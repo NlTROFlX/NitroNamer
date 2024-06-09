@@ -544,7 +544,7 @@ function buildUI(thisObj) {
         helpWin.add("statictext", undefined, "E or E{#} - Name of effects. If you specify the variable E with curly braces, you can specify the character through which the effects will be listed.");
         helpWin.add("statictext", undefined, "F - Frame Rate");
         helpWin.add("statictext", undefined, "H - Height of the layer");
-        helpWin.add("statictext", undefined, "I - Local index of selected layers");
+        helpWin.add("statictext", undefined, "I - Local index of selected layers (for selected mode, works the same as 'i' for total mode)");
         helpWin.add("statictext", undefined, "i - Layer index");
         helpWin.add("statictext", undefined, "Ip - In point of the layer");
         helpWin.add("statictext", undefined, "M - Source name (file or pre-comp)");
