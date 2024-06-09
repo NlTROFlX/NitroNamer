@@ -73,66 +73,69 @@ function buildUI(thisObj) {
     var grpButtons = win.add("group", undefined);
     grpButtons.orientation = "row";
 
-    var scriptFolderPath = File($.fileName).parent.fsName + "/NitroNamer/img/";
+    var scriptFile = new File($.fileName);
+    $.writeln(scriptFile)
+    var scriptFolderPath = scriptFile.path;
+    $.writeln(scriptFolderPath)
 
-    var btnRename = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "renameIcon.png"), { style: "toolbutton" });
+    var btnRename = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/renameIcon.png"), { style: "toolbutton" });
     btnRename.size = [32, 32]; // Установить размер кнопки
     btnRename.imageSize = [24, 24]; // Установить размер изображения
 
-    var btnHelp = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "helpIcon.png"), { style: "toolbutton" });
+    var btnHelp = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/helpIcon.png"), { style: "toolbutton" });
     btnHelp.size = [32, 32]; // Установить размер кнопки
     btnHelp.imageSize = [24, 24]; // Установить размер изображения
 
-    var btnVariables = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "variablesIcon.png"), { style: "toolbutton" });
+    var btnVariables = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/variablesIcon.png"), { style: "toolbutton" });
     btnVariables.size = [32, 32]; // Установить размер кнопки
     btnVariables.imageSize = [24, 24]; // Установить размер изображения
 
-    var btnReset = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "resetIcon.png"), { style: "toolbutton" });
+    var btnReset = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/resetIcon.png"), { style: "toolbutton" });
     btnReset.size = [32, 32]; // Установить размер кнопки
     btnReset.imageSize = [24, 24]; // Установить размер изображения
 
     function resetRenameButtonIcon() {
-        btnRename.image = File(scriptFolderPath + "renameIcon.png");
+        btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIcon.png");
         btnRename.imageSize = [24, 24];
     }
 
     // Обработчики событий для кнопки переименования
     btnRename.addEventListener("mouseover", function() {
-        btnRename.image = File(scriptFolderPath + "renameIconHover.png");
+        btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHover.png");
         btnRename.imageSize = [24, 24];
     });
     btnRename.addEventListener("mouseout", function() {
-        btnRename.image = File(scriptFolderPath + "renameIcon.png");
+        btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIcon.png");
         btnRename.imageSize = [24, 24];
     });
 
     // Обработчики событий для кнопки помощи
     btnHelp.addEventListener("mouseover", function() {
-        btnHelp.image = File(scriptFolderPath + "helpIconHover.png");
+        btnHelp.image = File(scriptFolderPath + "/NitroNamer/img/helpIconHover.png");
         btnHelp.imageSize = [24, 24];
     });
     btnHelp.addEventListener("mouseout", function() {
-        btnHelp.image = File(scriptFolderPath + "helpIcon.png");
+        btnHelp.image = File(scriptFolderPath + "/NitroNamer/img/helpIcon.png");
         btnHelp.imageSize = [24, 24];
     });
 
     // Обработчики событий для кнопки сброса
     btnReset.addEventListener("mouseover", function() {
-        btnReset.image = File(scriptFolderPath + "resetIconHover.png");
+        btnReset.image = File(scriptFolderPath + "/NitroNamer/img/resetIconHover.png");
         btnReset.imageSize = [24, 24];
     });
     btnReset.addEventListener("mouseout", function() {
-        btnReset.image = File(scriptFolderPath + "resetIcon.png");
+        btnReset.image = File(scriptFolderPath + "/NitroNamer/img/resetIcon.png");
         btnReset.imageSize = [24, 24];
     });
 
     // Обработчики событий для кнопки переменных
     btnVariables.addEventListener("mouseover", function() {
-        btnVariables.image = File(scriptFolderPath + "variablesIconHover.png");
+        btnVariables.image = File(scriptFolderPath + "/NitroNamer/img/variablesIconHover.png");
         btnVariables.imageSize = [24, 24];
     });
     btnVariables.addEventListener("mouseout", function() {
-        btnVariables.image = File(scriptFolderPath + "variablesIcon.png");
+        btnVariables.image = File(scriptFolderPath + "/NitroNamer/img/variablesIcon.png");
         btnVariables.imageSize = [24, 24];
     });
     btnVariables.onClick = function() {
@@ -147,7 +150,7 @@ function buildUI(thisObj) {
         renameLayersByTemplate(allLayers, template, briefly, brieflyType);
         updateLayerCounts();
         updatePreview();  // Ensure IN and OUT fields are updated
-        btnRename.image = File(scriptFolderPath + "doneIcon.png"); // Change button icon to "Done!" icon
+        btnRename.image = File(scriptFolderPath + "/NitroNamer/img/doneIcon.png"); // Change button icon to "Done!" icon
         btnRename.imageSize = [24, 24]; // Ensure the "Done!" icon is also resized
     };
 
