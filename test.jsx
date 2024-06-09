@@ -6,8 +6,11 @@
 
         // Загрузка иконки
         var scriptFile = new File($.fileName);
+        $.writeln(scriptFile);
         var scriptPath = scriptFile.path;
+        $.writeln(scriptPath);
         var iconFile = new File(scriptPath + "/1/2/icon.png");
+        $.writeln(iconFile);
         if (iconFile.exists) {
             iconFile.open("r");
             var iconBlob = iconFile.read();
