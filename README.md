@@ -1,4 +1,4 @@
-![PREVIEW|370](https://github.com/NlTROFlX/NitroNamer/assets/108728274/5e6a90ea-8c5a-4aba-9fa3-111eed780a23)
+![PREVIEW|250](https://github.com/NlTROFlX/NitroNamer/assets/108728274/5e6a90ea-8c5a-4aba-9fa3-111eed780a23)
 ### Документа
 ция по использованию скрипта NitroNamer
 
