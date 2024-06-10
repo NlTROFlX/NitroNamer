@@ -3,6 +3,7 @@ function buildUI(thisObj) {
     win.orientation = "column";
     win.alignChildren = ["fill", "top"];
     win.active = true;
+    win.layout.layout(true);
 
     var grpLayerSelection = win.add("group", undefined);
     grpLayerSelection.orientation = "row"; // Изменено на горизонтальную ориентацию
