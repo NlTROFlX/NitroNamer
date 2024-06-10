@@ -8,11 +8,11 @@ function buildUI(thisObj) {
     var grpLayerSelection = win.add("group", undefined);
     grpLayerSelection.orientation = "row"; // Изменено на горизонтальную ориентацию
 
-    var rdoAllLayers = grpLayerSelection.add("radiobutton", undefined, "Total: ");
+    var rdoAllLayers = grpLayerSelection.add("radiobutton", undefined, "Total: ");
     rdoAllLayers.value = true;
     var txtAllLayersCount = grpLayerSelection.add("statictext", undefined, "");
 
-    var rdoOnlySelected = grpLayerSelection.add("radiobutton", undefined, "Selected: ");
+    var rdoOnlySelected = grpLayerSelection.add("radiobutton", undefined, "Selected: ");
     var txtSelectedLayersCount = grpLayerSelection.add("statictext", undefined, "");
 
     rdoAllLayers.onClick = function() {
@@ -73,66 +73,67 @@ function buildUI(thisObj) {
     var grpButtons = win.add("group", undefined);
     grpButtons.orientation = "row";
 
-    var scriptFolderPath = File($.fileName).parent.fsName + "/NitroNamer/img/";
+    var scriptFile = new File($.fileName);
+    var scriptFolderPath = scriptFile.path;
 
-    var btnRename = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "renameIcon.png"), { style: "toolbutton" });
+    var btnRename = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/renameIcon.png"), { style: "toolbutton" });
     btnRename.size = [32, 32]; // Установить размер кнопки
     btnRename.imageSize = [24, 24]; // Установить размер изображения
 
-    var btnHelp = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "helpIcon.png"), { style: "toolbutton" });
+    var btnHelp = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/helpIcon.png"), { style: "toolbutton" });
     btnHelp.size = [32, 32]; // Установить размер кнопки
     btnHelp.imageSize = [24, 24]; // Установить размер изображения
 
-    var btnVariables = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "variablesIcon.png"), { style: "toolbutton" });
+    var btnVariables = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/variablesIcon.png"), { style: "toolbutton" });
     btnVariables.size = [32, 32]; // Установить размер кнопки
     btnVariables.imageSize = [24, 24]; // Установить размер изображения
 
-    var btnReset = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "resetIcon.png"), { style: "toolbutton" });
+    var btnReset = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/resetIcon.png"), { style: "toolbutton" });
     btnReset.size = [32, 32]; // Установить размер кнопки
     btnReset.imageSize = [24, 24]; // Установить размер изображения
 
     function resetRenameButtonIcon() {
-        btnRename.image = File(scriptFolderPath + "renameIcon.png");
+        btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIcon.png");
         btnRename.imageSize = [24, 24];
     }
 
     // Обработчики событий для кнопки переименования
     btnRename.addEventListener("mouseover", function() {
-        btnRename.image = File(scriptFolderPath + "renameIconHover.png");
+        btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHover.png");
         btnRename.imageSize = [24, 24];
     });
     btnRename.addEventListener("mouseout", function() {
-        btnRename.image = File(scriptFolderPath + "renameIcon.png");
+        btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIcon.png");
         btnRename.imageSize = [24, 24];
     });
 
     // Обработчики событий для кнопки помощи
     btnHelp.addEventListener("mouseover", function() {
-        btnHelp.image = File(scriptFolderPath + "helpIconHover.png");
+        btnHelp.image = File(scriptFolderPath + "/NitroNamer/img/helpIconHover.png");
         btnHelp.imageSize = [24, 24];
     });
     btnHelp.addEventListener("mouseout", function() {
-        btnHelp.image = File(scriptFolderPath + "helpIcon.png");
+        btnHelp.image = File(scriptFolderPath + "/NitroNamer/img/helpIcon.png");
         btnHelp.imageSize = [24, 24];
     });
 
     // Обработчики событий для кнопки сброса
     btnReset.addEventListener("mouseover", function() {
-        btnReset.image = File(scriptFolderPath + "resetIconHover.png");
+        btnReset.image = File(scriptFolderPath + "/NitroNamer/img/resetIconHover.png");
         btnReset.imageSize = [24, 24];
     });
     btnReset.addEventListener("mouseout", function() {
-        btnReset.image = File(scriptFolderPath + "resetIcon.png");
+        btnReset.image = File(scriptFolderPath + "/NitroNamer/img/resetIcon.png");
         btnReset.imageSize = [24, 24];
     });
 
     // Обработчики событий для кнопки переменных
     btnVariables.addEventListener("mouseover", function() {
-        btnVariables.image = File(scriptFolderPath + "variablesIconHover.png");
+        btnVariables.image = File(scriptFolderPath + "/NitroNamer/img/variablesIconHover.png");
         btnVariables.imageSize = [24, 24];
     });
     btnVariables.addEventListener("mouseout", function() {
-        btnVariables.image = File(scriptFolderPath + "variablesIcon.png");
+        btnVariables.image = File(scriptFolderPath + "/NitroNamer/img/variablesIcon.png");
         btnVariables.imageSize = [24, 24];
     });
     btnVariables.onClick = function() {
@@ -147,7 +148,7 @@ function buildUI(thisObj) {
         renameLayersByTemplate(allLayers, template, briefly, brieflyType);
         updateLayerCounts();
         updatePreview();  // Ensure IN and OUT fields are updated
-        btnRename.image = File(scriptFolderPath + "doneIcon.png"); // Change button icon to "Done!" icon
+        btnRename.image = File(scriptFolderPath + "/NitroNamer/img/doneIcon.png"); // Change button icon to "Done!" icon
         btnRename.imageSize = [24, 24]; // Ensure the "Done!" icon is also resized
     };
 
@@ -233,19 +234,18 @@ function buildUI(thisObj) {
                 effectNames.push(effect.name);
             }
         }
-
+    
         var effectsString = effectNames.length > 0 ? effectNames.join(", ") : "ClearLayer";
         var compName = app.project.activeItem.name;
-
         var frameRate = getFrameRate(layer);
         var duration = getDuration(layer);
         var shortDuration = getShortDuration(layer);
         var mediumDuration = getMediumDuration(layer);
-
+    
         if (briefly) {
             frameRate = parseFloat(frameRate).toFixed(2); // Ensure frame rate is formatted correctly
         }
-
+    
         var variables = {
             "T": getLayerType(layer),
             "i": layer.index,
@@ -259,11 +259,14 @@ function buildUI(thisObj) {
             "Ddd": mediumDuration,
             "C": compName,
             "Ip": layer.inPoint.toFixed(2),  // In point
-            "Op": layer.outPoint.toFixed(2)  // Out point
+            "Op": layer.outPoint.toFixed(2), // Out point
+            "M": getSourceName(layer),       // Добавлено
+            "W": getWidth(layer),            // Добавлено
+            "H": getHeight(layer)            // Добавлено
         };
-
+    
         var newName = replaceVariables(template, variables);
-
+    
         if (briefly) {
             switch (brieflyType) {
                 case "Camel Case":
@@ -286,9 +289,10 @@ function buildUI(thisObj) {
                     break;
             }
         }
-
+    
         return newName;
-    }                
+    }
+                    
 
     function toCamelCase(str) {
         return str.split(/(\d+\.\d{2}|\d{2}:\d{2}:\d{2}|\d+min\.\d+sec|\d+min\.\d{2}sec)/).map(function(part, index) {
@@ -395,8 +399,29 @@ function buildUI(thisObj) {
         return "NoLimit";
     }
 
+    function getSourceName(layer) {
+        if (layer.source) {
+            return layer.source.name;
+        }
+        return "NoSource";
+    }
+    
+    function getWidth(layer) {
+        if (layer.source && layer.source.width) {
+            return layer.source.width.toString();
+        }
+        return "NoWidth";
+    }
+    
+    function getHeight(layer) {
+        if (layer.source && layer.source.height) {
+            return layer.source.height.toString();
+        }
+        return "NoHeight";
+    }
+
     function replaceVariables(template, variables) {
-        return template.replace(/\(([^()]+)\)|E\{([^}]+)\}|Ip|Op|Dd{0,2}|[A-Z]|i|I/g, function(match, group, customDelimiter) {
+        return template.replace(/\(([^()]+)\)|E\{([^}]+)\}|Ip|Op|Dd{0,2}|[A-Z]|i|I|M|W|H/g, function(match, group, customDelimiter) {
             if (group) {
                 return group;  // Handle text inside parentheses
             } else if (customDelimiter !== undefined) {
@@ -415,40 +440,38 @@ function buildUI(thisObj) {
                 return variables[match] !== undefined ? variables[match] : match;
             }
         });
-    }
+    }        
 
     var localIndex = 1; // Глобальный локальный индекс
 
     function renameLayersByTemplate(allLayers, template, briefly, brieflyType) {
         var proj = app.project;
-
+    
         if (proj) {
             var comp = proj.activeItem;
-
+    
             if (comp && comp instanceof CompItem) {
                 app.beginUndoGroup("Rename Layers by Template");
-
+    
                 // Сброс локального индекса перед переименованием
                 localIndex = 1;
-
+    
                 for (var i = 1; i <= comp.numLayers; i++) {
                     var layer = comp.layer(i);
-
+    
                     if (allLayers || layer.selected) {
-                        $.writeln("Processing layer: " + layer.name);
-
+    
                         var effectNames = [];
                         if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
                             for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
                                 var effect = layer.property("ADBE Effect Parade").property(j);
                                 effectNames.push(effect.name);
-                                $.writeln("Found effect: " + effect.name);
                             }
                         }
-
+    
                         var effectsString = effectNames.length > 0 ? effectNames.join(", ") : "ClearLayer";
                         var compName = app.project.activeItem.name;
-
+    
                         var variables = {
                             "T": getLayerType(layer),
                             "i": i,
@@ -462,11 +485,14 @@ function buildUI(thisObj) {
                             "Ddd": getMediumDuration(layer),
                             "C": compName,
                             "Ip": layer.inPoint.toFixed(2),  // In point
-                            "Op": layer.outPoint.toFixed(2)  // Out point
+                            "Op": layer.outPoint.toFixed(2), // Out point
+                            "M": getSourceName(layer),       // Добавлено
+                            "W": getWidth(layer),            // Добавлено
+                            "H": getHeight(layer)            // Добавлено
                         };
-
+    
                         var newName = replaceVariables(template, variables);
-
+    
                         if (briefly) {
                             switch (brieflyType) {
                                 case "Camel Case":
@@ -489,20 +515,17 @@ function buildUI(thisObj) {
                                     break;
                             }
                         }
-
-                        $.writeln("New layer name: " + newName);
-
+    
                         layer.name = newName;
-                        $.writeln("Layer renamed: " + layer.name);
-
+    
                         // Увеличиваем локальный индекс после переименования слоя
                         localIndex++;
                     }
                 }
-
+    
                 app.endUndoGroup();
             } else {
-                alert("Please select a composition.");
+                alert("Please select a composition or layer.", "NitroNamer");
             }
         } else {
             alert("Project not found.");
@@ -514,26 +537,29 @@ function buildUI(thisObj) {
         helpWin.orientation = "column";
         helpWin.alignChildren = ["fill", "top"];
         helpWin.add("statictext", undefined, "Available variables:");
-        helpWin.add("statictext", undefined, "O - Original name of the layer");
-        helpWin.add("statictext", undefined, "E or E{#} - Name of effects. If you specify the variable E with curly braces, you can specify the character through which the effects will be listed.");
-        helpWin.add("statictext", undefined, "T - Layer type (Pre-comp, Footage, Shape, Solid, Null, Adjustment, Audio, Text, Light, Camera)");
-        helpWin.add("statictext", undefined, "i - Layer index");
-        helpWin.add("statictext", undefined, "I - Local index of selected layers");
-        helpWin.add("statictext", undefined, "F - Frame Rate");
-        helpWin.add("statictext", undefined, "R - Resolution (Width*Height)");
+        helpWin.add("statictext", undefined, "C - Current composition name");
         helpWin.add("statictext", undefined, "D - Duration (HH:MM:SS)");
         helpWin.add("statictext", undefined, "Dd - By seconds duration (0Sec)");
         helpWin.add("statictext", undefined, "Ddd - By minute duration (0Min.0Sec)");
-        helpWin.add("statictext", undefined, "C - Current composition name");
+        helpWin.add("statictext", undefined, "E or E{#} - Name of effects. If you specify the variable E with curly braces, you can specify the character through which the effects will be listed.");
+        helpWin.add("statictext", undefined, "F - Frame Rate");
+        helpWin.add("statictext", undefined, "H - Height of the layer");
+        helpWin.add("statictext", undefined, "I - Local index of selected layers (for selected mode, works the same as 'i' for total mode)");
+        helpWin.add("statictext", undefined, "i - Layer index");
         helpWin.add("statictext", undefined, "Ip - In point of the layer");
+        helpWin.add("statictext", undefined, "M - Source name (file or pre-comp)");
+        helpWin.add("statictext", undefined, "O - Original name of the layer");
         helpWin.add("statictext", undefined, "Op - Out point of the layer");
+        helpWin.add("statictext", undefined, "R - Resolution (Width*Height)");
+        helpWin.add("statictext", undefined, "T - Layer type (Pre-comp, Footage, Shape, Solid, Null, Adjustment, Audio, Text, Light, Camera)");
+        helpWin.add("statictext", undefined, "W - Width of the layer");
         helpWin.add("statictext", undefined, "(Any text) - You can write any text in parentheses, it will not be counted as variables");
-
+    
         var btnClose = helpWin.add("button", undefined, "Close");
         btnClose.onClick = function() {
             helpWin.close();
         };
-
+    
         // Add the new button to open the URL
         var btnNitrofix = helpWin.add("button", undefined, "NitroNamer 2024.2 | Say thanks or buy a coffee for NITROFIX");
         btnNitrofix.onClick = function() {
@@ -544,10 +570,10 @@ function buildUI(thisObj) {
                 system.callSystem("open " + url);
             }
         };
-
+    
         helpWin.center();
         helpWin.show();
-    }
+    }        
 
     // Функция отображения текущих переменных для выбранного слоя
     function showVariables() {
@@ -597,10 +623,10 @@ function buildUI(thisObj) {
                     variablesWin.center();
                     variablesWin.show();
                 } else {
-                    alert("No layers in composition.");
+                    alert("No composition selected.", "NitroNamer");
                 }
             } else {
-                alert("No composition selected.");
+                alert("No composition selected.", "NitroNamer");
             }
         } else {
             alert("No project open.");
