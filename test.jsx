@@ -1,42 +1,37 @@
-{
-    // Проверяем, что панель UI не существует
-    var myScriptUI = this;
-    function createUI(thisObj) {
-        var myPanel = (thisObj instanceof Panel) ? thisObj : new Window("palette", "My Panel", undefined, {resizeable: true});
+(function () {
+    // Создание UI окна
+    var myWindow = new Window("palette", "Сохранение текста в JSON", undefined);
+    myWindow.orientation = "column";
+    
+    // Текстовое поле
+    var textField = myWindow.add("edittext", undefined, "Введите текст здесь");
+    textField.size = [300, 25];
+    
+    // Кнопка "Сохранить"
+    var saveButton = myWindow.add("button", undefined, "Сохранить");
 
-        // Загрузка иконки
+    // Функция для сохранения текста в JSON файл
+    function saveTextToJson(text) {
         var scriptFile = new File($.fileName);
-        $.writeln(scriptFile);
-        var scriptPath = scriptFile.path;
-        $.writeln(scriptPath);
-        var iconFile = new File(scriptPath + "/1/2/icon.png");
-        $.writeln(iconFile);
-        if (iconFile.exists) {
-            iconFile.open("r");
-            var iconBlob = iconFile.read();
-            iconFile.close();
-
-            // Создаем кнопку с иконкой
-            var myButton = myPanel.add("iconbutton", undefined, File(scriptPath + "/1/2/icon.png"), {style: "toolbutton"});
-
-            // Добавляем обработчик события для кнопки
-            myButton.onClick = function() {
-                alert("Button Clicked!");
-            };
-        } else {
-            alert("Icon file not found!");
-        }
-
-        // Настраиваем отображение панели
-        if (myPanel instanceof Window) {
-            myPanel.center();
-            myPanel.show();
-        } else {
-            myPanel.layout.layout(true);
-        }
-
-        return myPanel;
+        var scriptFolder = scriptFile.path;
+        var jsonFile = new File(scriptFolder + "/savedText.json");
+        
+        var jsonData = {
+            text: text
+        };
+        
+        jsonFile.open("w");
+        jsonFile.write(JSON.stringify(jsonData, null, 4));
+        jsonFile.close();
     }
 
-    var myUI = createUI(myScriptUI);
-}
+    // Обработчик события нажатия на кнопку "Сохранить"
+    saveButton.onClick = function () {
+        var text = textField.text;
+        saveTextToJson(text);
+        alert("Текст сохранен в JSON файл!");
+    };
+    
+    myWindow.center();
+    myWindow.show();
+})();
