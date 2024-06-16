@@ -10,10 +10,18 @@
     // Кнопка "Сохранить"
     var saveButton = myWindow.add("button", undefined, "Сохранить");
 
+    // Группа для выпадающего списка и кнопки удаления
+    var dropdownGroup = myWindow.add("group", undefined);
+    dropdownGroup.orientation = "row";
+
     // Выпадающий список
-    var dropdown = myWindow.add("dropdownlist", undefined, []);
-    dropdown.size = [300, 25];
+    var dropdown = dropdownGroup.add("dropdownlist", undefined, []);
+    dropdown.size = [270, 25];
     dropdown.selection = null;
+
+    // Кнопка "Удалить"
+    var deleteButton = dropdownGroup.add("button", undefined, "Удалить");
+    deleteButton.size = [30, 25];
 
     // Функция для загрузки данных из JSON файла
     function loadJsonData() {
@@ -86,7 +94,7 @@
             // Проверка уникальности текста
             if (!isTextUnique(jsonData, text)) {
                 alert("Текст уже существует в файле JSON.");
-                return;
+                return false; // Прекращаем выполнение функции, если текст не уникален
             }
 
             // Добавление нового текста в массив
@@ -94,6 +102,33 @@
 
             // Сортировка данных
             sortJsonData(jsonData);
+
+            // Запись обновленного массива в файл
+            jsonFile.encoding = "UTF-8"; // Устанавливаем кодировку на UTF-8
+            jsonFile.open("w");
+            jsonFile.write(JSON.stringify(jsonData, null, 4)); // Форматирование JSON с отступами
+            jsonFile.close();
+            return true; // Успешное выполнение функции
+        } catch (error) {
+            alert("Ошибка: " + error.message);
+            return false; // Ошибка выполнения функции
+        }
+    }
+
+    // Функция для удаления текста из JSON файла
+    function deleteTextFromJson(text) {
+        try {
+            var scriptFile = new File($.fileName);
+            var scriptFolder = scriptFile.path;
+            var jsonFilePath = scriptFolder + "/NitroNamer/user/UserTemplatePresets.json";
+            var jsonFile = new File(jsonFilePath);
+
+            var jsonData = loadJsonData();
+
+            // Удаление текста из массива
+            jsonData = jsonData.filter(function (item) {
+                return item.textbox1 !== text;
+            });
 
             // Запись обновленного массива в файл
             jsonFile.encoding = "UTF-8"; // Устанавливаем кодировку на UTF-8
@@ -109,11 +144,15 @@
     function updateDropdown() {
         dropdown.removeAll();
         var jsonData = loadJsonData();
-        for (var i = 0; i < jsonData.length; i++) {
-            var itemText = jsonData[i].textbox1;
-            dropdown.add("item", itemText);
-        }
-        if (jsonData.length > 0) {
+
+        if (jsonData.length === 0) {
+            var noTemplatesItem = dropdown.add("item", "Нету сохраненных шаблонов");
+            dropdown.selection = noTemplatesItem;
+        } else {
+            for (var i = 0; i < jsonData.length; i++) {
+                var itemText = jsonData[i].textbox1;
+                dropdown.add("item", itemText);
+            }
             dropdown.selection = 0;
         }
     }
@@ -126,11 +165,30 @@
                 alert("Пожалуйста, введите текст.");
                 return;
             }
-            saveTextToJson(text);
-            alert("Текст добавлен в JSON файл!");
-            updateDropdown();
+            var success = saveTextToJson(text);
+            if (success) {
+                alert("Текст добавлен в JSON файл!");
+                updateDropdown();
+            }
         } catch (error) {
             alert("Ошибка при сохранении: " + error.message);
+        }
+    };
+
+    // Обработчик события нажатия на кнопку "Удалить"
+    deleteButton.onClick = function () {
+        try {
+            var selectedItem = dropdown.selection;
+            if (selectedItem === null || selectedItem.text === "Нету сохраненных шаблонов") {
+                alert("Пожалуйста, выберите элемент для удаления.");
+                return;
+            }
+            var text = selectedItem.text;
+            deleteTextFromJson(text);
+            alert("Текст удален из JSON файла!");
+            updateDropdown();
+        } catch (error) {
+            alert("Ошибка при удалении: " + error.message);
         }
     };
 
