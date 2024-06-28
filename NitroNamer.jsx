@@ -26,7 +26,7 @@ function buildUI(thisObj) {
         resetRenameButtonIcon();
         
         // Сохранить настройки
-        var settings = { allLayers: rdoAllLayers.value };
+        var settings = { allLayers: rdoAllLayers.value, template: txtTemplate.text };
         saveSettings(settings);
         $.writeln("rdoAllLayers clicked, settings: " + JSON.stringify(settings));
     };
@@ -42,10 +42,12 @@ function buildUI(thisObj) {
         resetRenameButtonIcon();
         
         // Сохранить настройки
-        var settings = { allLayers: rdoAllLayers.value };
+        var settings = { allLayers: rdoAllLayers.value, template: txtTemplate.text };
         saveSettings(settings);
         $.writeln("rdoOnlySelected clicked, settings: " + JSON.stringify(settings));
     };
+    
+    
 
     var grpTemplate = win.add("group", undefined);
     grpTemplate.orientation = "column";
@@ -54,7 +56,12 @@ function buildUI(thisObj) {
     txtTemplate.onChanging = function() {
         updatePreview();
         updateLayerCounts();
-        resetRenameButtonIcon(); // Reset button icon to "Rename Layers"
+        resetRenameButtonIcon();
+        
+        // Сохранить настройки
+        var settings = { allLayers: rdoAllLayers.value, template: txtTemplate.text };
+        saveSettings(settings);
+        $.writeln("Template changed, settings: " + JSON.stringify(settings));
     };
 
     var txtOriginalLabel = win.add("statictext", undefined, "Input layer name: ");
@@ -196,7 +203,7 @@ function buildUI(thisObj) {
         // Добавить логирование
         $.writeln("Settings saved: " + JSON.stringify(settings));
     }
-
+    
     function loadSettings() {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
@@ -216,11 +223,12 @@ function buildUI(thisObj) {
         $.writeln("No settings file found.");
         return null;
     }
-
+    
     function applySettings(settings) {
         if (settings) {
             rdoAllLayers.value = settings.allLayers;
             rdoOnlySelected.value = !settings.allLayers;
+            txtTemplate.text = settings.template || "(Template for renaming)O_T.i";
             updateLayerCounts();
             updatePreview();
             resetRenameButtonIcon();
