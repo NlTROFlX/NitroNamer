@@ -3,7 +3,6 @@ function buildUI(thisObj) {
     win.orientation = "column";
     win.alignChildren = ["fill", "top"];
     win.active = true;
-    win.layout.layout(true);
 
     var grpLayerSelection = win.add("group", undefined);
     grpLayerSelection.orientation = "row"; // Изменено на горизонтальную ориентацию
@@ -15,6 +14,7 @@ function buildUI(thisObj) {
     var rdoOnlySelected = grpLayerSelection.add("radiobutton", undefined, "Selected: ");
     var txtSelectedLayersCount = grpLayerSelection.add("statictext", undefined, "");
 
+    // Обновить функции переключения режимов
     rdoAllLayers.onClick = function() {
         if (rdoAllLayers.value) {
             rdoOnlySelected.value = false;
@@ -23,8 +23,14 @@ function buildUI(thisObj) {
         }
         updateLayerCounts();
         updatePreview();
-        resetRenameButtonIcon(); // Reset button icon to "Rename Layers"
+        resetRenameButtonIcon();
+        
+        // Сохранить настройки
+        var settings = { allLayers: rdoAllLayers.value };
+        saveSettings(settings);
+        $.writeln("rdoAllLayers clicked, settings: " + JSON.stringify(settings));
     };
+    
     rdoOnlySelected.onClick = function() {
         if (rdoOnlySelected.value) {
             rdoAllLayers.value = false;
@@ -33,7 +39,12 @@ function buildUI(thisObj) {
         }
         updateLayerCounts();
         updatePreview();
-        resetRenameButtonIcon(); // Reset button icon to "Rename Layers"
+        resetRenameButtonIcon();
+        
+        // Сохранить настройки
+        var settings = { allLayers: rdoAllLayers.value };
+        saveSettings(settings);
+        $.writeln("rdoOnlySelected clicked, settings: " + JSON.stringify(settings));
     };
 
     var grpTemplate = win.add("group", undefined);
@@ -167,6 +178,54 @@ function buildUI(thisObj) {
         updatePreview();
         resetRenameButtonIcon(); // Reset button icon to "Rename"
     };
+
+    // Добавить функции для работы с JSON с логированием
+    function saveSettings(settings) {
+        var scriptFile = new File($.fileName);
+        var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
+        var settingsFile = new File(scriptFolderPath + "/settings.json");
+        
+        if (!Folder(scriptFolderPath).exists) {
+            Folder(scriptFolderPath).create();
+        }
+        
+        settingsFile.open("w");
+        settingsFile.write(JSON.stringify(settings));
+        settingsFile.close();
+        
+        // Добавить логирование
+        $.writeln("Settings saved: " + JSON.stringify(settings));
+    }
+
+    function loadSettings() {
+        var scriptFile = new File($.fileName);
+        var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
+        var settingsFile = new File(scriptFolderPath + "/settings.json");
+        
+        if (settingsFile.exists) {
+            settingsFile.open("r");
+            var settings = JSON.parse(settingsFile.read());
+            settingsFile.close();
+            
+            // Добавить логирование
+            $.writeln("Settings loaded: " + JSON.stringify(settings));
+            return settings;
+        }
+        
+        // Добавить логирование
+        $.writeln("No settings file found.");
+        return null;
+    }
+
+    function applySettings(settings) {
+        if (settings) {
+            rdoAllLayers.value = settings.allLayers;
+            rdoOnlySelected.value = !settings.allLayers;
+            updateLayerCounts();
+            updatePreview();
+            resetRenameButtonIcon();
+        }
+    }
 
     function updateLayerCounts() {
         var proj = app.project;
