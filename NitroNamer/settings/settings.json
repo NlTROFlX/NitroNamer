@@ -2,63 +2,27 @@
     "userPresets": {
         "preset_1": {
             "allLayers": false,
-            "template": "1",
-            "briefly": false,
-            "brieflyType": 0
+            "template": "фвафываasdf",
+            "briefly": true,
+            "brieflyType": 5
         },
         "preset_2": {
-            "allLayers": false,
-            "template": "2",
+            "allLayers": true,
+            "template": "(Template for renaming)O_T.i",
             "briefly": false,
             "brieflyType": 0
         },
         "preset_3": {
-            "allLayers": false,
-            "template": "2",
-            "briefly": false,
-            "brieflyType": 0
-        },
-        "preset_4": {
-            "allLayers": false,
-            "template": "999",
-            "briefly": false,
-            "brieflyType": 0
-        },
-        "preset_5": {
-            "allLayers": false,
-            "template": "999",
+            "allLayers": true,
+            "template": "Ddd-2",
             "briefly": true,
-            "brieflyType": 0
-        },
-        "preset_6": {
-            "allLayers": false,
-            "template": "999",
-            "briefly": true,
-            "brieflyType": 1
-        },
-        "preset_7": {
-            "allLayers": false,
-            "template": "*-*-",
-            "briefly": false,
-            "brieflyType": 5
-        },
-        "preset_8": {
-            "allLayers": false,
-            "template": "ёёёёё",
-            "briefly": false,
-            "brieflyType": 5
-        },
-        "preset_9": {
-            "allLayers": false,
-            "template": "фвафываasdf",
-            "briefly": true,
-            "brieflyType": 5
+            "brieflyType": 2
         }
     },
     "currentSettings": {
-        "allLayers": false,
-        "template": "фвафываasdf",
+        "allLayers": true,
+        "template": "Ddd-2",
         "briefly": true,
-        "brieflyType": 5
+        "brieflyType": 2
     }
 }

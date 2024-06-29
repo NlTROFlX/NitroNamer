@@ -256,6 +256,7 @@ function buildUI(thisObj) {
     btnVariables.onClick = function() {
         showVariables();
     };
+
     btnSave.onClick = function() {
         var settings = {
             allLayers: rdoAllLayers.value,
@@ -283,7 +284,63 @@ function buildUI(thisObj) {
             ddLayerMode.add("item", presetTemplates[i]);
         }
         ddLayerMode.selection = ddLayerMode.items.length - 1; // Устанавливаем выбор на последний добавленный пресет
-    };                                                       
+    };
+    
+    btnCircleMinus.onClick = function() {
+        var selectedPreset = ddLayerMode.selection;
+        if (selectedPreset) {
+            var presetTemplate = selectedPreset.text;
+    
+            // Загрузить текущие настройки
+            var settings = loadSettings();
+            var userPresets = settings.userPresets || {};
+    
+            // Найти ключ пресета с соответствующим шаблоном и удалить его
+            var newUserPresets = {};
+            var newPresetNumber = 1;
+            for (var key in userPresets) {
+                if (userPresets.hasOwnProperty(key)) {
+                    if (userPresets[key].template !== presetTemplate) {
+                        var newKey = "preset_" + newPresetNumber++;
+                        newUserPresets[newKey] = userPresets[key];
+                    }
+                }
+            }
+    
+            // Обновить настройки
+            settings.userPresets = newUserPresets;
+    
+            // Сохранить обновленные настройки
+            var scriptFile = new File($.fileName);
+            var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
+            var settingsFile = new File(scriptFolderPath + "/settings.json");
+            
+            settingsFile.encoding = "UTF-8"; // Устанавливаем кодировку UTF-8
+            settingsFile.open("w");
+            settingsFile.write(JSON.stringify(settings, null, 4));
+            settingsFile.close();
+    
+            $.writeln("Preset deleted and reordered, settings: " + JSON.stringify(settings));
+    
+            // Обновить список пресетов
+            var presetTemplates = [];
+            for (var key in newUserPresets) {
+                if (newUserPresets.hasOwnProperty(key)) {
+                    presetTemplates.push(newUserPresets[key].template);
+                }
+            }
+    
+            ddLayerMode.removeAll();
+            for (var i = 0; i < presetTemplates.length; i++) {
+                ddLayerMode.add("item", presetTemplates[i]);
+            }
+            if (ddLayerMode.items.length > 0) {
+                ddLayerMode.selection = 0; // Устанавливаем выбор на первый пресет, если он есть
+            }
+        } else {
+            alert("Please select a preset to delete.");
+        }
+    };        
 
     btnRename.onClick = function() {
         var allLayers = rdoAllLayers.value;
