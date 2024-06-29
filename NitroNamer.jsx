@@ -839,6 +839,9 @@ function buildUI(thisObj) {
         }
         return effectNames.length > 0 ? effectNames.join(", ") : "No effects";
     }
+    
+    var settings = loadSettings();
+    applySettings(settings);
 
     updateLayerCounts();
     updatePreview();
