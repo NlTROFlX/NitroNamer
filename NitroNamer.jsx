@@ -45,6 +45,17 @@ function buildUI(thisObj) {
         btnCircleMinus.imageSize = [24, 24];
     });
 
+    // Загрузить настройки и заполнить выпадающий список пресетами
+    var settings = loadSettings();
+    var userPresets = settings.userPresets || {};
+    var presetTemplates = [];
+
+    for (var key in userPresets) {
+        if (userPresets.hasOwnProperty(key)) {
+            presetTemplates.push(userPresets[key].template);
+        }
+    }
+
     // Новая группа для выпадающего списка
     var grpDropdownAndButtons = win.add("group", undefined);
     grpDropdownAndButtons.orientation = "row";
@@ -52,7 +63,7 @@ function buildUI(thisObj) {
     grpDropdownAndButtons.margins = [0, -10, 0, 0]; // Отступы от краев группы (верхний отступ 5px)
 
     // Добавить выпадающий список
-    var ddLayerMode = grpDropdownAndButtons.add("dropdownlist", undefined, ["Mode 1", "Mode 2", "Mode 3"]);
+    var ddLayerMode = grpDropdownAndButtons.add("dropdownlist", undefined, presetTemplates);
     ddLayerMode.selection = 0;
 
     // Обновить функции переключения режимов
@@ -255,7 +266,24 @@ function buildUI(thisObj) {
     
         saveSettings(settings, false);
         $.writeln("Preset saved, settings: " + JSON.stringify(settings));
-    };                                                   
+        
+        // Обновить список пресетов
+        var updatedSettings = loadSettings();
+        var userPresets = updatedSettings.userPresets || {};
+        var presetTemplates = [];
+    
+        for (var key in userPresets) {
+            if (userPresets.hasOwnProperty(key)) {
+                presetTemplates.push(userPresets[key].template);
+            }
+        }
+    
+        ddLayerMode.removeAll();
+        for (var i = 0; i < presetTemplates.length; i++) {
+            ddLayerMode.add("item", presetTemplates[i]);
+        }
+        ddLayerMode.selection = ddLayerMode.items.length - 1; // Устанавливаем выбор на последний добавленный пресет
+    };                                                       
 
     btnRename.onClick = function() {
         var allLayers = rdoAllLayers.value;
@@ -290,11 +318,11 @@ function buildUI(thisObj) {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
         var settingsFile = new File(scriptFolderPath + "/settings.json");
-        
+    
         if (!Folder(scriptFolderPath).exists) {
             Folder(scriptFolderPath).create();
         }
-        
+    
         var existingSettings = loadSettings() || {};
         var userPresets = existingSettings.userPresets || {};
         var currentSettings = existingSettings.currentSettings || {};
@@ -310,12 +338,13 @@ function buildUI(thisObj) {
         existingSettings.userPresets = userPresets;
         existingSettings.currentSettings = currentSettings;
     
+        settingsFile.encoding = "UTF-8"; // Устанавливаем кодировку UTF-8
         settingsFile.open("w");
         settingsFile.write(JSON.stringify(existingSettings, null, 4));
         settingsFile.close();
     
         $.writeln("Settings saved: " + JSON.stringify(existingSettings));
-    }
+    }    
     
     function loadSettings() {
         var scriptFile = new File($.fileName);
@@ -839,7 +868,7 @@ function buildUI(thisObj) {
         }
         return effectNames.length > 0 ? effectNames.join(", ") : "No effects";
     }
-    
+
     var settings = loadSettings();
     applySettings(settings);
 

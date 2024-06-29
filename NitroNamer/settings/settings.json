@@ -35,12 +35,30 @@
             "template": "999",
             "briefly": true,
             "brieflyType": 1
+        },
+        "preset_7": {
+            "allLayers": false,
+            "template": "*-*-",
+            "briefly": false,
+            "brieflyType": 5
+        },
+        "preset_8": {
+            "allLayers": false,
+            "template": "ёёёёё",
+            "briefly": false,
+            "brieflyType": 5
+        },
+        "preset_9": {
+            "allLayers": false,
+            "template": "фвафываasdf",
+            "briefly": true,
+            "brieflyType": 5
         }
     },
     "currentSettings": {
-        "allLayers": true,
-        "template": "999",
+        "allLayers": false,
+        "template": "фвафываasdf",
         "briefly": true,
-        "brieflyType": 4
+        "brieflyType": 5
     }
 }
