@@ -47,22 +47,8 @@ function buildUI(thisObj) {
         $.writeln("rdoOnlySelected clicked, settings: " + JSON.stringify(settings));
     };
     
-    var grpTemplate = win.add("group", undefined);
-    grpTemplate.orientation = "column";
-    var ddPresets = grpTemplate.add("dropdownlist", undefined, []);
-    ddPresets.alignment = ["fill", "top"];
-    ddPresets.onChange = function() {
-        if (ddPresets.selection) {
-            txtTemplate.text = ddPresets.selection.text;
-            var settings = { allLayers: rdoAllLayers.value, template: txtTemplate.text };
-            saveSettings(settings);
-            updatePreview();
-            updateLayerCounts();
-            resetRenameButtonIcon();
-            $.writeln("Preset selected, settings: " + JSON.stringify(settings));
-        }
-    };
     
+
     var grpTemplate = win.add("group", undefined);
     grpTemplate.orientation = "column";
     var txtTemplate = grpTemplate.add("edittext", undefined, "(Template for renaming)O_T.i", {multiline: false, scrolling: false}); // Установлено значение по умолчанию
@@ -243,15 +229,6 @@ function buildUI(thisObj) {
             rdoAllLayers.value = settings.allLayers;
             rdoOnlySelected.value = !settings.allLayers;
             txtTemplate.text = settings.template || "(Template for renaming)O_T.i";
-            
-            // Загрузить пресеты в выпадающий список
-            ddPresets.removeAll();
-            for (var key in settings) {
-                if (key.startsWith("userPreset")) {
-                    ddPresets.add("item", settings[key]);
-                }
-}
-            
             updateLayerCounts();
             updatePreview();
             resetRenameButtonIcon();
