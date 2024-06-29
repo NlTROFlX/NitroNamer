@@ -14,6 +14,9 @@ function buildUI(thisObj) {
     var rdoOnlySelected = grpLayerSelection.add("radiobutton", undefined, "Selected: ");
     var txtSelectedLayersCount = grpLayerSelection.add("statictext", undefined, "");
 
+    var scriptFile = new File($.fileName);
+    var scriptFolderPath = scriptFile.path;
+
     // Обновить функции переключения режимов
     rdoAllLayers.onClick = function() {
         if (rdoAllLayers.value) {
@@ -62,6 +65,17 @@ function buildUI(thisObj) {
             $.writeln("Preset selected, settings: " + JSON.stringify(settings));
         }
     };
+
+    var grpButtons = grpTemplate.add("group", undefined);
+    grpButtons.orientation = "row";
+
+    var btnSavePreset = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/arrowUp.png"), { style: "toolbutton" });
+    btnSavePreset.size = [32, 32];
+    btnSavePreset.imageSize = [24, 24];
+
+    var btnCopyPreset = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/arrowDown.png"), { style: "toolbutton" });
+    btnCopyPreset.size = [32, 32];
+    btnCopyPreset.imageSize = [24, 24];
     
     var grpTemplate = win.add("group", undefined);
     grpTemplate.orientation = "column";
@@ -105,9 +119,6 @@ function buildUI(thisObj) {
     var grpButtons = win.add("group", undefined);
     grpButtons.orientation = "row";
 
-    var scriptFile = new File($.fileName);
-    var scriptFolderPath = scriptFile.path;
-
     var btnRename = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/renameIcon.png"), { style: "toolbutton" });
     btnRename.size = [32, 32]; // Установить размер кнопки
     btnRename.imageSize = [24, 24]; // Установить размер изображения
@@ -128,6 +139,25 @@ function buildUI(thisObj) {
         btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIcon.png");
         btnRename.imageSize = [24, 24];
     }
+
+    // Обработчики событий для кнопок сохранения и копирования пресетов
+    btnSavePreset.addEventListener("mouseover", function() {
+        btnSavePreset.image = File(scriptFolderPath + "/NitroNamer/img/arrowUpHover.png");
+        btnSavePreset.imageSize = [24, 24];
+    });
+    btnSavePreset.addEventListener("mouseout", function() {
+        btnSavePreset.image = File(scriptFolderPath + "/NitroNamer/img/arrowUp.png");
+        btnSavePreset.imageSize = [24, 24];
+    });
+
+    btnCopyPreset.addEventListener("mouseover", function() {
+        btnCopyPreset.image = File(scriptFolderPath + "/NitroNamer/img/arrowDownHover.png");
+        btnCopyPreset.imageSize = [24, 24];
+    });
+    btnCopyPreset.addEventListener("mouseout", function() {
+        btnCopyPreset.image = File(scriptFolderPath + "/NitroNamer/img/arrowDown.png");
+        btnCopyPreset.imageSize = [24, 24];
+    });
 
     // Обработчики событий для кнопки переименования
     btnRename.addEventListener("mouseover", function() {
@@ -171,6 +201,32 @@ function buildUI(thisObj) {
     btnVariables.onClick = function() {
         showVariables();
     };
+
+    btnSavePreset.onClick = function() {
+        var settings = loadSettings() || {};
+        var presetIndex = 1;
+        while (settings["userPreset" + presetIndex]) {
+            presetIndex++;
+        }
+        settings["userPreset" + presetIndex] = txtTemplate.text;
+        saveSettings(settings);
+        
+        // Обновить выпадающий список пресетов
+        ddPresets.add("item", txtTemplate.text);
+        $.writeln("Preset saved, settings: " + JSON.stringify(settings));
+    };
+
+    btnCopyPreset.onClick = function() {
+        if (ddPresets.selection) {
+            txtTemplate.text = ddPresets.selection.text;
+            var settings = { allLayers: rdoAllLayers.value, template: txtTemplate.text };
+            saveSettings(settings);
+            updatePreview();
+            updateLayerCounts();
+            resetRenameButtonIcon();
+            $.writeln("Preset copied to template field, settings: " + JSON.stringify(settings));
+        }
+    };    
 
     btnRename.onClick = function() {
         var allLayers = rdoAllLayers.value;
