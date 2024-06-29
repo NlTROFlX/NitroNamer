@@ -3,6 +3,7 @@ function buildUI(thisObj) {
     win.orientation = "column";
     win.alignChildren = ["fill", "top"];
     win.active = true;
+    win.margins = [4,4,4,4];
 
     var grpLayerSelection = win.add("group", undefined);
     grpLayerSelection.orientation = "row"; // Изменено на горизонтальную ориентацию
@@ -13,6 +14,46 @@ function buildUI(thisObj) {
 
     var rdoOnlySelected = grpLayerSelection.add("radiobutton", undefined, "Selected: ");
     var txtSelectedLayersCount = grpLayerSelection.add("statictext", undefined, "");
+
+    var scriptFile = new File($.fileName);
+    var scriptFolderPath = scriptFile.path;
+
+    // Добавить кнопки в grpLayerSelection
+    var btnSave = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/save.png"), {style: "toolbutton"});
+    btnSave.size = [24, 24];
+    btnSave.imageSize = [24, 24];
+
+    btnSave.addEventListener("mouseover", function() {
+        btnSave.image = File(scriptFolderPath + "/NitroNamer/img/saveHover.png");
+        btnSave.imageSize = [24, 24];
+    });
+    btnSave.addEventListener("mouseout", function() {
+        btnSave.image = File(scriptFolderPath + "/NitroNamer/img/save.png");
+        btnSave.imageSize = [24, 24];
+    });
+
+    var btnCircleMinus = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/circleMinus.png"), {style: "toolbutton"});
+    btnCircleMinus.size = [24, 24];
+    btnCircleMinus.imageSize = [24, 24];
+
+    btnCircleMinus.addEventListener("mouseover", function() {
+        btnCircleMinus.image = File(scriptFolderPath + "/NitroNamer/img/circleMinusHover.png");
+        btnCircleMinus.imageSize = [24, 24];
+    });
+    btnCircleMinus.addEventListener("mouseout", function() {
+        btnCircleMinus.image = File(scriptFolderPath + "/NitroNamer/img/circleMinus.png");
+        btnCircleMinus.imageSize = [24, 24];
+    });
+
+    // Новая группа для выпадающего списка
+    var grpDropdownAndButtons = win.add("group", undefined);
+    grpDropdownAndButtons.orientation = "row";
+    grpDropdownAndButtons.alignment = ["fill", "top"];
+    grpDropdownAndButtons.margins = [0, -10, 0, 0]; // Отступы от краев группы (верхний отступ 5px)
+
+    // Добавить выпадающий список
+    var ddLayerMode = grpDropdownAndButtons.add("dropdownlist", undefined, ["Mode 1", "Mode 2", "Mode 3"]);
+    ddLayerMode.selection = 0;
 
     // Обновить функции переключения режимов
     rdoAllLayers.onClick = function() {
@@ -47,12 +88,12 @@ function buildUI(thisObj) {
         $.writeln("rdoOnlySelected clicked, settings: " + JSON.stringify(settings));
     };
     
-    
-
     var grpTemplate = win.add("group", undefined);
     grpTemplate.orientation = "column";
+    grpTemplate.margins = [0,-10,0,0];
     var txtTemplate = grpTemplate.add("edittext", undefined, "(Template for renaming)O_T.i", {multiline: false, scrolling: false}); // Установлено значение по умолчанию
     txtTemplate.alignment = ["fill", "top"];
+    txtTemplate.margins = [0,-10,0,0];
     txtTemplate.onChanging = function() {
         updatePreview();
         updateLayerCounts();
@@ -63,14 +104,22 @@ function buildUI(thisObj) {
         saveSettings(settings);
         $.writeln("Template changed, settings: " + JSON.stringify(settings));
     };
+    // Установить ширину выпадающего списка после создания txtTemplate
+    win.onShow = function() {
+        ddLayerMode.size = [txtTemplate.size[0], ddLayerMode.size[1]];
+    };
 
     var txtOriginalLabel = win.add("statictext", undefined, "Input layer name: ");
+    txtOriginalLabel.maximumSize.height = 8;
     var txtOriginal = win.add("edittext", undefined, "", {readonly: true});
     txtOriginal.alignment = ["fill", "top"];
+    txtOriginal.margins = [0,-10,0,0];
 
     var txtRenamedLabel = win.add("statictext", undefined, "Template result: ");
+    txtRenamedLabel.maximumSize.height = 8;
     var txtRenamed = win.add("edittext", undefined, "", {readonly: true});
     txtRenamed.alignment = ["fill", "top"];
+    txtRenamed.margins = [0,-10,0,0];
 
     var grpBriefly = win.add("group", undefined);
     grpBriefly.orientation = "row";
@@ -87,12 +136,11 @@ function buildUI(thisObj) {
         updateLayerCounts();
         resetRenameButtonIcon(); // Reset button icon to "Rename Layers"
     };
+    grpBriefly.margins = [0,-10,0,0];
 
     var grpButtons = win.add("group", undefined);
     grpButtons.orientation = "row";
-
-    var scriptFile = new File($.fileName);
-    var scriptFolderPath = scriptFile.path;
+    grpButtons.margins = [0,-10,0,0];
 
     var btnRename = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/renameIcon.png"), { style: "toolbutton" });
     btnRename.size = [32, 32]; // Установить размер кнопки
