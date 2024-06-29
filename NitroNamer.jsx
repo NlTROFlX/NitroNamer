@@ -32,16 +32,16 @@ function buildUI(thisObj) {
         btnSave.imageSize = [24, 24];
     });
 
-    var btnCircleMinus = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/circleMinus.png"), {style: "toolbutton"});
+    var btnCircleMinus = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/delete.png"), {style: "toolbutton"});
     btnCircleMinus.size = [24, 24];
     btnCircleMinus.imageSize = [24, 24];
 
     btnCircleMinus.addEventListener("mouseover", function() {
-        btnCircleMinus.image = File(scriptFolderPath + "/NitroNamer/img/circleMinusHover.png");
+        btnCircleMinus.image = File(scriptFolderPath + "/NitroNamer/img/deleteHover.png");
         btnCircleMinus.imageSize = [24, 24];
     });
     btnCircleMinus.addEventListener("mouseout", function() {
-        btnCircleMinus.image = File(scriptFolderPath + "/NitroNamer/img/circleMinus.png");
+        btnCircleMinus.image = File(scriptFolderPath + "/NitroNamer/img/delete.png");
         btnCircleMinus.imageSize = [24, 24];
     });
 
