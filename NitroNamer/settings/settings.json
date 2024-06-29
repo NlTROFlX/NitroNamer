@@ -1,16 +1,46 @@
 {
     "userPresets": {
         "preset_1": {
-            "allLayers": true,
-            "template": "1"
+            "allLayers": false,
+            "template": "1",
+            "briefly": false,
+            "brieflyType": 0
         },
         "preset_2": {
-            "allLayers": true,
-            "template": "2"
+            "allLayers": false,
+            "template": "2",
+            "briefly": false,
+            "brieflyType": 0
         },
         "preset_3": {
-            "allLayers": true,
-            "template": "3"
+            "allLayers": false,
+            "template": "2",
+            "briefly": false,
+            "brieflyType": 0
+        },
+        "preset_4": {
+            "allLayers": false,
+            "template": "999",
+            "briefly": false,
+            "brieflyType": 0
+        },
+        "preset_5": {
+            "allLayers": false,
+            "template": "999",
+            "briefly": true,
+            "brieflyType": 0
+        },
+        "preset_6": {
+            "allLayers": false,
+            "template": "999",
+            "briefly": true,
+            "brieflyType": 1
         }
+    },
+    "currentSettings": {
+        "allLayers": true,
+        "template": "999",
+        "briefly": true,
+        "brieflyType": 4
     }
 }

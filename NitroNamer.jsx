@@ -66,10 +66,15 @@ function buildUI(thisObj) {
         updatePreview();
         resetRenameButtonIcon();
         
-        // Сохранить настройки
-        var settings = { allLayers: rdoAllLayers.value, template: txtTemplate.text };
-        saveSettings(settings);
-        $.writeln("rdoAllLayers clicked, settings: " + JSON.stringify(settings));
+        // Сохранить текущие настройки
+        var currentSettings = {
+            allLayers: rdoAllLayers.value,
+            template: txtTemplate.text,
+            briefly: chkBriefly.value,
+            brieflyType: ddBrieflyType.selection.index
+        };
+        saveSettings(currentSettings, true);
+        $.writeln("rdoAllLayers clicked, current settings saved: " + JSON.stringify(currentSettings));
     };
     
     rdoOnlySelected.onClick = function() {
@@ -82,10 +87,15 @@ function buildUI(thisObj) {
         updatePreview();
         resetRenameButtonIcon();
         
-        // Сохранить настройки
-        var settings = { allLayers: rdoAllLayers.value, template: txtTemplate.text };
-        saveSettings(settings);
-        $.writeln("rdoOnlySelected clicked, settings: " + JSON.stringify(settings));
+        // Сохранить текущие настройки
+        var currentSettings = {
+            allLayers: rdoAllLayers.value,
+            template: txtTemplate.text,
+            briefly: chkBriefly.value,
+            brieflyType: ddBrieflyType.selection.index
+        };
+        saveSettings(currentSettings, true);
+        $.writeln("rdoOnlySelected clicked, current settings saved: " + JSON.stringify(currentSettings));
     };
     
     var grpTemplate = win.add("group", undefined);
@@ -95,6 +105,21 @@ function buildUI(thisObj) {
     txtTemplate.alignment = ["fill", "top"];
     txtTemplate.margins = [0,-10,0,0];
     txtTemplate.onChanging = function() {
+        updatePreview();
+        updateLayerCounts();
+        resetRenameButtonIcon();
+    };
+    txtTemplate.onChange = function() {
+        var currentSettings = {
+            allLayers: rdoAllLayers.value,
+            template: txtTemplate.text,
+            briefly: chkBriefly.value,
+            brieflyType: ddBrieflyType.selection.index
+        };
+    
+        saveSettings(currentSettings, true);
+        $.writeln("Current settings saved: " + JSON.stringify(currentSettings));
+    
         updatePreview();
         updateLayerCounts();
         resetRenameButtonIcon();
@@ -122,14 +147,34 @@ function buildUI(thisObj) {
     var ddBrieflyType = grpBriefly.add("dropdownlist", undefined, ["Camel Case", "Pascal Case", "Snake Case", "Kebab Case", "Screaming Snake Case", "This Comp"]);
     ddBrieflyType.selection = 0;
     chkBriefly.onClick = function() {
+        var currentSettings = {
+            allLayers: rdoAllLayers.value,
+            template: txtTemplate.text,
+            briefly: chkBriefly.value,
+            brieflyType: ddBrieflyType.selection.index
+        };
+    
+        saveSettings(currentSettings, true);
+        $.writeln("Current settings saved: " + JSON.stringify(currentSettings));
+    
         updatePreview();
         updateLayerCounts();
-        resetRenameButtonIcon(); // Reset button icon to "Rename Layers"
+        resetRenameButtonIcon();
     };
     ddBrieflyType.onChange = function() {
+        var currentSettings = {
+            allLayers: rdoAllLayers.value,
+            template: txtTemplate.text,
+            briefly: chkBriefly.value,
+            brieflyType: ddBrieflyType.selection.index
+        };
+    
+        saveSettings(currentSettings, true);
+        $.writeln("Current settings saved: " + JSON.stringify(currentSettings));
+    
         updatePreview();
         updateLayerCounts();
-        resetRenameButtonIcon(); // Reset button icon to "Rename Layers"
+        resetRenameButtonIcon();
     };
     grpBriefly.margins = [0,-10,0,0];
 
@@ -203,10 +248,12 @@ function buildUI(thisObj) {
     btnSave.onClick = function() {
         var settings = {
             allLayers: rdoAllLayers.value,
-            template: txtTemplate.text
+            template: txtTemplate.text,
+            briefly: chkBriefly.value,
+            brieflyType: ddBrieflyType.selection.index
         };
-        
-        saveSettings(settings);
+    
+        saveSettings(settings, false);
         $.writeln("Preset saved, settings: " + JSON.stringify(settings));
     };                                                   
 
@@ -239,7 +286,7 @@ function buildUI(thisObj) {
     };
 
     // Добавить функции для работы с JSON с логированием
-    function saveSettings(settings) {
+    function saveSettings(settings, isCurrent) {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
         var settingsFile = new File(scriptFolderPath + "/settings.json");
@@ -250,55 +297,71 @@ function buildUI(thisObj) {
         
         var existingSettings = loadSettings() || {};
         var userPresets = existingSettings.userPresets || {};
+        var currentSettings = existingSettings.currentSettings || {};
     
-        // Определение следующего порядкового номера пресета
-        var nextPresetNumber = Object.keys(userPresets).length + 1;
-        var uniqueKey = "preset_" + nextPresetNumber; // Генерация уникального ключа на основе порядкового номера
-        
-        userPresets[uniqueKey] = settings;
-        
+        if (isCurrent) {
+            currentSettings = settings;
+        } else {
+            var nextPresetNumber = Object.keys(userPresets).length + 1;
+            var uniqueKey = "preset_" + nextPresetNumber;
+            userPresets[uniqueKey] = settings;
+        }
+    
         existingSettings.userPresets = userPresets;
-        
+        existingSettings.currentSettings = currentSettings;
+    
         settingsFile.open("w");
-        settingsFile.write(JSON.stringify(existingSettings, null, 4));  // Форматирование для удобства чтения
+        settingsFile.write(JSON.stringify(existingSettings, null, 4));
         settingsFile.close();
-        
+    
         $.writeln("Settings saved: " + JSON.stringify(existingSettings));
-    }                
+    }
     
     function loadSettings() {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
         var settingsFile = new File(scriptFolderPath + "/settings.json");
-        
+    
         if (settingsFile.exists) {
             settingsFile.open("r");
             var settings = JSON.parse(settingsFile.read());
             settingsFile.close();
-            
+    
             $.writeln("Settings loaded: " + JSON.stringify(settings));
             return settings;
         }
-        
+    
         $.writeln("No settings file found.");
         return {};
     }
     
     function applySettings(settings) {
         if (settings && settings.userPresets) {
-            // Загрузка последнего сохраненного пресета
             var lastPresetKey = Object.keys(settings.userPresets).pop();
             var lastPreset = settings.userPresets[lastPresetKey];
-            
+    
             rdoAllLayers.value = lastPreset.allLayers;
             rdoOnlySelected.value = !lastPreset.allLayers;
             txtTemplate.text = lastPreset.template || "(Template for renaming)O_T.i";
-            
+            chkBriefly.value = lastPreset.briefly;
+            ddBrieflyType.selection = lastPreset.brieflyType || 0;
+    
             updateLayerCounts();
             updatePreview();
             resetRenameButtonIcon();
         }
-    }
+        if (settings && settings.currentSettings) {
+            rdoAllLayers.value = settings.currentSettings.allLayers;
+            rdoOnlySelected.value = !settings.currentSettings.allLayers;
+            txtTemplate.text = settings.currentSettings.template || "(Template for renaming)O_T.i";
+            chkBriefly.value = settings.currentSettings.briefly;
+            ddBrieflyType.selection = settings.currentSettings.brieflyType || 0;
+    
+            updateLayerCounts();
+            updatePreview();
+            resetRenameButtonIcon();
+        }
+    }            
 
     function updateLayerCounts() {
         var proj = app.project;
