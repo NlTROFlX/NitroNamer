@@ -1,1 +1,16 @@
-{"allLayers":false,"template":"(Template for renaming)O_T.i"}
+{
+    "userPresets": {
+        "preset_1": {
+            "allLayers": true,
+            "template": "1"
+        },
+        "preset_2": {
+            "allLayers": true,
+            "template": "2"
+        },
+        "preset_3": {
+            "allLayers": true,
+            "template": "3"
+        }
+    }
+}

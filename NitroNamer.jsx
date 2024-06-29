@@ -98,11 +98,6 @@ function buildUI(thisObj) {
         updatePreview();
         updateLayerCounts();
         resetRenameButtonIcon();
-        
-        // Сохранить настройки
-        var settings = { allLayers: rdoAllLayers.value, template: txtTemplate.text };
-        saveSettings(settings);
-        $.writeln("Template changed, settings: " + JSON.stringify(settings));
     };
     // Установить ширину выпадающего списка после создания txtTemplate
     win.onShow = function() {
@@ -205,6 +200,15 @@ function buildUI(thisObj) {
     btnVariables.onClick = function() {
         showVariables();
     };
+    btnSave.onClick = function() {
+        var settings = {
+            allLayers: rdoAllLayers.value,
+            template: txtTemplate.text
+        };
+        
+        saveSettings(settings);
+        $.writeln("Preset saved, settings: " + JSON.stringify(settings));
+    };                                                   
 
     btnRename.onClick = function() {
         var allLayers = rdoAllLayers.value;
@@ -244,13 +248,23 @@ function buildUI(thisObj) {
             Folder(scriptFolderPath).create();
         }
         
+        var existingSettings = loadSettings() || {};
+        var userPresets = existingSettings.userPresets || {};
+    
+        // Определение следующего порядкового номера пресета
+        var nextPresetNumber = Object.keys(userPresets).length + 1;
+        var uniqueKey = "preset_" + nextPresetNumber; // Генерация уникального ключа на основе порядкового номера
+        
+        userPresets[uniqueKey] = settings;
+        
+        existingSettings.userPresets = userPresets;
+        
         settingsFile.open("w");
-        settingsFile.write(JSON.stringify(settings));
+        settingsFile.write(JSON.stringify(existingSettings, null, 4));  // Форматирование для удобства чтения
         settingsFile.close();
         
-        // Добавить логирование
-        $.writeln("Settings saved: " + JSON.stringify(settings));
-    }
+        $.writeln("Settings saved: " + JSON.stringify(existingSettings));
+    }                
     
     function loadSettings() {
         var scriptFile = new File($.fileName);
@@ -262,21 +276,24 @@ function buildUI(thisObj) {
             var settings = JSON.parse(settingsFile.read());
             settingsFile.close();
             
-            // Добавить логирование
             $.writeln("Settings loaded: " + JSON.stringify(settings));
             return settings;
         }
         
-        // Добавить логирование
         $.writeln("No settings file found.");
-        return null;
+        return {};
     }
     
     function applySettings(settings) {
-        if (settings) {
-            rdoAllLayers.value = settings.allLayers;
-            rdoOnlySelected.value = !settings.allLayers;
-            txtTemplate.text = settings.template || "(Template for renaming)O_T.i";
+        if (settings && settings.userPresets) {
+            // Загрузка последнего сохраненного пресета
+            var lastPresetKey = Object.keys(settings.userPresets).pop();
+            var lastPreset = settings.userPresets[lastPresetKey];
+            
+            rdoAllLayers.value = lastPreset.allLayers;
+            rdoOnlySelected.value = !lastPreset.allLayers;
+            txtTemplate.text = lastPreset.template || "(Template for renaming)O_T.i";
+            
             updateLayerCounts();
             updatePreview();
             resetRenameButtonIcon();
