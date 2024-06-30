@@ -422,7 +422,7 @@ function buildUI(thisObj) {
     }
     
     function applySettings(settings) {
-        if (settings && settings.userPresets) {
+        if (settings && settings.userPresets && Object.keys(settings.userPresets).length > 0) {
             var lastPresetKey = Object.keys(settings.userPresets).pop();
             var lastPreset = settings.userPresets[lastPresetKey];
     
@@ -435,8 +435,7 @@ function buildUI(thisObj) {
             updateLayerCounts();
             updatePreview();
             resetRenameButtonIcon();
-        }
-        if (settings && settings.currentSettings) {
+        } else if (settings && settings.currentSettings) {
             rdoAllLayers.value = settings.currentSettings.allLayers;
             rdoOnlySelected.value = !settings.currentSettings.allLayers;
             txtTemplate.text = settings.currentSettings.template || "(Template for renaming)O_T.i";
@@ -447,7 +446,7 @@ function buildUI(thisObj) {
             updatePreview();
             resetRenameButtonIcon();
         }
-    }            
+    }                
 
     function updateLayerCounts() {
         var proj = app.project;

@@ -1,27 +1,27 @@
 {
     "userPresets": {
         "preset_1": {
-            "allLayers": false,
-            "template": "фвафываasdf",
+            "allLayers": true,
+            "template": "Ddd-1",
             "briefly": true,
-            "brieflyType": 5
+            "brieflyType": 2
         },
         "preset_2": {
             "allLayers": true,
-            "template": "(Template for renaming)O_T.i",
-            "briefly": false,
-            "brieflyType": 0
+            "template": "Ddd-2",
+            "briefly": true,
+            "brieflyType": 2
         },
         "preset_3": {
             "allLayers": true,
-            "template": "Ddd-2",
+            "template": "Ddd-4",
             "briefly": true,
             "brieflyType": 2
         }
     },
     "currentSettings": {
         "allLayers": true,
-        "template": "Ddd-2",
+        "template": "Ddd-4",
         "briefly": true,
         "brieflyType": 2
     }
