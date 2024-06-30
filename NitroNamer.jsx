@@ -287,19 +287,30 @@ function buildUI(thisObj) {
     };
 
     btnSave.onClick = function() {
-        var templateText = txtTemplate.text.trim(); // Удалить пробелы в начале и конце строки
-    
-        if (templateText === "") {
-            alert("Template name cannot be empty. Please enter a valid template name.");
-            return; // Прервать процесс сохранения
-        }
-    
         var settings = {
             allLayers: rdoAllLayers.value,
-            template: templateText, // Использовать очищенное значение
+            template: txtTemplate.text,
             briefly: chkBriefly.value,
             brieflyType: ddBrieflyType.selection.index
         };
+    
+        // Проверка на пустой шаблон
+        if (!settings.template.trim()) {
+            alert("Template cannot be empty.");
+            return;
+        }
+    
+        // Загрузить текущие настройки
+        var existingSettings = loadSettings();
+        var userPresets = existingSettings.userPresets || {};
+    
+        // Проверка на уникальность шаблона
+        for (var key in userPresets) {
+            if (userPresets.hasOwnProperty(key) && userPresets[key].template === settings.template) {
+                alert("A preset with this template already exists.");
+                return;
+            }
+        }
     
         saveSettings(settings, false);
         $.writeln("Preset saved, settings: " + JSON.stringify(settings));
@@ -320,7 +331,7 @@ function buildUI(thisObj) {
             ddLayerMode.add("item", presetTemplates[i]);
         }
         ddLayerMode.selection = ddLayerMode.items.length - 1; // Устанавливаем выбор на последний добавленный пресет
-    };    
+    };        
     
     btnCircleMinus.onClick = function() {
         var selectedPreset = ddLayerMode.selection;

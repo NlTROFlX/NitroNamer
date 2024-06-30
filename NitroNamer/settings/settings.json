@@ -4,37 +4,25 @@
             "allLayers": true,
             "template": "Ddd-1",
             "briefly": true,
-            "brieflyType": 2
+            "brieflyType": 0
         },
         "preset_2": {
-            "allLayers": true,
+            "allLayers": false,
             "template": "Ddd-2",
             "briefly": true,
-            "brieflyType": 2
+            "brieflyType": 1
         },
         "preset_3": {
             "allLayers": true,
             "template": "Ddd-3",
-            "briefly": true,
-            "brieflyType": 2
-        },
-        "preset_4": {
-            "allLayers": false,
-            "template": "Ddd-4",
-            "briefly": true,
-            "brieflyType": 2
-        },
-        "preset_5": {
-            "allLayers": false,
-            "template": "Ddd-4",
             "briefly": false,
-            "brieflyType": 4
+            "brieflyType": 2
         }
     },
     "currentSettings": {
-        "allLayers": false,
-        "template": "Ddd-4",
-        "briefly": true,
+        "allLayers": true,
+        "template": "Ddd-3",
+        "briefly": false,
         "brieflyType": 2
     }
 }
