@@ -287,9 +287,16 @@ function buildUI(thisObj) {
     };
 
     btnSave.onClick = function() {
+        var templateText = txtTemplate.text.trim(); // Удалить пробелы в начале и конце строки
+    
+        if (templateText === "") {
+            alert("Template name cannot be empty. Please enter a valid template name.");
+            return; // Прервать процесс сохранения
+        }
+    
         var settings = {
             allLayers: rdoAllLayers.value,
-            template: txtTemplate.text,
+            template: templateText, // Использовать очищенное значение
             briefly: chkBriefly.value,
             brieflyType: ddBrieflyType.selection.index
         };
@@ -313,7 +320,7 @@ function buildUI(thisObj) {
             ddLayerMode.add("item", presetTemplates[i]);
         }
         ddLayerMode.selection = ddLayerMode.items.length - 1; // Устанавливаем выбор на последний добавленный пресет
-    };
+    };    
     
     btnCircleMinus.onClick = function() {
         var selectedPreset = ddLayerMode.selection;
