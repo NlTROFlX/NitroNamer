@@ -11,17 +11,11 @@
             "template": "Ddd-2",
             "briefly": true,
             "brieflyType": 2
-        },
-        "preset_3": {
-            "allLayers": true,
-            "template": "Ddd-4",
-            "briefly": true,
-            "brieflyType": 2
         }
     },
     "currentSettings": {
-        "allLayers": true,
-        "template": "Ddd-4",
+        "allLayers": false,
+        "template": "Ddd-1",
         "briefly": true,
         "brieflyType": 2
     }

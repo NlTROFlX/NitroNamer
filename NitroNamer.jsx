@@ -66,6 +66,35 @@ function buildUI(thisObj) {
     var ddLayerMode = grpDropdownAndButtons.add("dropdownlist", undefined, presetTemplates);
     ddLayerMode.selection = 0;
 
+    ddLayerMode.onChange = function() {
+        var selectedPreset = ddLayerMode.selection;
+        if (selectedPreset) {
+            var presetTemplate = selectedPreset.text;
+    
+            // Загрузить текущие настройки
+            var settings = loadSettings();
+            var userPresets = settings.userPresets || {};
+    
+            // Найти ключ пресета с соответствующим шаблоном
+            for (var key in userPresets) {
+                if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
+                    var preset = userPresets[key];
+                    rdoAllLayers.value = preset.allLayers;
+                    rdoOnlySelected.value = !preset.allLayers;
+                    txtTemplate.text = preset.template;
+                    chkBriefly.value = preset.briefly;
+                    ddBrieflyType.selection = preset.brieflyType || 0;
+    
+                    updateLayerCounts();
+                    updatePreview();
+                    resetRenameButtonIcon();
+    
+                    break;
+                }
+            }
+        }
+    };
+
     // Обновить функции переключения режимов
     rdoAllLayers.onClick = function() {
         if (rdoAllLayers.value) {
