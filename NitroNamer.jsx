@@ -320,6 +320,9 @@ function buildUI(thisObj) {
         if (selectedPreset) {
             var presetTemplate = selectedPreset.text;
     
+            // Сохранить текущее значение поля ввода шаблона
+            var currentTemplateText = txtTemplate.text;
+    
             // Загрузить текущие настройки
             var settings = loadSettings();
             var userPresets = settings.userPresets || {};
@@ -366,6 +369,9 @@ function buildUI(thisObj) {
             if (ddLayerMode.items.length > 0) {
                 ddLayerMode.selection = 0; // Устанавливаем выбор на первый пресет, если он есть
             }
+    
+            // Восстановить значение поля ввода шаблона
+            txtTemplate.text = currentTemplateText;
         } else {
             alert("Please select a preset to delete.");
         }
