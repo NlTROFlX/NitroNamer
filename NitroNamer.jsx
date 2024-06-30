@@ -327,8 +327,9 @@ function buildUI(thisObj) {
         if (selectedPreset) {
             var presetTemplate = selectedPreset.text;
     
-            // Сохранить текущее значение поля ввода шаблона
+            // Сохранить текущее значение полей ввода шаблона и результата
             var currentTemplateText = txtTemplate.text;
+            var currentResultText = txtRenamed.text;
     
             // Загрузить текущие настройки
             var settings = loadSettings();
@@ -377,12 +378,13 @@ function buildUI(thisObj) {
                 ddLayerMode.selection = 0; // Устанавливаем выбор на первый пресет, если он есть
             }
     
-            // Восстановить значение поля ввода шаблона
+            // Восстановить значения полей ввода шаблона и результата
             txtTemplate.text = currentTemplateText;
+            txtRenamed.text = currentResultText;
         } else {
             alert("Please select a preset to delete.");
         }
-    };        
+    };       
 
     btnRename.onClick = function() {
         var allLayers = rdoAllLayers.value;
