@@ -784,6 +784,9 @@ function buildUI(thisObj) {
     }
     
     function getWidth(layer) {
+        if (layer.nullLayer || layer.adjustmentLayer) {
+            return "NoWidth";
+        }
         if (layer.source && layer.source.width) {
             return layer.source.width.toString();
         }
@@ -791,6 +794,9 @@ function buildUI(thisObj) {
     }
     
     function getHeight(layer) {
+        if (layer.nullLayer || layer.adjustmentLayer) {
+            return "NoHeight";
+        }
         if (layer.source && layer.source.height) {
             return layer.source.height.toString();
         }

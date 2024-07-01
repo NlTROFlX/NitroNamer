@@ -9,7 +9,7 @@
     },
     "currentSettings": {
         "allLayers": true,
-        "template": "W|H",
+        "template": "W*H",
         "briefly": false,
         "brieflyType": 0
     }
