@@ -697,11 +697,14 @@ function buildUI(thisObj) {
     }
 
     function getResolution(layer) {
+        if (layer.nullLayer || layer.adjustmentLayer) {
+            return "NoResolution";
+        }
         if (layer.source && layer.source.width && layer.source.height) {
             return layer.source.width + "*" + layer.source.height;
         }
         return "NoResolution";
-    }
+    }    
 
     function getDuration(layer) {
         if (layer.source && layer.source.duration) {

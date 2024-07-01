@@ -1,28 +1,16 @@
 {
     "userPresets": {
         "preset_1": {
-            "allLayers": true,
-            "template": "Ddd-1",
-            "briefly": true,
-            "brieflyType": 0
-        },
-        "preset_2": {
             "allLayers": false,
-            "template": "Ddd-2",
+            "template": "T_Ddd.i_R",
             "briefly": true,
             "brieflyType": 1
-        },
-        "preset_3": {
-            "allLayers": true,
-            "template": "Ddd-3",
-            "briefly": false,
-            "brieflyType": 2
         }
     },
     "currentSettings": {
         "allLayers": true,
-        "template": "Ddd-3",
+        "template": "1",
         "briefly": false,
-        "brieflyType": 2
+        "brieflyType": 1
     }
 }
