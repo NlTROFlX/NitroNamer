@@ -339,24 +339,11 @@ function buildUI(thisObj) {
         }
     
         saveSettings(settings, false);
-        
+    
         // Обновить список пресетов
         var updatedSettings = loadSettings();
-        var userPresets = updatedSettings.userPresets || {};
-        var presetTemplates = [];
-    
-        for (var key in userPresets) {
-            if (userPresets.hasOwnProperty(key)) {
-                presetTemplates.push(userPresets[key].template);
-            }
-        }
-    
-        ddLayerMode.removeAll();
-        for (var i = 0; i < presetTemplates.length; i++) {
-            ddLayerMode.add("item", presetTemplates[i]);
-        }
-        ddLayerMode.selection = ddLayerMode.items.length - 1; // Устанавливаем выбор на последний добавленный пресет
-    };        
+        updatePresetsDropdown(updatedSettings);
+    };            
     
     btnCircleMinus.onClick = function() {
         var selectedPreset = ddLayerMode.selection;
@@ -390,27 +377,14 @@ function buildUI(thisObj) {
             var scriptFile = new File($.fileName);
             var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
             var settingsFile = new File(scriptFolderPath + "/settings.json");
-            
+    
             settingsFile.encoding = "UTF-8"; // Устанавливаем кодировку UTF-8
             settingsFile.open("w");
             settingsFile.write(JSON.stringify(settings, null, 4));
             settingsFile.close();
     
             // Обновить список пресетов
-            var presetTemplates = [];
-            for (var key in newUserPresets) {
-                if (newUserPresets.hasOwnProperty(key)) {
-                    presetTemplates.push(newUserPresets[key].template);
-                }
-            }
-    
-            ddLayerMode.removeAll();
-            for (var i = 0; i < presetTemplates.length; i++) {
-                ddLayerMode.add("item", presetTemplates[i]);
-            }
-            if (ddLayerMode.items.length > 0) {
-                ddLayerMode.selection = 0; // Устанавливаем выбор на первый пресет, если он есть
-            }
+            updatePresetsDropdown(settings);
     
             // Восстановить значения полей ввода шаблона и результата
             txtTemplate.text = currentTemplateText;
@@ -418,7 +392,7 @@ function buildUI(thisObj) {
         } else {
             alert("Please select a preset to delete.");
         }
-    };       
+    };           
 
     btnRename.onClick = function() {
         var allLayers = rdoAllLayers.value;
@@ -477,7 +451,7 @@ function buildUI(thisObj) {
         settingsFile.open("w");
         settingsFile.write(JSON.stringify(existingSettings, null, 4));
         settingsFile.close();
-    }    
+    }        
     
     function loadSettings() {
         var scriptFile = new File($.fileName);
@@ -519,7 +493,32 @@ function buildUI(thisObj) {
             updatePreview();
             resetRenameButtonIcon();
         }
-    }                
+    
+        // Обновить список пресетов
+        updatePresetsDropdown(settings);
+    }
+    
+    function updatePresetsDropdown(settings) {
+        ddLayerMode.removeAll();
+        var userPresets = settings.userPresets || {};
+        var presetTemplates = [];
+    
+        for (var key in userPresets) {
+            if (userPresets.hasOwnProperty(key)) {
+                presetTemplates.push(userPresets[key].template);
+            }
+        }
+    
+        if (presetTemplates.length === 0) {
+            ddLayerMode.add("item", "Save your new preset");
+        } else {
+            for (var i = 0; i < presetTemplates.length; i++) {
+                ddLayerMode.add("item", presetTemplates[i]);
+            }
+        }
+    
+        ddLayerMode.selection = 0;
+    }
 
     function updateLayerCounts() {
         var proj = app.project;
