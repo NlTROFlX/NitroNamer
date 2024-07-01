@@ -5,12 +5,18 @@
             "template": "T_Ddd.i_R",
             "briefly": true,
             "brieflyType": 1
+        },
+        "preset_2": {
+            "allLayers": false,
+            "template": "Preset1",
+            "briefly": true,
+            "brieflyType": 1
         }
     },
     "currentSettings": {
-        "allLayers": true,
-        "template": "1",
-        "briefly": false,
+        "allLayers": false,
+        "template": "Preset1",
+        "briefly": true,
         "brieflyType": 1
     }
 }

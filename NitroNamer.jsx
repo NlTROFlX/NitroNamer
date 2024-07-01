@@ -164,6 +164,37 @@ function buildUI(thisObj) {
         updateLayerCounts();
         resetRenameButtonIcon();
     };
+    txtTemplate.addEventListener("keydown", function(event) {
+    if (event.keyName === "Enter") {
+        var selectedPreset = ddLayerMode.selection;
+        if (selectedPreset) {
+            var presetTemplate = selectedPreset.text;
+            
+            // Загрузить текущие настройки
+            var settings = loadSettings();
+            var userPresets = settings.userPresets || {};
+            
+            // Найти ключ пресета с соответствующим шаблоном
+            for (var key in userPresets) {
+                if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
+                    var preset = userPresets[key];
+                    rdoAllLayers.value = preset.allLayers;
+                    rdoOnlySelected.value = !preset.allLayers;
+                    txtTemplate.text = preset.template;
+                    chkBriefly.value = preset.briefly;
+                    ddBrieflyType.selection = preset.brieflyType || 0;
+                    
+                    updateLayerCounts();
+                    updatePreview();
+                    resetRenameButtonIcon();
+                    
+                    break;
+                }
+            }
+        }
+    }
+    });
+                     
     // Установить ширину выпадающего списка после создания txtTemplate
     win.onShow = function() {
         ddLayerMode.size = [txtTemplate.size[0], ddLayerMode.size[1]];
