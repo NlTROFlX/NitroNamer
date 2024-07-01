@@ -114,7 +114,6 @@ function buildUI(thisObj) {
             brieflyType: ddBrieflyType.selection.index
         };
         saveSettings(currentSettings, true);
-        $.writeln("rdoAllLayers clicked, current settings saved: " + JSON.stringify(currentSettings));
     };
     
     rdoOnlySelected.onClick = function() {
@@ -135,7 +134,6 @@ function buildUI(thisObj) {
             brieflyType: ddBrieflyType.selection.index
         };
         saveSettings(currentSettings, true);
-        $.writeln("rdoOnlySelected clicked, current settings saved: " + JSON.stringify(currentSettings));
     };
     
     var grpTemplate = win.add("group", undefined);
@@ -158,7 +156,6 @@ function buildUI(thisObj) {
         };
     
         saveSettings(currentSettings, true);
-        $.writeln("Current settings saved: " + JSON.stringify(currentSettings));
     
         updatePreview();
         updateLayerCounts();
@@ -226,7 +223,6 @@ function buildUI(thisObj) {
         };
     
         saveSettings(currentSettings, true);
-        $.writeln("Current settings saved: " + JSON.stringify(currentSettings));
     
         updatePreview();
         updateLayerCounts();
@@ -241,7 +237,6 @@ function buildUI(thisObj) {
         };
     
         saveSettings(currentSettings, true);
-        $.writeln("Current settings saved: " + JSON.stringify(currentSettings));
     
         updatePreview();
         updateLayerCounts();
@@ -344,7 +339,6 @@ function buildUI(thisObj) {
         }
     
         saveSettings(settings, false);
-        $.writeln("Preset saved, settings: " + JSON.stringify(settings));
         
         // Обновить список пресетов
         var updatedSettings = loadSettings();
@@ -401,8 +395,6 @@ function buildUI(thisObj) {
             settingsFile.open("w");
             settingsFile.write(JSON.stringify(settings, null, 4));
             settingsFile.close();
-    
-            $.writeln("Preset deleted and reordered, settings: " + JSON.stringify(settings));
     
             // Обновить список пресетов
             var presetTemplates = [];
@@ -485,8 +477,6 @@ function buildUI(thisObj) {
         settingsFile.open("w");
         settingsFile.write(JSON.stringify(existingSettings, null, 4));
         settingsFile.close();
-    
-        $.writeln("Settings saved: " + JSON.stringify(existingSettings));
     }    
     
     function loadSettings() {
@@ -498,12 +488,9 @@ function buildUI(thisObj) {
             settingsFile.open("r");
             var settings = JSON.parse(settingsFile.read());
             settingsFile.close();
-    
-            $.writeln("Settings loaded: " + JSON.stringify(settings));
             return settings;
         }
     
-        $.writeln("No settings file found.");
         return {};
     }
     
