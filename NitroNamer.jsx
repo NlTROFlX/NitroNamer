@@ -89,11 +89,21 @@ function buildUI(thisObj) {
                     updatePreview();
                     resetRenameButtonIcon();
     
+                    // Сохранить текущий выбор пресета
+                    var currentSettings = {
+                        allLayers: rdoAllLayers.value,
+                        template: txtTemplate.text,
+                        briefly: chkBriefly.value,
+                        brieflyType: ddBrieflyType.selection.index,
+                        selectedPresetIndex: ddLayerMode.selection.index
+                    };
+                    saveSettings(currentSettings, true);
+    
                     break;
                 }
             }
         }
-    };
+    };    
 
     // Обновить функции переключения режимов
     rdoAllLayers.onClick = function() {
@@ -451,7 +461,7 @@ function buildUI(thisObj) {
         settingsFile.open("w");
         settingsFile.write(JSON.stringify(existingSettings, null, 4));
         settingsFile.close();
-    }        
+    }            
     
     function loadSettings() {
         var scriptFile = new File($.fileName);
@@ -496,7 +506,14 @@ function buildUI(thisObj) {
     
         // Обновить список пресетов
         updatePresetsDropdown(settings);
-    }
+    
+        // Установить сохраненный выбор пресета
+        if (settings.currentSettings && typeof settings.currentSettings.selectedPresetIndex !== 'undefined') {
+            ddLayerMode.selection = settings.currentSettings.selectedPresetIndex;
+        } else {
+            ddLayerMode.selection = 0; // Выбрать первый элемент, если нет сохраненного выбора
+        }
+    }    
     
     function updatePresetsDropdown(settings) {
         ddLayerMode.removeAll();
@@ -517,8 +534,13 @@ function buildUI(thisObj) {
             }
         }
     
-        ddLayerMode.selection = 0;
-    }
+        // Установить сохраненный выбор пресета
+        if (settings.currentSettings && typeof settings.currentSettings.selectedPresetIndex !== 'undefined') {
+            ddLayerMode.selection = settings.currentSettings.selectedPresetIndex;
+        } else {
+            ddLayerMode.selection = 0; // Выбрать первый элемент, если нет сохраненного выбора
+        }
+    }    
 
     function updateLayerCounts() {
         var proj = app.project;

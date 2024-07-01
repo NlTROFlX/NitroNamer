@@ -1,16 +1,23 @@
 {
     "userPresets": {
         "preset_1": {
-            "allLayers": false,
-            "template": "Preset1",
-            "briefly": true,
-            "brieflyType": 1
+            "allLayers": true,
+            "template": "1",
+            "briefly": false,
+            "brieflyType": 0
+        },
+        "preset_2": {
+            "allLayers": true,
+            "template": "2",
+            "briefly": false,
+            "brieflyType": 0
         }
     },
     "currentSettings": {
-        "allLayers": false,
-        "template": "Preset1",
-        "briefly": true,
-        "brieflyType": 1
+        "allLayers": true,
+        "template": "2",
+        "briefly": false,
+        "brieflyType": 0,
+        "selectedPresetIndex": 1
     }
 }
