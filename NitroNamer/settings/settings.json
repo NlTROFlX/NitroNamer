@@ -1,16 +1,12 @@
 {
     "userPresets": {
-        "preset_1": {
-            "allLayers": true,
-            "template": "T_F",
-            "briefly": false,
-            "brieflyType": 0
-        }
+        
     },
     "currentSettings": {
         "allLayers": true,
-        "template": "W*H",
+        "template": "T_F",
         "briefly": false,
-        "brieflyType": 0
+        "brieflyType": 0,
+        "selectedPresetIndex": 0
     }
 }
