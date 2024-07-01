@@ -357,7 +357,7 @@ function buildUI(thisObj) {
     
     btnCircleMinus.onClick = function() {
         var selectedPreset = ddLayerMode.selection;
-        if (selectedPreset) {
+        if (selectedPreset && selectedPreset.text !== "Save your new preset" && selectedPreset.text !== "Please select a preset to delete") {
             var presetTemplate = selectedPreset.text;
     
             // Сохранить текущее значение полей ввода шаблона и результата
@@ -400,9 +400,9 @@ function buildUI(thisObj) {
             txtTemplate.text = currentTemplateText;
             txtRenamed.text = currentResultText;
         } else {
-            alert("Please select a preset to delete.");
+            updatePresetsDropdown(loadSettings());
         }
-    };           
+    };               
 
     btnRename.onClick = function() {
         var allLayers = rdoAllLayers.value;
@@ -527,7 +527,7 @@ function buildUI(thisObj) {
         }
     
         if (presetTemplates.length === 0) {
-            ddLayerMode.add("item", "Save your new preset");
+            ddLayerMode.add("item", "All presets have been deleted");
         } else {
             for (var i = 0; i < presetTemplates.length; i++) {
                 ddLayerMode.add("item", presetTemplates[i]);
@@ -540,7 +540,7 @@ function buildUI(thisObj) {
         } else {
             ddLayerMode.selection = 0; // Выбрать первый элемент, если нет сохраненного выбора
         }
-    }    
+    }        
 
     function updateLayerCounts() {
         var proj = app.project;
