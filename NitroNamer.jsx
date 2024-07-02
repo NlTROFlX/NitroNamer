@@ -417,8 +417,9 @@ function buildUI(thisObj) {
     };
 
     btnHelp.onClick = function() {
-        showHelp();
         updateLayerCounts();
+        var helpScriptPath = scriptFolderPath + "/NitroNamer/scripts/NNHelp.jsx";
+        $.evalFile(helpScriptPath);
     };
 
     btnReset.onClick = function() {
