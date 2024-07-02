@@ -4,9 +4,8 @@
     },
     "currentSettings": {
         "allLayers": true,
-        "template": "T_F",
+        "template": "T",
         "briefly": false,
-        "brieflyType": 0,
-        "selectedPresetIndex": 0
+        "brieflyType": 0
     }
 }

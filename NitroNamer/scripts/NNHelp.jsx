@@ -2,128 +2,101 @@ function showHelp() {
     var helpWin = new Window("dialog", "NitroNamer - Help Panel", undefined, {resizeable: true});
     helpWin.orientation = "column";
     helpWin.alignChildren = ["fill", "top"];
-    
-    var addGroupHeader = function(parent, title) {
-        var group = parent.add("group", undefined);
-        group.orientation = "row";
-        group.alignment = ["fill", "top"];
-        group.add("statictext", undefined, title);
-        var divider = group.add("panel", undefined, undefined, {borderStyle: "sunken"});
-        divider.alignment = "fill";
+    helpWin.spacing = 10;
+
+    var addGroupPanel = function(parent, title, variables) {
+        var panel = parent.add("panel", undefined, title);
+        panel.orientation = "column";
+        panel.alignChildren = ["fill", "top"];
+        panel.spacing = 10;
+
+        var listBox = panel.add("listbox", undefined, variables, {multiselect: false});
+        listBox.preferredSize = [200, 100];
+
+        return panel;
     };
 
-    var addVariableGroup = function(parent, title, variables) {
-        var group = parent.add("group", undefined);
-        group.orientation = "column";
-        group.alignment = ["fill", "top"];
-        group.margins = 10;
-        
-        var header = group.add("statictext", undefined, title);
-        header.graphics.font = ScriptUI.newFont("Arial", "Bold", 12);
-        
-        for (var i = 0; i < variables.length; i++) {
-            var variableGroup = group.add("group", undefined);
-            variableGroup.orientation = "row";
-            variableGroup.alignChildren = ["left", "center"];
-            variableGroup.spacing = 10;
-            
-            var variableText = variableGroup.add("statictext", undefined, variables[i].variable);
-            variableText.preferredSize.width = 60;
-            variableText.graphics.font = ScriptUI.newFont("Arial", "Bold", 12);
-            
-            var descriptionText = variableGroup.add("statictext", undefined, variables[i].description);
-            descriptionText.graphics.font = ScriptUI.newFont("Arial", "Regular", 12);
-        }
-        
-        var separator = parent.add("panel", undefined, undefined, {borderStyle: "etched"});
-        separator.alignment = "fill";
-        separator.minimumSize.height = 2;
-        separator.maximumSize.height = 2;
-    };
+    // Первая строка групп
+    var firstRow = helpWin.add("group", undefined);
+    firstRow.orientation = "row";
+    firstRow.alignChildren = ["fill", "top"];
+    firstRow.spacing = 10;
 
-    var variables = [
-        {
-            title: "Composition Information:",
-            vars: [
-                {variable: "C", description: "Current composition name"}
-            ]
-        },
-        {
-            title: "Time and Duration:",
-            vars: [
-                {variable: "D", description: "Duration (HH:MM:SS)"},
-                {variable: "Dd", description: "By seconds duration (0Sec)"},
-                {variable: "Ddd", description: "By minute duration (0Min.0Sec)"},
-                {variable: "Ip", description: "In point of the layer"},
-                {variable: "Op", description: "Out point of the layer"}
-            ]
-        },
-        {
-            title: "Effects:",
-            vars: [
-                {variable: "E", description: "Name of effects"},
-                {variable: "E{#}", description: "Effects with custom delimiter"}
-            ]
-        },
-        {
-            title: "Frame Rate and Resolution:",
-            vars: [
-                {variable: "F", description: "Frame Rate"},
-                {variable: "R", description: "Resolution (Width*Height)"}
-            ]
-        },
-        {
-            title: "Indexes and Identifiers:",
-            vars: [
-                {variable: "I", description: "Local index of selected layers"},
-                {variable: "i", description: "Layer index"}
-            ]
-        },
-        {
-            title: "Source:",
-            vars: [
-                {variable: "M", description: "Source name (file or pre-comp)"},
-                {variable: "W", description: "Width of the layer"},
-                {variable: "H", description: "Height of the layer"}
-            ]
-        },
-        {
-            title: "Layer Type:",
-            vars: [
-                {variable: "T", description: "Layer type (Pre-comp, Footage, Shape, Solid, Null, Adjustment, Audio, Text, Light, Camera)"}
-            ]
-        },
-        {
-            title: "Other:",
-            vars: [
-                {variable: "O", description: "Original name of the layer"}
-            ]
-        }
+    // Переменные информации о композиции
+    var compVariables = [
+        "C - Current composition name"
     ];
+    addGroupPanel(firstRow, "Composition Information", compVariables);
 
-    helpWin.add("statictext", undefined, "Available Variables:").graphics.font = ScriptUI.newFont("Arial", "Bold", 14);
+    // Переменные времени и длительности
+    var timeVariables = [
+        "D - Duration (HH:MM:SS)",
+        "Dd - By seconds duration (0Sec)",
+        "Ddd - By minute duration (0Min.0Sec)",
+        "Ip - In point of the layer",
+        "Op - Out point of the layer"
+    ];
+    addGroupPanel(firstRow, "Time and Duration", timeVariables);
 
-    var mainGroup = helpWin.add("group", undefined);
-    mainGroup.orientation = "row";
-    mainGroup.alignChildren = ["fill", "top"];
+    // Переменные эффектов
+    var effectsVariables = [
+        "E - Name of effects",
+        "E{#} - Effects with custom delimiter"
+    ];
+    addGroupPanel(firstRow, "Effects", effectsVariables);
 
-    for (var i = 0; i < variables.length; i++) {
-        var subGroup = mainGroup.add("group", undefined);
-        subGroup.orientation = "column";
-        subGroup.alignChildren = ["fill", "top"];
-        subGroup.spacing = 10;
-        subGroup.margins = 10;
+    // Переменные частоты кадров и разрешения
+    var frameResVariables = [
+        "F - Frame Rate",
+        "R - Resolution (Width*Height)"
+    ];
+    addGroupPanel(firstRow, "Frame Rate and Resolution", frameResVariables);
 
-        addVariableGroup(subGroup, variables[i].title, variables[i].vars);
-    }
+    // Вторая строка групп
+    var secondRow = helpWin.add("group", undefined);
+    secondRow.orientation = "row";
+    secondRow.alignChildren = ["fill", "top"];
+    secondRow.spacing = 10;
 
-    var btnClose = helpWin.add("button", undefined, "Close");
+    // Переменные индексов и идентификаторов
+    var indexVariables = [
+        "I - Local index of selected layers",
+        "i - Layer index"
+    ];
+    addGroupPanel(secondRow, "Indexes and Identifiers", indexVariables);
+
+    // Переменные источника
+    var sourceVariables = [
+        "M - Source name (file or pre-comp)",
+        "W - Width of the layer",
+        "H - Height of the layer"
+    ];
+    addGroupPanel(secondRow, "Source", sourceVariables);
+
+    // Переменные типа слоя
+    var layerTypeVariables = [
+        "T - Layer type (Pre-comp, Footage, Shape, Solid, Null, Adjustment, Audio, Text, Light, Camera)"
+    ];
+    addGroupPanel(secondRow, "Layer Type", layerTypeVariables);
+
+    // Прочие переменные
+    var otherVariables = [
+        "O - Original name of the layer"
+    ];
+    addGroupPanel(secondRow, "Other", otherVariables);
+
+    var buttonGroup = helpWin.add("group", undefined);
+    buttonGroup.orientation = "row";
+    buttonGroup.alignChildren = ["center", "top"];
+    buttonGroup.spacing = 10;
+
+    var btnClose = buttonGroup.add("button", undefined, "Close");
     btnClose.onClick = function() {
         helpWin.close();
     };
 
     // Add the new button to open the URL
-    var btnNitrofix = helpWin.add("button", undefined, "NitroNamer 2024.2 | Say thanks or buy a coffee for NITROFIX");
+    var btnNitrofix = buttonGroup.add("button", undefined, "NitroNamer 2024.2 | Say thanks or buy a coffee for NITROFIX");
     btnNitrofix.onClick = function() {
         var url = "https://boosty.to/nitrofix";
         if ($.os.indexOf("Windows") !== -1) {
