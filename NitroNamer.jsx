@@ -635,7 +635,7 @@ function buildUI(thisObj) {
             "C": compName,
             "Ip": layer.inPoint.toFixed(2),  // In point
             "Op": layer.outPoint.toFixed(2), // Out point
-            "M": getSourceName(layer),       // Добавлено
+            "S": getSourceName(layer),
             "W": getWidth(layer),            // Добавлено
             "H": getHeight(layer)            // Добавлено
         };
@@ -805,7 +805,7 @@ function buildUI(thisObj) {
     }
 
     function replaceVariables(template, variables) {
-        return template.replace(/\(([^()]+)\)|E\{([^}]+)\}|Ip|Op|Dd{0,2}|[A-Z]|i|I|M|W|H/g, function(match, group, customDelimiter) {
+        return template.replace(/\(([^()]+)\)|E\{([^}]+)\}|Ip|Op|Dd{0,2}|[A-Z]|i|I|S|W|H/g, function(match, group, customDelimiter) {
             if (group) {
                 return group;  // Handle text inside parentheses
             } else if (customDelimiter !== undefined) {
@@ -870,7 +870,7 @@ function buildUI(thisObj) {
                             "C": compName,
                             "Ip": layer.inPoint.toFixed(2),  // In point
                             "Op": layer.outPoint.toFixed(2), // Out point
-                            "M": getSourceName(layer),       // Добавлено
+                            "S": getSourceName(layer),
                             "W": getWidth(layer),            // Добавлено
                             "H": getHeight(layer)            // Добавлено
                         };
@@ -986,7 +986,8 @@ function buildUI(thisObj) {
                         "Ddd": getMediumDuration(layer),
                         "C": comp.name,
                         "Ip": layer.inPoint.toFixed(2),
-                        "Op": layer.outPoint.toFixed(2)
+                        "Op": layer.outPoint.toFixed(2),
+                        "S": getSourceName(layer)
                     };
 
                     var variablesWin = new Window("dialog", "Current Layer Variables", undefined, {resizeable: true});
