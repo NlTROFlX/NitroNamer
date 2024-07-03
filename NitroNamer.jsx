@@ -676,7 +676,7 @@ function buildUI(thisObj) {
         if (layer instanceof CameraLayer || layer instanceof LightLayer) {
             return "NoTrackMate";
         } else if (layer.isTrackMatte) {
-            return layer.name + "[TM - Source]";
+            return "[TM - Source]";
         } else if (layer.trackMatteType !== undefined && layer.trackMatteType !== TrackMatteType.NO_TRACK_MATTE && (
                 layer.trackMatteType === TrackMatteType.ALPHA ||
                 layer.trackMatteType === TrackMatteType.ALPHA_INVERTED ||
@@ -699,7 +699,7 @@ function buildUI(thisObj) {
                 default:
                     matteType = "Unknown Track Matte";
             }
-            return layer.name + "[TM - " + matteType + "]";
+            return "[TM - " + matteType + "]";
         } else {
             return "NoTrackMate";
         }
