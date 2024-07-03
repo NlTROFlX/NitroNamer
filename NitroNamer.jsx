@@ -638,7 +638,8 @@ function buildUI(thisObj) {
             "S": getSourceName(layer),
             "W": getWidth(layer),
             "H": getHeight(layer),
-            "Tm": getTrackMatteType(layer)   // Track Matte type
+            "Tm": getTrackMatteType(layer),
+            "Ar": getAspectRatio(layer)   // Добавлено для переменной Ar
         };
     
         var newName = replaceVariables(template, variables);
@@ -667,7 +668,7 @@ function buildUI(thisObj) {
         }
     
         return newName;
-    }
+    }    
     
     function getTrackMatteType(layer) {
         if (layer instanceof CameraLayer || layer instanceof LightLayer) {
@@ -837,8 +838,24 @@ function buildUI(thisObj) {
         return "NoHeight";
     }
 
+    function getAspectRatio(layer) {
+        if (layer.nullLayer || layer.adjustmentLayer) {
+            return "NoAspectRatio";
+        }
+        if (layer.source && layer.source.width && layer.source.height) {
+            var width = layer.source.width;
+            var height = layer.source.height;
+            var gcd = function(a, b) {
+                return b == 0 ? a : gcd(b, a % b);
+            };
+            var divisor = gcd(width, height);
+            return (width / divisor) + ":" + (height / divisor);
+        }
+        return "NoAspectRatio";
+    }
+
     function replaceVariables(template, variables) {
-        return template.replace(/\(([^()]+)\)|E\{([^}]+)\}|Ip|Op|Dd{0,2}|Tm|[A-Z]|i|I|S|W|H/g, function(match, group, customDelimiter) {
+        return template.replace(/\(([^()]+)\)|E\{([^}]+)\}|Ip|Op|Dd{0,2}|Tm|Ar|[A-Z]|i|I|S|W|H/g, function(match, group, customDelimiter) {
             if (group) {
                 return group;  // Handle text inside parentheses
             } else if (customDelimiter !== undefined) {
@@ -855,11 +872,13 @@ function buildUI(thisObj) {
                 return variables['Ddd'];
             } else if (match === 'Tm') {
                 return variables['Tm'];
+            } else if (match === 'Ar') {
+                return variables['Ar'];  // Добавлено для переменной Ar
             } else {
                 return variables[match] !== undefined ? variables[match] : match;
             }
         });
-    }            
+    }    
 
     var localIndex = 1; // Глобальный локальный индекс
 
@@ -908,7 +927,8 @@ function buildUI(thisObj) {
                             "S": getSourceName(layer),
                             "W": getWidth(layer),
                             "H": getHeight(layer),
-                            "Tm": getTrackMatteType(layer)   // Track Matte type
+                            "Tm": getTrackMatteType(layer),
+                            "Ar": getAspectRatio(layer)   // Добавлено для переменной Ar
                         };
     
                         var newName = replaceVariables(template, variables);
@@ -950,7 +970,7 @@ function buildUI(thisObj) {
         } else {
             alert("Project not found.");
         }
-    }
+    }    
 
     function showHelp() {
         var helpWin = new Window("dialog", "NitroNamer - Help panel", undefined, {resizeable: true});
