@@ -690,11 +690,7 @@ function buildUI(thisObj) {
                 default:
                     matteType = "Unknown Track Matte";
             }
-            if (layer.trackMatteLayer) {
-                return layer.trackMatteLayer.name + "[TM - " + matteType + "]";
-            } else {
-                return "Unknown Source[TM - " + matteType + "]";
-            }
+            return layer.name + "[TM - " + matteType + "]";
         } else {
             return "NoTrackMate";
         }
