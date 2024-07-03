@@ -670,13 +670,10 @@ function buildUI(thisObj) {
     }
     
     function getTrackMatteType(layer) {
-        var matteTypeDebug = "Layer: " + layer.name + " - TrackMatteType: " + layer.trackMatteType;
-        $.writeln(matteTypeDebug); // This will print the debug information to the JavaScript console in After Effects
-    
         if (layer instanceof CameraLayer || layer instanceof LightLayer) {
             return "NoTrackMate";
         } else if (layer.isTrackMatte) {
-            return "[TM - Source]";
+            return "TM:Source";
         } else if (layer.trackMatteType !== undefined && layer.trackMatteType !== TrackMatteType.NO_TRACK_MATTE && (
                 layer.trackMatteType === TrackMatteType.ALPHA ||
                 layer.trackMatteType === TrackMatteType.ALPHA_INVERTED ||
@@ -699,7 +696,7 @@ function buildUI(thisObj) {
                 default:
                     matteType = "Unknown Track Matte";
             }
-            return "[TM - " + matteType + "]";
+            return "TM:" + matteType;
         } else {
             return "NoTrackMate";
         }
