@@ -635,9 +635,10 @@ function buildUI(thisObj) {
             "C": compName,
             "Ip": layer.inPoint.toFixed(2),  // In point
             "Op": layer.outPoint.toFixed(2), // Out point
-            "S": getSourceName(layer),
-            "W": getWidth(layer),            // Добавлено
-            "H": getHeight(layer)            // Добавлено
+            "S": getSourceName(layer),       // Изменено с "M" на "S"
+            "W": getWidth(layer),
+            "H": getHeight(layer),
+            "Tm": getTrackMatteType(layer)   // Добавлено для переменной Tm
         };
     
         var newName = replaceVariables(template, variables);
@@ -667,7 +668,24 @@ function buildUI(thisObj) {
     
         return newName;
     }
-                    
+    
+    function getTrackMatteType(layer) {
+        if (layer.trackMatteType !== undefined && layer.trackMatteType !== TrackMatteType.NO_TRACK_MATTE) {
+            switch (layer.trackMatteType) {
+                case TrackMatteType.ALPHA:
+                    return "Alpha";
+                case TrackMatteType.ALPHA_INVERTED:
+                    return "Alpha Inverted";
+                case TrackMatteType.LUMA:
+                    return "Luma";
+                case TrackMatteType.LUMA_INVERTED:
+                    return "Luma Inverted";
+                default:
+                    return "Unknown Track Matte";
+            }
+        }
+        return "No Track Matte";
+    }            
 
     function toCamelCase(str) {
         return str.split(/(\d+\.\d{2}|\d{2}:\d{2}:\d{2}|\d+min\.\d+sec|\d+min\.\d{2}sec)/).map(function(part, index) {
@@ -805,7 +823,7 @@ function buildUI(thisObj) {
     }
 
     function replaceVariables(template, variables) {
-        return template.replace(/\(([^()]+)\)|E\{([^}]+)\}|Ip|Op|Dd{0,2}|[A-Z]|i|I|S|W|H/g, function(match, group, customDelimiter) {
+        return template.replace(/\(([^()]+)\)|E\{([^}]+)\}|Ip|Op|Dd{0,2}|Tm|[A-Z]|i|I|S|W|H/g, function(match, group, customDelimiter) {
             if (group) {
                 return group;  // Handle text inside parentheses
             } else if (customDelimiter !== undefined) {
@@ -820,11 +838,13 @@ function buildUI(thisObj) {
                 return variables['Dd'];
             } else if (match === 'Ddd') {
                 return variables['Ddd'];
+            } else if (match === 'Tm') {
+                return variables['Tm'];
             } else {
                 return variables[match] !== undefined ? variables[match] : match;
             }
         });
-    }        
+    }            
 
     var localIndex = 1; // Глобальный локальный индекс
 
@@ -870,10 +890,11 @@ function buildUI(thisObj) {
                             "C": compName,
                             "Ip": layer.inPoint.toFixed(2),  // In point
                             "Op": layer.outPoint.toFixed(2), // Out point
-                            "S": getSourceName(layer),
-                            "W": getWidth(layer),            // Добавлено
-                            "H": getHeight(layer)            // Добавлено
-                        };
+                            "S": getSourceName(layer),       // Изменено с "M" на "S"
+                            "W": getWidth(layer),
+                            "H": getHeight(layer),
+                            "Tm": getTrackMatteType(layer)   // Добавлено для переменной Tm
+                        };                        
     
                         var newName = replaceVariables(template, variables);
     
@@ -987,8 +1008,9 @@ function buildUI(thisObj) {
                         "C": comp.name,
                         "Ip": layer.inPoint.toFixed(2),
                         "Op": layer.outPoint.toFixed(2),
-                        "S": getSourceName(layer)
-                    };
+                        "S": getSourceName(layer),       // Изменено с "M" на "S"
+                        "Tm": getTrackMatteType(layer)   // Добавлено для переменной Tm
+                    };                    
 
                     var variablesWin = new Window("dialog", "Current Layer Variables", undefined, {resizeable: true});
                     variablesWin.orientation = "column";

@@ -4,8 +4,8 @@
     },
     "currentSettings": {
         "allLayers": true,
-        "template": "S",
-        "briefly": true,
+        "template": "Tm",
+        "briefly": false,
         "brieflyType": 0
     }
 }

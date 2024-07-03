@@ -67,7 +67,7 @@ function showHelp() {
 
     // Переменные источника
     var sourceVariables = [
-        "M - Source name (file or pre-comp)",
+        "S - Source name (file or pre-comp)",
         "W - Width of the layer",
         "H - Height of the layer"
     ];
