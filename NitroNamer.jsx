@@ -635,10 +635,10 @@ function buildUI(thisObj) {
             "C": compName,
             "Ip": layer.inPoint.toFixed(2),  // In point
             "Op": layer.outPoint.toFixed(2), // Out point
-            "S": getSourceName(layer),       // Изменено с "M" на "S"
+            "S": getSourceName(layer),
             "W": getWidth(layer),
             "H": getHeight(layer),
-            "Tm": getTrackMatteType(layer)   // Добавлено для переменной Tm
+            "Tm": getTrackMatteType(layer)   // Track Matte type
         };
     
         var newName = replaceVariables(template, variables);
@@ -670,21 +670,34 @@ function buildUI(thisObj) {
     }
     
     function getTrackMatteType(layer) {
-        if (layer.trackMatteType !== undefined && layer.trackMatteType !== TrackMatteType.NO_TRACK_MATTE) {
+        if (layer.isTrackMatte) {
+            return layer.name + "[TM - Source]";
+        } else if (layer.trackMatteType !== TrackMatteType.NO_TRACK_MATTE) {
+            var matteType;
             switch (layer.trackMatteType) {
                 case TrackMatteType.ALPHA:
-                    return "Alpha";
+                    matteType = "Alpha";
+                    break;
                 case TrackMatteType.ALPHA_INVERTED:
-                    return "Alpha Inverted";
+                    matteType = "Alpha Inverted";
+                    break;
                 case TrackMatteType.LUMA:
-                    return "Luma";
+                    matteType = "Luma";
+                    break;
                 case TrackMatteType.LUMA_INVERTED:
-                    return "Luma Inverted";
+                    matteType = "Luma Inverted";
+                    break;
                 default:
-                    return "Unknown Track Matte";
+                    matteType = "Unknown Track Matte";
             }
+            if (layer.trackMatteLayer) {
+                return layer.trackMatteLayer.name + "[TM - " + matteType + "]";
+            } else {
+                return "Unknown Source[TM - " + matteType + "]";
+            }
+        } else {
+            return "NoTrackMate";
         }
-        return "No Track Matte";
     }            
 
     function toCamelCase(str) {
@@ -857,7 +870,7 @@ function buildUI(thisObj) {
             if (comp && comp instanceof CompItem) {
                 app.beginUndoGroup("Rename Layers by Template");
     
-                // Сброс локального индекса перед переименованием
+                // Reset local index before renaming
                 localIndex = 1;
     
                 for (var i = 1; i <= comp.numLayers; i++) {
@@ -879,7 +892,7 @@ function buildUI(thisObj) {
                         var variables = {
                             "T": getLayerType(layer),
                             "i": i,
-                            "I": localIndex,  // Используем локальный индекс
+                            "I": localIndex,  // Using local index
                             "O": layer.name,
                             "E": effectsString,
                             "F": getFrameRate(layer),
@@ -890,11 +903,11 @@ function buildUI(thisObj) {
                             "C": compName,
                             "Ip": layer.inPoint.toFixed(2),  // In point
                             "Op": layer.outPoint.toFixed(2), // Out point
-                            "S": getSourceName(layer),       // Изменено с "M" на "S"
+                            "S": getSourceName(layer),
                             "W": getWidth(layer),
                             "H": getHeight(layer),
-                            "Tm": getTrackMatteType(layer)   // Добавлено для переменной Tm
-                        };                        
+                            "Tm": getTrackMatteType(layer)   // Track Matte type
+                        };
     
                         var newName = replaceVariables(template, variables);
     
@@ -923,7 +936,7 @@ function buildUI(thisObj) {
     
                         layer.name = newName;
     
-                        // Увеличиваем локальный индекс после переименования слоя
+                        // Increment local index after renaming the layer
                         localIndex++;
                     }
                 }
