@@ -627,19 +627,20 @@ function buildUI(thisObj) {
             "I": localIndex,
             "O": layer.name,
             "E": effectsString,
-            "F": frameRate,
+            "F": getFrameRate(layer),
             "R": getResolution(layer),
-            "D": duration,
-            "Dd": shortDuration,
-            "Ddd": mediumDuration,
+            "D": getDuration(layer),
+            "Dd": getShortDuration(layer),
+            "Ddd": getMediumDuration(layer),
             "C": compName,
-            "Ip": layer.inPoint.toFixed(2),  // In point
-            "Op": layer.outPoint.toFixed(2), // Out point
+            "Ip": layer.inPoint.toFixed(2),
+            "Op": layer.outPoint.toFixed(2),
             "S": getSourceName(layer),
             "W": getWidth(layer),
             "H": getHeight(layer),
             "Tm": getTrackMatteType(layer),
-            "Ar": getAspectRatio(layer)   // Добавлено для переменной Ar
+            "Ar": getAspectRatio(layer),
+            "Ec": getEffectsCount(layer)   // Добавлено для переменной Ec
         };
     
         var newName = replaceVariables(template, variables);
@@ -854,14 +855,25 @@ function buildUI(thisObj) {
         return "NoAspectRatio";
     }
 
+    function getEffectsCount(layer) {
+        if (layer.property("ADBE Effect Parade")) {
+            return layer.property("ADBE Effect Parade").numProperties;
+        }
+        return 0;
+    }
+
     function replaceVariables(template, variables) {
-        return template.replace(/\(([^()]+)\)|E\{([^}]+)\}|Ip|Op|Dd{0,2}|Tm|Ar|[A-Z]|i|I|S|W|H/g, function(match, group, customDelimiter) {
+        return template.replace(/\(([^()]+)\)|Ec|E\{([^}]+)\}|E|Ip|Op|Dd{0,2}|Tm|Ar|[A-Z]|i|I|S|W|H/g, function(match, group, customDelimiter) {
             if (group) {
                 return group;  // Handle text inside parentheses
+            } else if (match === 'Ec') {
+                return variables['Ec'];
             } else if (customDelimiter !== undefined) {
                 // Handle the custom delimiter for E
                 var effectsString = variables['E'].split(', ').join(customDelimiter);
                 return effectsString;
+            } else if (match === 'E') {
+                return variables['E'];
             } else if (match === 'Ip') {
                 return variables['Ip'];
             } else if (match === 'Op') {
@@ -873,12 +885,13 @@ function buildUI(thisObj) {
             } else if (match === 'Tm') {
                 return variables['Tm'];
             } else if (match === 'Ar') {
-                return variables['Ar'];  // Добавлено для переменной Ar
+                return variables['Ar'];
             } else {
                 return variables[match] !== undefined ? variables[match] : match;
             }
         });
-    }    
+    }
+        
 
     var localIndex = 1; // Глобальный локальный индекс
 
@@ -928,7 +941,8 @@ function buildUI(thisObj) {
                             "W": getWidth(layer),
                             "H": getHeight(layer),
                             "Tm": getTrackMatteType(layer),
-                            "Ar": getAspectRatio(layer)   // Добавлено для переменной Ar
+                            "Ar": getAspectRatio(layer),
+                            "Ec": getEffectsCount(layer)   // Добавлено для переменной Ec
                         };
     
                         var newName = replaceVariables(template, variables);
@@ -1043,8 +1057,9 @@ function buildUI(thisObj) {
                         "C": comp.name,
                         "Ip": layer.inPoint.toFixed(2),
                         "Op": layer.outPoint.toFixed(2),
-                        "S": getSourceName(layer),       // Изменено с "M" на "S"
-                        "Tm": getTrackMatteType(layer)   // Добавлено для переменной Tm
+                        "S": getSourceName(layer), // Изменено с "M" на "S"
+                        "Tm": getTrackMatteType(layer), // Добавлено для переменной Tm
+                        "Ec": getEffectsCount(layer)    // Добавлено для переменной Ec
                     };                    
 
                     var variablesWin = new Window("dialog", "Current Layer Variables", undefined, {resizeable: true});
