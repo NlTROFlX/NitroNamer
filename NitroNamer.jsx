@@ -616,7 +616,7 @@ function buildUI(thisObj) {
         var duration = getDuration(layer);
         var shortDuration = getShortDuration(layer);
         var mediumDuration = getMediumDuration(layer);
-        var projectName = app.project.file ? app.project.file.name : "Untitled Project"; // Project name
+        var projectName = getProjectName(); // Use the new function
     
         if (briefly) {
             frameRate = parseFloat(frameRate).toFixed(2); // Ensure frame rate is formatted correctly
@@ -642,7 +642,7 @@ function buildUI(thisObj) {
             "Tm": getTrackMatteType(layer),
             "Ar": getAspectRatio(layer),
             "Ec": getEffectsCount(layer),
-            "Pn": projectName   // Added project name variable
+            "Pn": projectName   // Added project name variable without extension
         };
     
         var newName = replaceVariables(template, variables);
@@ -671,7 +671,7 @@ function buildUI(thisObj) {
         }
     
         return newName;
-    }        
+    }                    
     
     function getTrackMatteType(layer) {
         if (layer instanceof CameraLayer || layer instanceof LightLayer) {
@@ -864,6 +864,20 @@ function buildUI(thisObj) {
         return 0;
     }
 
+    function getProjectName() {
+        var projectName = "Untitled Project";
+        if (app.project.file) {
+            var projectFileName = app.project.file.name;
+            var lastDotIndex = projectFileName.lastIndexOf('.');
+            if (lastDotIndex !== -1) {
+                projectName = projectFileName.substring(0, lastDotIndex);
+            } else {
+                projectName = projectFileName;
+            }
+        }
+        return projectName;
+    }
+
     function replaceVariables(template, variables) {
         return template.replace(/\(([^()]+)\)|Ec|E\{([^}]+)\}|E|Ip|Op|Dd{0,2}|Tm|Ar|Pn|[A-Z]|i|I|S|W|H/g, function(match, group, customDelimiter) {
             if (group) {
@@ -925,7 +939,7 @@ function buildUI(thisObj) {
     
                         var effectsString = effectNames.length > 0 ? effectNames.join(", ") : "ClearLayer";
                         var compName = app.project.activeItem.name;
-                        var projectName = app.project.file ? app.project.file.name : "Untitled Project"; // Project name
+                        var projectName = getProjectName(); // Use the new function
     
                         var variables = {
                             "T": getLayerType(layer),
@@ -947,7 +961,7 @@ function buildUI(thisObj) {
                             "Tm": getTrackMatteType(layer),
                             "Ar": getAspectRatio(layer),
                             "Ec": getEffectsCount(layer),
-                            "Pn": projectName   // Added project name variable
+                            "Pn": projectName   // Added project name variable without extension
                         };
     
                         var newName = replaceVariables(template, variables);
@@ -989,7 +1003,7 @@ function buildUI(thisObj) {
         } else {
             alert("Project not found.");
         }
-    }        
+    }                    
 
     function showHelp() {
         var helpWin = new Window("dialog", "NitroNamer - Help panel", undefined, {resizeable: true});
@@ -1048,6 +1062,8 @@ function buildUI(thisObj) {
                 }
     
                 if (layer) {
+                    var projectName = getProjectName(); // Use the new function
+    
                     var variables = {
                         "T": getLayerType(layer),
                         "i": layer.index,
@@ -1067,7 +1083,7 @@ function buildUI(thisObj) {
                         "H": getHeight(layer),
                         "Tm": getTrackMatteType(layer),
                         "Ec": getEffectsCount(layer),
-                        "Pn": app.project.file ? app.project.file.name : "Untitled Project" // Added project name variable
+                        "Pn": projectName   // Added project name variable without extension
                     };
     
                     var variablesWin = new Window("dialog", "Current Layer Variables", undefined, {resizeable: true});
@@ -1096,7 +1112,7 @@ function buildUI(thisObj) {
         } else {
             alert("No project open.");
         }
-    }    
+    }                
 
     // Функция получения списка эффектов слоя
     function getEffectNames(layer) {
