@@ -647,7 +647,8 @@ function buildUI(thisObj) {
             "Ar": getAspectRatio(layer),
             "Ec": getEffectsCount(layer),
             "Pn": projectName,
-            "Lpos": getLayerPosition(layer) // Add the new variable here
+            "Lpos": getLayerPosition(layer),
+            "Lsc": getLayerScale(layer) // Add the new variable here
         };
     
         var newName = replaceVariables(template, variables);
@@ -676,7 +677,7 @@ function buildUI(thisObj) {
         }
     
         return newName;
-    }
+    }    
     
     function getTrackMatteType(layer) {
         if (layer instanceof CameraLayer || layer instanceof LightLayer) {
@@ -912,8 +913,19 @@ function buildUI(thisObj) {
         return animatedProps;
     }
 
+    function getLayerScale(layer) {
+        if (layer.transform && layer.transform.scale) {
+            var scale = layer.transform.scale.value;
+            var roundedScale = scale.map(function(coord) {
+                return Math.round(coord * 10) / 10;
+            });
+            return layer.threeDLayer ? roundedScale.join(", ") : roundedScale.slice(0, 2).join(", ");
+        }
+        return "NoScale";
+    }
+
     function replaceVariables(template, variables) {
-        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|E|An|Ip|Op|Dd{0,2}|Tm|Ar|Pn|Lpos|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces) {
+        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|E|An|Ip|Op|Dd{0,2}|Tm|Ar|Pn|Lpos|Lsc|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces) {
             if (group) {
                 return group;  // Handle text inside parentheses
             } else if (customEffectDelimiterParentheses !== undefined) {
@@ -948,12 +960,13 @@ function buildUI(thisObj) {
                 return variables['Pn'];
             } else if (match === 'Lpos') {
                 return variables['Lpos'];
+            } else if (match === 'Lsc') {
+                return variables['Lsc'];
             } else {
                 return variables[match] !== undefined ? variables[match] : match;
             }
         });
     }
-               
 
     var localIndex = 1; // Глобальный локальный индекс
 
@@ -1009,8 +1022,9 @@ function buildUI(thisObj) {
                             "Tm": getTrackMatteType(layer),
                             "Ar": getAspectRatio(layer),
                             "Ec": getEffectsCount(layer),
-                            "Pn": projectName,   // Added project name variable without extension
-                            "Lpos": getLayerPosition(layer) // Add the new variable here
+                            "Pn": projectName, 
+                            "Lpos": getLayerPosition(layer),
+                            "Lsc": getLayerScale(layer) // Add the new variable here
                         };
     
                         var newName = replaceVariables(template, variables);
@@ -1052,7 +1066,7 @@ function buildUI(thisObj) {
         } else {
             alert("Project not found.");
         }
-    }                                    
+    }                                        
 
     function showHelp() {
         var helpWin = new Window("dialog", "NitroNamer - Help panel", undefined, {resizeable: true});
@@ -1132,8 +1146,9 @@ function buildUI(thisObj) {
                         "H": getHeight(layer),
                         "Tm": getTrackMatteType(layer),
                         "Ec": getEffectsCount(layer),
-                        "Pn": projectName,   // Added project name variable without extension
-                        "Lpos": getLayerPosition(layer) // Add the new variable here
+                        "Pn": projectName,
+                        "Lpos": getLayerPosition(layer),
+                        "Lsc": getLayerScale(layer) // Add the new variable here
                     };
     
                     var variablesWin = new Window("dialog", "Current Layer Variables", undefined, {resizeable: true});
@@ -1162,7 +1177,7 @@ function buildUI(thisObj) {
         } else {
             alert("No project open.");
         }
-    }                    
+    }                        
 
     // Функция получения списка эффектов слоя
     function getEffectNames(layer) {

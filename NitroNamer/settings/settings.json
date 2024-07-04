@@ -9,9 +9,8 @@
     },
     "currentSettings": {
         "allLayers": true,
-        "template": "O_Tm",
+        "template": "T",
         "briefly": false,
-        "brieflyType": 0,
-        "selectedPresetIndex": 0
+        "brieflyType": 0
     }
 }
