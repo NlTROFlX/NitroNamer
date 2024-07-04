@@ -649,7 +649,8 @@ function buildUI(thisObj) {
             "Pn": projectName,
             "Lpos": getLayerPosition(layer),
             "Lsc": getLayerScale(layer),
-            "Lrot": getLayerRotation(layer)
+            "Lrot": getLayerRotation(layer),
+            "Lops": getLayerOpacity(layer)
         };
     
         var newName = replaceVariables(template, variables);
@@ -942,10 +943,18 @@ function buildUI(thisObj) {
             }
             return "NoRotation";
         }
-    }    
+    }
+
+    function getLayerOpacity(layer) {
+        if (layer.transform && layer.transform.opacity) {
+            var opacity = layer.transform.opacity.value;
+            return Math.round(opacity * 10) / 10;
+        }
+        return "NoOpacity";
+    }
 
     function replaceVariables(template, variables) {
-        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|E|An|Ip|Op|Dd{0,2}|Tm|Ar|Pn|Lpos|Lsc|Lrot|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces) {
+        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|E|An|Ip|Op|Dd{0,2}|Tm|Ar|Pn|Lpos|Lsc|Lrot|Lops|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces) {
             if (group) {
                 return group;  // Handle text inside parentheses
             } else if (customEffectDelimiterParentheses !== undefined) {
@@ -984,11 +993,13 @@ function buildUI(thisObj) {
                 return variables['Lsc'];
             } else if (match === 'Lrot') {
                 return variables['Lrot'];
+            } else if (match === 'Lops') {
+                return variables['Lops'];
             } else {
                 return variables[match] !== undefined ? variables[match] : match;
             }
         });
-    }
+    }    
 
     var localIndex = 1; // Глобальный локальный индекс
 
@@ -1047,7 +1058,8 @@ function buildUI(thisObj) {
                             "Pn": projectName, 
                             "Lpos": getLayerPosition(layer),
                             "Lsc": getLayerScale(layer),
-                            "Lrot": getLayerRotation(layer)
+                            "Lrot": getLayerRotation(layer),
+                            "Lops": getLayerOpacity(layer)
                         };
     
                         var newName = replaceVariables(template, variables);
@@ -1171,7 +1183,9 @@ function buildUI(thisObj) {
                         "Ec": getEffectsCount(layer),
                         "Pn": projectName,
                         "Lpos": getLayerPosition(layer),
-                        "Lsc": getLayerScale(layer) // Add the new variable here
+                        "Lsc": getLayerScale(layer),
+                        "Lrot": getLayerRotation(layer),
+                        "Lops": getLayerOpacity(layer)
                     };
     
                     var variablesWin = new Window("dialog", "Current Layer Variables", undefined, {resizeable: true});
