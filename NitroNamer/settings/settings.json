@@ -8,8 +8,8 @@
         }
     },
     "currentSettings": {
-        "allLayers": true,
-        "template": "Lops%",
+        "allLayers": false,
+        "template": "O_Tm",
         "briefly": false,
         "brieflyType": 0
     }

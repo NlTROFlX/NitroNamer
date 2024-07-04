@@ -1,5 +1,8 @@
 function buildUI(thisObj) {
     var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "NitroNamer", undefined, {resizeable: true});
+    var globalWidthSizeElements = 275;
+    win.maximumSize = [globalWidthSizeElements+8, 275]; // Set the maximum size of the panel
+    win.minimumSize = [globalWidthSizeElements+8, 275]; // Set the minimum size of the panel
     win.orientation = "column";
     win.alignChildren = ["fill", "top"];
     win.active = true;
@@ -22,6 +25,7 @@ function buildUI(thisObj) {
     var btnSave = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/save.png"), {style: "toolbutton"});
     btnSave.size = [24, 24];
     btnSave.imageSize = [24, 24];
+    btnSave.alignment = ["right", "center"];
 
     btnSave.addEventListener("mouseover", function() {
         btnSave.image = File(scriptFolderPath + "/NitroNamer/img/saveHover.png");
@@ -35,6 +39,7 @@ function buildUI(thisObj) {
     var btnCircleMinus = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/delete.png"), {style: "toolbutton"});
     btnCircleMinus.size = [24, 24];
     btnCircleMinus.imageSize = [24, 24];
+    btnCircleMinus.alignment = ["right", "center"];
 
     btnCircleMinus.addEventListener("mouseover", function() {
         btnCircleMinus.image = File(scriptFolderPath + "/NitroNamer/img/deleteHover.png");
@@ -44,6 +49,7 @@ function buildUI(thisObj) {
         btnCircleMinus.image = File(scriptFolderPath + "/NitroNamer/img/delete.png");
         btnCircleMinus.imageSize = [24, 24];
     });
+    
 
     // Загрузить настройки и заполнить выпадающий список пресетами
     var settings = loadSettings();
@@ -60,7 +66,7 @@ function buildUI(thisObj) {
     var grpDropdownAndButtons = win.add("group", undefined);
     grpDropdownAndButtons.orientation = "row";
     grpDropdownAndButtons.alignment = ["fill", "top"];
-    grpDropdownAndButtons.margins = [0, -10, 0, 0]; // Отступы от краев группы (верхний отступ 5px)
+    grpDropdownAndButtons.margins = [0, -10, 0, 0];
 
     // Добавить выпадающий список
     var ddLayerMode = grpDropdownAndButtons.add("dropdownlist", undefined, presetTemplates);
@@ -218,6 +224,18 @@ function buildUI(thisObj) {
     var txtRenamed = win.add("edittext", undefined, "", {readonly: true});
     txtRenamed.alignment = ["fill", "top"];
     txtRenamed.margins = [0,-10,0,0];
+
+    txtTemplate.maximumSize.width = globalWidthSizeElements;
+    txtTemplate.minimumSize.width = globalWidthSizeElements;
+
+    txtOriginal.maximumSize.width = globalWidthSizeElements;
+    txtOriginal.minimumSize.width = globalWidthSizeElements;
+
+    txtRenamed.maximumSize.width = globalWidthSizeElements;
+    txtRenamed.minimumSize.width = globalWidthSizeElements;
+
+    ddLayerMode.maximumSize.width = globalWidthSizeElements;
+    ddLayerMode.minimumSize.width = globalWidthSizeElements;
 
     var grpBriefly = win.add("group", undefined);
     grpBriefly.orientation = "row";
