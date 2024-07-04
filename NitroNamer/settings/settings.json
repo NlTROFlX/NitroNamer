@@ -9,8 +9,9 @@
     },
     "currentSettings": {
         "allLayers": true,
-        "template": "T_Lpos",
+        "template": "O_Tm",
         "briefly": false,
-        "brieflyType": 0
+        "brieflyType": 0,
+        "selectedPresetIndex": 0
     }
 }

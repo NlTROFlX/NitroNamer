@@ -712,14 +712,11 @@ function buildUI(thisObj) {
     }        
 
     function toCamelCase(str) {
-        return str.split(/(\d+\.\d{2}|\d{2}:\d{2}:\d{2}|\d+min\.\d+sec|\d+min\.\d{2}sec)/).map(function(part, index) {
-            if (index % 2 === 0) {
-                return part.replace(/(?:^\w|[A-Z]|\b\w|\s+|_)/g, function(match, index) {
-                    if (+match === 0) return "";
-                    return index === 0 ? match.toLowerCase() : match.toUpperCase();
-                });
+        return str.split(/(\d+|\W+)/).map(function(part, index) {
+            if (index === 0) {
+                return part.toLowerCase();
             }
-            return part;
+            return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
         }).join('');
     }
 
