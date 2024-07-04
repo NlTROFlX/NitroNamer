@@ -572,7 +572,7 @@ function buildUI(thisObj) {
         var proj = app.project;
         if (proj) {
             var comp = proj.activeItem;
-            if (comp && comp instanceof CompItem && comp.numLayers > 0) { // Добавлена проверка на наличие слоев
+            if (comp && comp instanceof CompItem && comp.numLayers > 0) {
                 var layer = null;
                 if (rdoAllLayers.value) {
                     layer = comp.selectedLayers.length > 0 ? comp.selectedLayers[0] : comp.layer(1);
@@ -599,7 +599,7 @@ function buildUI(thisObj) {
             txtOriginal.text = "No project open.";
             txtRenamed.text = "No project open.";
         }
-    }        
+    }            
 
     function generateNewName(layer, template, briefly, brieflyType) {
         var effectNames = [];
@@ -616,11 +616,14 @@ function buildUI(thisObj) {
         var duration = getDuration(layer);
         var shortDuration = getShortDuration(layer);
         var mediumDuration = getMediumDuration(layer);
-        var projectName = getProjectName(); // Use the new function
+        var projectName = getProjectName();
     
         if (briefly) {
-            frameRate = parseFloat(frameRate).toFixed(2); // Ensure frame rate is formatted correctly
+            frameRate = parseFloat(frameRate).toFixed(2); 
         }
+    
+        var animatedProps = getAnimatedProperties(layer);
+        var animatedPropsString = animatedProps.length > 0 ? animatedProps.join(", ") : "NoAnimations";
     
         var variables = {
             "T": getLayerType(layer),
@@ -628,6 +631,7 @@ function buildUI(thisObj) {
             "I": localIndex,
             "O": layer.name,
             "E": effectsString,
+            "An": animatedPropsString,
             "F": getFrameRate(layer),
             "R": getResolution(layer),
             "D": getDuration(layer),
@@ -642,7 +646,7 @@ function buildUI(thisObj) {
             "Tm": getTrackMatteType(layer),
             "Ar": getAspectRatio(layer),
             "Ec": getEffectsCount(layer),
-            "Pn": projectName   // Added project name variable without extension
+            "Pn": projectName
         };
     
         var newName = replaceVariables(template, variables);
@@ -671,7 +675,7 @@ function buildUI(thisObj) {
         }
     
         return newName;
-    }                    
+    }                        
     
     function getTrackMatteType(layer) {
         if (layer instanceof CameraLayer || layer instanceof LightLayer) {
@@ -878,18 +882,46 @@ function buildUI(thisObj) {
         return projectName;
     }
 
+    function getAnimatedProperties(layer) {
+        var animatedProps = [];
+    
+        function checkPropertyGroup(propertyGroup) {
+            for (var i = 1; i <= propertyGroup.numProperties; i++) {
+                var prop = propertyGroup.property(i);
+    
+                if (prop.numKeys > 0) {
+                    animatedProps.push(prop.name);
+                }
+    
+                if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
+                    checkPropertyGroup(prop);
+                }
+            }
+        }
+    
+        checkPropertyGroup(layer);
+        return animatedProps;
+    }
+
     function replaceVariables(template, variables) {
-        return template.replace(/\(([^()]+)\)|Ec|E\{([^}]+)\}|E|Ip|Op|Dd{0,2}|Tm|Ar|Pn|[A-Z]|i|I|S|W|H/g, function(match, group, customDelimiter) {
+        return template.replace(/\(([^()]+)\)|Ec|E\{([^}]+)\}|An\(([^)]+)\)|An|An\{([^}]+)\}|E|Ip|Op|Dd{0,2}|Tm|Ar|Pn|[A-Z]|i|I|S|W|H/g, function(match, group, customDelimiter, customAnimDelimiterInParentheses, customAnimDelimiterInBraces) {
             if (group) {
-                return group;  // Handle text inside parentheses
+                return group;
             } else if (match === 'Ec') {
                 return variables['Ec'];
             } else if (customDelimiter !== undefined) {
-                // Handle the custom delimiter for E
                 var effectsString = variables['E'].split(', ').join(customDelimiter);
                 return effectsString;
             } else if (match === 'E') {
                 return variables['E'];
+            } else if (customAnimDelimiterInParentheses !== undefined) {
+                var animatedPropsString = variables['An'].split(', ').join(customAnimDelimiterInParentheses);
+                return animatedPropsString;
+            } else if (customAnimDelimiterInBraces !== undefined) {
+                var animatedPropsString = variables['An'].split(', ').join(customAnimDelimiterInBraces);
+                return animatedPropsString;
+            } else if (match === 'An') {
+                return variables['An'];
             } else if (match === 'Ip') {
                 return variables['Ip'];
             } else if (match === 'Op') {
@@ -908,7 +940,7 @@ function buildUI(thisObj) {
                 return variables[match] !== undefined ? variables[match] : match;
             }
         });
-    }   
+    }                           
 
     var localIndex = 1; // Глобальный локальный индекс
 
@@ -928,7 +960,6 @@ function buildUI(thisObj) {
                     var layer = comp.layer(i);
     
                     if (allLayers || layer.selected) {
-    
                         var effectNames = [];
                         if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
                             for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
@@ -939,7 +970,10 @@ function buildUI(thisObj) {
     
                         var effectsString = effectNames.length > 0 ? effectNames.join(", ") : "ClearLayer";
                         var compName = app.project.activeItem.name;
-                        var projectName = getProjectName(); // Use the new function
+                        var projectName = getProjectName();
+    
+                        var animatedProps = getAnimatedProperties(layer);
+                        var animatedPropsString = animatedProps.length > 0 ? animatedProps.join(", ") : "NoAnimations";
     
                         var variables = {
                             "T": getLayerType(layer),
@@ -947,6 +981,7 @@ function buildUI(thisObj) {
                             "I": localIndex,  // Using local index
                             "O": layer.name,
                             "E": effectsString,
+                            "An": animatedPropsString,
                             "F": getFrameRate(layer),
                             "R": getResolution(layer),
                             "D": getDuration(layer),
@@ -1003,7 +1038,7 @@ function buildUI(thisObj) {
         } else {
             alert("Project not found.");
         }
-    }                    
+    }                        
 
     function showHelp() {
         var helpWin = new Window("dialog", "NitroNamer - Help panel", undefined, {resizeable: true});
