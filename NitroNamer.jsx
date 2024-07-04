@@ -904,22 +904,23 @@ function buildUI(thisObj) {
     }
 
     function replaceVariables(template, variables) {
-        return template.replace(/\(([^()]+)\)|Ec|E\{([^}]+)\}|An\(([^)]+)\)|An|An\{([^}]+)\}|E|Ip|Op|Dd{0,2}|Tm|Ar|Pn|[A-Z]|i|I|S|W|H/g, function(match, group, customDelimiter, customAnimDelimiterInParentheses, customAnimDelimiterInBraces) {
+        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|E|An|Ip|Op|Dd{0,2}|Tm|Ar|Pn|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces) {
             if (group) {
-                return group;
-            } else if (match === 'Ec') {
-                return variables['Ec'];
-            } else if (customDelimiter !== undefined) {
-                var effectsString = variables['E'].split(', ').join(customDelimiter);
+                return group;  // Handle text inside parentheses
+            } else if (customEffectDelimiterParentheses !== undefined) {
+                var effectsString = variables['E'].split(', ').join(customEffectDelimiterParentheses);
                 return effectsString;
+            } else if (customEffectDelimiterBraces !== undefined) {
+                var effectsString = variables['E'].split(', ').join(customEffectDelimiterBraces);
+                return effectsString;
+            } else if (customAnimDelimiterParentheses !== undefined) {
+                var animatedPropsString = variables['An'].split(', ').join(customAnimDelimiterParentheses);
+                return animatedPropsString;
+            } else if (customAnimDelimiterBraces !== undefined) {
+                var animatedPropsString = variables['An'].split(', ').join(customAnimDelimiterBraces);
+                return animatedPropsString;
             } else if (match === 'E') {
                 return variables['E'];
-            } else if (customAnimDelimiterInParentheses !== undefined) {
-                var animatedPropsString = variables['An'].split(', ').join(customAnimDelimiterInParentheses);
-                return animatedPropsString;
-            } else if (customAnimDelimiterInBraces !== undefined) {
-                var animatedPropsString = variables['An'].split(', ').join(customAnimDelimiterInBraces);
-                return animatedPropsString;
             } else if (match === 'An') {
                 return variables['An'];
             } else if (match === 'Ip') {
@@ -940,7 +941,7 @@ function buildUI(thisObj) {
                 return variables[match] !== undefined ? variables[match] : match;
             }
         });
-    }                           
+    }                         
 
     var localIndex = 1; // Глобальный локальный индекс
 
