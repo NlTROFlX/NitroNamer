@@ -648,7 +648,8 @@ function buildUI(thisObj) {
             "Ec": getEffectsCount(layer),
             "Pn": projectName,
             "Lpos": getLayerPosition(layer),
-            "Lsc": getLayerScale(layer) // Add the new variable here
+            "Lsc": getLayerScale(layer),
+            "Lrot": getLayerRotation(layer)
         };
     
         var newName = replaceVariables(template, variables);
@@ -924,8 +925,27 @@ function buildUI(thisObj) {
         return "NoScale";
     }
 
+    function getLayerRotation(layer) {
+        if (layer.threeDLayer) {
+            // For 3D layers, concatenate the X, Y, and Z rotations
+            var rotationX = layer.transform.xRotation ? layer.transform.xRotation.value : 0;
+            var rotationY = layer.transform.yRotation ? layer.transform.yRotation.value : 0;
+            var rotationZ = layer.transform.zRotation ? layer.transform.zRotation.value : 0;
+            return [rotationX, rotationY, rotationZ].map(function(value) {
+                return Math.round(value * 10) / 10;
+            }).join(", ");
+        } else {
+            // For 2D layers, use the regular rotation property
+            if (layer.transform && layer.transform.rotation) {
+                var rotation = layer.transform.rotation.value;
+                return Math.round(rotation * 10) / 10;
+            }
+            return "NoRotation";
+        }
+    }    
+
     function replaceVariables(template, variables) {
-        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|E|An|Ip|Op|Dd{0,2}|Tm|Ar|Pn|Lpos|Lsc|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces) {
+        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|E|An|Ip|Op|Dd{0,2}|Tm|Ar|Pn|Lpos|Lsc|Lrot|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces) {
             if (group) {
                 return group;  // Handle text inside parentheses
             } else if (customEffectDelimiterParentheses !== undefined) {
@@ -962,6 +982,8 @@ function buildUI(thisObj) {
                 return variables['Lpos'];
             } else if (match === 'Lsc') {
                 return variables['Lsc'];
+            } else if (match === 'Lrot') {
+                return variables['Lrot'];
             } else {
                 return variables[match] !== undefined ? variables[match] : match;
             }
@@ -1024,7 +1046,8 @@ function buildUI(thisObj) {
                             "Ec": getEffectsCount(layer),
                             "Pn": projectName, 
                             "Lpos": getLayerPosition(layer),
-                            "Lsc": getLayerScale(layer) // Add the new variable here
+                            "Lsc": getLayerScale(layer),
+                            "Lrot": getLayerRotation(layer)
                         };
     
                         var newName = replaceVariables(template, variables);

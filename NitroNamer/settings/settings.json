@@ -9,7 +9,7 @@
     },
     "currentSettings": {
         "allLayers": true,
-        "template": "T",
+        "template": "(Rot):Lrot | (Sc):Lsc | (Pos):Lpos",
         "briefly": false,
         "brieflyType": 0
     }
