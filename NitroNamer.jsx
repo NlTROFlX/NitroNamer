@@ -616,6 +616,7 @@ function buildUI(thisObj) {
         var duration = getDuration(layer);
         var shortDuration = getShortDuration(layer);
         var mediumDuration = getMediumDuration(layer);
+        var projectName = app.project.file ? app.project.file.name : "Untitled Project"; // Project name
     
         if (briefly) {
             frameRate = parseFloat(frameRate).toFixed(2); // Ensure frame rate is formatted correctly
@@ -640,7 +641,8 @@ function buildUI(thisObj) {
             "H": getHeight(layer),
             "Tm": getTrackMatteType(layer),
             "Ar": getAspectRatio(layer),
-            "Ec": getEffectsCount(layer)   // Добавлено для переменной Ec
+            "Ec": getEffectsCount(layer),
+            "Pn": projectName   // Added project name variable
         };
     
         var newName = replaceVariables(template, variables);
@@ -669,7 +671,7 @@ function buildUI(thisObj) {
         }
     
         return newName;
-    }    
+    }        
     
     function getTrackMatteType(layer) {
         if (layer instanceof CameraLayer || layer instanceof LightLayer) {
@@ -863,7 +865,7 @@ function buildUI(thisObj) {
     }
 
     function replaceVariables(template, variables) {
-        return template.replace(/\(([^()]+)\)|Ec|E\{([^}]+)\}|E|Ip|Op|Dd{0,2}|Tm|Ar|[A-Z]|i|I|S|W|H/g, function(match, group, customDelimiter) {
+        return template.replace(/\(([^()]+)\)|Ec|E\{([^}]+)\}|E|Ip|Op|Dd{0,2}|Tm|Ar|Pn|[A-Z]|i|I|S|W|H/g, function(match, group, customDelimiter) {
             if (group) {
                 return group;  // Handle text inside parentheses
             } else if (match === 'Ec') {
@@ -886,12 +888,13 @@ function buildUI(thisObj) {
                 return variables['Tm'];
             } else if (match === 'Ar') {
                 return variables['Ar'];
+            } else if (match === 'Pn') {
+                return variables['Pn'];
             } else {
                 return variables[match] !== undefined ? variables[match] : match;
             }
         });
-    }
-        
+    }   
 
     var localIndex = 1; // Глобальный локальный индекс
 
@@ -922,6 +925,7 @@ function buildUI(thisObj) {
     
                         var effectsString = effectNames.length > 0 ? effectNames.join(", ") : "ClearLayer";
                         var compName = app.project.activeItem.name;
+                        var projectName = app.project.file ? app.project.file.name : "Untitled Project"; // Project name
     
                         var variables = {
                             "T": getLayerType(layer),
@@ -942,7 +946,8 @@ function buildUI(thisObj) {
                             "H": getHeight(layer),
                             "Tm": getTrackMatteType(layer),
                             "Ar": getAspectRatio(layer),
-                            "Ec": getEffectsCount(layer)   // Добавлено для переменной Ec
+                            "Ec": getEffectsCount(layer),
+                            "Pn": projectName   // Added project name variable
                         };
     
                         var newName = replaceVariables(template, variables);
@@ -984,7 +989,7 @@ function buildUI(thisObj) {
         } else {
             alert("Project not found.");
         }
-    }    
+    }        
 
     function showHelp() {
         var helpWin = new Window("dialog", "NitroNamer - Help panel", undefined, {resizeable: true});
@@ -1041,7 +1046,7 @@ function buildUI(thisObj) {
                 } else if (rdoOnlySelected.value) {
                     layer = comp.selectedLayers.length > 0 ? comp.selectedLayers[0] : comp.layer(1);
                 }
-
+    
                 if (layer) {
                     var variables = {
                         "T": getLayerType(layer),
@@ -1057,11 +1062,14 @@ function buildUI(thisObj) {
                         "C": comp.name,
                         "Ip": layer.inPoint.toFixed(2),
                         "Op": layer.outPoint.toFixed(2),
-                        "S": getSourceName(layer), // Изменено с "M" на "S"
-                        "Tm": getTrackMatteType(layer), // Добавлено для переменной Tm
-                        "Ec": getEffectsCount(layer)    // Добавлено для переменной Ec
-                    };                    
-
+                        "S": getSourceName(layer),
+                        "W": getWidth(layer),
+                        "H": getHeight(layer),
+                        "Tm": getTrackMatteType(layer),
+                        "Ec": getEffectsCount(layer),
+                        "Pn": app.project.file ? app.project.file.name : "Untitled Project" // Added project name variable
+                    };
+    
                     var variablesWin = new Window("dialog", "Current Layer Variables", undefined, {resizeable: true});
                     variablesWin.orientation = "column";
                     variablesWin.alignChildren = ["fill", "top"];
@@ -1071,12 +1079,12 @@ function buildUI(thisObj) {
                             variablesWin.add("statictext", undefined, key + ": " + variables[key]);
                         }
                     }
-
+    
                     var btnClose = variablesWin.add("button", undefined, "Close");
                     btnClose.onClick = function() {
                         variablesWin.close();
                     };
-
+    
                     variablesWin.center();
                     variablesWin.show();
                 } else {
@@ -1088,7 +1096,7 @@ function buildUI(thisObj) {
         } else {
             alert("No project open.");
         }
-    }
+    }    
 
     // Функция получения списка эффектов слоя
     function getEffectNames(layer) {

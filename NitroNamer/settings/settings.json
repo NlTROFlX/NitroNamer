@@ -9,8 +9,8 @@
     },
     "currentSettings": {
         "allLayers": true,
-        "template": "T_Ddd_[Ec]_S.Tm===C",
-        "briefly": true,
-        "brieflyType": 4
+        "template": "Pn",
+        "briefly": false,
+        "brieflyType": 0
     }
 }
