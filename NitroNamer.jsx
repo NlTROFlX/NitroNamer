@@ -6,7 +6,6 @@ function buildUI(thisObj) {
     win.preferredSize.height = 122;
     win.active = true;
     win.margins = [4,4,4,4];
-    win.prefe
 
     var grpLayerSelection = win.add("group", undefined);
     grpLayerSelection.orientation = "row"; // Изменено на горизонтальную ориентацию
@@ -399,6 +398,9 @@ function buildUI(thisObj) {
         // Обновить список пресетов
         var updatedSettings = loadSettings();
         updatePresetsDropdown(updatedSettings);
+    
+        // Ensure the saved template remains in the template field
+        txtTemplate.text = settings.template;
     };            
     
     btnCircleMinus.onClick = function() {
@@ -592,6 +594,16 @@ function buildUI(thisObj) {
             var nextPresetNumber = Object.keys(userPresets).length + 1;
             var uniqueKey = "preset_" + nextPresetNumber;
             userPresets[uniqueKey] = settings;
+    
+            // Move the new preset to the beginning
+            var newUserPresets = {};
+            newUserPresets[uniqueKey] = settings;
+            for (var key in userPresets) {
+                if (key !== uniqueKey) {
+                    newUserPresets[key] = userPresets[key];
+                }
+            }
+            userPresets = newUserPresets;
         }
     
         existingSettings.userPresets = userPresets;
