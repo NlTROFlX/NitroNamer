@@ -56,17 +56,39 @@ function buildUI(thisObj) {
     btnMinimize.imageSize = [24, 24];
     btnMinimize.alignment = ["right", "center"];
 
-    // Add event listener for mouseover to change icon
-    btnMinimize.addEventListener("mouseover", function() {
-        btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimizeHover.png");
-        btnMinimize.imageSize = [24, 24];
-    });
+    // Function to set minimize button icon based on UICompact value
+    function setMinimizeButtonIcon(isCompact) {
+        btnMinimize.removeEventListener("mouseover", handleMouseOverMaximize);
+        btnMinimize.removeEventListener("mouseout", handleMouseOutMaximize);
+        btnMinimize.removeEventListener("mouseover", handleMouseOverMinimize);
+        btnMinimize.removeEventListener("mouseout", handleMouseOutMinimize);
 
-    // Add event listener for mouseout to revert icon
-    btnMinimize.addEventListener("mouseout", function() {
+        if (isCompact) {
+            btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/maximize.png");
+            btnMinimize.addEventListener("mouseover", handleMouseOverMaximize);
+            btnMinimize.addEventListener("mouseout", handleMouseOutMaximize);
+        } else {
+            btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimize.png");
+            btnMinimize.addEventListener("mouseover", handleMouseOverMinimize);
+            btnMinimize.addEventListener("mouseout", handleMouseOutMinimize);
+        }
+    }
+
+    function handleMouseOverMaximize() {
+        btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/maximizeHover.png");
+    }
+
+    function handleMouseOutMaximize() {
+        btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/maximize.png");
+    }
+
+    function handleMouseOverMinimize() {
+        btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimizeHover.png");
+    }
+
+    function handleMouseOutMinimize() {
         btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimize.png");
-        btnMinimize.imageSize = [24, 24];
-    });
+    }
 
     // Загрузить настройки и заполнить выпадающий список пресетами
     var settings = loadSettings();
@@ -353,6 +375,7 @@ function buildUI(thisObj) {
         btnVariables.image = File(scriptFolderPath + "/NitroNamer/img/variablesIcon.png");
         btnVariables.imageSize = [24, 24];
     });
+
     btnVariables.onClick = function() {
         showVariables();
     };
@@ -467,7 +490,7 @@ function buildUI(thisObj) {
         updatePreview();
         resetRenameButtonIcon(); // Reset button icon to "Rename"
     };
-
+    
     btnMinimize.onClick = function() {
         var settings = loadSettings();
         var currentSettings = settings.currentSettings || {};
@@ -484,7 +507,7 @@ function buildUI(thisObj) {
         setMinimizeButtonIcon(isCompact);
     
         // Additional code to minimize/maximize UI elements will be added later
-    };        
+    };
 
     // Добавить функции для работы с JSON с логированием
     function saveSettings(settings, isCurrent) {
@@ -583,26 +606,6 @@ function buildUI(thisObj) {
             ddLayerMode.selection = settings.currentSettings.selectedPresetIndex;
         } else {
             ddLayerMode.selection = 0; // Select first item if no saved selection
-        }
-    }    
-    
-    function setMinimizeButtonIcon(isCompact) {
-        if (isCompact) {
-            btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/maximize.png");
-            btnMinimize.addEventListener("mouseover", function() {
-                btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/maximizeHover.png");
-            });
-            btnMinimize.addEventListener("mouseout", function() {
-                btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/maximize.png");
-            });
-        } else {
-            btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimize.png");
-            btnMinimize.addEventListener("mouseover", function() {
-                btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimizeHover.png");
-            });
-            btnMinimize.addEventListener("mouseout", function() {
-                btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimize.png");
-            });
         }
     }
     
