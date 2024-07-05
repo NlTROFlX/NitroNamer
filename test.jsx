@@ -1,34 +1,34 @@
-// Создаем панель
 {
-    function createUI(thisObj) {
-        var myPanel = (thisObj instanceof Panel) ? thisObj : new Window("palette", "My Panel", undefined, { resizeable: true });
+    // Create UI Panel
+    var win = new Window("palette", "Custom UI", undefined);
+    win.orientation = "column";
+    win.alignChildren = ["fill", "top"];
 
-        // Добавляем кнопку на панель
-        var myButton = myPanel.add("button", undefined, "Нажми меня");
+    // Create Text Fields
+    var textField1 = win.add("edittext", undefined, "Text Field 1");
+    var textField2 = win.add("edittext", undefined, "Text Field 2");
+    var textField3 = win.add("edittext", undefined, "Text Field 3");
 
-        // Обработчик нажатия на кнопку
-        myButton.onClick = function() {
-            alert("Кнопка нажата!");
-        };
+    // Create Buttons
+    var button1 = win.add("button", undefined, "Button 1");
+    var button2 = win.add("button", undefined, "Button 2");
+    var button3 = win.add("button", undefined, "Button 3");
 
-        // Обработчик нажатия клавиш
-        myPanel.addEventListener('keydown', function(event) {
-            if (event.ctrlKey && event.altKey && event.keyName === 'Multiply') {
-                alert("Горячая клавиша Ctrl+Alt+* нажата!");
-            }
-        });
+    // Create Compact Mode Button
+    var compactButton = win.add("button", undefined, "Compact mode");
 
-        // Возвращаем панель
-        return myPanel;
-    }
+    // Function to Toggle Compact Mode
+    compactButton.onClick = function() {
+        var isCompact = textField1.visible;
+        textField1.visible = !isCompact;
+        textField2.visible = !isCompact;
+        textField3.visible = !isCompact;
+        button1.visible = !isCompact;
+        button2.visible = !isCompact;
+        button3.visible = !isCompact;
+    };
 
-    // Проверяем, что скрипт запускается в After Effects
-    var myScriptPal = createUI(this);
-    if (myScriptPal != null && myScriptPal instanceof Window) {
-        myScriptPal.center();
-        myScriptPal.show();
-    } else {
-        myScriptPal.layout.layout(true);
-        myScriptPal.layout.resize();
-    }
+    // Show the UI Panel
+    win.center();
+    win.show();
 }
