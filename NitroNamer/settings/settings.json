@@ -2,12 +2,18 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "T_Ddd.i[Pn]-R- | Op, Ip",
+        "template": "T_Ddd.i[Pn]-R-[Ec]-E(*)-An(*)",
         "briefly": false,
         "brieflyType": 3,
-        "selectedPresetIndex": 3
+        "selectedPresetIndex": 0
     },
     "userPresets": {
+        "preset_7": {
+            "allLayers": true,
+            "template": "T_Ddd.i[Pn]-R- | ",
+            "briefly": false,
+            "brieflyType": 3
+        },
         "preset_6": {
             "allLayers": true,
             "template": "7",

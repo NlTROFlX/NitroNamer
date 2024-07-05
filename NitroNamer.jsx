@@ -867,7 +867,7 @@ function buildUI(thisObj) {
                 effectNames.push(effect.name);
             }
         }
-
+    
         var effectsString = effectNames.length > 0 ? effectNames.join(", ") : "ClearLayer";
         var compName = app.project.activeItem.name;
         var frameRate = getFrameRate(layer);
@@ -875,14 +875,14 @@ function buildUI(thisObj) {
         var shortDuration = getShortDuration(layer);
         var mediumDuration = getMediumDuration(layer);
         var projectName = getProjectName();
-
+    
         if (briefly) {
             frameRate = parseFloat(frameRate).toFixed(2); 
         }
-
+    
         var animatedProps = getAnimatedProperties(layer);
         var animatedPropsString = animatedProps.length > 0 ? animatedProps.join(", ") : "NoAnimations";
-
+    
         var variables = {
             "T": getLayerType(layer),
             "i": layer.index,
@@ -910,9 +910,9 @@ function buildUI(thisObj) {
             "Lrot": getLayerRotation(layer),
             "Lops": getLayerOpacity(layer)
         };
-
+    
         var newName = replaceVariables(template, variables);
-
+    
         if (briefly) {
             switch (brieflyType) {
                 case "Camel Case":
@@ -935,7 +935,7 @@ function buildUI(thisObj) {
                     break;
             }
         }
-
+    
         return newName;
     }
 
@@ -1237,7 +1237,7 @@ function buildUI(thisObj) {
 
     // Replace variables in the template with actual values
     function replaceVariables(template, variables) {
-        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|E|An|Ip|Op|Dd{0,2}|Tm|Ar|Pn|Lpos|Lsc|Lrot|Lops|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces) {
+        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|Ec|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|E|An|Ip|Op|Dd{0,2}|Tm|Ar|Pn|Lpos|Lsc|Lrot|Lops|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces) {
             if (group) {
                 return group;  // Handle text inside parentheses
             } else if (customEffectDelimiterParentheses !== undefined) {
@@ -1278,6 +1278,8 @@ function buildUI(thisObj) {
                 return variables['Lrot'];
             } else if (match === 'Lops') {
                 return variables['Lops'];
+            } else if (match === 'Ec') {
+                return variables['Ec'];
             } else {
                 return variables[match] !== undefined ? variables[match] : match;
             }
@@ -1289,19 +1291,19 @@ function buildUI(thisObj) {
     // Rename layers based on the template
     function renameLayersByTemplate(allLayers, template, briefly, brieflyType) {
         var proj = app.project;
-
+    
         if (proj) {
             var comp = proj.activeItem;
-
+    
             if (comp && comp instanceof CompItem) {
                 app.beginUndoGroup("Rename Layers by Template");
-
+    
                 // Reset local index before renaming
                 localIndex = 1;
-
+    
                 for (var i = 1; i <= comp.numLayers; i++) {
                     var layer = comp.layer(i);
-
+    
                     if (allLayers || layer.selected) {
                         var effectNames = [];
                         if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
@@ -1310,14 +1312,14 @@ function buildUI(thisObj) {
                                 effectNames.push(effect.name);
                             }
                         }
-
+    
                         var effectsString = effectNames.length > 0 ? effectNames.join(", ") : "ClearLayer";
                         var compName = app.project.activeItem.name;
                         var projectName = getProjectName();
-
+    
                         var animatedProps = getAnimatedProperties(layer);
                         var animatedPropsString = animatedProps.length > 0 ? animatedProps.join(", ") : "NoAnimations";
-
+    
                         var variables = {
                             "T": getLayerType(layer),
                             "i": i,
@@ -1345,9 +1347,9 @@ function buildUI(thisObj) {
                             "Lrot": getLayerRotation(layer),
                             "Lops": getLayerOpacity(layer)
                         };
-
+    
                         var newName = replaceVariables(template, variables);
-
+    
                         if (briefly) {
                             switch (brieflyType) {
                                 case "Camel Case":
@@ -1370,14 +1372,14 @@ function buildUI(thisObj) {
                                     break;
                             }
                         }
-
+    
                         layer.name = newName;
-
+    
                         // Increment local index after renaming the layer
                         localIndex++;
                     }
                 }
-
+    
                 app.endUndoGroup();
             } else {
                 alert("Please select a composition or layer.", "NitroNamer");
