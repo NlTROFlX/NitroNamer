@@ -8,7 +8,7 @@
         }
     },
     "currentSettings": {
-        "allLayers": false,
+        "allLayers": true,
         "template": "O_Tm",
         "briefly": false,
         "brieflyType": 0

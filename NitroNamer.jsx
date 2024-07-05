@@ -49,7 +49,29 @@ function buildUI(thisObj) {
         btnCircleMinus.image = File(scriptFolderPath + "/NitroNamer/img/delete.png");
         btnCircleMinus.imageSize = [24, 24];
     });
-    
+
+    // Add minimize button to grpLayerSelection
+    var btnMinimize = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/minimize.png"), {style: "toolbutton"});
+    btnMinimize.size = [24, 24];
+    btnMinimize.imageSize = [24, 24];
+    btnMinimize.alignment = ["right", "center"];
+
+    // Add event listener for mouseover to change icon
+    btnMinimize.addEventListener("mouseover", function() {
+        btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimizeHover.png");
+        btnMinimize.imageSize = [24, 24];
+    });
+
+    // Add event listener for mouseout to revert icon
+    btnMinimize.addEventListener("mouseout", function() {
+        btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimize.png");
+        btnMinimize.imageSize = [24, 24];
+    });
+
+    // Add event listener for click to toggle UI elements
+    btnMinimize.onClick = function() {
+        // Code to minimize and maximize UI elements will be added later
+    };
 
     // Загрузить настройки и заполнить выпадающий список пресетами
     var settings = loadSettings();
