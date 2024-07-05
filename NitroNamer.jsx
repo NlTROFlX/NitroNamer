@@ -375,17 +375,17 @@ function buildUI(thisObj) {
             brieflyType: ddBrieflyType.selection.index
         };
     
-        // Проверка на пустой шаблон
+        // Check for empty template
         if (!settings.template.trim()) {
             alert("Template cannot be empty.");
             return;
         }
     
-        // Загрузить текущие настройки
+        // Load current settings
         var existingSettings = loadSettings();
         var userPresets = existingSettings.userPresets || {};
     
-        // Проверка на уникальность шаблона
+        // Check for unique template
         for (var key in userPresets) {
             if (userPresets.hasOwnProperty(key) && userPresets[key].template === settings.template) {
                 alert("A preset with this template already exists.");
@@ -393,13 +393,21 @@ function buildUI(thisObj) {
             }
         }
     
-        saveSettings(settings, false);
+        // Save the new preset
+        var newPresetKey = saveSettings(settings, false);
     
-        // Обновить список пресетов
+        // Load updated settings
         var updatedSettings = loadSettings();
         updatePresetsDropdown(updatedSettings);
     
-        // Ensure the saved template remains in the template field
+        // Set the selection to the newly saved preset
+        var presetKeys = Object.keys(updatedSettings.userPresets);
+        var newPresetIndex = presetKeys.indexOf(newPresetKey);
+        if (newPresetIndex !== -1) {
+            ddLayerMode.selection = newPresetIndex;
+        }
+    
+        // Ensure the template field remains the same
         txtTemplate.text = settings.template;
     };            
     
@@ -590,6 +598,8 @@ function buildUI(thisObj) {
         var userPresets = existingSettings.userPresets || {};
         var currentSettings = existingSettings.currentSettings || {};
     
+        var newPresetKey = null; // Initialize new preset key
+    
         if (isCurrent) {
             // Only update properties in currentSettings without replacing the entire object
             for (var key in settings) {
@@ -599,14 +609,14 @@ function buildUI(thisObj) {
             }
         } else {
             var nextPresetNumber = Object.keys(userPresets).length + 1;
-            var uniqueKey = "preset_" + nextPresetNumber;
-            userPresets[uniqueKey] = settings;
+            newPresetKey = "preset_" + nextPresetNumber;
+            userPresets[newPresetKey] = settings;
     
             // Move the new preset to the beginning
             var newUserPresets = {};
-            newUserPresets[uniqueKey] = settings;
+            newUserPresets[newPresetKey] = settings;
             for (var key in userPresets) {
-                if (key !== uniqueKey) {
+                if (key !== newPresetKey) {
                     newUserPresets[key] = userPresets[key];
                 }
             }
@@ -620,6 +630,8 @@ function buildUI(thisObj) {
         settingsFile.open("w");
         settingsFile.write(JSON.stringify(existingSettings, null, 4));
         settingsFile.close();
+    
+        return newPresetKey; // Return the key of the newly saved preset
     }                
     
     function loadSettings() {
