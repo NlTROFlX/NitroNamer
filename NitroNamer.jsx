@@ -1,7 +1,7 @@
 function buildUI(thisObj) {
     // Create a window or panel for the UI
     var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "NitroNamer", undefined, {resizeable: true});
-    var globalWidthSizeElements = 275; // Set global width for UI elements
+    var globalWidthSizeElements = 284; // Set global width for UI elements
     win.orientation = "column";
     win.alignChildren = ["fill", "top"];
     win.preferredSize.height = 122;
@@ -240,12 +240,14 @@ function buildUI(thisObj) {
     txtOriginalLabel.maximumSize.height = 8;
     var txtOriginal = grpTextFields.add("edittext", undefined, "", {readonly: true});
     txtOriginal.alignment = ["fill", "top"];
+    txtOriginal.maximumSize.width = globalWidthSizeElements;
     txtOriginal.margins = [0, -10, 0, 0];
 
     var txtRenamedLabel = grpTextFields.add("statictext", undefined, "Template result: ");
     txtRenamedLabel.maximumSize.height = 8;
     var txtRenamed = grpTextFields.add("edittext", undefined, "", {readonly: true});
     txtRenamed.alignment = ["fill", "top"];
+    txtRenamed.maximumSize.width = globalWidthSizeElements;
     txtRenamed.margins = [0, -10, 0, 0];
 
     // Set maximum and minimum width for text fields and dropdown
@@ -559,6 +561,7 @@ function buildUI(thisObj) {
             win.layout.resize();
             win.size.height = 122;
             win.maximumSize.height = 122;
+            win.maximumSize.width = globalWidthSizeElements + 8;
         } else {
             btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimize.png");
             btnMinimize.addEventListener("mouseover", handleMouseOverMinimize);

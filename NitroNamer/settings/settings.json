@@ -2,7 +2,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "T_Ddd.i[Pn]-R-[Ec]-E(*)-An(*)",
+        "template": "T",
         "briefly": false,
         "brieflyType": 3,
         "selectedPresetIndex": 0
