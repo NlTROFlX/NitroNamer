@@ -1,16 +1,12 @@
 {
-    "userPresets": {
-        "preset_1": {
-            "allLayers": true,
-            "template": "O_Tm",
-            "briefly": false,
-            "brieflyType": 0
-        }
-    },
     "currentSettings": {
-        "allLayers": true,
-        "template": "O_Tm",
+        "UICompact": false,
+        "allLayers": false,
+        "template": "",
         "briefly": false,
         "brieflyType": 0
+    },
+    "userPresets": {
+        
     }
 }

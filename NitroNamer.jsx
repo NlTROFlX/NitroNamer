@@ -68,11 +68,6 @@ function buildUI(thisObj) {
         btnMinimize.imageSize = [24, 24];
     });
 
-    // Add event listener for click to toggle UI elements
-    btnMinimize.onClick = function() {
-        // Code to minimize and maximize UI elements will be added later
-    };
-
     // Загрузить настройки и заполнить выпадающий список пресетами
     var settings = loadSettings();
     var userPresets = settings.userPresets || {};
@@ -473,6 +468,24 @@ function buildUI(thisObj) {
         resetRenameButtonIcon(); // Reset button icon to "Rename"
     };
 
+    btnMinimize.onClick = function() {
+        var settings = loadSettings();
+        var currentSettings = settings.currentSettings || {};
+        var isCompact = !currentSettings.UICompact; // Toggle value
+    
+        // Update the "UICompact" key in currentSettings
+        currentSettings.UICompact = isCompact;
+        settings.currentSettings = currentSettings;
+    
+        // Save the updated settings
+        saveSettings(currentSettings, true);
+    
+        // Set the minimize button icon based on the new value
+        setMinimizeButtonIcon(isCompact);
+    
+        // Additional code to minimize/maximize UI elements will be added later
+    };        
+
     // Добавить функции для работы с JSON с логированием
     function saveSettings(settings, isCurrent) {
         var scriptFile = new File($.fileName);
@@ -488,7 +501,12 @@ function buildUI(thisObj) {
         var currentSettings = existingSettings.currentSettings || {};
     
         if (isCurrent) {
-            currentSettings = settings;
+            // Only update properties in currentSettings without replacing the entire object
+            for (var key in settings) {
+                if (settings.hasOwnProperty(key)) {
+                    currentSettings[key] = settings[key];
+                }
+            }
         } else {
             var nextPresetNumber = Object.keys(userPresets).length + 1;
             var uniqueKey = "preset_" + nextPresetNumber;
@@ -498,26 +516,34 @@ function buildUI(thisObj) {
         existingSettings.userPresets = userPresets;
         existingSettings.currentSettings = currentSettings;
     
-        settingsFile.encoding = "UTF-8"; // Устанавливаем кодировку UTF-8
+        settingsFile.encoding = "UTF-8"; // Set encoding to UTF-8
         settingsFile.open("w");
         settingsFile.write(JSON.stringify(existingSettings, null, 4));
         settingsFile.close();
-    }            
+    }                
     
     function loadSettings() {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
         var settingsFile = new File(scriptFolderPath + "/settings.json");
     
+        var settings = {};
         if (settingsFile.exists) {
             settingsFile.open("r");
-            var settings = JSON.parse(settingsFile.read());
+            settings = JSON.parse(settingsFile.read());
             settingsFile.close();
-            return settings;
         }
     
-        return {};
-    }
+        if (!settings.currentSettings) {
+            settings.currentSettings = {};
+        }
+    
+        if (settings.currentSettings.UICompact === undefined) {
+            settings.currentSettings.UICompact = false;
+        }
+    
+        return settings;
+    }    
     
     function applySettings(settings) {
         if (settings && settings.userPresets && Object.keys(settings.userPresets).length > 0) {
@@ -545,16 +571,40 @@ function buildUI(thisObj) {
             resetRenameButtonIcon();
         }
     
-        // Обновить список пресетов
+        // Check for UICompact key and set the initial icon for btnMinimize
+        var isCompact = settings.currentSettings && settings.currentSettings.UICompact;
+        setMinimizeButtonIcon(isCompact);
+    
+        // Update presets dropdown
         updatePresetsDropdown(settings);
     
-        // Установить сохраненный выбор пресета
+        // Set the saved preset selection
         if (settings.currentSettings && typeof settings.currentSettings.selectedPresetIndex !== 'undefined') {
             ddLayerMode.selection = settings.currentSettings.selectedPresetIndex;
         } else {
-            ddLayerMode.selection = 0; // Выбрать первый элемент, если нет сохраненного выбора
+            ddLayerMode.selection = 0; // Select first item if no saved selection
         }
     }    
+    
+    function setMinimizeButtonIcon(isCompact) {
+        if (isCompact) {
+            btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/maximize.png");
+            btnMinimize.addEventListener("mouseover", function() {
+                btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/maximizeHover.png");
+            });
+            btnMinimize.addEventListener("mouseout", function() {
+                btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/maximize.png");
+            });
+        } else {
+            btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimize.png");
+            btnMinimize.addEventListener("mouseover", function() {
+                btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimizeHover.png");
+            });
+            btnMinimize.addEventListener("mouseout", function() {
+                btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimize.png");
+            });
+        }
+    }
     
     function updatePresetsDropdown(settings) {
         ddLayerMode.removeAll();
