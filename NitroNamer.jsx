@@ -1,12 +1,12 @@
 function buildUI(thisObj) {
     var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "NitroNamer", undefined, {resizeable: true});
     var globalWidthSizeElements = 275;
-    win.maximumSize = [globalWidthSizeElements+8, 275]; // Set the maximum size of the panel
-    win.minimumSize = [globalWidthSizeElements+8, 275]; // Set the minimum size of the panel
     win.orientation = "column";
     win.alignChildren = ["fill", "top"];
+    win.preferredSize.height = 122;
     win.active = true;
     win.margins = [4,4,4,4];
+    win.prefe
 
     var grpLayerSelection = win.add("group", undefined);
     grpLayerSelection.orientation = "row"; // Изменено на горизонтальную ориентацию
@@ -530,7 +530,8 @@ function buildUI(thisObj) {
             // Adjust panel height
             win.layout.layout(true);
             win.layout.resize();
-            win.minimumSize.height = win.size.height - 150; // Set a smaller minimum height for compact mode
+            win.size.height = 122;
+            win.maximumSize.height = 122;
         } else {
             btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimize.png");
             btnMinimize.addEventListener("mouseover", handleMouseOverMinimize);
@@ -557,7 +558,8 @@ function buildUI(thisObj) {
             // Adjust panel height to automatic
             win.layout.layout(true);
             win.layout.resize();
-            win.minimumSize.height = -1; // Reset to default minimum height
+            win.size.height = 122;
+            win.maximumSize.height = 260;
         }
     
         // Force layout update
