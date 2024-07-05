@@ -1,6 +1,6 @@
 {
     "currentSettings": {
-        "UICompact": false,
+        "UICompact": true,
         "allLayers": false,
         "template": "123",
         "briefly": false,

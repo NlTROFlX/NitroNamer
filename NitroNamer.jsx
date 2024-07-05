@@ -54,25 +54,7 @@ function buildUI(thisObj) {
     var btnMinimize = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/minimize.png"), {style: "toolbutton"});
     btnMinimize.size = [24, 24];
     btnMinimize.imageSize = [24, 24];
-    btnMinimize.alignment = ["right", "center"];
-
-    // Function to set minimize button icon based on UICompact value
-    function setMinimizeButtonIcon(isCompact) {
-        btnMinimize.removeEventListener("mouseover", handleMouseOverMaximize);
-        btnMinimize.removeEventListener("mouseout", handleMouseOutMaximize);
-        btnMinimize.removeEventListener("mouseover", handleMouseOverMinimize);
-        btnMinimize.removeEventListener("mouseout", handleMouseOutMinimize);
-
-        if (isCompact) {
-            btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/maximize.png");
-            btnMinimize.addEventListener("mouseover", handleMouseOverMaximize);
-            btnMinimize.addEventListener("mouseout", handleMouseOutMaximize);
-        } else {
-            btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimize.png");
-            btnMinimize.addEventListener("mouseover", handleMouseOverMinimize);
-            btnMinimize.addEventListener("mouseout", handleMouseOutMinimize);
-        }
-    }
+    btnMinimize.alignment = ["right", "center"];    
 
     function handleMouseOverMaximize() {
         btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/maximizeHover.png");
@@ -252,17 +234,21 @@ function buildUI(thisObj) {
         ddLayerMode.size = [txtTemplate.size[0], ddLayerMode.size[1]];
     };
 
-    var txtOriginalLabel = win.add("statictext", undefined, "Input layer name: ");
-    txtOriginalLabel.maximumSize.height = 8;
-    var txtOriginal = win.add("edittext", undefined, "", {readonly: true});
-    txtOriginal.alignment = ["fill", "top"];
-    txtOriginal.margins = [0,-10,0,0];
+    var grpTextFields = win.add("group", undefined);
+    grpTextFields.orientation = "column";
+    grpTextFields.alignChildren = ["fill", "top"];
 
-    var txtRenamedLabel = win.add("statictext", undefined, "Template result: ");
+    var txtOriginalLabel = grpTextFields.add("statictext", undefined, "Input layer name: ");
+    txtOriginalLabel.maximumSize.height = 8;
+    var txtOriginal = grpTextFields.add("edittext", undefined, "", {readonly: true});
+    txtOriginal.alignment = ["fill", "top"];
+    txtOriginal.margins = [0, -10, 0, 0];
+
+    var txtRenamedLabel = grpTextFields.add("statictext", undefined, "Template result: ");
     txtRenamedLabel.maximumSize.height = 8;
-    var txtRenamed = win.add("edittext", undefined, "", {readonly: true});
+    var txtRenamed = grpTextFields.add("edittext", undefined, "", {readonly: true});
     txtRenamed.alignment = ["fill", "top"];
-    txtRenamed.margins = [0,-10,0,0];
+    txtRenamed.margins = [0, -10, 0, 0];
 
     txtTemplate.maximumSize.width = globalWidthSizeElements;
     txtTemplate.minimumSize.width = globalWidthSizeElements;
@@ -275,6 +261,8 @@ function buildUI(thisObj) {
 
     ddLayerMode.maximumSize.width = globalWidthSizeElements;
     ddLayerMode.minimumSize.width = globalWidthSizeElements;
+
+    var txtRenamedCompact;    
 
     var grpBriefly = win.add("group", undefined);
     grpBriefly.orientation = "row";
@@ -509,6 +497,74 @@ function buildUI(thisObj) {
         // Additional code to minimize/maximize UI elements will be added later
     };
 
+    function setMinimizeButtonIcon(isCompact) {
+        btnMinimize.removeEventListener("mouseover", handleMouseOverMaximize);
+        btnMinimize.removeEventListener("mouseout", handleMouseOutMaximize);
+        btnMinimize.removeEventListener("mouseover", handleMouseOverMinimize);
+        btnMinimize.removeEventListener("mouseout", handleMouseOutMinimize);
+    
+        if (isCompact) {
+            btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/maximize.png");
+            btnMinimize.addEventListener("mouseover", handleMouseOverMaximize);
+            btnMinimize.addEventListener("mouseout", handleMouseOutMaximize);
+    
+            // Hide UI elements
+            btnRename.visible = false;
+            btnHelp.visible = false;
+            btnVariables.visible = false;
+            btnReset.visible = false;
+            chkBriefly.visible = false;
+            ddBrieflyType.visible = false;
+            txtOriginalLabel.visible = false;
+            txtOriginal.visible = false;
+            txtRenamedLabel.visible = false;
+            txtRenamed.visible = false;
+    
+            // Create a new txtRenamed field after txtTemplate
+            if (!txtRenamedCompact) {
+                txtRenamedCompact = grpTemplate.add("edittext", undefined, txtRenamed.text, {readonly: true});
+                txtRenamedCompact.alignment = ["fill", "top"];
+                txtRenamedCompact.margins = [0, -10, 0, 0];
+            }
+    
+            // Adjust panel height
+            win.layout.layout(true);
+            win.layout.resize();
+            win.minimumSize.height = win.size.height - 150; // Set a smaller minimum height for compact mode
+        } else {
+            btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimize.png");
+            btnMinimize.addEventListener("mouseover", handleMouseOverMinimize);
+            btnMinimize.addEventListener("mouseout", handleMouseOutMinimize);
+    
+            // Show UI elements
+            btnRename.visible = true;
+            btnHelp.visible = true;
+            btnVariables.visible = true;
+            btnReset.visible = true;
+            chkBriefly.visible = true;
+            ddBrieflyType.visible = true;
+            txtOriginalLabel.visible = true;
+            txtOriginal.visible = true;
+            txtRenamedLabel.visible = true;
+            txtRenamed.visible = true;
+    
+            // Remove the compact txtRenamed field if it exists
+            if (txtRenamedCompact) {
+                grpTemplate.remove(txtRenamedCompact);
+                txtRenamedCompact = null;
+            }
+    
+            // Adjust panel height to automatic
+            win.layout.layout(true);
+            win.layout.resize();
+            win.minimumSize.height = -1; // Reset to default minimum height
+        }
+    
+        // Force layout update
+        win.layout.layout(true);
+        win.layout.resize();
+    }    
+
     // Добавить функции для работы с JSON с логированием
     function saveSettings(settings, isCurrent) {
         var scriptFile = new File($.fileName);
@@ -680,19 +736,32 @@ function buildUI(thisObj) {
                     var newName = generateNewName(layer, template, briefly, brieflyType);
                     txtOriginal.text = originalName;
                     txtRenamed.text = newName;
+                    if (txtRenamedCompact) {
+                        txtRenamedCompact.text = newName;
+                    }
                 } else {
                     txtOriginal.text = "No layers in composition.";
                     txtRenamed.text = "No layers in composition.";
+                    if (txtRenamedCompact) {
+                        txtRenamedCompact.text = "No layers in composition.";
+                    }
                 }
             } else {
                 txtOriginal.text = "No composition selected.";
                 txtRenamed.text = "No composition selected.";
+                if (txtRenamedCompact) {
+                    txtRenamedCompact.text = "No composition selected.";
+                }
             }
         } else {
             txtOriginal.text = "No project open.";
             txtRenamed.text = "No project open.";
+            if (txtRenamedCompact) {
+                txtRenamedCompact.text = "No project open.";
+            }
         }
-    }                
+    }
+                    
 
     function generateNewName(layer, template, briefly, brieflyType) {
         var effectNames = [];
