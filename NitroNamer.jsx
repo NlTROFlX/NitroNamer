@@ -408,15 +408,14 @@ function buildUI(thisObj) {
         if (selectedPreset && selectedPreset.text !== "Save your new preset" && selectedPreset.text !== "Please select a preset to delete") {
             var presetTemplate = selectedPreset.text;
     
-            // Сохранить текущее значение полей ввода шаблона и результата
+            // Save the current value of the template field
             var currentTemplateText = txtTemplate.text;
-            var currentResultText = txtRenamed.text;
     
-            // Загрузить текущие настройки
+            // Load current settings
             var settings = loadSettings();
             var userPresets = settings.userPresets || {};
     
-            // Найти ключ пресета с соответствующим шаблоном и удалить его
+            // Find the key of the preset with the matching template and delete it
             var newUserPresets = {};
             var newPresetNumber = 1;
             for (var key in userPresets) {
@@ -428,29 +427,37 @@ function buildUI(thisObj) {
                 }
             }
     
-            // Обновить настройки
+            // Update settings
             settings.userPresets = newUserPresets;
     
-            // Сохранить обновленные настройки
+            // Save updated settings
             var scriptFile = new File($.fileName);
             var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
             var settingsFile = new File(scriptFolderPath + "/settings.json");
     
-            settingsFile.encoding = "UTF-8"; // Устанавливаем кодировку UTF-8
+            settingsFile.encoding = "UTF-8"; // Set encoding to UTF-8
             settingsFile.open("w");
             settingsFile.write(JSON.stringify(settings, null, 4));
             settingsFile.close();
     
-            // Обновить список пресетов
+            // Update preset list
             updatePresetsDropdown(settings);
     
-            // Восстановить значения полей ввода шаблона и результата
+            // Restore the template field value
             txtTemplate.text = currentTemplateText;
-            txtRenamed.text = currentResultText;
+    
+            // Update the current settings with the restored template value
+            var currentSettings = {
+                allLayers: rdoAllLayers.value,
+                template: txtTemplate.text,
+                briefly: chkBriefly.value,
+                brieflyType: ddBrieflyType.selection.index
+            };
+            saveSettings(currentSettings, true);
         } else {
             updatePresetsDropdown(loadSettings());
         }
-    };               
+    };                   
 
     btnRename.onClick = function() {
         var allLayers = rdoAllLayers.value;
