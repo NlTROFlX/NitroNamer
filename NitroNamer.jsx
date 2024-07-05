@@ -646,7 +646,20 @@ function buildUI(thisObj) {
     }    
     
     function applySettings(settings) {
-        if (settings && settings.userPresets && Object.keys(settings.userPresets).length > 0) {
+        // Temporarily disable the dropdown change handler
+        ddLayerMode.onChange = null;
+    
+        if (settings && settings.currentSettings) {
+            rdoAllLayers.value = settings.currentSettings.allLayers;
+            rdoOnlySelected.value = !settings.currentSettings.allLayers;
+            txtTemplate.text = settings.currentSettings.template || "(Template for renaming)O_T.i";
+            chkBriefly.value = settings.currentSettings.briefly;
+            ddBrieflyType.selection = settings.currentSettings.brieflyType || 0;
+    
+            updateLayerCounts();
+            updatePreview();
+            resetRenameButtonIcon();
+        } else if (settings && settings.userPresets && Object.keys(settings.userPresets).length > 0) {
             var lastPresetKey = Object.keys(settings.userPresets).pop();
             var lastPreset = settings.userPresets[lastPresetKey];
     
@@ -655,16 +668,6 @@ function buildUI(thisObj) {
             txtTemplate.text = lastPreset.template || "(Template for renaming)O_T.i";
             chkBriefly.value = lastPreset.briefly;
             ddBrieflyType.selection = lastPreset.brieflyType || 0;
-    
-            updateLayerCounts();
-            updatePreview();
-            resetRenameButtonIcon();
-        } else if (settings && settings.currentSettings) {
-            rdoAllLayers.value = settings.currentSettings.allLayers;
-            rdoOnlySelected.value = !settings.currentSettings.allLayers;
-            txtTemplate.text = settings.currentSettings.template || "(Template for renaming)O_T.i";
-            chkBriefly.value = settings.currentSettings.briefly;
-            ddBrieflyType.selection = settings.currentSettings.brieflyType || 0;
     
             updateLayerCounts();
             updatePreview();
@@ -678,15 +681,62 @@ function buildUI(thisObj) {
         // Update presets dropdown
         updatePresetsDropdown(settings);
     
-        // Set the saved preset selection
         if (settings.currentSettings && typeof settings.currentSettings.selectedPresetIndex !== 'undefined') {
             ddLayerMode.selection = settings.currentSettings.selectedPresetIndex;
         } else {
             ddLayerMode.selection = 0; // Select first item if no saved selection
         }
+    
+        // Explicitly set txtTemplate.text after updating the dropdown
+        txtTemplate.text = settings.currentSettings.template || "(Template for renaming)O_T.i";
+    
+        // Re-enable the dropdown change handler
+        ddLayerMode.onChange = dropdownChangeHandler;
+    }
+    
+    function dropdownChangeHandler() {
+        var selectedPreset = ddLayerMode.selection;
+        if (selectedPreset) {
+            var presetTemplate = selectedPreset.text;
+    
+            // Load current settings
+            var settings = loadSettings();
+            var userPresets = settings.userPresets || {};
+    
+            // Find the preset with the matching template
+            for (var key in userPresets) {
+                if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
+                    var preset = userPresets[key];
+                    rdoAllLayers.value = preset.allLayers;
+                    rdoOnlySelected.value = !preset.allLayers;
+                    txtTemplate.text = preset.template;
+                    chkBriefly.value = preset.briefly;
+                    ddBrieflyType.selection = preset.brieflyType || 0;
+    
+                    updateLayerCounts();
+                    updatePreview();
+                    resetRenameButtonIcon();
+    
+                    // Save the current settings with the selected preset index
+                    var currentSettings = {
+                        allLayers: rdoAllLayers.value,
+                        template: txtTemplate.text,
+                        briefly: chkBriefly.value,
+                        brieflyType: ddBrieflyType.selection.index,
+                        selectedPresetIndex: ddLayerMode.selection.index
+                    };
+                    saveSettings(currentSettings, true);
+    
+                    break;
+                }
+            }
+        }
     }
     
     function updatePresetsDropdown(settings) {
+        // Temporarily disable the dropdown change handler
+        ddLayerMode.onChange = null;
+    
         ddLayerMode.removeAll();
         var userPresets = settings.userPresets || {};
         var presetTemplates = [];
@@ -705,12 +755,14 @@ function buildUI(thisObj) {
             }
         }
     
-        // Установить сохраненный выбор пресета
         if (settings.currentSettings && typeof settings.currentSettings.selectedPresetIndex !== 'undefined') {
             ddLayerMode.selection = settings.currentSettings.selectedPresetIndex;
         } else {
-            ddLayerMode.selection = 0; // Выбрать первый элемент, если нет сохраненного выбора
+            ddLayerMode.selection = 0; // Select first item if no saved selection
         }
+    
+        // Re-enable the dropdown change handler
+        ddLayerMode.onChange = dropdownChangeHandler;
     }        
 
     function updateLayerCounts() {
