@@ -2,10 +2,10 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "5",
-        "briefly": true,
+        "template": "T_Ddd.i[Pn]-R- | Op, Ip",
+        "briefly": false,
         "brieflyType": 3,
-        "selectedPresetIndex": 0
+        "selectedPresetIndex": 3
     },
     "userPresets": {
         "preset_6": {
