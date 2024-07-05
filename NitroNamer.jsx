@@ -13,11 +13,11 @@ function buildUI(thisObj) {
     grpLayerSelection.orientation = "row"; // Set orientation to horizontal
 
     // Add radio buttons for layer selection mode
-    var rdoAllLayers = grpLayerSelection.add("radiobutton", undefined, "Total: ");
+    var rdoAllLayers = grpLayerSelection.add("radiobutton", undefined, "Total: ");
     rdoAllLayers.value = true; // Default to selecting all layers
     var txtAllLayersCount = grpLayerSelection.add("statictext", undefined, "");
 
-    var rdoOnlySelected = grpLayerSelection.add("radiobutton", undefined, "Selected: ");
+    var rdoOnlySelected = grpLayerSelection.add("radiobutton", undefined, "Selected: ");
     var txtSelectedLayersCount = grpLayerSelection.add("statictext", undefined, "");
 
     // Get the script's file and folder path
