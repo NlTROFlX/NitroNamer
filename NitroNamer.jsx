@@ -875,6 +875,7 @@ function buildUI(thisObj) {
         var compName = app.project.activeItem.name;
         var frameRate = getFrameRate(layer);
         var duration = getDuration(layer);
+        var durationInFrames = getDurationInFrames(layer);
         var projectName = getProjectName();
         var expressionProps = getExpressionControlledProperties(layer);
         var fileExtension = getFileExtension(layer);
@@ -896,6 +897,7 @@ function buildUI(thisObj) {
             "F": frameRate,
             "R": getResolution(layer),
             "D": duration,
+            "Df": durationInFrames,
             "C": compName,
             "Ip": layer.inPoint.toFixed(2),
             "Op": layer.outPoint.toFixed(2),
@@ -1271,9 +1273,19 @@ function buildUI(thisObj) {
         return "NoOpacity";
     }
 
+    // Get the duration of a layer in frames based on the in and out points
+    function getDurationInFrames(layer) {
+        if (layer && layer.containingComp) {
+            var frameRate = layer.containingComp.frameRate;
+            var duration = (layer.outPoint - layer.inPoint) * frameRate;
+            return Math.round(duration);
+        }
+        return "NoDuration";
+    }
+
     // Replace variables in the template with actual values
     function replaceVariables(template, variables) {
-        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|Ec|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|D\(([^)]+)\)|D|E|An|Ip|Op|Tm|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lexp|Fext\(([^)]+)\)|Fext|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, durationFormat, customFext) {
+        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|Ar|Pn|Lpos|Lsc|Lrot|Lops|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, durationFormat, customFext) {
             if (group) {
                 return group;  // Handle text inside parentheses
             } else if (customEffectDelimiterParentheses !== undefined) {
@@ -1292,10 +1304,16 @@ function buildUI(thisObj) {
                 return typeof variables['D'] === 'function' ? variables['D'](durationFormat) : variables['D'];
             } else if (match === 'D') {
                 return typeof variables['D'] === 'function' ? variables['D']() : variables['D'];
-            } else if (match === 'E') {
-                return variables['E'];
-            } else if (match === 'An') {
-                return variables['An'];
+            } else if (match === 'Df') {
+                return variables['Df'];
+            } else if (match === 'Ec') {
+                return variables['Ec'];
+            } else if (match === 'Fext') {
+                return variables['Fext'];
+            } else if (customFext !== undefined) {
+                return variables['Fext'] === customFext ? customFext : "";
+            } else if (match === 'Lexp') {
+                return variables['Lexp'];
             } else if (match === 'Ip') {
                 return variables['Ip'];
             } else if (match === 'Op') {
@@ -1314,14 +1332,6 @@ function buildUI(thisObj) {
                 return variables['Lrot'];
             } else if (match === 'Lops') {
                 return variables['Lops'];
-            } else if (match === 'Ec') {
-                return variables['Ec'];
-            } else if (match === 'Lexp') {
-                return variables['Lexp'];
-            } else if (customFext !== undefined) {
-                return variables['Fext'] === customFext ? customFext : "";
-            } else if (match === 'Fext') {
-                return variables['Fext'];
             } else {
                 return variables[match] !== undefined ? variables[match] : match;
             }
@@ -1360,6 +1370,7 @@ function buildUI(thisObj) {
                         var projectName = getProjectName();
                         var expressionProps = getExpressionControlledProperties(layer);
                         var fileExtension = getFileExtension(layer);
+                        var durationInFrames = getDurationInFrames(layer);
 
                         var animatedProps = getAnimatedProperties(layer);
                         var animatedPropsString = animatedProps.length > 0 ? animatedProps.join(", ") : "NoAnimations";
@@ -1374,6 +1385,7 @@ function buildUI(thisObj) {
                             "F": getFrameRate(layer),
                             "R": getResolution(layer),
                             "D": getDuration(layer),
+                            "Df": durationInFrames,
                             "C": compName,
                             "Ip": layer.inPoint.toFixed(2),  // In point
                             "Op": layer.outPoint.toFixed(2), // Out point
