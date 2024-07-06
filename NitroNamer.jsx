@@ -875,8 +875,6 @@ function buildUI(thisObj) {
         var compName = app.project.activeItem.name;
         var frameRate = getFrameRate(layer);
         var duration = getDuration(layer);
-        var shortDuration = getShortDuration(layer);
-        var mediumDuration = getMediumDuration(layer);
         var projectName = getProjectName();
     
         if (briefly) {
@@ -896,8 +894,6 @@ function buildUI(thisObj) {
             "F": getFrameRate(layer),
             "R": getResolution(layer),
             "D": getDuration(layer),
-            "Dd": getShortDuration(layer),
-            "Ddd": getMediumDuration(layer),
             "C": compName,
             "Ip": layer.inPoint.toFixed(2),
             "Op": layer.outPoint.toFixed(2),
@@ -1066,45 +1062,33 @@ function buildUI(thisObj) {
         } else if (layer.hasAudio || layer.hasVideo) {
             duration = layer.outPoint - layer.inPoint;
         } else {
-            return "NoLimit";
+            return function() {
+                return "NoLimit";
+            };
         }
     
         var hours = Math.floor(duration / 3600);
         var minutes = Math.floor((duration % 3600) / 60);
         var seconds = Math.floor(duration % 60);
-        return (hours < 10 ? "0" + hours : hours) + ":" +
-               (minutes < 10 ? "0" + minutes : minutes) + ":" +
-               (seconds < 10 ? "0" + seconds : seconds);
-    }
+        var milliseconds = Math.floor((duration * 1000) % 1000);
     
-    function getShortDuration(layer) {
-        var duration;
-        if (layer.source && layer.source.duration) {
-            duration = layer.source.duration;
-        } else if (layer.hasAudio || layer.hasVideo) {
-            duration = layer.outPoint - layer.inPoint;
-        } else {
-            return "NoLimit";
-        }
-    
-        var seconds = Math.floor(duration);
-        return seconds + "Sec";
-    }
-    
-    function getMediumDuration(layer) {
-        var duration;
-        if (layer.source && layer.source.duration) {
-            duration = layer.source.duration;
-        } else if (layer.hasAudio || layer.hasVideo) {
-            duration = layer.outPoint - layer.inPoint;
-        } else {
-            return "NoLimit";
-        }
-    
-        var minutes = Math.floor(duration / 60);
-        var seconds = Math.floor(duration % 60);
-        return minutes + "min." + (seconds < 10 ? "0" + seconds : seconds) + "sec";
-    }
+        return function(format) {
+            switch (format) {
+                case '1':
+                    return (hours < 10 ? "0" + hours : hours);
+                case '2':
+                    return (minutes < 10 ? "0" + minutes : minutes);
+                case '3':
+                    return (seconds < 10 ? "0" + seconds : seconds);
+                case '4':
+                    return (milliseconds < 100 ? (milliseconds < 10 ? "00" + milliseconds : "0" + milliseconds) : milliseconds);
+                default:
+                    return (hours < 10 ? "0" + hours : hours) + ":" +
+                           (minutes < 10 ? "0" + minutes : minutes) + ":" +
+                           (seconds < 10 ? "0" + seconds : seconds);
+            }
+        };
+    }    
 
     // Get the source name of a layer
     function getSourceName(layer) {
@@ -1253,7 +1237,7 @@ function buildUI(thisObj) {
 
     // Replace variables in the template with actual values
     function replaceVariables(template, variables) {
-        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|Ec|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|E|An|Ip|Op|Dd{0,2}|Tm|Ar|Pn|Lpos|Lsc|Lrot|Lops|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces) {
+        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|Ec|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|D\(([^)]+)\)|D|E|An|Ip|Op|Tm|Ar|Pn|Lpos|Lsc|Lrot|Lops|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, durationFormat) {
             if (group) {
                 return group;  // Handle text inside parentheses
             } else if (customEffectDelimiterParentheses !== undefined) {
@@ -1268,6 +1252,10 @@ function buildUI(thisObj) {
             } else if (customAnimDelimiterBraces !== undefined) {
                 var animatedPropsString = variables['An'].split(', ').join(customAnimDelimiterBraces);
                 return animatedPropsString;
+            } else if (durationFormat !== undefined) {
+                return typeof variables['D'] === 'function' ? variables['D'](durationFormat) : variables['D'];
+            } else if (match === 'D') {
+                return typeof variables['D'] === 'function' ? variables['D']() : variables['D'];
             } else if (match === 'E') {
                 return variables['E'];
             } else if (match === 'An') {
@@ -1276,10 +1264,6 @@ function buildUI(thisObj) {
                 return variables['Ip'];
             } else if (match === 'Op') {
                 return variables['Op'];
-            } else if (match === 'Dd') {
-                return variables['Dd'];
-            } else if (match === 'Ddd') {
-                return variables['Ddd'];
             } else if (match === 'Tm') {
                 return variables['Tm'];
             } else if (match === 'Ar') {
@@ -1300,7 +1284,7 @@ function buildUI(thisObj) {
                 return variables[match] !== undefined ? variables[match] : match;
             }
         });
-    }
+    }            
 
     var localIndex = 1; // Global local index
 
@@ -1346,8 +1330,6 @@ function buildUI(thisObj) {
                             "F": getFrameRate(layer),
                             "R": getResolution(layer),
                             "D": getDuration(layer),
-                            "Dd": getShortDuration(layer),
-                            "Ddd": getMediumDuration(layer),
                             "C": compName,
                             "Ip": layer.inPoint.toFixed(2),  // In point
                             "Op": layer.outPoint.toFixed(2), // Out point
@@ -1413,8 +1395,6 @@ function buildUI(thisObj) {
         helpWin.add("statictext", undefined, "Available variables:");
         helpWin.add("statictext", undefined, "C - Current composition name");
         helpWin.add("statictext", undefined, "D - Duration (HH:MM:SS)");
-        helpWin.add("statictext", undefined, "Dd - By seconds duration (0Sec)");
-        helpWin.add("statictext", undefined, "Ddd - By minute duration (0Min.0Sec)");
         helpWin.add("statictext", undefined, "E or E{#} - Name of effects. If you specify the variable E with curly braces, you can specify the character through which the effects will be listed.");
         helpWin.add("statictext", undefined, "F - Frame Rate");
         helpWin.add("statictext", undefined, "H - Height of the layer");
@@ -1451,72 +1431,7 @@ function buildUI(thisObj) {
 
     // Show current layer variables
     function showVariables() {
-        var proj = app.project;
-        if (proj) {
-            var comp = proj.activeItem;
-            if (comp && comp instanceof CompItem && comp.numLayers > 0) {
-                var layer = null;
-                if (rdoAllLayers.value) {
-                    layer = comp.selectedLayers.length > 0 ? comp.selectedLayers[0] : comp.layer(1);
-                } else if (rdoOnlySelected.value) {
-                    layer = comp.selectedLayers.length > 0 ? comp.selectedLayers[0] : comp.layer(1);
-                }
-
-                if (layer) {
-                    var projectName = getProjectName(); // Use the new function
-
-                    var variables = {
-                        "T": getLayerType(layer),
-                        "i": layer.index,
-                        "I": localIndex,
-                        "O": layer.name,
-                        "E": getEffectNames(layer),
-                        "F": getFrameRate(layer),
-                        "R": getResolution(layer),
-                        "D": getDuration(layer),
-                        "Dd": getShortDuration(layer),
-                        "Ddd": getMediumDuration(layer),
-                        "C": comp.name,
-                        "Ip": layer.inPoint.toFixed(2),
-                        "Op": layer.outPoint.toFixed(2),
-                        "S": getSourceName(layer),
-                        "W": getWidth(layer),
-                        "H": getHeight(layer),
-                        "Tm": getTrackMatteType(layer),
-                        "Ec": getEffectsCount(layer),
-                        "Pn": projectName,
-                        "Lpos": getLayerPosition(layer),
-                        "Lsc": getLayerScale(layer),
-                        "Lrot": getLayerRotation(layer),
-                        "Lops": getLayerOpacity(layer)
-                    };
-
-                    var variablesWin = new Window("dialog", "Current Layer Variables", undefined, {resizeable: true});
-                    variablesWin.orientation = "column";
-                    variablesWin.alignChildren = ["fill", "top"];
-                    
-                    for (var key in variables) {
-                        if (variables.hasOwnProperty(key)) {
-                            variablesWin.add("statictext", undefined, key + ": " + variables[key]);
-                        }
-                    }
-
-                    var btnClose = variablesWin.add("button", undefined, "Close");
-                    btnClose.onClick = function() {
-                        variablesWin.close();
-                    };
-
-                    variablesWin.center();
-                    variablesWin.show();
-                } else {
-                    alert("No composition selected.", "NitroNamer");
-                }
-            } else {
-                alert("No composition selected.", "NitroNamer");
-            }
-        } else {
-            alert("No project open.");
-        }
+        
     }
 
     // Get the effect names applied to a layer
