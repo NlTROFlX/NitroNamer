@@ -79,7 +79,9 @@ function showHelp() {
         "Ar - Aspect ratio",
         "An - Animated properties",
         "Pn - Project name",
-        "Lexp - List of properties controlled by expressions"
+        "Lexp - List of properties controlled by expressions",
+        "Fext - File extension of the layer",
+        "Fext(mp3) - Custom extension check"
     ];
     addGroupPanel(secondRow, "Layer Properties", layerPropertiesVariables);
 

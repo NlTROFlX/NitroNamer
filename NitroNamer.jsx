@@ -861,7 +861,6 @@ function buildUI(thisObj) {
         }
     }
 
-
     // Generate new name for a layer based on the template
     function generateNewName(layer, template, briefly, brieflyType) {
         var effectNames = [];
@@ -878,6 +877,7 @@ function buildUI(thisObj) {
         var duration = getDuration(layer);
         var projectName = getProjectName();
         var expressionProps = getExpressionControlledProperties(layer);
+        var fileExtension = getFileExtension(layer);
 
         if (briefly) {
             frameRate = parseFloat(frameRate).toFixed(2); 
@@ -910,7 +910,8 @@ function buildUI(thisObj) {
             "Lsc": getLayerScale(layer),
             "Lrot": getLayerRotation(layer),
             "Lops": getLayerOpacity(layer),
-            "Lexp": expressionProps
+            "Lexp": expressionProps,
+            "Fext": fileExtension
         };
 
         var newName = replaceVariables(template, variables);
@@ -941,26 +942,26 @@ function buildUI(thisObj) {
         return newName;
     }
 
-// Get the list of properties controlled by expressions
-function getExpressionControlledProperties(layer) {
-    var expressionProps = [];
+    // Get the list of properties controlled by expressions
+    function getExpressionControlledProperties(layer) {
+        var expressionProps = [];
 
-    function checkPropertyGroup(propertyGroup) {
-        for (var i = 1; i <= propertyGroup.numProperties; i++) {
-            var prop = propertyGroup.property(i);
-            if (prop.expression && prop.expressionEnabled) {
-                expressionProps.push(prop.name);
-            }
+        function checkPropertyGroup(propertyGroup) {
+            for (var i = 1; i <= propertyGroup.numProperties; i++) {
+                var prop = propertyGroup.property(i);
+                if (prop.expression && prop.expressionEnabled) {
+                    expressionProps.push(prop.name);
+                }
 
-            if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
-                checkPropertyGroup(prop);
+                if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
+                    checkPropertyGroup(prop);
+                }
             }
         }
-    }
 
-    checkPropertyGroup(layer);
-    return expressionProps.length > 0 ? expressionProps.join(", ") : "NoExpressions";
-}
+        checkPropertyGroup(layer);
+        return expressionProps.length > 0 ? expressionProps.join(", ") : "NoExpressions";
+    }
 
 
     // Get the track matte type of a layer
@@ -1251,6 +1252,16 @@ function getExpressionControlledProperties(layer) {
         }
     }
 
+    // Get the file extension of a layer's source file
+    function getFileExtension(layer) {
+        if (layer.source && layer.source.file && layer.source.file.name) {
+            var fileName = layer.source.file.name;
+            var extension = fileName.split('.').pop();
+            return extension;
+        }
+        return "NoExtension";
+    }
+
     // Get the opacity of a layer
     function getLayerOpacity(layer) {
         if (layer.transform && layer.transform.opacity) {
@@ -1261,9 +1272,8 @@ function getExpressionControlledProperties(layer) {
     }
 
     // Replace variables in the template with actual values
-    // Replace variables in the template with actual values
     function replaceVariables(template, variables) {
-        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|Ec|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|D\(([^)]+)\)|D|E|An|Ip|Op|Tm|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lexp|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, durationFormat) {
+        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|Ec|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|D\(([^)]+)\)|D|E|An|Ip|Op|Tm|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lexp|Fext\(([^)]+)\)|Fext|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, durationFormat, customFext) {
             if (group) {
                 return group;  // Handle text inside parentheses
             } else if (customEffectDelimiterParentheses !== undefined) {
@@ -1308,12 +1318,15 @@ function getExpressionControlledProperties(layer) {
                 return variables['Ec'];
             } else if (match === 'Lexp') {
                 return variables['Lexp'];
+            } else if (customFext !== undefined) {
+                return variables['Fext'] === customFext ? customFext : "";
+            } else if (match === 'Fext') {
+                return variables['Fext'];
             } else {
                 return variables[match] !== undefined ? variables[match] : match;
             }
         });
     }
-            
 
     var localIndex = 1; // Global local index
 
@@ -1346,6 +1359,7 @@ function getExpressionControlledProperties(layer) {
                         var compName = app.project.activeItem.name;
                         var projectName = getProjectName();
                         var expressionProps = getExpressionControlledProperties(layer);
+                        var fileExtension = getFileExtension(layer);
 
                         var animatedProps = getAnimatedProperties(layer);
                         var animatedPropsString = animatedProps.length > 0 ? animatedProps.join(", ") : "NoAnimations";
@@ -1374,7 +1388,8 @@ function getExpressionControlledProperties(layer) {
                             "Lsc": getLayerScale(layer),
                             "Lrot": getLayerRotation(layer),
                             "Lops": getLayerOpacity(layer),
-                            "Lexp": expressionProps
+                            "Lexp": expressionProps,
+                            "Fext": fileExtension
                         };
 
                         var newName = replaceVariables(template, variables);
@@ -1417,7 +1432,6 @@ function getExpressionControlledProperties(layer) {
             alert("Project not found.");
         }
     }
-
 
     // Show help window
     function showHelp() {
