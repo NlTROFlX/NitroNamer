@@ -1059,38 +1059,51 @@ function buildUI(thisObj) {
         return "NoResolution";
     }
 
-    // Get the duration of a layer
     function getDuration(layer) {
+        var duration;
         if (layer.source && layer.source.duration) {
-            var duration = layer.source.duration;
-            var hours = Math.floor(duration / 3600);
-            var minutes = Math.floor((duration % 3600) / 60);
-            var seconds = Math.floor(duration % 60);
-            return (hours < 10 ? "0" + hours : hours) + ":" +
-                   (minutes < 10 ? "0" + minutes : minutes) + ":" +
-                   (seconds < 10 ? "0" + seconds : seconds);
+            duration = layer.source.duration;
+        } else if (layer.hasAudio || layer.hasVideo) {
+            duration = layer.outPoint - layer.inPoint;
+        } else {
+            return "NoLimit";
         }
-        return "NoLimit";
+    
+        var hours = Math.floor(duration / 3600);
+        var minutes = Math.floor((duration % 3600) / 60);
+        var seconds = Math.floor(duration % 60);
+        return (hours < 10 ? "0" + hours : hours) + ":" +
+               (minutes < 10 ? "0" + minutes : minutes) + ":" +
+               (seconds < 10 ? "0" + seconds : seconds);
     }
-
-    // Get the short duration of a layer in seconds
+    
     function getShortDuration(layer) {
+        var duration;
         if (layer.source && layer.source.duration) {
-            var seconds = Math.floor(layer.source.duration);
-            return seconds + "Sec";
+            duration = layer.source.duration;
+        } else if (layer.hasAudio || layer.hasVideo) {
+            duration = layer.outPoint - layer.inPoint;
+        } else {
+            return "NoLimit";
         }
-        return "NoLimit";
+    
+        var seconds = Math.floor(duration);
+        return seconds + "Sec";
     }
-
-    // Get the medium duration of a layer in minutes and seconds
+    
     function getMediumDuration(layer) {
+        var duration;
         if (layer.source && layer.source.duration) {
-            var duration = layer.source.duration;
-            var minutes = Math.floor(duration / 60);
-            var seconds = Math.floor(duration % 60);
-            return minutes + "min." + (seconds < 10 ? "0" + seconds : seconds) + "sec";
+            duration = layer.source.duration;
+        } else if (layer.hasAudio || layer.hasVideo) {
+            duration = layer.outPoint - layer.inPoint;
+        } else {
+            return "NoLimit";
         }
-        return "NoLimit";
+    
+        var minutes = Math.floor(duration / 60);
+        var seconds = Math.floor(duration % 60);
+        return minutes + "min." + (seconds < 10 ? "0" + seconds : seconds) + "sec";
     }
 
     // Get the source name of a layer
