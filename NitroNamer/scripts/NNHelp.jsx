@@ -16,19 +16,19 @@ function showHelp() {
         return panel;
     };
 
-    // Первая строка групп
+    // First row of groups
     var firstRow = helpWin.add("group", undefined);
     firstRow.orientation = "row";
     firstRow.alignChildren = ["fill", "top"];
     firstRow.spacing = 10;
 
-    // Переменные информации о композиции
+    // Composition Information Variables
     var compVariables = [
         "C - Current composition name"
     ];
     addGroupPanel(firstRow, "Composition Information", compVariables);
 
-    // Переменные времени и длительности
+    // Time and Duration Variables
     var timeVariables = [
         "D - Duration (HH:MM:SS)",
         "Dd - By seconds duration (0Sec)",
@@ -38,48 +38,57 @@ function showHelp() {
     ];
     addGroupPanel(firstRow, "Time and Duration", timeVariables);
 
-    // Переменные эффектов
+    // Effects Variables
     var effectsVariables = [
         "E - Name of effects",
-        "E{#} - Effects with custom delimiter"
+        "E{#} - Effects with custom delimiter",
+        "Ec - Effects count"
     ];
     addGroupPanel(firstRow, "Effects", effectsVariables);
 
-    // Переменные частоты кадров и разрешения
+    // Frame Rate and Resolution Variables
     var frameResVariables = [
         "F - Frame Rate",
         "R - Resolution (Width*Height)"
     ];
     addGroupPanel(firstRow, "Frame Rate and Resolution", frameResVariables);
 
-    // Вторая строка групп
+    // Second row of groups
     var secondRow = helpWin.add("group", undefined);
     secondRow.orientation = "row";
     secondRow.alignChildren = ["fill", "top"];
     secondRow.spacing = 10;
 
-    // Переменные индексов и идентификаторов
+    // Indexes and Identifiers Variables
     var indexVariables = [
         "I - Local index of selected layers",
         "i - Layer index"
     ];
     addGroupPanel(secondRow, "Indexes and Identifiers", indexVariables);
 
-    // Переменные источника
-    var sourceVariables = [
+    // Layer Properties Variables
+    var layerPropertiesVariables = [
         "S - Source name (file or pre-comp)",
         "W - Width of the layer",
-        "H - Height of the layer"
+        "H - Height of the layer",
+        "Lpos - Layer position",
+        "Lsc - Layer scale",
+        "Lrot - Layer rotation",
+        "Lops - Layer opacity",
+        "Tm - Track matte type",
+        "Ar - Aspect ratio",
+        "An - Animated properties",
+        "Pn - Project name"
     ];
-    addGroupPanel(secondRow, "Source", sourceVariables);
+    addGroupPanel(secondRow, "Layer Properties", layerPropertiesVariables);
 
-    // Переменные типа слоя
+    // Layer Type Variables
     var layerTypeVariables = [
         "T - Layer type (Pre-comp, Footage, Shape, Solid, Null, Adjustment, Audio, Text, Light, Camera)"
     ];
     addGroupPanel(secondRow, "Layer Type", layerTypeVariables);
 
-    // Прочие переменные
+    // Other Variables
     var otherVariables = [
         "O - Original name of the layer"
     ];
@@ -110,5 +119,5 @@ function showHelp() {
     helpWin.show();
 }
 
-// Вызов функции отображения окна помощи
+// Call the help window function
 showHelp();
