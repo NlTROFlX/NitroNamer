@@ -1,34 +1,48 @@
 {
-    // Create UI Panel
-    var win = new Window("palette", "Custom UI", undefined);
+    var win = new Window("palette", "Set Audio Layer Duration", undefined);
     win.orientation = "column";
-    win.alignChildren = ["fill", "top"];
 
-    // Create Text Fields
-    var textField1 = win.add("edittext", undefined, "Text Field 1");
-    var textField2 = win.add("edittext", undefined, "Text Field 2");
-    var textField3 = win.add("edittext", undefined, "Text Field 3");
+    var setDurationBtn = win.add("button", undefined, "Set Duration");
 
-    // Create Buttons
-    var button1 = win.add("button", undefined, "Button 1");
-    var button2 = win.add("button", undefined, "Button 2");
-    var button3 = win.add("button", undefined, "Button 3");
+    function setAudioLayerDuration() {
+        var comp = app.project.activeItem;
+        if (comp == null || !(comp instanceof CompItem)) {
+            alert("Please select a composition.");
+            return;
+        }
 
-    // Create Compact Mode Button
-    var compactButton = win.add("button", undefined, "Compact mode");
+        if (comp.selectedLayers.length == 0) {
+            alert("Please select an audio layer.");
+            return;
+        }
 
-    // Function to Toggle Compact Mode
-    compactButton.onClick = function() {
-        var isCompact = textField1.visible;
-        textField1.visible = !isCompact;
-        textField2.visible = !isCompact;
-        textField3.visible = !isCompact;
-        button1.visible = !isCompact;
-        button2.visible = !isCompact;
-        button3.visible = !isCompact;
-    };
+        var selectedLayer = comp.selectedLayers[0];
 
-    // Show the UI Panel
+        if (selectedLayer.hasAudio === false) {
+            alert("Please select a valid audio layer.");
+            return;
+        }
+
+        var audioFile = selectedLayer.source;
+        if (audioFile == null || !(audioFile instanceof FootageItem)) {
+            alert("The selected layer does not have a valid audio source.");
+            return;
+        }
+
+        var duration = audioFile.duration;
+
+        if (isNaN(duration) || duration <= 0) {
+            alert("The audio duration is invalid.");
+            return;
+        }
+
+        app.beginUndoGroup("Set Audio Layer Duration");
+        selectedLayer.name = duration.toFixed(2) + "s";
+        app.endUndoGroup();
+    }
+
+    setDurationBtn.onClick = setAudioLayerDuration;
+
     win.center();
     win.show();
 }
