@@ -78,7 +78,8 @@ function showHelp() {
         "Tm - Track matte type",
         "Ar - Aspect ratio",
         "An - Animated properties",
-        "Pn - Project name"
+        "Pn - Project name",
+        "Lexp - List of properties controlled by expressions"
     ];
     addGroupPanel(secondRow, "Layer Properties", layerPropertiesVariables);
 

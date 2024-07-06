@@ -861,6 +861,7 @@ function buildUI(thisObj) {
         }
     }
 
+
     // Generate new name for a layer based on the template
     function generateNewName(layer, template, briefly, brieflyType) {
         var effectNames = [];
@@ -870,20 +871,21 @@ function buildUI(thisObj) {
                 effectNames.push(effect.name);
             }
         }
-    
+
         var effectsString = effectNames.length > 0 ? effectNames.join(", ") : "ClearLayer";
         var compName = app.project.activeItem.name;
         var frameRate = getFrameRate(layer);
         var duration = getDuration(layer);
         var projectName = getProjectName();
-    
+        var expressionProps = getExpressionControlledProperties(layer);
+
         if (briefly) {
             frameRate = parseFloat(frameRate).toFixed(2); 
         }
-    
+
         var animatedProps = getAnimatedProperties(layer);
         var animatedPropsString = animatedProps.length > 0 ? animatedProps.join(", ") : "NoAnimations";
-    
+
         var variables = {
             "T": getLayerType(layer),
             "i": layer.index,
@@ -891,9 +893,9 @@ function buildUI(thisObj) {
             "O": layer.name,
             "E": effectsString,
             "An": animatedPropsString,
-            "F": getFrameRate(layer),
+            "F": frameRate,
             "R": getResolution(layer),
-            "D": getDuration(layer),
+            "D": duration,
             "C": compName,
             "Ip": layer.inPoint.toFixed(2),
             "Op": layer.outPoint.toFixed(2),
@@ -907,11 +909,12 @@ function buildUI(thisObj) {
             "Lpos": getLayerPosition(layer),
             "Lsc": getLayerScale(layer),
             "Lrot": getLayerRotation(layer),
-            "Lops": getLayerOpacity(layer)
+            "Lops": getLayerOpacity(layer),
+            "Lexp": expressionProps
         };
-    
+
         var newName = replaceVariables(template, variables);
-    
+
         if (briefly) {
             switch (brieflyType) {
                 case "Camel Case":
@@ -934,9 +937,31 @@ function buildUI(thisObj) {
                     break;
             }
         }
-    
+
         return newName;
     }
+
+// Get the list of properties controlled by expressions
+function getExpressionControlledProperties(layer) {
+    var expressionProps = [];
+
+    function checkPropertyGroup(propertyGroup) {
+        for (var i = 1; i <= propertyGroup.numProperties; i++) {
+            var prop = propertyGroup.property(i);
+            if (prop.expression && prop.expressionEnabled) {
+                expressionProps.push(prop.name);
+            }
+
+            if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
+                checkPropertyGroup(prop);
+            }
+        }
+    }
+
+    checkPropertyGroup(layer);
+    return expressionProps.length > 0 ? expressionProps.join(", ") : "NoExpressions";
+}
+
 
     // Get the track matte type of a layer
     function getTrackMatteType(layer) {
@@ -1236,8 +1261,9 @@ function buildUI(thisObj) {
     }
 
     // Replace variables in the template with actual values
+    // Replace variables in the template with actual values
     function replaceVariables(template, variables) {
-        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|Ec|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|D\(([^)]+)\)|D|E|An|Ip|Op|Tm|Ar|Pn|Lpos|Lsc|Lrot|Lops|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, durationFormat) {
+        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|Ec|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|D\(([^)]+)\)|D|E|An|Ip|Op|Tm|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lexp|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, durationFormat) {
             if (group) {
                 return group;  // Handle text inside parentheses
             } else if (customEffectDelimiterParentheses !== undefined) {
@@ -1280,30 +1306,33 @@ function buildUI(thisObj) {
                 return variables['Lops'];
             } else if (match === 'Ec') {
                 return variables['Ec'];
+            } else if (match === 'Lexp') {
+                return variables['Lexp'];
             } else {
                 return variables[match] !== undefined ? variables[match] : match;
             }
         });
-    }            
+    }
+            
 
     var localIndex = 1; // Global local index
 
     // Rename layers based on the template
     function renameLayersByTemplate(allLayers, template, briefly, brieflyType) {
         var proj = app.project;
-    
+
         if (proj) {
             var comp = proj.activeItem;
-    
+
             if (comp && comp instanceof CompItem) {
                 app.beginUndoGroup("Rename Layers by Template");
-    
+
                 // Reset local index before renaming
                 localIndex = 1;
-    
+
                 for (var i = 1; i <= comp.numLayers; i++) {
                     var layer = comp.layer(i);
-    
+
                     if (allLayers || layer.selected) {
                         var effectNames = [];
                         if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
@@ -1312,14 +1341,15 @@ function buildUI(thisObj) {
                                 effectNames.push(effect.name);
                             }
                         }
-    
+
                         var effectsString = effectNames.length > 0 ? effectNames.join(", ") : "ClearLayer";
                         var compName = app.project.activeItem.name;
                         var projectName = getProjectName();
-    
+                        var expressionProps = getExpressionControlledProperties(layer);
+
                         var animatedProps = getAnimatedProperties(layer);
                         var animatedPropsString = animatedProps.length > 0 ? animatedProps.join(", ") : "NoAnimations";
-    
+
                         var variables = {
                             "T": getLayerType(layer),
                             "i": i,
@@ -1339,15 +1369,16 @@ function buildUI(thisObj) {
                             "Tm": getTrackMatteType(layer),
                             "Ar": getAspectRatio(layer),
                             "Ec": getEffectsCount(layer),
-                            "Pn": projectName, 
+                            "Pn": projectName,
                             "Lpos": getLayerPosition(layer),
                             "Lsc": getLayerScale(layer),
                             "Lrot": getLayerRotation(layer),
-                            "Lops": getLayerOpacity(layer)
+                            "Lops": getLayerOpacity(layer),
+                            "Lexp": expressionProps
                         };
-    
+
                         var newName = replaceVariables(template, variables);
-    
+
                         if (briefly) {
                             switch (brieflyType) {
                                 case "Camel Case":
@@ -1370,14 +1401,14 @@ function buildUI(thisObj) {
                                     break;
                             }
                         }
-    
+
                         layer.name = newName;
-    
+
                         // Increment local index after renaming the layer
                         localIndex++;
                     }
                 }
-    
+
                 app.endUndoGroup();
             } else {
                 alert("Please select a composition or layer.", "NitroNamer");
@@ -1386,6 +1417,7 @@ function buildUI(thisObj) {
             alert("Project not found.");
         }
     }
+
 
     // Show help window
     function showHelp() {
