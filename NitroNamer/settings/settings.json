@@ -1,7 +1,7 @@
 {
     "currentSettings": {
         "UICompact": false,
-        "allLayers": true,
+        "allLayers": false,
         "template": "T_Ddd.i[Pn]-R- | ",
         "briefly": true,
         "brieflyType": 3,
