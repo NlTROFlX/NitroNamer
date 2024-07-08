@@ -2,52 +2,22 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "T_Ddd.i[Pn]-R- | ",
+        "template": "[Ip-Ec]E(=)_D | D(3) | An | Ar | Tm | Lpos | Fext(mp3) | W | Lsc",
         "briefly": false,
-        "brieflyType": 5,
+        "brieflyType": 0,
         "selectedPresetIndex": 0
     },
     "userPresets": {
-        "preset_7": {
-            "allLayers": true,
-            "template": "T_Ddd.i[Pn]-R- | ",
-            "briefly": false,
-            "brieflyType": 3
-        },
-        "preset_6": {
-            "allLayers": true,
-            "template": "7",
-            "briefly": true,
-            "brieflyType": 3
-        },
         "preset_1": {
             "allLayers": true,
-            "template": "5",
+            "template": "[Ec]E(=)_D | D(3) | An | Ar",
             "briefly": true,
-            "brieflyType": 3
+            "brieflyType": 0
         },
         "preset_2": {
             "allLayers": true,
-            "template": "4",
-            "briefly": true,
-            "brieflyType": 3
-        },
-        "preset_3": {
-            "allLayers": true,
-            "template": "3",
-            "briefly": true,
-            "brieflyType": 3
-        },
-        "preset_4": {
-            "allLayers": true,
-            "template": "2",
-            "briefly": true,
-            "brieflyType": 3
-        },
-        "preset_5": {
-            "allLayers": true,
-            "template": "1",
-            "briefly": true,
+            "template": "T_Ddd.i[Pn]-R- | ",
+            "briefly": false,
             "brieflyType": 3
         }
     }
