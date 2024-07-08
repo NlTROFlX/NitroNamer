@@ -1,11 +1,11 @@
 {
     "currentSettings": {
         "UICompact": false,
-        "allLayers": true,
-        "template": "[Ip-Ec]E(=)_D | D(3) | An | Ar | Tm | Lpos | Fext(mp3) | W | Lsc",
-        "briefly": false,
-        "brieflyType": 0,
-        "selectedPresetIndex": 0
+        "allLayers": false,
+        "template": "T_Ddd.i[Pn]-R- | ",
+        "briefly": true,
+        "brieflyType": 3,
+        "selectedPresetIndex": 1
     },
     "userPresets": {
         "preset_1": {
