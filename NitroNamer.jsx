@@ -1489,7 +1489,8 @@ function buildUI(thisObj) {
 
     // Show current layer variables
     function showVariables() {
-        
+        var scriptFilePath = new File($.fileName).path + "/NitroNamer/scripts/NNLayerInfo.jsx";
+        $.evalFile(scriptFilePath);
     }
 
     // Get the effect names applied to a layer

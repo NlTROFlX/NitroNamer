@@ -1,8 +1,11 @@
 function showHelp() {
-    var helpWin = new Window("dialog", "NitroNamer - Help Panel", undefined, {resizeable: true});
+    var helpWin = new Window("dialog", "NitroNamer - Variable library", undefined, {resizeable: true});
     helpWin.orientation = "column";
     helpWin.alignChildren = ["fill", "top"];
     helpWin.spacing = 10;
+    win.layout.layout(true);
+
+    var totalVariables = 0;
 
     var addGroupPanel = function(parent, title, variables) {
         var panel = parent.add("panel", undefined, title);
@@ -12,6 +15,8 @@ function showHelp() {
 
         var listBox = panel.add("listbox", undefined, variables, {multiselect: false});
         listBox.preferredSize = [200, 100];
+
+        totalVariables += variables.length;
 
         return panel;
     };
@@ -93,16 +98,24 @@ function showHelp() {
 
     var buttonGroup = helpWin.add("group", undefined);
     buttonGroup.orientation = "row";
-    buttonGroup.alignChildren = ["center", "top"];
+    buttonGroup.alignChildren = ["left", "top"];
     buttonGroup.spacing = 10;
 
-    var btnClose = buttonGroup.add("button", undefined, "Close");
+    var totalVariablesText = buttonGroup.add("statictext", undefined, "Total " + totalVariables + " variables available");
+    totalVariablesText.alignment = ["left", "top"];
+
+    var buttonsSubGroup = buttonGroup.add("group", undefined);
+    buttonsSubGroup.orientation = "row";
+    buttonsSubGroup.alignChildren = ["center", "top"];
+    buttonsSubGroup.spacing = 10;
+
+    var btnClose = buttonsSubGroup.add("button", undefined, "Close");
     btnClose.onClick = function() {
         helpWin.close();
     };
 
     // Add the new button to open the URL for donations
-    var btnNitrofix = buttonGroup.add("button", undefined, "NitroNamer 2024.2 | Say thanks or buy a coffee for NITROFIX");
+    var btnNitrofix = buttonsSubGroup.add("button", undefined, "NitroNamer 2024.3 | Say thanks or buy a coffee for NITROFIX");
     btnNitrofix.onClick = function() {
         var url = "https://boosty.to/nitrofix";
         if ($.os.indexOf("Windows") !== -1) {
@@ -113,7 +126,7 @@ function showHelp() {
     };
 
     // Add the new button to open the GitHub project page
-    var btnGitHub = buttonGroup.add("button", undefined, "Project Page on GitHub");
+    var btnGitHub = buttonsSubGroup.add("button", undefined, "Project page on GitHub");
     btnGitHub.onClick = function() {
         var url = "https://github.com/NlTROFlX/NitroNamer";
         if ($.os.indexOf("Windows") !== -1) {
