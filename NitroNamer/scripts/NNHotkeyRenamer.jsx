@@ -1,18 +1,16 @@
+// Function to load settings from a JSON file
 function loadSettingsFromFile() {
     var scriptFile = new File($.fileName);
-    var scriptFolderPath = scriptFile.path + "/../settings";
-    var settingsFile = new File(scriptFolderPath + "/settings.json");
+    var scriptFolderPath = scriptFile.path + "/../settings/settings.json";
+    var settingsFile = new File(scriptFolderPath);
 
     var settings = {};
     if (settingsFile.exists) {
         settingsFile.open("r");
-        var fileContent = settingsFile.read();
-        settings = JSON.parse(fileContent);
+        settings = JSON.parse(settingsFile.read());
         settingsFile.close();
-        $.writeln("[DEBUG]: Settings loaded successfully from: " + settingsFile.fsName);
     } else {
-        alert("Settings file not found at: " + settingsFile.fsName);
-        $.writeln("[DEBUG]: Settings file not found at: " + settingsFile.fsName);
+        throw new Error("Settings file not found at: " + settingsFile.fsName);
     }
 
     return settings;
@@ -37,21 +35,8 @@ function getKeyValues() {
         };
     } catch (error) {
         alert("Error: " + error.message);
-        $.writeln("[DEBUG]: Error loading key values: " + error.message);
         return null;
     }
-}
-
-function getBrieflyTypeString(index) {
-    var brieflyTypes = [
-        "Camel Case",
-        "Pascal Case",
-        "Snake Case",
-        "Kebab Case",
-        "Screaming Snake Case",
-        "This Comp"
-    ];
-    return brieflyTypes[index] || "Camel Case"; // default to "Camel Case" if index is out of range
 }
 
 // Convert string to camel case
@@ -162,7 +147,6 @@ function replaceVariables(template, variables) {
 // Function to generate new name based on the template and variables
 function generateNewName(layer, template, briefly, brieflyType) {
     var effectNames = getEffectNames(layer);
-
     var effectsString = effectNames.length > 0 ? effectNames.join(", ") : "ClearLayer";
     var compName = app.project.activeItem.name;
     var frameRate = getFrameRate(layer);
@@ -171,6 +155,10 @@ function generateNewName(layer, template, briefly, brieflyType) {
     var projectName = getProjectName();
     var expressionProps = getExpressionControlledProperties(layer);
     var fileExtension = getFileExtension(layer);
+
+    if (briefly) {
+        frameRate = parseFloat(frameRate).toFixed(2); 
+    }
 
     var animatedProps = getAnimatedProperties(layer);
     var animatedPropsString = animatedProps.length > 0 ? animatedProps.join(", ") : "NoAnimations";
@@ -208,22 +196,22 @@ function generateNewName(layer, template, briefly, brieflyType) {
 
     if (briefly) {
         switch (brieflyType) {
-            case "Camel Case":
+            case 0:
                 newName = toCamelCase(newName);
                 break;
-            case "Pascal Case":
+            case 1:
                 newName = toPascalCase(newName);
                 break;
-            case "Snake Case":
+            case 2:
                 newName = toSnakeCase(newName);
                 break;
-            case "Kebab Case":
+            case 3:
                 newName = toKebabCase(newName);
                 break;
-            case "Screaming Snake Case":
+            case 4:
                 newName = toScreamingSnakeCase(newName);
                 break;
-            case "This Comp":
+            case 5:
                 newName = toThisComp(newName);
                 break;
         }
@@ -571,15 +559,6 @@ function renameLayersByTemplate(allLayers, template, briefly, brieflyType) {
 
 // Main execution
 var keyValues = getKeyValues();
-if (keyValues && keyValues.template) {
-    $.writeln("[DEBUG]: Starting layer renaming process");
-
-    // Convert brieflyType index to string
-    keyValues.brieflyType = getBrieflyTypeString(keyValues.brieflyType);
-
+if (keyValues) {
     renameLayersByTemplate(keyValues.allLayers, keyValues.template, keyValues.briefly, keyValues.brieflyType);
-    $.writeln("[DEBUG]: Renaming complete");
-} else {
-    alert("Failed to load key values or template is undefined.");
-    $.writeln("[DEBUG]: Failed to load key values or template is undefined.");
 }

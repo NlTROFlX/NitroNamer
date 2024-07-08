@@ -7,7 +7,6 @@ function buildUI(thisObj) {
     win.preferredSize.height = 122;
     win.active = true;
     win.margins = [4,4,4,4];
-    win.layout.layout(true);
 
     // Create group for layer selection options
     var grpLayerSelection = win.add("group", undefined);

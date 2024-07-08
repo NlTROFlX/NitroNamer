@@ -2,9 +2,9 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "T.i",
+        "template": "T_Ddd.i[Pn]-R- | ",
         "briefly": true,
-        "brieflyType": 4,
+        "brieflyType": 3,
         "selectedPresetIndex": 1
     },
     "userPresets": {
