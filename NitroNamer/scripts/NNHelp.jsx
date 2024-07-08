@@ -24,15 +24,15 @@ function showHelp() {
 
     // Composition Information Variables
     var compVariables = [
-        "C - Current composition name"
+        "C - Current composition name",
+        "Pn - Project name"
     ];
     addGroupPanel(firstRow, "Composition Information", compVariables);
 
     // Time and Duration Variables
     var timeVariables = [
         "D - Duration (HH:MM:SS)",
-        "Dd - By seconds duration (0Sec)",
-        "Ddd - By minute duration (0Min.0Sec)",
+        "Df - Duration in frames",
         "Ip - In point of the layer",
         "Op - Out point of the layer"
     ];
@@ -49,7 +49,8 @@ function showHelp() {
     // Frame Rate and Resolution Variables
     var frameResVariables = [
         "F - Frame Rate",
-        "R - Resolution (Width*Height)"
+        "R - Resolution (Width*Height)",
+        "Ar - Aspect ratio"
     ];
     addGroupPanel(firstRow, "Frame Rate and Resolution", frameResVariables);
 
@@ -68,6 +69,7 @@ function showHelp() {
 
     // Layer Properties Variables
     var layerPropertiesVariables = [
+        "T - Layer type (Pre-comp, Footage, Shape, Solid, Null, Adjustment, Audio, Text, Light, Camera)",
         "S - Source name (file or pre-comp)",
         "W - Width of the layer",
         "H - Height of the layer",
@@ -76,20 +78,12 @@ function showHelp() {
         "Lrot - Layer rotation",
         "Lops - Layer opacity",
         "Tm - Track matte type",
-        "Ar - Aspect ratio",
         "An - Animated properties",
-        "Pn - Project name",
         "Lexp - List of properties controlled by expressions",
         "Fext - File extension of the layer",
         "Fext(mp3) - Custom extension check"
     ];
     addGroupPanel(secondRow, "Layer Properties", layerPropertiesVariables);
-
-    // Layer Type Variables
-    var layerTypeVariables = [
-        "T - Layer type (Pre-comp, Footage, Shape, Solid, Null, Adjustment, Audio, Text, Light, Camera)"
-    ];
-    addGroupPanel(secondRow, "Layer Type", layerTypeVariables);
 
     // Other Variables
     var otherVariables = [
@@ -107,10 +101,21 @@ function showHelp() {
         helpWin.close();
     };
 
-    // Add the new button to open the URL
+    // Add the new button to open the URL for donations
     var btnNitrofix = buttonGroup.add("button", undefined, "NitroNamer 2024.2 | Say thanks or buy a coffee for NITROFIX");
     btnNitrofix.onClick = function() {
         var url = "https://boosty.to/nitrofix";
+        if ($.os.indexOf("Windows") !== -1) {
+            system.callSystem("cmd.exe /c start " + url);
+        } else {
+            system.callSystem("open " + url);
+        }
+    };
+
+    // Add the new button to open the GitHub project page
+    var btnGitHub = buttonGroup.add("button", undefined, "Project Page on GitHub");
+    btnGitHub.onClick = function() {
+        var url = "https://github.com/NlTROFlX/NitroNamer";
         if ($.os.indexOf("Windows") !== -1) {
             system.callSystem("cmd.exe /c start " + url);
         } else {
