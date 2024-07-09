@@ -240,14 +240,14 @@ function buildUI(thisObj) {
 
     // Add text fields for original and renamed layer names
     var txtOriginalLabel = grpTextFields.add("statictext", undefined, "Input layer name: ");
-    txtOriginalLabel.maximumSize.height = 8;
+    txtOriginalLabel.maximumSize.height = 12;
     var txtOriginal = grpTextFields.add("edittext", undefined, "", {readonly: true});
     txtOriginal.alignment = ["fill", "top"];
     txtOriginal.maximumSize.width = globalWidthSizeElements;
     txtOriginal.margins = [0, -10, 0, 0];
 
     var txtRenamedLabel = grpTextFields.add("statictext", undefined, "Template result: ");
-    txtRenamedLabel.maximumSize.height = 8;
+    txtRenamedLabel.maximumSize.height = 12;
     var txtRenamed = grpTextFields.add("edittext", undefined, "", {readonly: true});
     txtRenamed.alignment = ["fill", "top"];
     txtRenamed.maximumSize.width = globalWidthSizeElements;
