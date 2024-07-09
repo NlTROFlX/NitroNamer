@@ -173,12 +173,29 @@ function runHotkeyRenamer() {
 
     // Convert string to camel case
     function toCamelCase(str) {
-        return str.split(/(\d+|\W+)/).map(function(part, index) {
-            if (index === 0) {
-                return part.toLowerCase();
+        var result = "";
+        var capitalizeNext = false;
+
+        for (var i = 0; i < str.length; i++) {
+            var currentChar = str.charAt(i);
+            var charCode = str.charCodeAt(i);
+
+            if ((charCode >= 48 && charCode <= 57) || // цифры
+                (charCode >= 65 && charCode <= 90) || // заглавные буквы
+                (charCode >= 97 && charCode <= 122)) { // строчные буквы
+                if (capitalizeNext) {
+                    result += currentChar.toUpperCase();
+                    capitalizeNext = false;
+                } else {
+                    result += currentChar.toLowerCase();
+                }
+            } else {
+                result += currentChar; // Сохраняем символ, который не является буквой или цифрой
+                capitalizeNext = true;
             }
-            return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
-        }).join('');
+        }
+
+        return result;
     }
 
     // Convert string to pascal case

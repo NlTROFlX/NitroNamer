@@ -1027,7 +1027,6 @@ function buildUI(thisObj) {
         return result;
     }
 
-
     // Convert string to pascal case
     function toPascalCase(str) {
         return str.replace(/\w\S*/g, function(txt) {
