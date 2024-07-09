@@ -11,6 +11,7 @@ function buildUI(thisObj) {
     // Create group for layer selection options
     var grpLayerSelection = win.add("group", undefined);
     grpLayerSelection.orientation = "row"; // Set orientation to horizontal
+    grpLayerSelection.maximumSize.width = globalWidthSizeElements;
 
     // Add radio buttons for layer selection mode
     var rdoAllLayers = grpLayerSelection.add("radiobutton", undefined, "Total: ");
@@ -234,6 +235,8 @@ function buildUI(thisObj) {
     var grpTextFields = win.add("group", undefined);
     grpTextFields.orientation = "column";
     grpTextFields.alignChildren = ["fill", "top"];
+    grpTextFields.alignment = ["right", "center"];
+    grpTextFields.maximumSize.width = globalWidthSizeElements;
 
     // Add text fields for original and renamed layer names
     var txtOriginalLabel = grpTextFields.add("statictext", undefined, "Input layer name: ");
