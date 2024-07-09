@@ -1152,10 +1152,16 @@ function buildUI(thisObj) {
     function getLayerPosition(layer) {
         if (layer.transform && layer.transform.position) {
             var pos = layer.transform.position.value;
-            var roundedPos = pos.map(function(coord) {
-                return Math.round(coord * 10) / 10;
-            });
-            return layer.threeDLayer ? roundedPos.join(", ") : roundedPos.slice(0, 2).join(", ");
+            if (typeof pos === 'object' && pos.length !== undefined) {
+                var roundedPos = [];
+                for (var i = 0; i < pos.length; i++) {
+                    roundedPos.push(Math.round(pos[i] * 10) / 10);
+                }
+                return layer.threeDLayer ? roundedPos.join(", ") : roundedPos.slice(0, 2).join(", ");
+            } else {
+                var roundedPos = Math.round(pos * 10) / 10;
+                return roundedPos.toString();
+            }
         }
         return "NoPosition";
     }
@@ -1226,10 +1232,16 @@ function buildUI(thisObj) {
     function getLayerScale(layer) {
         if (layer.transform && layer.transform.scale) {
             var scale = layer.transform.scale.value;
-            var roundedScale = scale.map(function(coord) {
-                return Math.round(coord * 10) / 10;
-            });
-            return layer.threeDLayer ? roundedScale.join(", ") : roundedScale.slice(0, 2).join(", ");
+            if (typeof scale === 'object' && scale.length !== undefined) {
+                var roundedScale = [];
+                for (var i = 0; i < scale.length; i++) {
+                    roundedScale.push(Math.round(scale[i] * 10) / 10);
+                }
+                return layer.threeDLayer ? roundedScale.join(", ") : roundedScale.slice(0, 2).join(", ");
+            } else {
+                var roundedScale = Math.round(scale * 10) / 10;
+                return roundedScale.toString();
+            }
         }
         return "NoScale";
     }
@@ -1241,9 +1253,12 @@ function buildUI(thisObj) {
             var rotationX = layer.transform.xRotation ? layer.transform.xRotation.value : 0;
             var rotationY = layer.transform.yRotation ? layer.transform.yRotation.value : 0;
             var rotationZ = layer.transform.zRotation ? layer.transform.zRotation.value : 0;
-            return [rotationX, rotationY, rotationZ].map(function(value) {
-                return Math.round(value * 10) / 10;
-            }).join(", ");
+            var rotations = [rotationX, rotationY, rotationZ];
+            var roundedRotations = [];
+            for (var i = 0; i < rotations.length; i++) {
+                roundedRotations.push(Math.round(rotations[i] * 10) / 10);
+            }
+            return roundedRotations.join(", ");
         } else {
             // For 2D layers, use the regular rotation property
             if (layer.transform && layer.transform.rotation) {
@@ -1343,19 +1358,17 @@ function buildUI(thisObj) {
     // Rename layers based on the template
     function renameLayersByTemplate(allLayers, template, briefly, brieflyType) {
         var proj = app.project;
-
-        if (proj) {
+        if (proj && proj.activeItem instanceof CompItem) {
             var comp = proj.activeItem;
-
-            if (comp && comp instanceof CompItem) {
+            if (comp.numLayers > 0) {
                 app.beginUndoGroup("Rename Layers by Template");
-
+    
                 // Reset local index before renaming
                 localIndex = 1;
-
+    
                 for (var i = 1; i <= comp.numLayers; i++) {
                     var layer = comp.layer(i);
-
+    
                     if (allLayers || layer.selected) {
                         var effectNames = [];
                         if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
@@ -1364,17 +1377,17 @@ function buildUI(thisObj) {
                                 effectNames.push(effect.name);
                             }
                         }
-
+    
                         var effectsString = effectNames.length > 0 ? effectNames.join(", ") : "ClearLayer";
                         var compName = app.project.activeItem.name;
                         var projectName = getProjectName();
                         var expressionProps = getExpressionControlledProperties(layer);
                         var fileExtension = getFileExtension(layer);
                         var durationInFrames = getDurationInFrames(layer);
-
+    
                         var animatedProps = getAnimatedProperties(layer);
                         var animatedPropsString = animatedProps.length > 0 ? animatedProps.join(", ") : "NoAnimations";
-
+    
                         var variables = {
                             "T": getLayerType(layer),
                             "i": i,
@@ -1403,9 +1416,9 @@ function buildUI(thisObj) {
                             "Lexp": expressionProps,
                             "Fext": fileExtension
                         };
-
+    
                         var newName = replaceVariables(template, variables);
-
+    
                         if (briefly) {
                             switch (brieflyType) {
                                 case "Camel Case":
@@ -1428,20 +1441,20 @@ function buildUI(thisObj) {
                                     break;
                             }
                         }
-
+    
                         layer.name = newName;
-
+    
                         // Increment local index after renaming the layer
                         localIndex++;
                     }
                 }
-
+    
                 app.endUndoGroup();
             } else {
-                alert("Please select a composition or layer.", "NitroNamer");
+                alert("No layers in the active composition.");
             }
         } else {
-            alert("Project not found.");
+            alert("Please select a valid composition.");
         }
     }
 

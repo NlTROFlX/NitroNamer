@@ -3,7 +3,7 @@
         "UICompact": false,
         "allLayers": true,
         "template": "T_Ddd.i[Pn]-R- | ",
-        "briefly": true,
+        "briefly": false,
         "brieflyType": 3,
         "selectedPresetIndex": 1
     },

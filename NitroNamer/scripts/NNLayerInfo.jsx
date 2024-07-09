@@ -219,10 +219,12 @@ function getHeight(layer) {
 function getLayerPosition(layer) {
     if (layer.transform && layer.transform.position) {
         var pos = layer.transform.position.value;
-        var roundedPos = pos.map(function(coord) {
-            return Math.round(coord * 10) / 10;
-        });
-        return layer.threeDLayer ? roundedPos.join(", ") : roundedPos.slice(0, 2).join(", ");
+        if (pos && pos.map) {
+            var roundedPos = pos.map(function(coord) {
+                return Math.round(coord * 10) / 10;
+            });
+            return layer.threeDLayer ? roundedPos.join(", ") : roundedPos.slice(0, 2).join(", ");
+        }
     }
     return "NoPosition";
 }
