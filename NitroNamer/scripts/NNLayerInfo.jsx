@@ -216,14 +216,19 @@ function getHeight(layer) {
     return "NoHeight";
 }
 
+// Get the position of a layer
 function getLayerPosition(layer) {
     if (layer.transform && layer.transform.position) {
         var pos = layer.transform.position.value;
-        if (pos && pos.map) {
-            var roundedPos = pos.map(function(coord) {
-                return Math.round(coord * 10) / 10;
-            });
+        if (typeof pos === 'object' && pos.length !== undefined) {
+            var roundedPos = [];
+            for (var i = 0; i < pos.length; i++) {
+                roundedPos.push(Math.round(pos[i] * 10) / 10);
+            }
             return layer.threeDLayer ? roundedPos.join(", ") : roundedPos.slice(0, 2).join(", ");
+        } else {
+            var roundedPos = Math.round(pos * 10) / 10;
+            return roundedPos.toString();
         }
     }
     return "NoPosition";
@@ -287,26 +292,37 @@ function getAnimatedProperties(layer) {
     return animatedProps;
 }
 
+// Get the scale of a layer
 function getLayerScale(layer) {
     if (layer.transform && layer.transform.scale) {
         var scale = layer.transform.scale.value;
-        var roundedScale = scale.map(function(coord) {
-            return Math.round(coord * 10) / 10;
-        });
-        return layer.threeDLayer ? roundedScale.join(", ") : roundedScale.slice(0, 2).join(", ");
+        if (typeof scale === 'object' && scale.length !== undefined) {
+            var roundedScale = [];
+            for (var i = 0; i < scale.length; i++) {
+                roundedScale.push(Math.round(scale[i] * 10) / 10);
+            }
+            return layer.threeDLayer ? roundedScale.join(", ") : roundedScale.slice(0, 2).join(", ");
+        } else {
+            var roundedScale = Math.round(scale * 10) / 10;
+            return roundedScale.toString();
+        }
     }
     return "NoScale";
 }
 
+// Get the rotation of a layer
 function getLayerRotation(layer) {
     if (layer.threeDLayer) {
         // For 3D layers, concatenate the X, Y, and Z rotations
         var rotationX = layer.transform.xRotation ? layer.transform.xRotation.value : 0;
         var rotationY = layer.transform.yRotation ? layer.transform.yRotation.value : 0;
         var rotationZ = layer.transform.zRotation ? layer.transform.zRotation.value : 0;
-        return [rotationX, rotationY, rotationZ].map(function(value) {
-            return Math.round(value * 10) / 10;
-        }).join(", ");
+        var rotations = [rotationX, rotationY, rotationZ];
+        var roundedRotations = [];
+        for (var i = 0; i < rotations.length; i++) {
+            roundedRotations.push(Math.round(rotations[i] * 10) / 10);
+        }
+        return roundedRotations.join(", ");
     } else {
         // For 2D layers, use the regular rotation property
         if (layer.transform && layer.transform.rotation) {
