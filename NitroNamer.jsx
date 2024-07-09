@@ -266,7 +266,7 @@ function buildUI(thisObj) {
     var grpBriefly = win.add("group", undefined);
     grpBriefly.orientation = "row";
     var chkBriefly = grpBriefly.add("checkbox", undefined, "Briefly");
-    var ddBrieflyType = grpBriefly.add("dropdownlist", undefined, ["Camel Case", "Pascal Case", "Snake Case", "Kebab Case", "Screaming Snake Case", "This Comp"]);
+    var ddBrieflyType = grpBriefly.add("dropdownlist", undefined, ["Camel Case", "Pascal Case", "Snake Case", "Kebab Case", "Screaming Snake Case"]);
     ddBrieflyType.selection = 0;
 
     // Event handler for "Briefly" checkbox
@@ -383,8 +383,8 @@ function buildUI(thisObj) {
             brieflyType: ddBrieflyType.selection.index
         };
 
-        // Check for empty template
-        if (!settings.template.trim()) {
+        // Проверяем пустой шаблон
+        if (!trim(settings.template)) {
             alert("Template cannot be empty.");
             return;
         }
@@ -409,7 +409,13 @@ function buildUI(thisObj) {
         updatePresetsDropdown(updatedSettings);
 
         // Set the selection to the newly saved preset
-        var presetKeys = Object.keys(updatedSettings.userPresets);
+        var presetKeys = [];
+        for (var key in updatedSettings.userPresets) {
+            if (updatedSettings.userPresets.hasOwnProperty(key)) {
+                presetKeys.push(key);
+            }
+        }
+
         var newPresetIndex = presetKeys.indexOf(newPresetKey);
         if (newPresetIndex !== -1) {
             ddLayerMode.selection = newPresetIndex;
@@ -418,6 +424,12 @@ function buildUI(thisObj) {
         // Ensure the template field remains the same
         txtTemplate.text = settings.template;
     };
+
+    // Реализация функции trim
+    function trim(str) {
+        return str.replace(/^\s+|\s+$/g, '');
+    }
+
 
     // Delete preset when Delete button is clicked
     btnCircleMinus.onClick = function() {
@@ -621,7 +633,13 @@ function buildUI(thisObj) {
                 }
             }
         } else {
-            var nextPresetNumber = Object.keys(userPresets).length + 1;
+            // Считаем количество ключей в userPresets
+            var nextPresetNumber = 1;
+            for (var key in userPresets) {
+                if (userPresets.hasOwnProperty(key)) {
+                    nextPresetNumber++;
+                }
+            }
             newPresetKey = "preset_" + nextPresetNumber;
             userPresets[newPresetKey] = settings;
 
@@ -935,9 +953,6 @@ function buildUI(thisObj) {
                 case "Screaming Snake Case":
                     newName = toScreamingSnakeCase(newName);
                     break;
-                case "This Comp":
-                    newName = toThisComp(newName);
-                    break;
             }
         }
 
@@ -1047,12 +1062,6 @@ function buildUI(thisObj) {
     // Convert string to screaming snake case
     function toScreamingSnakeCase(str) {
         return str.replace(/\s+/g, '_').toUpperCase();
-    }
-
-    // Add comp name to the string
-    function toThisComp(str) {
-        var compName = app.project.activeItem.name;
-        return "[" + compName + "] " + str;
     }
 
     // Get the type of a layer
@@ -1452,9 +1461,6 @@ function buildUI(thisObj) {
                                     break;
                                 case "Screaming Snake Case":
                                     newName = toScreamingSnakeCase(newName);
-                                    break;
-                                case "This Comp":
-                                    newName = toThisComp(newName);
                                     break;
                             }
                         }
