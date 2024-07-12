@@ -1,8 +1,8 @@
 {
     "currentSettings": {
         "UICompact": false,
-        "allLayers": false,
-        "template": "I",
+        "allLayers": true,
+        "template": "T | Lpnt | Lpos | E",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0
