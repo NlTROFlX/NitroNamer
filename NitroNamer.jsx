@@ -544,12 +544,16 @@ function buildUI(thisObj) {
         var template = txtTemplate.text;
         var briefly = chkBriefly.value;
         var brieflyType = ddBrieflyType.selection.text;
-        renameLayersByTemplate(allLayers, template, briefly, brieflyType);
+    
+        // Check if the shift key is held down
+        var includeShyLayers = ScriptUI.environment.keyboardState.shiftKey;
+    
+        renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers);
         updateLayerCounts();
         updatePreview();  // Ensure IN and OUT fields are updated
         btnRename.image = File(scriptFolderPath + "/NitroNamer/img/doneIcon.png"); // Change button icon to "Done!" icon
         btnRename.imageSize = [24, 24]; // Ensure the "Done!" icon is also resized
-    };
+    };    
 
     // Show help when Help button is clicked
     btnHelp.onClick = function() {
@@ -1432,7 +1436,7 @@ function buildUI(thisObj) {
     var localIndex = 1; // Global local index
 
     // Rename layers based on the template
-    function renameLayersByTemplate(allLayers, template, briefly, brieflyType) {
+    function renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers) {
         var proj = app.project;
         if (proj && proj.activeItem instanceof CompItem) {
             var comp = proj.activeItem;
@@ -1444,6 +1448,9 @@ function buildUI(thisObj) {
     
                 for (var i = 1; i <= comp.numLayers; i++) {
                     var layer = comp.layer(i);
+    
+                    // Skip shy layers unless includeShyLayers is true
+                    if (layer.shy && !includeShyLayers) continue;
     
                     if (allLayers || layer.selected) {
                         var effectNames = [];
