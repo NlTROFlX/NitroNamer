@@ -2,9 +2,9 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "T - Lpnt(i) | Lpnt",
+        "template": "T - {Lpnt}.Lpnt(i)",
         "briefly": false,
-        "brieflyType": 0,
+        "brieflyType": 4,
         "selectedPresetIndex": 0
     },
     "userPresets": {

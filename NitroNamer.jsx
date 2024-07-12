@@ -282,8 +282,32 @@ function buildUI(thisObj) {
     // Create group for "Briefly" checkbox and dropdown
     var grpBriefly = win.add("group", undefined);
     grpBriefly.orientation = "row";
-    var chkBriefly = grpBriefly.add("checkbox", undefined, "Briefly");
+    grpBriefly.alignChildren = [ "right", "center"];
+
+    // Move buttons to the grpBriefly group
+    var btnRename = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/renameIcon.png"), { style: "toolbutton" });
+    btnRename.size = [24, 24]; // Set button size
+    btnRename.imageSize = [24, 24]; // Set image size
+    btnRename.alignment = ["left", "center"];
+
+    var btnHelp = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/helpIcon.png"), { style: "toolbutton" });
+    btnHelp.size = [24, 24]; // Set button size
+    btnHelp.imageSize = [24, 24]; // Set image size
+    btnHelp.alignment = ["left", "center"];
+
+    var btnVariables = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/variablesIcon.png"), { style: "toolbutton" });
+    btnVariables.size = [24, 24]; // Set button size
+    btnVariables.imageSize = [24, 24]; // Set image size
+    btnVariables.alignment = ["left", "center"];
+
+    var btnReset = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/resetIcon.png"), { style: "toolbutton" });
+    btnReset.size = [24, 24]; // Set button size
+    btnReset.imageSize = [24, 24]; // Set image size
+    btnReset.alignment = ["left", "center"];
+
+    var chkBriefly = grpBriefly.add("checkbox", undefined);
     var ddBrieflyType = grpBriefly.add("dropdownlist", undefined, ["Camel Case", "Pascal Case", "Snake Case", "Kebab Case", "Screaming Snake Case"]);
+    ddBrieflyType.maximumSize.width = 100;
     ddBrieflyType.selection = 0;
 
     // Event handler for "Briefly" checkbox
@@ -314,31 +338,6 @@ function buildUI(thisObj) {
         resetRenameButtonIcon();
     };
     grpBriefly.margins = [0,-10,0,0];
-
-    // Create group for main action buttons
-    var grpButtons = win.add("group", undefined);
-    grpButtons.orientation = "row";
-    grpButtons.margins = [0,-10,0,0];
-
-    // Add Rename button with icon and hover effect
-    var btnRename = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/renameIcon.png"), { style: "toolbutton" });
-    btnRename.size = [32, 32]; // Set button size
-    btnRename.imageSize = [24, 24]; // Set image size
-
-    // Add Help button with icon and hover effect
-    var btnHelp = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/helpIcon.png"), { style: "toolbutton" });
-    btnHelp.size = [32, 32]; // Set button size
-    btnHelp.imageSize = [24, 24]; // Set image size
-
-    // Add Variables button with icon and hover effect
-    var btnVariables = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/variablesIcon.png"), { style: "toolbutton" });
-    btnVariables.size = [32, 32]; // Set button size
-    btnVariables.imageSize = [24, 24]; // Set image size
-
-    // Add Reset button with icon and hover effect
-    var btnReset = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/resetIcon.png"), { style: "toolbutton" });
-    btnReset.size = [32, 32]; // Set button size
-    btnReset.imageSize = [24, 24]; // Set image size
 
     // Function to reset Rename button icon
     function resetRenameButtonIcon() {
