@@ -1,7 +1,7 @@
 function buildUI(thisObj) {
     // Create a window or panel for the UI
     var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "NitroNamer", undefined, {resizeable: true});
-    var globalWidthSizeElements = 284; // Set global width for UI elements
+    var globalWidthSizeElements = 298; // Set global width for UI elements
     win.orientation = "column";
     win.alignChildren = ["fill", "top"];
     win.preferredSize.height = 122;
@@ -24,6 +24,20 @@ function buildUI(thisObj) {
     // Get the script's file and folder path
     var scriptFile = new File($.fileName);
     var scriptFolderPath = scriptFile.path;
+
+    // Add Copy button with icon and hover effect
+    var btnCopy = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/copy.png"), {style: "toolbutton"}, 0);
+    btnCopy.size = [24, 24];
+    btnCopy.imageSize = [24, 24];
+    btnCopy.alignment = ["right", "center"];
+    btnCopy.addEventListener("mouseover", function() {
+        btnCopy.image = File(scriptFolderPath + "/NitroNamer/img/copyHover.png");
+        btnCopy.imageSize = [24, 24];
+    });
+    btnCopy.addEventListener("mouseout", function() {
+        btnCopy.image = File(scriptFolderPath + "/NitroNamer/img/copy.png");
+        btnCopy.imageSize = [24, 24];
+    });
 
     // Add Save button with icon and hover effect
     var btnSave = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/save.png"), {style: "toolbutton"});
@@ -377,6 +391,38 @@ function buildUI(thisObj) {
         showVariables();
     };
 
+    // Copy layer name to template input field
+    btnCopy.onClick = function() {
+        var proj = app.project;
+        if (proj && proj.activeItem instanceof CompItem) {
+            var comp = proj.activeItem;
+            var layer = null;
+            if (comp.selectedLayers.length > 0) {
+                layer = comp.selectedLayers[0];
+            } else if (comp.numLayers > 0) {
+                layer = comp.layer(1);
+            }
+
+            if (layer) {
+                txtTemplate.text = layer.name;
+                updatePreview();
+                updateLayerCounts();
+                resetRenameButtonIcon();
+
+                var currentSettings = {
+                    allLayers: rdoAllLayers.value,
+                    template: txtTemplate.text,
+                    briefly: chkBriefly.value,
+                    brieflyType: ddBrieflyType.selection.index
+                };
+                saveSettings(currentSettings, true);
+            } else {
+                alert("No layers in the composition.");
+            }
+        } else {
+            alert("Please select a valid composition.");
+        }
+    };
     // Save settings when Save button is clicked
     btnSave.onClick = function() {
         var settings = {
