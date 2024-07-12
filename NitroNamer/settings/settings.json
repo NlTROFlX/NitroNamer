@@ -1,8 +1,8 @@
 {
     "currentSettings": {
         "UICompact": false,
-        "allLayers": true,
-        "template": "1",
+        "allLayers": false,
+        "template": "(Shape Layer 2)",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0
