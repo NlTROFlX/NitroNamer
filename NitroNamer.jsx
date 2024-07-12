@@ -404,7 +404,7 @@ function buildUI(thisObj) {
             }
 
             if (layer) {
-                txtTemplate.text = layer.name;
+                txtTemplate.text = "(" + layer.name + ")";
                 updatePreview();
                 updateLayerCounts();
                 resetRenameButtonIcon();
@@ -423,6 +423,7 @@ function buildUI(thisObj) {
             alert("Please select a valid composition.");
         }
     };
+    
     // Save settings when Save button is clicked
     btnSave.onClick = function() {
         var settings = {
