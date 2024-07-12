@@ -544,16 +544,129 @@ function buildUI(thisObj) {
         var template = txtTemplate.text;
         var briefly = chkBriefly.value;
         var brieflyType = ddBrieflyType.selection.text;
-    
-        // Check if the shift key is held down
+
+        // Check if the Alt key is held down
+        var isAltPressed = ScriptUI.environment.keyboardState.altKey;
         var includeShyLayers = ScriptUI.environment.keyboardState.shiftKey;
-    
-        renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers);
-        updateLayerCounts();
-        updatePreview();  // Ensure IN and OUT fields are updated
-        btnRename.image = File(scriptFolderPath + "/NitroNamer/img/doneIcon.png"); // Change button icon to "Done!" icon
-        btnRename.imageSize = [24, 24]; // Ensure the "Done!" icon is also resized
-    };    
+
+        // Function to rename layers in the specified order
+        function renameLayers(startIndex, endIndex, increment) {
+            // Reset local index before renaming
+            localIndex = 1;
+
+            for (var i = startIndex; i !== endIndex; i += increment) {
+                var layer = comp.layer(i);
+
+                // Skip shy layers unless includeShyLayers is true
+                if (layer.shy && !includeShyLayers) continue;
+
+                if (allLayers || layer.selected) {
+                    var effectNames = [];
+                    if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
+                        for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
+                            var effect = layer.property("ADBE Effect Parade").property(j);
+                            effectNames.push(effect.name);
+                        }
+                    }
+
+                    var effectsString = effectNames.length > 0 ? effectNames.join(", ") : "ClearLayer";
+                    var compName = app.project.activeItem.name;
+                    var projectName = getProjectName();
+                    var expressionProps = getExpressionControlledProperties(layer);
+                    var fileExtension = getFileExtension(layer);
+                    var durationInFrames = getDurationInFrames(layer);
+
+                    var animatedProps = getAnimatedProperties(layer);
+                    var animatedPropsString = animatedProps.length > 0 ? animatedProps.join(", ") : "NoAnimations";
+
+                    // Calculate the global index (i) based on the renaming direction
+                    var globalIndex = isAltPressed ? (comp.numLayers - i + 1) : i;
+
+                    var variables = {
+                        "T": getLayerType(layer),
+                        "i": globalIndex,
+                        "I": localIndex,  // Using local index
+                        "O": layer.name,
+                        "E": effectsString,
+                        "An": animatedPropsString,
+                        "F": getFrameRate(layer),
+                        "R": getResolution(layer),
+                        "D": getDuration(layer),
+                        "Df": durationInFrames,
+                        "C": compName,
+                        "Ip": layer.inPoint.toFixed(2),  // In point
+                        "Op": layer.outPoint.toFixed(2), // Out point
+                        "S": getSourceName(layer),
+                        "W": getWidth(layer),
+                        "H": getHeight(layer),
+                        "Tm": getTrackMatteType(layer),
+                        "Ar": getAspectRatio(layer),
+                        "Ec": getEffectsCount(layer),
+                        "Pn": projectName,
+                        "Lpos": getLayerPosition(layer),
+                        "Lsc": getLayerScale(layer),
+                        "Lrot": getLayerRotation(layer),
+                        "Lops": getLayerOpacity(layer),
+                        "Lexp": expressionProps,
+                        "Fext": fileExtension
+                    };
+
+                    var newName = replaceVariables(template, variables);
+
+                    if (briefly) {
+                        switch (brieflyType) {
+                            case "Camel Case":
+                                newName = toCamelCase(newName);
+                                break;
+                            case "Pascal Case":
+                                newName = toPascalCase(newName);
+                                break;
+                            case "Snake Case":
+                                newName = toSnakeCase(newName);
+                                break;
+                            case "Kebab Case":
+                                newName = toKebabCase(newName);
+                                break;
+                            case "Screaming Snake Case":
+                                newName = toScreamingSnakeCase(newName);
+                                break;
+                        }
+                    }
+
+                    layer.name = newName;
+
+                    // Increment local index after renaming the layer
+                    localIndex++;
+                }
+            }
+        }
+
+        var proj = app.project;
+        if (proj && proj.activeItem instanceof CompItem) {
+            var comp = proj.activeItem;
+            if (comp.numLayers > 0) {
+                app.beginUndoGroup("Rename Layers by Template");
+
+                if (isAltPressed) {
+                    // Rename layers from bottom to top
+                    renameLayers(comp.numLayers, 0, -1);
+                } else {
+                    // Rename layers from top to bottom
+                    renameLayers(1, comp.numLayers + 1, 1);
+                }
+
+                app.endUndoGroup();
+                updateLayerCounts();
+                updatePreview();  // Ensure IN and OUT fields are updated
+                btnRename.image = File(scriptFolderPath + "/NitroNamer/img/doneIcon.png"); // Change button icon to "Done!" icon
+                btnRename.imageSize = [24, 24]; // Ensure the "Done!" icon is also resized
+            } else {
+                alert("No layers in the active composition.");
+            }
+        } else {
+            alert("Please select a valid composition.");
+        }
+    }; 
 
     // Show help when Help button is clicked
     btnHelp.onClick = function() {
