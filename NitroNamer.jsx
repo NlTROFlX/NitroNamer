@@ -988,7 +988,8 @@ function buildUI(thisObj) {
             "Lops": getLayerOpacity(layer),
             "Lexp": expressionProps,
             "Fext": fileExtension,
-            "Lpnt": getLayerParentName(layer) // Added variable
+            "Lpnt": getLayerParentName(layer), // Parent layer name
+            "LpntIndex": getLayerParentIndex(layer) // Parent layer index
         };        
 
         var newName = replaceVariables(template, variables);
@@ -1389,9 +1390,30 @@ function buildUI(thisObj) {
         return "NoParent";
     }
 
+    // Get the index of the layer relative to other layers with the same parent
+    function getLayerParentIndex(layer) {
+        if (!layer.parent) {
+            return "";
+        }
+
+        var parentLayer = layer.parent;
+        var comp = layer.containingComp;
+        var sameParentLayers = [];
+        
+        for (var i = 1; i <= comp.numLayers; i++) {
+            var currentLayer = comp.layer(i);
+            if (currentLayer.parent === parentLayer) {
+                sameParentLayers.push(currentLayer);
+            }
+        }
+        
+        var relativeIndex = sameParentLayers.indexOf(layer) + 1;
+        return relativeIndex;
+    }
+
     // Replace variables in the template with actual values
     function replaceVariables(template, variables) {
-        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, durationFormat, customFext) {
+        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, durationFormat, customFext, parentIndex) {
             if (group) {
                 return group;  // Handle text inside parentheses
             } else if (customEffectDelimiterParentheses !== undefined) {
@@ -1438,13 +1460,15 @@ function buildUI(thisObj) {
                 return variables['Lrot'];
             } else if (match === 'Lops') {
                 return variables['Lops'];
-            } else if (match === 'Lpnt') { // Added check for Lpnt
+            } else if (match === 'Lpnt') {
                 return variables['Lpnt'];
+            } else if (parentIndex !== undefined) { // Handle Lpnt(i)
+                return variables['LpntIndex'];
             } else {
                 return variables[match] !== undefined ? variables[match] : match;
             }
         });
-    }    
+    }
 
     var localIndex = 1; // Global local index
 
@@ -1518,7 +1542,8 @@ function buildUI(thisObj) {
                             "Lops": getLayerOpacity(layer),
                             "Lexp": expressionProps,
                             "Fext": fileExtension,
-                            "Lpnt": getLayerParentName(layer) // Added variable
+                            "Lpnt": getLayerParentName(layer), // Parent layer name
+                            "LpntIndex": getLayerParentIndex(layer) // Parent layer index
                         };                        
     
                         var newName = replaceVariables(template, variables);
