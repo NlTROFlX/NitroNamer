@@ -1,7 +1,7 @@
 function buildUI(thisObj) {
     // Create a window or panel for the UI
     var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "NitroNamer", undefined, {resizeable: true});
-    var globalWidthSizeElements = 298; // Set global width for UI elements
+    var globalWidthSizeElements = 300; // Set global width for UI elements
     win.orientation = "column";
     win.alignChildren = ["fill", "top"];
     win.preferredSize.height = 122;
@@ -253,15 +253,15 @@ function buildUI(thisObj) {
     grpTextFields.maximumSize.width = globalWidthSizeElements;
 
     // Add text fields for original and renamed layer names
-    var txtOriginalLabel = grpTextFields.add("statictext", undefined, "Input layer name: ");
-    txtOriginalLabel.maximumSize.height = 8;
+    var txtOriginalLabel = grpTextFields.add("statictext", undefined, "Input layer with original name: ");
+    txtOriginalLabel.maximumSize.height = 12;
     var txtOriginal = grpTextFields.add("edittext", undefined, "", {readonly: true});
     txtOriginal.alignment = ["fill", "top"];
     txtOriginal.maximumSize.width = globalWidthSizeElements;
     txtOriginal.margins = [0, -10, 0, 0];
 
-    var txtRenamedLabel = grpTextFields.add("statictext", undefined, "Template result: ");
-    txtRenamedLabel.maximumSize.height = 8;
+    var txtRenamedLabel = grpTextFields.add("statictext", undefined, "Template result for layer(s): ");
+    txtRenamedLabel.maximumSize.height = 12;
     var txtRenamed = grpTextFields.add("edittext", undefined, "", {readonly: true});
     txtRenamed.alignment = ["fill", "top"];
     txtRenamed.maximumSize.width = globalWidthSizeElements;
