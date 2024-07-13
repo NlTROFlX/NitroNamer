@@ -22,6 +22,7 @@ function showLayerInfo() {
         var animatedProps = getAnimatedProperties(layer);
         var animatedPropsString = animatedProps.length > 0 ? animatedProps.join(", ") : "NoAnimations";
 
+        // Update the variables object in the showLayerInfo function
         var variables = {
             "T": getLayerType(layer),
             "i": layer.index,
@@ -48,7 +49,9 @@ function showLayerInfo() {
             "Lrot": getLayerRotation(layer),
             "Lops": getLayerOpacity(layer),
             "Lexp": expressionProps,
-            "Fext": fileExtension
+            "Fext": fileExtension,
+            "Lpnt": getLayerParentName(layer), // Add parent name
+            "LpntIndex": getLayerParentIndex(layer) // Add parent index
         };
 
         var infoText = "";
@@ -381,4 +384,31 @@ function getTrackMatteType(layer) {
     } else {
         return "NoTrackMate";
     }
+}
+
+function getLayerParentName(layer) {
+    if (layer.parent) {
+        return layer.parent.name;
+    }
+    return "NoParent";
+}
+
+function getLayerParentIndex(layer) {
+    if (!layer.parent) {
+        return "";
+    }
+
+    var parentLayer = layer.parent;
+    var comp = layer.containingComp;
+    var sameParentLayers = [];
+    
+    for (var i = 1; i <= comp.numLayers; i++) {
+        var currentLayer = comp.layer(i);
+        if (currentLayer.parent === parentLayer) {
+            sameParentLayers.push(currentLayer);
+        }
+    }
+    
+    var relativeIndex = sameParentLayers.indexOf(layer) + 1;
+    return relativeIndex;
 }

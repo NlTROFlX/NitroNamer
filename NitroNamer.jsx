@@ -1478,20 +1478,20 @@ function buildUI(thisObj) {
             var comp = proj.activeItem;
             if (comp.numLayers > 0) {
                 app.beginUndoGroup("Rename Layers by Template");
-    
+
                 // Reset local index before renaming
                 localIndex = 1;
-    
+
                 var startIndex = reverseOrder ? comp.numLayers : 1;
                 var endIndex = reverseOrder ? 0 : comp.numLayers + 1;
                 var increment = reverseOrder ? -1 : 1;
-    
+
                 for (var i = startIndex; i !== endIndex; i += increment) {
                     var layer = comp.layer(i);
-    
+
                     // Skip shy layers unless includeShyLayers is true
                     if (layer.shy && !includeShyLayers) continue;
-    
+
                     if (allLayers || layer.selected) {
                         var effectNames = [];
                         if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
@@ -1500,20 +1500,20 @@ function buildUI(thisObj) {
                                 effectNames.push(effect.name);
                             }
                         }
-    
+
                         var effectsString = effectNames.length > 0 ? effectNames.join(", ") : "ClearLayer";
                         var compName = app.project.activeItem.name;
                         var projectName = getProjectName();
                         var expressionProps = getExpressionControlledProperties(layer);
                         var fileExtension = getFileExtension(layer);
                         var durationInFrames = getDurationInFrames(layer);
-    
+
                         var animatedProps = getAnimatedProperties(layer);
                         var animatedPropsString = animatedProps.length > 0 ? animatedProps.join(", ") : "NoAnimations";
-    
+
                         // Calculate the global index (i) based on the renaming direction
                         var globalIndex = reverseOrder ? (comp.numLayers - i + 1) : i;
-    
+
                         var variables = {
                             "T": getLayerType(layer),
                             "i": globalIndex,
@@ -1543,10 +1543,10 @@ function buildUI(thisObj) {
                             "Fext": fileExtension,
                             "Lpnt": getLayerParentName(layer), // Parent layer name
                             "LpntIndex": getLayerParentIndex(layer) // Parent layer index
-                        };                        
-    
+                        };
+
                         var newName = replaceVariables(template, variables);
-    
+
                         if (briefly) {
                             switch (brieflyType) {
                                 case "Camel Case":
@@ -1566,14 +1566,26 @@ function buildUI(thisObj) {
                                     break;
                             }
                         }
-    
+
+                        // Check if the layer is locked and unlock it if necessary
+                        var wasLocked = layer.locked;
+                        if (wasLocked) {
+                            layer.locked = false;
+                        }
+
+                        // Rename the layer
                         layer.name = newName;
-    
+
+                        // Restore the original locked state
+                        if (wasLocked) {
+                            layer.locked = true;
+                        }
+
                         // Increment local index after renaming the layer
                         localIndex++;
                     }
                 }
-    
+
                 app.endUndoGroup();
             } else {
                 alert("No layers in the active composition.");
