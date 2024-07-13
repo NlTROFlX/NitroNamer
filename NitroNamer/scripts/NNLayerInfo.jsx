@@ -395,7 +395,7 @@ function getLayerParentName(layer) {
 
 function getLayerParentIndex(layer) {
     if (!layer.parent) {
-        return "";
+        return "NoIndex";
     }
 
     var parentLayer = layer.parent;
