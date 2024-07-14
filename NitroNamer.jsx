@@ -1386,7 +1386,21 @@ function buildUI(thisObj) {
         if (layer.parent) {
             return layer.parent.name;
         }
+        // If the layer has no parent, check if it is a parent to any other layer
+        if (isParentLayer(layer)) {
+            return layer.name;  // Return the layer's own name if it's a parent
+        }
         return "NoParent";
+    }
+
+    function isParentLayer(layer) {
+        var comp = layer.containingComp;
+        for (var i = 1; i <= comp.numLayers; i++) {
+            if (comp.layer(i).parent === layer) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Get the index of the layer relative to other layers with the same parent
