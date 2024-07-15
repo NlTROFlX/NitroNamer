@@ -543,19 +543,24 @@ function buildUI(thisObj) {
         var template = txtTemplate.text;
         var briefly = chkBriefly.value;
         var brieflyType = ddBrieflyType.selection.text;
-
+    
+        // Check if the Alt key, Ctrl key, or Ctrl+Shift keys are held down
         var isAltPressed = ScriptUI.environment.keyboardState.altKey;
         var isCtrlPressed = ScriptUI.environment.keyboardState.ctrlKey;
         var isShiftPressed = ScriptUI.environment.keyboardState.shiftKey;
         var isCtrlShiftPressed = isCtrlPressed && isShiftPressed;
-
-        renameLayersByTemplate(allLayers, template, briefly, brieflyType, isShiftPressed, isCtrlPressed, isAltPressed);
-
+    
+        // Initialize includeShyLayers and reverseOrder
+        var includeShyLayers = isCtrlShiftPressed;
+        var reverseOrder = isAltPressed;
+    
+        renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed, isShiftPressed, isAltPressed, isCtrlShiftPressed);
+    
         updateLayerCounts();
-        updatePreview();  // Ensure IN and OUT fields are updated
-        btnRename.image = File(scriptFolderPath + "/NitroNamer/img/doneIcon.png"); // Change button icon to "Done!" icon
-        btnRename.imageSize = [24, 24]; // Ensure the "Done!" icon is also resized
-    };
+        updatePreview();
+        btnRename.image = File(scriptFolderPath + "/NitroNamer/img/doneIcon.png");
+        btnRename.imageSize = [24, 24];
+    };                
 
     // Show help when Help button is clicked
     btnHelp.onClick = function() {
@@ -1519,7 +1524,7 @@ function buildUI(thisObj) {
     var localIndex = 1; // Global local index
 
     // Rename layers based on the template
-    function renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed) {
+    function renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed, isShiftPressed, isAltPressed, isCtrlShiftPressed) {
         var proj = app.project;
         if (proj && proj.activeItem instanceof CompItem) {
             var comp = proj.activeItem;
@@ -1530,16 +1535,22 @@ function buildUI(thisObj) {
                 var layerInfo = getParentChildHierarchy(comp);
                 var sortedLayers = sortLayersByHierarchy(layerInfo);
     
+                if (reverseOrder) {
+                    sortedLayers.reverse();
+                }
+    
                 for (var i = 0; i < sortedLayers.length; i++) {
                     var layer = sortedLayers[i];
                     if (layer.shy && !includeShyLayers) continue;
                     if (layer.locked) continue; // Skip locked layers
                     if (!allLayers && !layer.selected) continue;
     
+                    var indexValue = isAltPressed ? sortedLayers.length - i : i + 1;
+    
                     var variables = {
                         "T": getLayerType(layer),
-                        "i": layer.index,
-                        "I": i + 1,
+                        "i": indexValue,
+                        "I": sortedLayers.indexOf(layer) + 1,
                         "O": layer.name,
                         "E": getEffectNames(layer),
                         "An": getAnimatedProperties(layer).join(", "),
@@ -1588,7 +1599,9 @@ function buildUI(thisObj) {
                         }
                     }
     
-                    if (isCtrlPressed) {
+                    if (isCtrlPressed && !isShiftPressed) {
+                        layer.name = layer.name + newName;
+                    } else if (isShiftPressed && !isCtrlPressed) {
                         layer.name = newName + layer.name;
                     } else {
                         layer.name = newName;
@@ -1602,7 +1615,7 @@ function buildUI(thisObj) {
         } else {
             alert("Please select a valid composition.");
         }
-    }
+    }    
     
     // Show help window
     function showHelp() {
