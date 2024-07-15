@@ -537,26 +537,25 @@ function buildUI(thisObj) {
         }
     };
 
-    // Rename layers when Rename button is clicked
+    // Button click handler with Alt key functionality
     btnRename.onClick = function() {
         var allLayers = rdoAllLayers.value;
         var template = txtTemplate.text;
         var briefly = chkBriefly.value;
         var brieflyType = ddBrieflyType.selection.text;
 
-        // Check if the Alt key, Ctrl key, or Ctrl+Shift keys are held down
         var isAltPressed = ScriptUI.environment.keyboardState.altKey;
         var isCtrlPressed = ScriptUI.environment.keyboardState.ctrlKey;
         var isShiftPressed = ScriptUI.environment.keyboardState.shiftKey;
         var isCtrlShiftPressed = isCtrlPressed && isShiftPressed;
 
-        renameLayersByTemplate(allLayers, template, briefly, brieflyType, isShiftPressed, isAltPressed, isCtrlPressed, isCtrlShiftPressed);
+        renameLayersByTemplate(allLayers, template, briefly, brieflyType, isShiftPressed, isCtrlPressed, isAltPressed);
 
         updateLayerCounts();
         updatePreview();  // Ensure IN and OUT fields are updated
         btnRename.image = File(scriptFolderPath + "/NitroNamer/img/doneIcon.png"); // Change button icon to "Done!" icon
         btnRename.imageSize = [24, 24]; // Ensure the "Done!" icon is also resized
-    }; 
+    };
 
     // Show help when Help button is clicked
     btnHelp.onClick = function() {
@@ -1426,6 +1425,38 @@ function buildUI(thisObj) {
         return relativeIndex;
     }
 
+    function getParentChildHierarchy(comp) {
+        var layerInfo = [];
+        for (var i = 1; i <= comp.numLayers; i++) {
+            var layer = comp.layer(i);
+            layerInfo.push({layer: layer, parent: layer.parent});
+        }
+        return layerInfo;
+    }       
+    
+    function sortLayersByHierarchy(layerInfo) {
+        var sortedLayers = [];
+        var visitedLayers = []; // Use an array instead of Set
+    
+        function addLayerAndChildren(layer) {
+            if (visitedLayers.indexOf(layer) === -1) {
+                visitedLayers.push(layer);
+                for (var j = 0; j < layerInfo.length; j++) {
+                    if (layerInfo[j].parent === layer) {
+                        addLayerAndChildren(layerInfo[j].layer);
+                    }
+                }
+                sortedLayers.push(layer);
+            }
+        }
+    
+        for (var i = 0; i < layerInfo.length; i++) {
+            addLayerAndChildren(layerInfo[i].layer);
+        }
+    
+        return sortedLayers;
+    }                     
+
     // Replace variables in the template with actual values
     function replaceVariables(template, variables) {
         return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, durationFormat, customFext, parentIndex) {
@@ -1494,118 +1525,76 @@ function buildUI(thisObj) {
             var comp = proj.activeItem;
             if (comp.numLayers > 0) {
                 app.beginUndoGroup("Rename Layers by Template");
-
-                // Reset local index before renaming
-                localIndex = 1;
-
-                var startIndex = reverseOrder ? comp.numLayers : 1;
-                var endIndex = reverseOrder ? 0 : comp.numLayers + 1;
-                var increment = reverseOrder ? -1 : 1;
-
-                for (var i = startIndex; i !== endIndex; i += increment) {
-                    var layer = comp.layer(i);
-
-                    // Skip shy layers unless includeShyLayers is true
+    
+                // Get and sort layers by hierarchy
+                var layerInfo = getParentChildHierarchy(comp);
+                var sortedLayers = sortLayersByHierarchy(layerInfo);
+    
+                for (var i = 0; i < sortedLayers.length; i++) {
+                    var layer = sortedLayers[i];
                     if (layer.shy && !includeShyLayers) continue;
-
-                    if (allLayers || layer.selected) {
-                        var effectNames = [];
-                        if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
-                            for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
-                                var effect = layer.property("ADBE Effect Parade").property(j);
-                                effectNames.push(effect.name);
-                            }
+                    if (layer.locked) continue; // Skip locked layers
+                    if (!allLayers && !layer.selected) continue;
+    
+                    var variables = {
+                        "T": getLayerType(layer),
+                        "i": layer.index,
+                        "I": i + 1,
+                        "O": layer.name,
+                        "E": getEffectNames(layer),
+                        "An": getAnimatedProperties(layer).join(", "),
+                        "F": getFrameRate(layer),
+                        "R": getResolution(layer),
+                        "D": getDuration(layer),
+                        "Df": getDurationInFrames(layer),
+                        "C": comp.name,
+                        "Ip": layer.inPoint.toFixed(2),
+                        "Op": layer.outPoint.toFixed(2),
+                        "S": getSourceName(layer),
+                        "W": getWidth(layer),
+                        "H": getHeight(layer),
+                        "Tm": getTrackMatteType(layer),
+                        "Ar": getAspectRatio(layer),
+                        "Ec": getEffectsCount(layer),
+                        "Pn": getProjectName(),
+                        "Lpos": getLayerPosition(layer),
+                        "Lsc": getLayerScale(layer),
+                        "Lrot": getLayerRotation(layer),
+                        "Lops": getLayerOpacity(layer),
+                        "Lexp": getExpressionControlledProperties(layer),
+                        "Fext": getFileExtension(layer),
+                        "Lpnt": layer.parent ? layer.parent.name : "NoParent"
+                    };
+    
+                    var newName = replaceVariables(template, variables);
+    
+                    if (briefly) {
+                        switch (brieflyType) {
+                            case "Camel Case":
+                                newName = toCamelCase(newName);
+                                break;
+                            case "Pascal Case":
+                                newName = toPascalCase(newName);
+                                break;
+                            case "Snake Case":
+                                newName = toSnakeCase(newName);
+                                break;
+                            case "Kebab Case":
+                                newName = toKebabCase(newName);
+                                break;
+                            case "Screaming Snake Case":
+                                newName = toScreamingSnakeCase(newName);
+                                break;
                         }
-
-                        var effectsString = effectNames.length > 0 ? effectNames.join(", ") : "ClearLayer";
-                        var compName = app.project.activeItem.name;
-                        var projectName = getProjectName();
-                        var expressionProps = getExpressionControlledProperties(layer);
-                        var fileExtension = getFileExtension(layer);
-                        var durationInFrames = getDurationInFrames(layer);
-
-                        var animatedProps = getAnimatedProperties(layer);
-                        var animatedPropsString = animatedProps.length > 0 ? animatedProps.join(", ") : "NoAnimations";
-
-                        // Calculate the global index (i) based on the renaming direction
-                        var globalIndex = reverseOrder ? (comp.numLayers - i + 1) : i;
-
-                        var variables = {
-                            "T": getLayerType(layer),
-                            "i": globalIndex,
-                            "I": localIndex,
-                            "O": layer.name,
-                            "E": effectsString,
-                            "An": animatedPropsString,
-                            "F": getFrameRate(layer),
-                            "R": getResolution(layer),
-                            "D": getDuration(layer),
-                            "Df": durationInFrames,
-                            "C": compName,
-                            "Ip": layer.inPoint.toFixed(2),
-                            "Op": layer.outPoint.toFixed(2),
-                            "S": getSourceName(layer),
-                            "W": getWidth(layer),
-                            "H": getHeight(layer),
-                            "Tm": getTrackMatteType(layer),
-                            "Ar": getAspectRatio(layer),
-                            "Ec": getEffectsCount(layer),
-                            "Pn": projectName,
-                            "Lpos": getLayerPosition(layer),
-                            "Lsc": getLayerScale(layer),
-                            "Lrot": getLayerRotation(layer),
-                            "Lops": getLayerOpacity(layer),
-                            "Lexp": expressionProps,
-                            "Fext": fileExtension,
-                            "Lpnt": getLayerParentName(layer), // Parent layer name
-                            "LpntIndex": getLayerParentIndex(layer) // Parent layer index
-                        };
-
-                        var newName = replaceVariables(template, variables);
-
-                        if (briefly) {
-                            switch (brieflyType) {
-                                case "Camel Case":
-                                    newName = toCamelCase(newName);
-                                    break;
-                                case "Pascal Case":
-                                    newName = toPascalCase(newName);
-                                    break;
-                                case "Snake Case":
-                                    newName = toSnakeCase(newName);
-                                    break;
-                                case "Kebab Case":
-                                    newName = toKebabCase(newName);
-                                    break;
-                                case "Screaming Snake Case":
-                                    newName = toScreamingSnakeCase(newName);
-                                    break;
-                            }
-                        }
-
-                        // Check if the layer is locked and unlock it if necessary
-                        var wasLocked = layer.locked;
-                        if (wasLocked) {
-                            layer.locked = false;
-                        }
-
-                        // Rename the layer, appending the new name to the original name if Ctrl is pressed
-                        if (isCtrlPressed) {
-                            layer.name = newName + layer.name;
-                        } else {
-                            layer.name = newName;
-                        }
-
-                        // Restore the original locked state
-                        if (wasLocked) {
-                            layer.locked = true;
-                        }
-
-                        // Increment local index after renaming the layer
-                        localIndex++;
+                    }
+    
+                    if (isCtrlPressed) {
+                        layer.name = newName + layer.name;
+                    } else {
+                        layer.name = newName;
                     }
                 }
-
+    
                 app.endUndoGroup();
             } else {
                 alert("No layers in the active composition.");
@@ -1614,7 +1603,7 @@ function buildUI(thisObj) {
             alert("Please select a valid composition.");
         }
     }
-
+    
     // Show help window
     function showHelp() {
         var helpWin = new Window("dialog", "NitroNamer - Help panel", undefined, {resizeable: true});

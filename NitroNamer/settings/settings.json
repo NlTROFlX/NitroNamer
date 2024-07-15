@@ -8,6 +8,11 @@
         "selectedPresetIndex": 0
     },
     "userPresets": {
-        
+        "preset_1": {
+            "allLayers": true,
+            "template": "Lpnt",
+            "briefly": false,
+            "brieflyType": 0
+        }
     }
 }
