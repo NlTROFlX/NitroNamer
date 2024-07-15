@@ -543,13 +543,15 @@ function buildUI(thisObj) {
         var template = txtTemplate.text;
         var briefly = chkBriefly.value;
         var brieflyType = ddBrieflyType.selection.text;
-    
-        // Check if the Alt key is held down
+
+        // Check if the Alt key, Ctrl key, or Ctrl+Shift keys are held down
         var isAltPressed = ScriptUI.environment.keyboardState.altKey;
-        var includeShyLayers = ScriptUI.environment.keyboardState.shiftKey;
-    
-        renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, isAltPressed);
-    
+        var isCtrlPressed = ScriptUI.environment.keyboardState.ctrlKey;
+        var isShiftPressed = ScriptUI.environment.keyboardState.shiftKey;
+        var isCtrlShiftPressed = isCtrlPressed && isShiftPressed;
+
+        renameLayersByTemplate(allLayers, template, briefly, brieflyType, isShiftPressed, isAltPressed, isCtrlPressed, isCtrlShiftPressed);
+
         updateLayerCounts();
         updatePreview();  // Ensure IN and OUT fields are updated
         btnRename.image = File(scriptFolderPath + "/NitroNamer/img/doneIcon.png"); // Change button icon to "Done!" icon
@@ -1486,7 +1488,7 @@ function buildUI(thisObj) {
     var localIndex = 1; // Global local index
 
     // Rename layers based on the template
-    function renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder) {
+    function renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed) {
         var proj = app.project;
         if (proj && proj.activeItem instanceof CompItem) {
             var comp = proj.activeItem;
@@ -1587,8 +1589,12 @@ function buildUI(thisObj) {
                             layer.locked = false;
                         }
 
-                        // Rename the layer
-                        layer.name = newName;
+                        // Rename the layer, appending the new name to the original name if Ctrl is pressed
+                        if (isCtrlPressed) {
+                            layer.name = newName + layer.name;
+                        } else {
+                            layer.name = newName;
+                        }
 
                         // Restore the original locked state
                         if (wasLocked) {
