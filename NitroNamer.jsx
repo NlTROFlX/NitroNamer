@@ -625,31 +625,32 @@ function buildUI(thisObj) {
         btnMinimize.removeEventListener("mouseout", handleMouseOutMaximize);
         btnMinimize.removeEventListener("mouseover", handleMouseOverMinimize);
         btnMinimize.removeEventListener("mouseout", handleMouseOutMinimize);
-
+    
         if (isCompact) {
             btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/maximize.png");
             btnMinimize.addEventListener("mouseover", handleMouseOverMaximize);
             btnMinimize.addEventListener("mouseout", handleMouseOutMaximize);
-
+    
             // Hide UI elements
             btnRename.visible = false;
             btnHelp.visible = false;
             btnVariables.visible = false;
             btnReset.visible = false;
+            btnSettings.visible = false; // Hide the settings button
             chkBriefly.visible = false;
             ddBrieflyType.visible = false;
             txtOriginalLabel.visible = false;
             txtOriginal.visible = false;
             txtRenamedLabel.visible = false;
             txtRenamed.visible = false;
-
+    
             // Create a new txtRenamed field after txtTemplate
             if (!txtRenamedCompact) {
                 txtRenamedCompact = grpTemplate.add("edittext", undefined, txtRenamed.text, {readonly: true});
                 txtRenamedCompact.alignment = ["fill", "top"];
                 txtRenamedCompact.margins = [0, -10, 0, 0];
             }
-
+    
             // Adjust panel height
             win.layout.layout(true);
             win.layout.resize();
@@ -660,32 +661,33 @@ function buildUI(thisObj) {
             btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimize.png");
             btnMinimize.addEventListener("mouseover", handleMouseOverMinimize);
             btnMinimize.addEventListener("mouseout", handleMouseOutMinimize);
-
+    
             // Show UI elements
             btnRename.visible = true;
             btnHelp.visible = true;
             btnVariables.visible = true;
             btnReset.visible = true;
+            btnSettings.visible = true; // Show the settings button
             chkBriefly.visible = true;
             ddBrieflyType.visible = true;
             txtOriginalLabel.visible = true;
             txtOriginal.visible = true;
             txtRenamedLabel.visible = true;
             txtRenamed.visible = true;
-
+    
             // Remove the compact txtRenamed field if it exists
             if (txtRenamedCompact) {
                 grpTemplate.remove(txtRenamedCompact);
                 txtRenamedCompact = null;
             }
-
+    
             // Adjust panel height to automatic
             win.layout.layout(true);
             win.layout.resize();
             win.size.height = 122;
             win.maximumSize.height = 260;
         }
-
+    
         // Force layout update
         win.layout.layout(true);
         win.layout.resize();
