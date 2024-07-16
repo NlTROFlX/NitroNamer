@@ -1574,7 +1574,8 @@ function buildUI(thisObj) {
                         "Lops": getLayerOpacity(layer),
                         "Lexp": getExpressionControlledProperties(layer),
                         "Fext": getFileExtension(layer),
-                        "Lpnt": layer.parent ? layer.parent.name : "NoParent"
+                        "Lpnt": layer.parent ? layer.parent.name : "NoParent",
+                        "LpntIndex": getLayerParentIndex(layer) // Ensure this is set
                     };
     
                     var newName = replaceVariables(template, variables);
@@ -1615,7 +1616,8 @@ function buildUI(thisObj) {
         } else {
             alert("Please select a valid composition.");
         }
-    }    
+    }
+       
     
     // Show help window
     function showHelp() {
