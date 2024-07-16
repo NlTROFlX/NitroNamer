@@ -1702,11 +1702,33 @@ function buildUI(thisObj) {
         return effectNames.length > 0 ? effectNames.join(", ") : "No effects";
     }
 
+    function checkAndCreateVariablesFile() {
+        var scriptFile = new File($.fileName);
+        var scriptFolderPath = scriptFile.path + "/NitroNamer/scripts";
+        var variablesFile = new File(scriptFolderPath + "/variables.json");
+    
+        if (!variablesFile.exists) {
+            // Define the default content for variables.json
+            var defaultVariables = {
+                "variables": {
+                    "exampleVariable": "exampleValue"
+                }
+            };
+    
+            // Create and write to the variables.json file
+            variablesFile.encoding = "UTF-8"; // Set encoding to UTF-8
+            variablesFile.open("w");
+            variablesFile.write(JSON.stringify(defaultVariables, null, 4));
+            variablesFile.close();
+        }
+    }    
+
     var settings = loadSettings();
     applySettings(settings);
 
     updateLayerCounts();
     updatePreview();
+    checkAndCreateVariablesFile();
 
     if (win instanceof Window) {
         win.center();
