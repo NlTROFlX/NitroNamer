@@ -305,6 +305,21 @@ function buildUI(thisObj) {
     btnReset.imageSize = [24, 24]; // Set image size
     btnReset.alignment = ["left", "center"];
 
+    // Add Settings button with icon and hover effect
+    var btnSettings = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/settings.png"), {style: "toolbutton"});
+    btnSettings.size = [24, 24]; // Set button size
+    btnSettings.imageSize = [24, 24]; // Set image size
+    btnSettings.alignment = ["left", "center"];
+
+    btnSettings.addEventListener("mouseover", function() {
+        btnSettings.image = File(scriptFolderPath + "/NitroNamer/img/settingsHover.png");
+        btnSettings.imageSize = [24, 24];
+    });
+    btnSettings.addEventListener("mouseout", function() {
+        btnSettings.image = File(scriptFolderPath + "/NitroNamer/img/settings.png");
+        btnSettings.imageSize = [24, 24];
+    });
+
     var chkBriefly = grpBriefly.add("checkbox", undefined);
     var ddBrieflyType = grpBriefly.add("dropdownlist", undefined, ["Camel Case", "Pascal Case", "Snake Case", "Kebab Case", "Screaming Snake Case"]);
     ddBrieflyType.maximumSize.width = 100;
@@ -537,6 +552,23 @@ function buildUI(thisObj) {
         }
     };
 
+    // Minimize or maximize the UI when Minimize button is clicked
+    btnMinimize.onClick = function() {
+        var settings = loadSettings();
+        var currentSettings = settings.currentSettings || {};
+        var isCompact = !currentSettings.UICompact; // Toggle value
+
+        // Update the "UICompact" key in currentSettings
+        currentSettings.UICompact = isCompact;
+        settings.currentSettings = currentSettings;
+
+        // Save the updated settings
+        saveSettings(currentSettings, true);
+
+        // Set the minimize button icon based on the new value
+        setMinimizeButtonIcon(isCompact);
+    };
+
     // Button click handler with Alt key functionality
     btnRename.onClick = function() {
         var allLayers = rdoAllLayers.value;
@@ -581,21 +613,10 @@ function buildUI(thisObj) {
         resetRenameButtonIcon(); // Reset button icon to "Rename"
     };
 
-    // Minimize or maximize the UI when Minimize button is clicked
-    btnMinimize.onClick = function() {
-        var settings = loadSettings();
-        var currentSettings = settings.currentSettings || {};
-        var isCompact = !currentSettings.UICompact; // Toggle value
-
-        // Update the "UICompact" key in currentSettings
-        currentSettings.UICompact = isCompact;
-        settings.currentSettings = currentSettings;
-
-        // Save the updated settings
-        saveSettings(currentSettings, true);
-
-        // Set the minimize button icon based on the new value
-        setMinimizeButtonIcon(isCompact);
+    // Run NNSettings.jsx script when Settings button is clicked
+    btnSettings.onClick = function() {
+        var settingsScriptPath = scriptFolderPath + "/NitroNamer/scripts/NNSettings.jsx";
+        $.evalFile(settingsScriptPath);
     };
 
     // Set the minimize button icon based on the UI state
