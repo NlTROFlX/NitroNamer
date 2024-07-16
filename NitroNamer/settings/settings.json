@@ -1,6 +1,6 @@
 {
     "currentSettings": {
-        "UICompact": false,
+        "UICompact": true,
         "allLayers": true,
         "template": "O - Lpnt[Lpnt(i)]",
         "briefly": false,
