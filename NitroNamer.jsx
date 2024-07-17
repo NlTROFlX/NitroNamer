@@ -1708,17 +1708,9 @@ function buildUI(thisObj) {
         var variablesFile = new File(scriptFolderPath + "/variables.json");
     
         if (!variablesFile.exists) {
-            // Define the default content for variables.json
-            var defaultVariables = {
-                "variables": {
-                    "exampleVariable": "exampleValue"
-                }
-            };
-    
-            // Create and write to the variables.json file
+            // Create the variables.json file
             variablesFile.encoding = "UTF-8"; // Set encoding to UTF-8
             variablesFile.open("w");
-            variablesFile.write(JSON.stringify(defaultVariables, null, 4));
             variablesFile.close();
         }
     }    

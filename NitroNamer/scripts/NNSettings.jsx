@@ -3,24 +3,74 @@ function buildNewUI(thisObj) {
     var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "Variable Input Panel", undefined, {resizeable: true});
     win.orientation = "column";
     win.alignChildren = ["fill", "top"];
-    win.preferredSize.height = 150;
-    win.margins = [4,4,4,4];
+    win.preferredSize.height = 50;
+    win.margins = [4, 4, 4, 4];
 
-    // Create a group for the drop-down list and input field
+    // Create a group for the drop-down list, icon, and input field
     var grpDropdownAndInput = win.add("group", undefined);
     grpDropdownAndInput.orientation = "row"; // Set orientation to horizontal
     grpDropdownAndInput.alignChildren = ["fill", "center"];
+    grpDropdownAndInput.margins = [0,0,0,0];
+    grpDropdownAndInput.size = [175,24]
+
+    // Add input field for variable name
+    var inputFieldVariableName = grpDropdownAndInput.add("edittext", undefined, "");
+    inputFieldVariableName.characters = 10; // Set width of the input field
+
+    // Add icon
+    var scriptFile = new File($.fileName);
+    var scriptFolderPath = scriptFile.path.replace("/scripts", "/img"); // Adjust the path to point to the img folder
+    var iconFile = new File(scriptFolderPath + "/search.png");
+    if (iconFile.exists) {
+        var icon = grpDropdownAndInput.add("image", undefined, iconFile);
+        icon.size = [24, 24]; // Set the size of the icon
+    } else {
+        alert("Icon file not found: " + iconFile.fsName);
+    }
 
     // Add drop-down list with variable names
-    var variableNames = ["An", "Ar", "D", "Ec", "E", "F", "Fext", "H", "Lexp", "R", "S", "Tm", "W"];
+    var variableNames = ["An", "Ar", "D", "F", "H", "Lexp", "R", "S", "Tm", "W"];
     var ddVariableNames = grpDropdownAndInput.add("dropdownlist", undefined, variableNames);
     ddVariableNames.selection = 0; // Select the first item by default
-    ddVariableNames.size = [50, 25]; // Set the size of the drop-down list
 
-    // Add input field
-    var inputField = grpDropdownAndInput.add("edittext", undefined, "");
-    inputField.characters = 10; // Set width of the input field
-    inputField.size = [100, 25]; // Set the size of the input field
+    // Add inscription
+    var grpInputTextFieldVariableName = win.add("group", undefined);
+    grpInputTextFieldVariableName.orientation = "column";
+    grpInputTextFieldVariableName.alignment = ["fill", "left"];
+    grpInputTextFieldVariableName.size=[100,12];
+    grpInputTextFieldVariableName.margins = [0, -10, 0, 0];
+
+    var inputTextFieldVariableName = grpInputTextFieldVariableName.add("statictext", undefined, "Value of the variable if it is not defined");
+    inputTextFieldVariableName.maximumSize.height = 12;
+    inputTextFieldVariableName.margins = [0, -10, 0, 0];
+
+    // Create a group for the input field and save button
+    var grpInputAndButton = win.add("group", undefined);
+    grpInputAndButton.orientation = "row"; // Set orientation to horizontal
+    grpInputAndButton.alignChildren = ["fill", "left"];
+    grpInputAndButton.margins = [0,-10,0,0];
+
+    // Add input field for variable value
+    var inputFieldVariableValue = grpInputAndButton.add("edittext", undefined, "");
+    inputFieldVariableValue.characters = 20; // Set width of the input field
+    inputFieldVariableValue.size = [150, 24]; // Set the size of the input field
+    inputFieldVariableValue.margins = [0,-10,0,0];
+
+    // Add save button with icon and hover effect
+    var saveIconFile = new File(scriptFolderPath + "/save.png");
+    var saveIconHoverFile = new File(scriptFolderPath + "/saveHover.png");
+    var btnSave = grpInputAndButton.add("iconbutton", undefined, saveIconFile, {style: "toolbutton"});
+    btnSave.size = [24, 24]; // Set button size
+    btnSave.imageSize = [24, 24]; // Set image size
+
+    btnSave.addEventListener("mouseover", function() {
+        btnSave.image = saveIconHoverFile;
+        btnSave.imageSize = [24, 24];
+    });
+    btnSave.addEventListener("mouseout", function() {
+        btnSave.image = saveIconFile;
+        btnSave.imageSize = [24, 24];
+    });
 
     // Display the window or panel
     if (win instanceof Window) {
@@ -30,6 +80,44 @@ function buildNewUI(thisObj) {
 
     return win;
 }
+
+function initializeVariablesFile() {
+    var scriptFile = new File($.fileName);
+    var variablesFilePath = scriptFile.path.replace("/scripts", "/scripts/variables.json");
+    var variablesFile = new File(variablesFilePath);
+
+    // Check if the file exists and is not empty
+    if (variablesFile.exists) {
+        variablesFile.open("r");
+        var content = variablesFile.read();
+        variablesFile.close();
+        if (content) {
+            // File exists and is not empty, do nothing
+            return;
+        }
+    }
+
+    // File does not exist or is empty, write the initial structure
+    var initialData = {
+        "An": { "defaultValue": "NoAnimations", "customValue": "" },
+        "Ar": { "defaultValue": "NoAspectRatio", "customValue": "" },
+        "E": { "defaultValue": "No effects", "customValue": "" },
+        "F": { "defaultValue": "NoFrameRate", "customValue": "" },
+        "H": { "defaultValue": "NoHeight", "customValue": "" },
+        "Lexp": { "defaultValue": "NoExpressions", "customValue": "" },
+        "R": { "defaultValue": "NoResolution", "customValue": "" },
+        "S": { "defaultValue": "NoSource", "customValue": "" },
+        "Tm": { "defaultValue": "NoTrackMate", "customValue": "" },
+        "W": { "defaultValue": "NoWidth", "customValue": "" }
+    };
+
+    variablesFile.open("w");
+    variablesFile.encoding = "UTF-8";
+    variablesFile.write(JSON.stringify(initialData, null, 4));
+    variablesFile.close();
+}
+
+initializeVariablesFile(); // Initialize the variables file if necessary
 
 var myNewScriptPal = buildNewUI(this);
 if (myNewScriptPal instanceof Panel) {

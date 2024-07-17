@@ -1,5 +1,42 @@
 {
-    "variables": {
-        "exampleVariable": "exampleValue"
+    "An": {
+        "defaultValue": "NoAnimations",
+        "customValue": ""
+    },
+    "Ar": {
+        "defaultValue": "NoAspectRatio",
+        "customValue": ""
+    },
+    "E": {
+        "defaultValue": "No effects",
+        "customValue": ""
+    },
+    "F": {
+        "defaultValue": "NoFrameRate",
+        "customValue": ""
+    },
+    "H": {
+        "defaultValue": "NoHeight",
+        "customValue": ""
+    },
+    "Lexp": {
+        "defaultValue": "NoExpressions",
+        "customValue": ""
+    },
+    "R": {
+        "defaultValue": "NoResolution",
+        "customValue": ""
+    },
+    "S": {
+        "defaultValue": "NoSource",
+        "customValue": ""
+    },
+    "Tm": {
+        "defaultValue": "NoTrackMate",
+        "customValue": ""
+    },
+    "W": {
+        "defaultValue": "NoWidth",
+        "customValue": ""
     }
 }
