@@ -2,12 +2,17 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "",
+        "template": "123",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0
     },
     "userPresets": {
-        
+        "preset_1": {
+            "allLayers": true,
+            "template": "123",
+            "briefly": false,
+            "brieflyType": 0
+        }
     }
 }

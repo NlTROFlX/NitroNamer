@@ -112,7 +112,7 @@ function buildUI(thisObj) {
     var ddLayerMode = grpDropdownAndButtons.add("dropdownlist", undefined, presetTemplates);
     ddLayerMode.selection = 0;
 
-    // Event handler for dropdown list change
+    // Update presets dropdown change handler
     ddLayerMode.onChange = function() {
         var selectedPreset = ddLayerMode.selection;
         if (selectedPreset) {
@@ -120,7 +120,6 @@ function buildUI(thisObj) {
             var settings = loadSettings();
             var userPresets = settings.userPresets || {};
 
-            // Find and apply the selected preset settings
             for (var key in userPresets) {
                 if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
                     var preset = userPresets[key];
@@ -133,6 +132,7 @@ function buildUI(thisObj) {
                     updateLayerCounts();
                     updatePreview();
                     resetRenameButtonIcon();
+                    updateRenameButtonIcon(); // Ensure the button is updated
 
                     var currentSettings = {
                         allLayers: rdoAllLayers.value,
@@ -252,6 +252,16 @@ function buildUI(thisObj) {
                         updateLayerCounts();
                         updatePreview();
                         resetRenameButtonIcon();
+                        updateRenameButtonIcon(); // Ensure the button is updated
+
+                        var currentSettings = {
+                            allLayers: rdoAllLayers.value,
+                            template: txtTemplate.text,
+                            briefly: chkBriefly.value,
+                            brieflyType: ddBrieflyType.selection.index,
+                            selectedPresetIndex: ddLayerMode.selection.index
+                        };
+                        saveSettings(currentSettings, true);
                         break;
                     }
                 }
@@ -618,7 +628,7 @@ function buildUI(thisObj) {
         updatePreview();
         btnRename.image = File(scriptFolderPath + "/NitroNamer/img/doneIcon.png");
         btnRename.imageSize = [24, 24];
-    };                
+    };               
 
     // Show help when Help button is clicked
     btnHelp.onClick = function() {
