@@ -70,8 +70,8 @@ function buildNewUI(thisObj) {
     grpRadioButtons.alignment = ["center", "bottom"]; // Align the group to the center bottom
 
     // Add radio buttons
-    var rdoDefault = grpRadioButtons.add("radiobutton", undefined, "Default");
-    var rdoCustom = grpRadioButtons.add("radiobutton", undefined, "Custom");
+    var rdoDefault = grpRadioButtons.add("radiobutton", undefined, "Default value");
+    var rdoCustom = grpRadioButtons.add("radiobutton", undefined, "Custom value");
 
     // Set the default selection
     rdoDefault.value = true;
@@ -135,6 +135,26 @@ function buildNewUI(thisObj) {
             }
         }
     };
+
+    // Add event listener to dropdown list
+    ddVariableNames.onChange = function() {
+        if (ddVariableNames.selection) {
+            inputFieldVariableName.text = ddVariableNames.selection.text;
+
+            // Check if the selected variable name exists in JSON data
+            if (variablesData && variablesData[inputFieldVariableName.text]) {
+                var variableSettings = variablesData[inputFieldVariableName.text];
+
+                if (variableSettings.active) {
+                    inputFieldVariableValue.text = variableSettings.customValue;
+                    rdoCustom.value = true;
+                } else {
+                    inputFieldVariableValue.text = variableSettings.defaultValue;
+                    rdoDefault.value = true;
+                }
+            }
+        }
+    };
     
     // Add event listener to handle Enter key press in input field
     inputFieldVariableName.addEventListener("keydown", function(event) {
@@ -155,6 +175,47 @@ function buildNewUI(thisObj) {
             }
         }
     });
+
+    // Add event listener to save button
+    btnSave.onClick = function() {
+        if (variablesData && inputFieldVariableName.text) {
+            var variableName = inputFieldVariableName.text;
+
+            // Ensure the variable entry exists in variablesData
+            if (!variablesData[variableName]) {
+                variablesData[variableName] = {
+                    "defaultValue": "",
+                    "customValue": "",
+                    "active": false
+                };
+            }
+
+            var variableSettings = variablesData[variableName];
+
+            // Save the value based on which radio button is active
+            if (rdoDefault.value) {
+                variableSettings.defaultValue = inputFieldVariableValue.text;
+                variableSettings.active = false;
+            } else if (rdoCustom.value) {
+                variableSettings.customValue = inputFieldVariableValue.text;
+                variableSettings.active = true;
+            }
+
+            // Save the updated settings back to the JSON file
+            var scriptFile = new File($.fileName);
+            var variablesFilePath = scriptFile.path.replace("/scripts", "/scripts/variables.json");
+            var variablesFile = new File(variablesFilePath);
+
+            variablesFile.open("w");
+            variablesFile.encoding = "UTF-8";
+            variablesFile.write(JSON.stringify(variablesData, null, 4));
+            variablesFile.close();
+
+            alert("Settings saved for variable: " + variableName);
+        } else {
+            alert("Please enter a valid variable name.");
+        }
+    };
 
     // Add event listeners for radio buttons
     rdoDefault.onClick = function() {

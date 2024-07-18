@@ -1,13 +1,13 @@
 {
     "An": {
         "defaultValue": "NoAnimations",
-        "customValue": "Custom{An}",
+        "customValue": "An - var",
         "active": true
     },
     "Ar": {
-        "defaultValue": "NoAspectRatio",
-        "customValue": "Custom{Ar}",
-        "active": true
+        "defaultValue": "Ar - var default",
+        "customValue": "Ar - var",
+        "active": false
     },
     "E": {
         "defaultValue": "No effects",
