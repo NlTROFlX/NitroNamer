@@ -16,7 +16,7 @@ var scriptMessageHead_1 = "NitroNamer - variable settings";
 
 function buildNewUI(thisObj) {
     // Create a window or panel for the UI
-    var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "NN - variable settings", undefined, {resizeable: true});
+    var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "NitroNamer - variable settings", undefined, {resizeable: true});
     win.orientation = "column";
     win.alignChildren = ["fill", "top"];
     win.preferredSize.height = 50;
@@ -45,7 +45,7 @@ function buildNewUI(thisObj) {
     }
 
     // Add drop-down list with variable names
-    var variableNames = ["An", "Ar", "D", "F", "H", "Lexp", "R", "S", "Tm", "W"];
+    var variableNames = ["An", "Ar", "E", "F", "H", "Lexp", "R", "S", "Tm", "W"];
     var ddVariableNames = grpDropdownAndInput.add("dropdownlist", undefined, variableNames);
     ddVariableNames.selection = 0; // Select the first item by default
 

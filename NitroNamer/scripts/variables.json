@@ -12,12 +12,12 @@
     "E": {
         "defaultValue": "No effects",
         "customValue": "Custom{E}",
-        "active": true
+        "active": false
     },
     "F": {
         "defaultValue": "NoFrameRate",
         "customValue": "Custom{F}",
-        "active": true
+        "active": false
     },
     "H": {
         "defaultValue": "NoHeight",
@@ -47,6 +47,11 @@
     "W": {
         "defaultValue": "NoWidth",
         "customValue": "Custom{W}",
+        "active": true
+    },
+    "Larp": {
+        "defaultValue": "",
+        "customValue": "Custom{Lexp}",
         "active": true
     }
 }
