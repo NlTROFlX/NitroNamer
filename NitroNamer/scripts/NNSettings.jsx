@@ -156,6 +156,23 @@ function buildNewUI(thisObj) {
         }
     });
 
+    // Add event listeners for radio buttons
+    rdoDefault.onClick = function() {
+        if (variablesData && variablesData[inputFieldVariableName.text]) {
+            var variableSettings = variablesData[inputFieldVariableName.text];
+            inputFieldVariableValue.text = variableSettings.defaultValue;
+            variableSettings.active = false;
+        }
+    };
+
+    rdoCustom.onClick = function() {
+        if (variablesData && variablesData[inputFieldVariableName.text]) {
+            var variableSettings = variablesData[inputFieldVariableName.text];
+            inputFieldVariableValue.text = variableSettings.customValue;
+            variableSettings.active = true;
+        }
+    };
+
     // Display the window or panel
     if (win instanceof Window) {
         win.center();
