@@ -8,17 +8,6 @@
         "selectedPresetIndex": 0
     },
     "userPresets": {
-        "preset_2": {
-            "allLayers": true,
-            "template": "O - Lpnt[Lpnt(i)]",
-            "briefly": false,
-            "brieflyType": 0
-        },
-        "preset_1": {
-            "allLayers": true,
-            "template": "Lpnt",
-            "briefly": false,
-            "brieflyType": 0
-        }
+        
     }
 }

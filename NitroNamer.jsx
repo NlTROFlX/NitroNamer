@@ -228,6 +228,7 @@ function buildUI(thisObj) {
         updatePreview();
         updateLayerCounts();
         resetRenameButtonIcon();
+        updateRenameButtonIcon();
     };
 
     // Event listener for Enter key in template text field
