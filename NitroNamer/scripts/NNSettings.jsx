@@ -63,6 +63,20 @@ function buildNewUI(thisObj) {
     btnSave.size = [24, 24]; // Set button size
     btnSave.imageSize = [24, 24]; // Set image size
 
+    // Create a group for the radio buttons
+    var grpRadioButtons = win.add("group", undefined);
+    grpRadioButtons.orientation = "row"; // Set orientation to horizontal
+    grpRadioButtons.alignChildren = ["center", "center"]; // Center the buttons
+    grpRadioButtons.alignment = ["center", "bottom"]; // Align the group to the center bottom
+
+    // Add radio buttons
+    var rdoDefault = grpRadioButtons.add("radiobutton", undefined, "Default");
+    var rdoCustom = grpRadioButtons.add("radiobutton", undefined, "Custom");
+
+    // Set the default selection
+    rdoDefault.value = true;
+
+
     btnSave.addEventListener("mouseover", function() {
         btnSave.image = saveIconHoverFile;
         btnSave.imageSize = [24, 24];
@@ -126,16 +140,16 @@ function initializeVariablesFile() {
 
     // File does not exist or is empty, write the initial structure
     var initialData = {
-        "An": { "defaultValue": "NoAnimations", "customValue": "" },
-        "Ar": { "defaultValue": "NoAspectRatio", "customValue": "" },
-        "E": { "defaultValue": "No effects", "customValue": "" },
-        "F": { "defaultValue": "NoFrameRate", "customValue": "" },
-        "H": { "defaultValue": "NoHeight", "customValue": "" },
-        "Lexp": { "defaultValue": "NoExpressions", "customValue": "" },
-        "R": { "defaultValue": "NoResolution", "customValue": "" },
-        "S": { "defaultValue": "NoSource", "customValue": "" },
-        "Tm": { "defaultValue": "NoTrackMate", "customValue": "" },
-        "W": { "defaultValue": "NoWidth", "customValue": "" }
+        "An": { "defaultValue": "NoAnimations", "customValue": "Custom{An}", "active": true },
+        "Ar": { "defaultValue": "NoAspectRatio", "customValue": "Custom{Ar}", "active": true },
+        "E": { "defaultValue": "No effects", "customValue": "Custom{E}", "active": true },
+        "F": { "defaultValue": "NoFrameRate", "customValue": "Custom{F}", "active": true },
+        "H": { "defaultValue": "NoHeight", "customValue": "Custom{H}", "active": true },
+        "Lexp": { "defaultValue": "NoExpressions", "customValue": "Custom{Lexp}", "active": true },
+        "R": { "defaultValue": "NoResolution", "customValue": "Custom{R}", "active": true },
+        "S": { "defaultValue": "NoSource", "customValue": "Custom{S}", "active": true },
+        "Tm": { "defaultValue": "NoTrackMate", "customValue": "Custom{Tm}", "active": true },
+        "W": { "defaultValue": "NoWidth", "customValue": "Custom{W}", "active": true }
     };
 
     variablesFile.open("w");
