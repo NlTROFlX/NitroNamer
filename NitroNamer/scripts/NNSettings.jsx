@@ -1,6 +1,22 @@
+// File does not exist or is empty, write the initial structure
+var initialData = {
+    "An": { "defaultValue": "NoAnimations", "customValue": "Custom{An}", "active": true },
+    "Ar": { "defaultValue": "NoAspectRatio", "customValue": "Custom{Ar}", "active": true },
+    "E": { "defaultValue": "No effects", "customValue": "Custom{E}", "active": true },
+    "F": { "defaultValue": "NoFrameRate", "customValue": "Custom{F}", "active": true },
+    "H": { "defaultValue": "NoHeight", "customValue": "Custom{H}", "active": true },
+    "Lexp": { "defaultValue": "NoExpressions", "customValue": "Custom{Lexp}", "active": true },
+    "R": { "defaultValue": "NoResolution", "customValue": "Custom{R}", "active": true },
+    "S": { "defaultValue": "NoSource", "customValue": "Custom{S}", "active": true },
+    "Tm": { "defaultValue": "NoTrackMate", "customValue": "Custom{Tm}", "active": true },
+    "W": { "defaultValue": "NoWidth", "customValue": "Custom{W}", "active": true }
+};
+
+var scriptMessageHead_1 = "NitroNamer - variable settings";
+
 function buildNewUI(thisObj) {
     // Create a window or panel for the UI
-    var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "Variable Input Panel", undefined, {resizeable: true});
+    var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "NN - variable settings", undefined, {resizeable: true});
     win.orientation = "column";
     win.alignChildren = ["fill", "top"];
     win.preferredSize.height = 50;
@@ -25,7 +41,7 @@ function buildNewUI(thisObj) {
         var icon = grpDropdownAndInput.add("image", undefined, iconFile);
         icon.size = [24, 24]; // Set the size of the icon
     } else {
-        alert("Icon file not found: " + iconFile.fsName);
+        alert("Icon file not found: " + iconFile.fsName, scriptMessageHead_1);
     }
 
     // Add drop-down list with variable names
@@ -94,6 +110,18 @@ function buildNewUI(thisObj) {
         btnSave.image = saveIconFile;
         btnSave.imageSize = [24, 24];
     });
+
+    // Function to reset UI fields
+    function resetUIFields() {
+        inputFieldVariableName.text = "";
+        inputFieldVariableValue.text = "";
+        ddVariableNames.removeAll();
+        for (var i = 0; i < variableNames.length; i++) {
+            ddVariableNames.add("item", variableNames[i]);
+        }
+        ddVariableNames.selection = 0;
+        rdoDefault.value = true;
+    }
 
     // Function to load variables from JSON file
     function loadVariables() {
@@ -187,42 +215,84 @@ function buildNewUI(thisObj) {
 
     // Add event listener to save button
     btnSave.onClick = function() {
-        if (variablesData && inputFieldVariableName.text) {
-            var variableName = inputFieldVariableName.text;
-
-            // Ensure the variable entry exists in variablesData
-            if (!variablesData[variableName]) {
-                variablesData[variableName] = {
-                    "defaultValue": "",
-                    "customValue": "",
-                    "active": false
-                };
+        var scriptFile = new File($.fileName);
+        var variablesFilePath = scriptFile.path.replace("/scripts", "/scripts/variables.json");
+        var variablesFile = new File(variablesFilePath);
+    
+        if (ScriptUI.environment.keyboardState.shiftKey) {
+            // Reset current variable settings to initialData
+            if (variablesData && inputFieldVariableName.text) {
+                var variableName = inputFieldVariableName.text;
+                if (initialData[variableName]) {
+                    variablesData[variableName] = {
+                        "defaultValue": initialData[variableName].defaultValue,
+                        "customValue": initialData[variableName].customValue,
+                        "active": initialData[variableName].active
+                    };
+                }
+    
+                variablesFile.open("w");
+                variablesFile.encoding = "UTF-8";
+                variablesFile.write(JSON.stringify(variablesData, null, 4));
+                variablesFile.close();
+    
+                resetUIFields();
+                alert("Settings reset for variable: " + variableName, scriptMessageHead_1);
             }
-
-            var variableSettings = variablesData[variableName];
-
-            // Save the value based on which radio button is active
-            if (rdoDefault.value) {
-                variableSettings.defaultValue = inputFieldVariableValue.text;
-                variableSettings.active = false;
-            } else if (rdoCustom.value) {
-                variableSettings.customValue = inputFieldVariableValue.text;
-                variableSettings.active = true;
+        } else if (ScriptUI.environment.keyboardState.ctrlKey && ScriptUI.environment.keyboardState.altKey) {
+            // Reset all variables to initialData
+            for (var key in initialData) {
+                if (initialData.hasOwnProperty(key)) {
+                    variablesData[key] = {
+                        "defaultValue": initialData[key].defaultValue,
+                        "customValue": initialData[key].customValue,
+                        "active": initialData[key].active
+                    };
+                }
             }
-
-            // Save the updated settings back to the JSON file
-            var scriptFile = new File($.fileName);
-            var variablesFilePath = scriptFile.path.replace("/scripts", "/scripts/variables.json");
-            var variablesFile = new File(variablesFilePath);
-
+    
             variablesFile.open("w");
             variablesFile.encoding = "UTF-8";
             variablesFile.write(JSON.stringify(variablesData, null, 4));
             variablesFile.close();
-
-            alert("Settings saved for variable: " + variableName);
+    
+            resetUIFields();
+            alert("All settings reset to initial values.", scriptMessageHead_1);
         } else {
-            alert("Please enter a valid variable name.");
+            // Save current settings
+            if (variablesData && inputFieldVariableName.text) {
+                var variableName = inputFieldVariableName.text;
+    
+                // Ensure the variable entry exists in variablesData
+                if (!variablesData[variableName]) {
+                    variablesData[variableName] = {
+                        "defaultValue": "",
+                        "customValue": "",
+                        "active": false
+                    };
+                }
+    
+                var variableSettings = variablesData[variableName];
+    
+                // Save the value based on which radio button is active
+                if (rdoDefault.value) {
+                    variableSettings.defaultValue = inputFieldVariableValue.text;
+                    variableSettings.active = false;
+                } else if (rdoCustom.value) {
+                    variableSettings.customValue = inputFieldVariableValue.text;
+                    variableSettings.active = true;
+                }
+    
+                // Save the updated settings back to the JSON file
+                variablesFile.open("w");
+                variablesFile.encoding = "UTF-8";
+                variablesFile.write(JSON.stringify(variablesData, null, 4));
+                variablesFile.close();
+    
+                alert("Settings saved for variable: " + variableName, scriptMessageHead_1);
+            } else {
+                alert("Please enter a valid variable name.", scriptMessageHead_1);
+            }
         }
     };
 
@@ -267,20 +337,6 @@ function initializeVariablesFile() {
             return;
         }
     }
-
-    // File does not exist or is empty, write the initial structure
-    var initialData = {
-        "An": { "defaultValue": "NoAnimations", "customValue": "Custom{An}", "active": true },
-        "Ar": { "defaultValue": "NoAspectRatio", "customValue": "Custom{Ar}", "active": true },
-        "E": { "defaultValue": "No effects", "customValue": "Custom{E}", "active": true },
-        "F": { "defaultValue": "NoFrameRate", "customValue": "Custom{F}", "active": true },
-        "H": { "defaultValue": "NoHeight", "customValue": "Custom{H}", "active": true },
-        "Lexp": { "defaultValue": "NoExpressions", "customValue": "Custom{Lexp}", "active": true },
-        "R": { "defaultValue": "NoResolution", "customValue": "Custom{R}", "active": true },
-        "S": { "defaultValue": "NoSource", "customValue": "Custom{S}", "active": true },
-        "Tm": { "defaultValue": "NoTrackMate", "customValue": "Custom{Tm}", "active": true },
-        "W": { "defaultValue": "NoWidth", "customValue": "Custom{W}", "active": true }
-    };
 
     variablesFile.open("w");
     variablesFile.encoding = "UTF-8";
