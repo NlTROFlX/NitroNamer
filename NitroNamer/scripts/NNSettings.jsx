@@ -76,21 +76,28 @@ function buildNewUI(thisObj) {
     inputFieldVariableName.onChanging = function() {
         var searchText = inputFieldVariableName.text.toLowerCase(); // Получить текст из поля ввода и привести к нижнему регистру
         ddVariableNames.removeAll(); // Очистить текущие элементы списка
-
+    
         // Добавить обратно только те элементы, которые содержат введенный текст
         for (var i = 0; i < variableNames.length; i++) {
             if (variableNames[i].toLowerCase().indexOf(searchText) !== -1) {
                 ddVariableNames.add("item", variableNames[i]);
             }
         }
-
+    
         // Если нет соответствующих элементов, добавить сообщение
         if (ddVariableNames.items.length === 0) {
             ddVariableNames.add("item", "No matches found");
         } else {
             ddVariableNames.selection = 0; // Выбрать первый элемент
         }
-    };    
+    };
+    
+    // Set value from dropdown to input field on Enter key press
+    inputFieldVariableName.addEventListener("keydown", function(event) {
+        if (event.keyName === "Enter" && ddVariableNames.selection) {
+            inputFieldVariableName.text = ddVariableNames.selection.text;
+        }
+    });
 
     // Display the window or panel
     if (win instanceof Window) {
