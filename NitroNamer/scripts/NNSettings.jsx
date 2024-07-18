@@ -59,6 +59,9 @@ function buildNewUI(thisObj) {
     // Add save button with icon and hover effect
     var saveIconFile = new File(scriptFolderPath + "/save.png");
     var saveIconHoverFile = new File(scriptFolderPath + "/saveHover.png");
+    var deleteIconHoverFile = new File(scriptFolderPath + "/deleteHover.png");
+    var resetIconHoverFile = new File(scriptFolderPath + "/resetIconHover.png");
+
     var btnSave = grpInputAndButton.add("iconbutton", undefined, saveIconFile, {style: "toolbutton"});
     btnSave.size = [24, 24]; // Set button size
     btnSave.imageSize = [24, 24]; // Set image size
@@ -76,12 +79,18 @@ function buildNewUI(thisObj) {
     // Set the default selection
     rdoDefault.value = true;
 
-
-    btnSave.addEventListener("mouseover", function() {
-        btnSave.image = saveIconHoverFile;
+    btnSave.addEventListener("mouseover", function(event) {
+        if (ScriptUI.environment.keyboardState.shiftKey) {
+            btnSave.image = deleteIconHoverFile;
+        } else if (ScriptUI.environment.keyboardState.ctrlKey && ScriptUI.environment.keyboardState.altKey) {
+            btnSave.image = resetIconHoverFile;
+        } else {
+            btnSave.image = saveIconHoverFile;
+        }
         btnSave.imageSize = [24, 24];
     });
-    btnSave.addEventListener("mouseout", function() {
+    
+    btnSave.addEventListener("mouseout", function(event) {
         btnSave.image = saveIconFile;
         btnSave.imageSize = [24, 24];
     });
