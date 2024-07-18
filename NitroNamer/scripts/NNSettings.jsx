@@ -75,10 +75,11 @@ function buildNewUI(thisObj) {
     grpInputTextFieldVariableName.size=[100,12];
     grpInputTextFieldVariableName.margins = [0, -10, 0, 0];
 
-    var originalTextFieldLabel  = "Value of the variable if it is not defined"; // the original label text
+    var originalTextFieldLabel  = "Value of an undefined variable"; // the original label text
 
     var inputTextFieldVariableName = grpInputTextFieldVariableName.add("statictext", undefined, originalTextFieldLabel );
     inputTextFieldVariableName.maximumSize.height = 12;
+    inputTextFieldVariableName.alignment = ["fill", "center"];
     inputTextFieldVariableName.margins = [0, -10, 0, 0];
 
     // Create a group for the input field and save button
@@ -124,6 +125,7 @@ function buildNewUI(thisObj) {
     var resetIconHoverFile = new File(scriptFolderPath + "/resetIconHover.png");
     var warningIconFile = new File(scriptFolderPath + "/warning.png");
     var warningIconHoverFile = new File(scriptFolderPath + "/warningHover.png");
+    var doneIconFile = new File(scriptFolderPath + "/doneIcon.png");
 
     var btnSave = grpInputAndButton.add("iconbutton", undefined, saveIconFile, {style: "toolbutton"});
     btnSave.size = [24, 24]; // Set button size
@@ -313,7 +315,15 @@ function buildNewUI(thisObj) {
                     variablesFile.write(JSON.stringify(variablesData, null, 4));
                     variablesFile.close();
 
-                    alert("Settings saved for variable: " + variableName);
+                    inputTextFieldVariableName.text = "Variable settings saved";
+                    btnSave.image = doneIconFile;
+
+                    // Reset the text and icon back after mouseout
+                    btnSave.addEventListener("mouseout", function resetIconAndText(event) {
+                        inputTextFieldVariableName.text = originalTextFieldLabel;
+                        btnSave.image = saveIconFile;
+                        btnSave.removeEventListener("mouseout", resetIconAndText);
+                    });
                 } else {
                     alert("Please enter a valid variable name.");
                 }
