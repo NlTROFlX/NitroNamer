@@ -86,30 +86,73 @@ function buildNewUI(thisObj) {
         btnSave.imageSize = [24, 24];
     });
 
+    // Function to load variables from JSON file
+    function loadVariables() {
+        var scriptFile = new File($.fileName);
+        var variablesFilePath = scriptFile.path.replace("/scripts", "/scripts/variables.json");
+        var variablesFile = new File(variablesFilePath);
+
+        if (variablesFile.exists) {
+            variablesFile.open("r");
+            var content = variablesFile.read();
+            variablesFile.close();
+            return JSON.parse(content);
+        }
+        return null;
+    }
+
+    var variablesData = loadVariables();
+
     // Filtering functionality
     inputFieldVariableName.onChanging = function() {
-        var searchText = inputFieldVariableName.text.toLowerCase(); // Получить текст из поля ввода и привести к нижнему регистру
-        ddVariableNames.removeAll(); // Очистить текущие элементы списка
+        var searchText = inputFieldVariableName.text.toLowerCase(); // Get the input text and convert to lowercase
+        ddVariableNames.removeAll(); // Clear current dropdown items
     
-        // Добавить обратно только те элементы, которые содержат введенный текст
+        // Filter and add items to the dropdown list
         for (var i = 0; i < variableNames.length; i++) {
             if (variableNames[i].toLowerCase().indexOf(searchText) !== -1) {
                 ddVariableNames.add("item", variableNames[i]);
             }
         }
     
-        // Если нет соответствующих элементов, добавить сообщение
+        // If no matching items, add a message
         if (ddVariableNames.items.length === 0) {
             ddVariableNames.add("item", "No matches found");
         } else {
-            ddVariableNames.selection = 0; // Выбрать первый элемент
+            ddVariableNames.selection = 0; // Select the first item
+        }
+    
+        // Check if the entered variable name exists in JSON data
+        if (variablesData && variablesData[inputFieldVariableName.text]) {
+            var variableSettings = variablesData[inputFieldVariableName.text];
+    
+            if (variableSettings.active) {
+                inputFieldVariableValue.text = variableSettings.customValue;
+                rdoCustom.value = true;
+            } else {
+                inputFieldVariableValue.text = variableSettings.defaultValue;
+                rdoDefault.value = true;
+            }
         }
     };
     
-    // Set value from dropdown to input field on Enter key press
+    // Add event listener to handle Enter key press in input field
     inputFieldVariableName.addEventListener("keydown", function(event) {
         if (event.keyName === "Enter" && ddVariableNames.selection) {
             inputFieldVariableName.text = ddVariableNames.selection.text;
+
+            // Check if the selected variable name exists in JSON data
+            if (variablesData && variablesData[inputFieldVariableName.text]) {
+                var variableSettings = variablesData[inputFieldVariableName.text];
+
+                if (variableSettings.active) {
+                    inputFieldVariableValue.text = variableSettings.customValue;
+                    rdoCustom.value = true;
+                } else {
+                    inputFieldVariableValue.text = variableSettings.defaultValue;
+                    rdoDefault.value = true;
+                }
+            }
         }
     });
 
