@@ -174,48 +174,19 @@ function buildNewUI(thisObj) {
 
     var variablesData = loadVariables();
 
-    // Filtering functionality
-    inputFieldVariableName.onChanging = function() {
-        var searchText = inputFieldVariableName.text.toLowerCase(); // Get the input text and convert to lowercase
-        ddVariableNames.removeAll(); // Clear current dropdown items
-    
-        // Filter and add items to the dropdown list
-        for (var i = 0; i < variableNames.length; i++) {
-            if (variableNames[i].toLowerCase().indexOf(searchText) !== -1) {
-                ddVariableNames.add("item", variableNames[i]);
-            }
-        }
-    
-        // If no matching items, add a message
-        if (ddVariableNames.items.length === 0) {
-            ddVariableNames.add("item", "No matches found");
-        } else {
-            ddVariableNames.selection = 0; // Select the first item
-        }
-    
-        // Check if the entered variable name exists in JSON data
-        if (variablesData && variablesData[inputFieldVariableName.text]) {
-            var variableSettings = variablesData[inputFieldVariableName.text];
-    
-            if (variableSettings.active) {
-                inputFieldVariableValue.text = variableSettings.customValue;
-                rdoCustom.value = true;
-            } else {
-                inputFieldVariableValue.text = variableSettings.defaultValue;
-                rdoDefault.value = true;
-            }
-        }
-    };
-    // Add event listener for input field changes
+    // Event listener for input field changes
     inputFieldVariableName.onChanging = function() {
         userIsTyping = true; // Set typing flag
         filterDropdownList(); // Call the filter function
 
-        // Reset the text field label to original when user starts typing
-        inputTextFieldVariableName.text = originalTextFieldLabel;
-
-        // Change button icon back to save icon if it was warning
-        btnSave.image = saveIconFile;
+        // Check if the entered variable name exists in JSON data
+        if (variablesData && variablesData[inputFieldVariableName.text]) {
+            inputTextFieldVariableName.text = originalTextFieldLabel;
+            btnSave.image = saveIconFile;
+        } else {
+            inputTextFieldVariableName.text = "Invalid variable name";
+            btnSave.image = warningIconFile;
+        }
         btnSave.imageSize = [24, 24];
     };
 
