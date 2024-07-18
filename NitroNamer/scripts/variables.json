@@ -12,12 +12,12 @@
     "E": {
         "defaultValue": "No effects",
         "customValue": "Custom{E}",
-        "active": false
+        "active": true
     },
     "F": {
         "defaultValue": "NoFrameRate",
         "customValue": "Custom{F}",
-        "active": false
+        "active": true
     },
     "H": {
         "defaultValue": "NoHeight",

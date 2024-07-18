@@ -185,6 +185,24 @@ function buildUI(thisObj) {
         saveSettings(currentSettings, true);
     };
 
+    // Custom trim function
+    function trim(str) {
+        return str.replace(/^\s+|\s+$/g, '');
+    }
+
+    // Function to check template field and update button icon and state
+    function updateRenameButtonIcon() {
+        var templateText = txtTemplate.text;
+        if (trim(templateText) === "") {
+            btnRename.image = warningIcon;
+            btnRename.imageSize = [24, 24];
+            btnRename.enabled = false;
+        } else {
+            resetRenameButtonIcon();
+            btnRename.enabled = true;
+        }
+    }
+
     // Create group for template text field
     var grpTemplate = win.add("group", undefined);
     grpTemplate.orientation = "column";
@@ -195,7 +213,7 @@ function buildUI(thisObj) {
     txtTemplate.onChanging = function() {
         updatePreview();
         updateLayerCounts();
-        resetRenameButtonIcon();
+        updateRenameButtonIcon(); // Update button icon based on input value
     };
 
     // Save settings when template text field changes
@@ -286,6 +304,8 @@ function buildUI(thisObj) {
 
     // Move buttons to the grpBriefly group
     var btnRename = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/renameIcon.png"), { style: "toolbutton" });
+    var warningIcon = File(scriptFolderPath + "/NitroNamer/img/warning.png");
+    var warningIconHover = File(scriptFolderPath + "/NitroNamer/img/warningHover.png");
     btnRename.size = [24, 24]; // Set button size
     btnRename.imageSize = [24, 24]; // Set image size
     btnRename.alignment = ["left", "center"];
@@ -362,12 +382,15 @@ function buildUI(thisObj) {
 
     // Event handlers for Rename button hover effect
     btnRename.addEventListener("mouseover", function() {
-        btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHover.png");
+        if (trim(txtTemplate.text) === "") {
+            btnRename.image = warningIconHover;
+        } else {
+            btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHover.png");
+        }
         btnRename.imageSize = [24, 24];
     });
     btnRename.addEventListener("mouseout", function() {
-        btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIcon.png");
-        btnRename.imageSize = [24, 24];
+        updateRenameButtonIcon(); // Re-check the field value when mouse out
     });
 
     // Event handlers for Help button hover effect
@@ -571,23 +594,25 @@ function buildUI(thisObj) {
 
     // Button click handler with Alt key functionality
     btnRename.onClick = function() {
+        if (!btnRename.enabled) return; // Prevent renaming if the button is disabled
+
         var allLayers = rdoAllLayers.value;
         var template = txtTemplate.text;
         var briefly = chkBriefly.value;
         var brieflyType = ddBrieflyType.selection.text;
-    
+
         // Check if the Alt key, Ctrl key, or Ctrl+Shift keys are held down
         var isAltPressed = ScriptUI.environment.keyboardState.altKey;
         var isCtrlPressed = ScriptUI.environment.keyboardState.ctrlKey;
         var isShiftPressed = ScriptUI.environment.keyboardState.shiftKey;
         var isCtrlShiftPressed = isCtrlPressed && isShiftPressed;
-    
+
         // Initialize includeShyLayers and reverseOrder
         var includeShyLayers = isCtrlShiftPressed;
         var reverseOrder = isAltPressed;
-    
+
         renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed, isShiftPressed, isAltPressed, isCtrlShiftPressed);
-    
+
         updateLayerCounts();
         updatePreview();
         btnRename.image = File(scriptFolderPath + "/NitroNamer/img/doneIcon.png");
@@ -1235,7 +1260,7 @@ function buildUI(thisObj) {
         if (layer.source) {
             return layer.source.name;
         }
-        return "NoSource";
+        return getLayerType(layer); // Use the layer type as the name if there is no source name
     }
 
     // Get the width of a layer
@@ -1721,6 +1746,7 @@ function buildUI(thisObj) {
     updateLayerCounts();
     updatePreview();
     checkAndCreateVariablesFile();
+    updateRenameButtonIcon();
 
     if (win instanceof Window) {
         win.center();
