@@ -14,6 +14,25 @@ var initialData = {
 
 var scriptMessageHead_1 = "NitroNamer - variable settings";
 
+// Function to load variables from JSON file
+function loadVariables() {
+    var scriptFile = new File($.fileName);
+    var variablesFilePath = scriptFile.path.replace("/scripts", "/scripts/variables.json");
+    var variablesFile = new File(variablesFilePath);
+
+    if (variablesFile.exists) {
+        variablesFile.open("r");
+        var content = variablesFile.read();
+        variablesFile.close();
+        return JSON.parse(content);
+    }
+    return {};
+}
+
+var variablesData = loadVariables();
+var lastText = "";
+var userIsTyping = false; // Flag to track if the user is typing
+
 function buildNewUI(thisObj) {
     // Create a window or panel for the UI
     var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "NitroNamer - variable settings", undefined, {resizeable: true});
@@ -27,7 +46,7 @@ function buildNewUI(thisObj) {
     grpDropdownAndInput.orientation = "row"; // Set orientation to horizontal
     grpDropdownAndInput.alignChildren = ["fill", "center"];
     grpDropdownAndInput.margins = [0,0,0,0];
-    grpDropdownAndInput.size = [175,24]
+    grpDropdownAndInput.size = [175,24];
 
     // Add input field for variable name
     var inputFieldVariableName = grpDropdownAndInput.add("edittext", undefined, "");
@@ -56,7 +75,9 @@ function buildNewUI(thisObj) {
     grpInputTextFieldVariableName.size=[100,12];
     grpInputTextFieldVariableName.margins = [0, -10, 0, 0];
 
-    var inputTextFieldVariableName = grpInputTextFieldVariableName.add("statictext", undefined, "Value of the variable if it is not defined");
+    var originalTextFieldLabel  = "Value of the variable if it is not defined"; // the original label text
+
+    var inputTextFieldVariableName = grpInputTextFieldVariableName.add("statictext", undefined, originalTextFieldLabel );
     inputTextFieldVariableName.maximumSize.height = 12;
     inputTextFieldVariableName.margins = [0, -10, 0, 0];
 
@@ -72,11 +93,37 @@ function buildNewUI(thisObj) {
     inputFieldVariableValue.size = [150, 24]; // Set the size of the input field
     inputFieldVariableValue.margins = [0,-10,0,0];
 
+    function filterDropdownList() {
+        var searchText = inputFieldVariableName.text.toLowerCase(); // Get the input text and convert to lowercase
+        if (searchText === lastText) return; // Exit if the text hasn't changed
+        lastText = searchText;
+    
+        ddVariableNames.removeAll(); // Clear current dropdown items
+    
+        // Filter and add items to the dropdown list
+        for (var i = 0; i < variableNames.length; i++) {
+            if (variableNames[i].toLowerCase().indexOf(searchText) !== -1) {
+                ddVariableNames.add("item", variableNames[i]);
+            }
+        }
+    
+        // If no matching items, add a message
+        if (ddVariableNames.items.length === 0) {
+            ddVariableNames.add("item", "No matches found");
+        } else {
+            ddVariableNames.selection = 0; // Select the first item
+        }
+    
+        userIsTyping = false; // Reset typing flag
+    }
+
     // Add save button with icon and hover effect
     var saveIconFile = new File(scriptFolderPath + "/save.png");
     var saveIconHoverFile = new File(scriptFolderPath + "/saveHover.png");
     var deleteIconHoverFile = new File(scriptFolderPath + "/deleteHover.png");
     var resetIconHoverFile = new File(scriptFolderPath + "/resetIconHover.png");
+    var warningIconFile = new File(scriptFolderPath + "/warning.png");
+    var warningIconHoverFile = new File(scriptFolderPath + "/warningHover.png");
 
     var btnSave = grpInputAndButton.add("iconbutton", undefined, saveIconFile, {style: "toolbutton"});
     btnSave.size = [24, 24]; // Set button size
@@ -100,6 +147,8 @@ function buildNewUI(thisObj) {
             btnSave.image = deleteIconHoverFile;
         } else if (ScriptUI.environment.keyboardState.ctrlKey && ScriptUI.environment.keyboardState.altKey) {
             btnSave.image = resetIconHoverFile;
+        } else if (!initialData[inputFieldVariableName.text]) {
+            btnSave.image = warningIconHoverFile;
         } else {
             btnSave.image = saveIconHoverFile;
         }
@@ -121,21 +170,6 @@ function buildNewUI(thisObj) {
         }
         ddVariableNames.selection = 0;
         rdoDefault.value = true;
-    }
-
-    // Function to load variables from JSON file
-    function loadVariables() {
-        var scriptFile = new File($.fileName);
-        var variablesFilePath = scriptFile.path.replace("/scripts", "/scripts/variables.json");
-        var variablesFile = new File(variablesFilePath);
-
-        if (variablesFile.exists) {
-            variablesFile.open("r");
-            var content = variablesFile.read();
-            variablesFile.close();
-            return JSON.parse(content);
-        }
-        return null;
     }
 
     var variablesData = loadVariables();
@@ -171,6 +205,18 @@ function buildNewUI(thisObj) {
                 rdoDefault.value = true;
             }
         }
+    };
+    // Add event listener for input field changes
+    inputFieldVariableName.onChanging = function() {
+        userIsTyping = true; // Set typing flag
+        filterDropdownList(); // Call the filter function
+
+        // Reset the text field label to original when user starts typing
+        inputTextFieldVariableName.text = originalTextFieldLabel;
+
+        // Change button icon back to save icon if it was warning
+        btnSave.image = saveIconFile;
+        btnSave.imageSize = [24, 24];
     };
 
     // Add event listener to dropdown list
@@ -218,80 +264,88 @@ function buildNewUI(thisObj) {
         var scriptFile = new File($.fileName);
         var variablesFilePath = scriptFile.path.replace("/scripts", "/scripts/variables.json");
         var variablesFile = new File(variablesFilePath);
-    
-        if (ScriptUI.environment.keyboardState.shiftKey) {
-            // Reset current variable settings to initialData
-            if (variablesData && inputFieldVariableName.text) {
-                var variableName = inputFieldVariableName.text;
-                if (initialData[variableName]) {
-                    variablesData[variableName] = {
-                        "defaultValue": initialData[variableName].defaultValue,
-                        "customValue": initialData[variableName].customValue,
-                        "active": initialData[variableName].active
-                    };
-                }
-    
-                variablesFile.open("w");
-                variablesFile.encoding = "UTF-8";
-                variablesFile.write(JSON.stringify(variablesData, null, 4));
-                variablesFile.close();
-    
-                resetUIFields();
-                alert("Settings reset for variable: " + variableName, scriptMessageHead_1);
-            }
-        } else if (ScriptUI.environment.keyboardState.ctrlKey && ScriptUI.environment.keyboardState.altKey) {
-            // Reset all variables to initialData
-            for (var key in initialData) {
-                if (initialData.hasOwnProperty(key)) {
-                    variablesData[key] = {
-                        "defaultValue": initialData[key].defaultValue,
-                        "customValue": initialData[key].customValue,
-                        "active": initialData[key].active
-                    };
-                }
-            }
-    
-            variablesFile.open("w");
-            variablesFile.encoding = "UTF-8";
-            variablesFile.write(JSON.stringify(variablesData, null, 4));
-            variablesFile.close();
-    
-            resetUIFields();
-            alert("All settings reset to initial values.", scriptMessageHead_1);
+
+        if (!initialData[inputFieldVariableName.text]) {
+            // Variable does not exist, show warning icon and change text
+            btnSave.image = warningIconFile;
+            btnSave.imageSize = [24, 24];
+
+            inputTextFieldVariableName.text = "Invalid variable name";
         } else {
-            // Save current settings
-            if (variablesData && inputFieldVariableName.text) {
-                var variableName = inputFieldVariableName.text;
-    
-                // Ensure the variable entry exists in variablesData
-                if (!variablesData[variableName]) {
-                    variablesData[variableName] = {
-                        "defaultValue": "",
-                        "customValue": "",
-                        "active": false
-                    };
+            if (ScriptUI.environment.keyboardState.shiftKey) {
+                // Reset current variable settings to initialData
+                if (variablesData && inputFieldVariableName.text) {
+                    var variableName = inputFieldVariableName.text;
+                    if (initialData[variableName]) {
+                        variablesData[variableName] = {
+                            "defaultValue": initialData[variableName].defaultValue,
+                            "customValue": initialData[variableName].customValue,
+                            "active": initialData[variableName].active
+                        };
+                    }
+
+                    variablesFile.open("w");
+                    variablesFile.encoding = "UTF-8";
+                    variablesFile.write(JSON.stringify(variablesData, null, 4));
+                    variablesFile.close();
+
+                    resetUIFields();
+                    alert("Settings reset for variable: " + variableName);
                 }
-    
-                var variableSettings = variablesData[variableName];
-    
-                // Save the value based on which radio button is active
-                if (rdoDefault.value) {
-                    variableSettings.defaultValue = inputFieldVariableValue.text;
-                    variableSettings.active = false;
-                } else if (rdoCustom.value) {
-                    variableSettings.customValue = inputFieldVariableValue.text;
-                    variableSettings.active = true;
+            } else if (ScriptUI.environment.keyboardState.ctrlKey && ScriptUI.environment.keyboardState.altKey) {
+                // Reset all variables to initialData
+                for (var key in initialData) {
+                    if (initialData.hasOwnProperty(key)) {
+                        variablesData[key] = {
+                            "defaultValue": initialData[key].defaultValue,
+                            "customValue": initialData[key].customValue,
+                            "active": initialData[key].active
+                        };
+                    }
                 }
-    
-                // Save the updated settings back to the JSON file
+
                 variablesFile.open("w");
                 variablesFile.encoding = "UTF-8";
                 variablesFile.write(JSON.stringify(variablesData, null, 4));
                 variablesFile.close();
-    
-                alert("Settings saved for variable: " + variableName, scriptMessageHead_1);
+
+                resetUIFields();
+                alert("All settings reset to initial values.");
             } else {
-                alert("Please enter a valid variable name.", scriptMessageHead_1);
+                // Save current settings
+                if (variablesData && inputFieldVariableName.text) {
+                    var variableName = inputFieldVariableName.text;
+
+                    // Ensure the variable entry exists in variablesData
+                    if (!variablesData[variableName]) {
+                        variablesData[variableName] = {
+                            "defaultValue": "",
+                            "customValue": "",
+                            "active": false
+                        };
+                    }
+
+                    var variableSettings = variablesData[variableName];
+
+                    // Save the value based on which radio button is active
+                    if (rdoDefault.value) {
+                        variableSettings.defaultValue = inputFieldVariableValue.text;
+                        variableSettings.active = false;
+                    } else if (rdoCustom.value) {
+                        variableSettings.customValue = inputFieldVariableValue.text;
+                        variableSettings.active = true;
+                    }
+
+                    // Save the updated settings back to the JSON file
+                    variablesFile.open("w");
+                    variablesFile.encoding = "UTF-8";
+                    variablesFile.write(JSON.stringify(variablesData, null, 4));
+                    variablesFile.close();
+
+                    alert("Settings saved for variable: " + variableName);
+                } else {
+                    alert("Please enter a valid variable name.");
+                }
             }
         }
     };

@@ -48,10 +48,5 @@
         "defaultValue": "NoWidth",
         "customValue": "Custom{W}",
         "active": true
-    },
-    "Larp": {
-        "defaultValue": "",
-        "customValue": "Custom{Lexp}",
-        "active": true
     }
 }
