@@ -2,12 +2,18 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "An",
+        "template": "Fext(mp3)",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0
     },
     "userPresets": {
+        "preset_2": {
+            "allLayers": true,
+            "template": "Fext(mp3)",
+            "briefly": false,
+            "brieflyType": 0
+        },
         "preset_1": {
             "allLayers": true,
             "template": "123",

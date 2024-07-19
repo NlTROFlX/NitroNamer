@@ -1557,7 +1557,7 @@ function buildUI(thisObj) {
             } else if (match === 'Fext') {
                 return variables['Fext'];
             } else if (customFext !== undefined) {
-                return variables['Fext'] === customFext ? customFext : "";
+                return variables['Fext'] === customFext ? customFext : "NoExtension";
             } else if (match === 'Lexp') {
                 return variables['Lexp'];
             } else if (match === 'Ip') {
