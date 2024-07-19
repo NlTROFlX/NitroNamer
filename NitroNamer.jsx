@@ -1023,7 +1023,7 @@ function buildUI(thisObj) {
         }
 
         var animatedProps = getAnimatedProperties(layer);
-        var animatedPropsString = animatedProps.length > 0 ? animatedProps.join(", ") : "NoAnimations";
+        var animatedPropsString = animatedProps.join(", ");
 
         var variables = {
             "T": getLayerType(layer),
@@ -1370,7 +1370,7 @@ function buildUI(thisObj) {
         }
 
         checkPropertyGroup(layer);
-        return animatedProps;
+        return animatedProps.length > 0 ? animatedProps : ["NoAnimations"];
     }
 
     // Get the scale of a layer
