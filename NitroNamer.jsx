@@ -1271,7 +1271,7 @@ function buildUI(thisObj) {
         if (layer.source) {
             return layer.source.name;
         }
-        return getLayerType(layer); // Use the layer type as the name if there is no source name
+        return layer.name; // Use the original name if there is no source name
     }
 
     // Get the width of a layer
