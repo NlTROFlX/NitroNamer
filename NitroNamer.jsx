@@ -1231,23 +1231,20 @@ function buildUI(thisObj) {
         return "NoResolution";
     }
 
+    // Get the duration of a layer in HH:MM:SS format
     function getDuration(layer) {
         var duration;
         if (layer.source && layer.source.duration) {
             duration = layer.source.duration;
-        } else if (layer.hasAudio || layer.hasVideo) {
-            duration = layer.outPoint - layer.inPoint;
         } else {
-            return function() {
-                return "NoLimit";
-            };
+            duration = layer.outPoint - layer.inPoint;
         }
-    
+
         var hours = Math.floor(duration / 3600);
         var minutes = Math.floor((duration % 3600) / 60);
         var seconds = Math.floor(duration % 60);
         var milliseconds = Math.floor((duration * 1000) % 1000);
-    
+
         return function(format) {
             switch (format) {
                 case '1':
@@ -1260,11 +1257,11 @@ function buildUI(thisObj) {
                     return (milliseconds < 100 ? (milliseconds < 10 ? "00" + milliseconds : "0" + milliseconds) : milliseconds);
                 default:
                     return (hours < 10 ? "0" + hours : hours) + ":" +
-                           (minutes < 10 ? "0" + minutes : minutes) + ":" +
-                           (seconds < 10 ? "0" + seconds : seconds);
+                        (minutes < 10 ? "0" + minutes : minutes) + ":" +
+                        (seconds < 10 ? "0" + seconds : seconds);
             }
         };
-    }    
+    }   
 
     // Get the source name of a layer
     function getSourceName(layer) {
