@@ -210,7 +210,13 @@ function buildUI(thisObj) {
     var txtTemplate = grpTemplate.add("edittext", undefined, "(Template for renaming)O_T.i", {multiline: false, scrolling: false});
     txtTemplate.alignment = ["fill", "top"];
     txtTemplate.margins = [0,-10,0,0];
+
+    txtTemplate.addEventListener("click", function() {
+        checkAndUpdateSettings(); // Check and update settings when the input field is clicked
+    });
+
     txtTemplate.onChanging = function() {
+        checkAndUpdateSettings(); // Check and update settings when the input field value is changing
         updatePreview();
         updateLayerCounts();
         updateRenameButtonIcon(); // Update button icon based on input value
@@ -218,6 +224,7 @@ function buildUI(thisObj) {
 
     // Save settings when template text field changes
     txtTemplate.onChange = function() {
+        checkAndUpdateSettings(); // Check and update settings when the input field value changes
         var currentSettings = {
             allLayers: rdoAllLayers.value,
             template: txtTemplate.text,
@@ -233,6 +240,7 @@ function buildUI(thisObj) {
 
     // Event listener for Enter key in template text field
     txtTemplate.addEventListener("keydown", function(event) {
+        checkAndUpdateSettings(); // Check and update settings when Enter key is pressed
         if (event.keyName === "Enter") {
             var selectedPreset = ddLayerMode.selection;
             if (selectedPreset) {
@@ -393,6 +401,9 @@ function buildUI(thisObj) {
 
     // Event handlers for Rename button hover effect
     btnRename.addEventListener("mouseover", function() {
+        checkAndUpdateSettings();
+        updatePreview();
+        updateLayerCounts();
         if (trim(txtTemplate.text) === "") {
             btnRename.image = warningIconHover;
         } else {
@@ -813,25 +824,39 @@ function buildUI(thisObj) {
         return settings;
     }
 
+    var variableSettings;
+    var lastModifiedTime;
+
     function loadVariableSettings() {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/scripts";
         var variablesFile = new File(scriptFolderPath + "/variables.json");
-    
+
         var variableSettings = {};
         if (variablesFile.exists) {
             variablesFile.open("r");
             variableSettings = JSON.parse(variablesFile.read());
             variablesFile.close();
+            
+            // Update the last modified time
+            lastModifiedTime = variablesFile.modified;
         }
         return variableSettings;
-    }
+    } 
 
-    function reloadVariableSettings() {
-        variableSettings = loadVariableSettings();
+    function getFileModifiedTime() {
+        var scriptFile = new File($.fileName);
+        var scriptFolderPath = scriptFile.path + "/NitroNamer/scripts";
+        var variablesFile = new File(scriptFolderPath + "/variables.json");
+    
+        if (variablesFile.exists) {
+            return variablesFile.modified;
+        }
+        return null;
     }
     
-    var variableSettings = loadVariableSettings();    
+    // Load settings initially
+    variableSettings = loadVariableSettings();
 
     // Apply settings to the UI
     function applySettings(settings) {
@@ -1021,10 +1046,20 @@ function buildUI(thisObj) {
                 txtRenamedCompact.text = "No project open.";
             }
         }
-    }    
+    }
+
+    function checkAndUpdateSettings() {
+        var currentModifiedTime = getFileModifiedTime();
+        if (currentModifiedTime && (!lastModifiedTime || currentModifiedTime.getTime() !== lastModifiedTime.getTime())) {
+            variableSettings = loadVariableSettings();
+            lastModifiedTime = currentModifiedTime;
+        }
+    }      
 
     // Generate new name for a layer based on the template
     function generateNewName(layer, template, briefly, brieflyType, settings) {
+        checkAndUpdateSettings(); // Check and update settings before generating the new name
+
         var effectNames = [];
         if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
             for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
@@ -1626,6 +1661,8 @@ function buildUI(thisObj) {
 
     // Rename layers based on the template
     function renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed, isShiftPressed, isAltPressed, isCtrlShiftPressed) {
+        checkAndUpdateSettings();
+
         var proj = app.project;
         if (proj && proj.activeItem instanceof CompItem) {
             var comp = proj.activeItem;

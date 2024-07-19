@@ -8,6 +8,12 @@
         "selectedPresetIndex": 0
     },
     "userPresets": {
+        "preset_3": {
+            "allLayers": true,
+            "template": "An",
+            "briefly": false,
+            "brieflyType": 0
+        },
         "preset_2": {
             "allLayers": true,
             "template": "Fext(mp3)",
