@@ -785,6 +785,10 @@ function buildUI(thisObj) {
         return newPresetKey; // Return the key of the newly saved preset
     }
 
+    function isArray(value) {
+        return Object.prototype.toString.call(value) === '[object Array]';
+    }
+
     // Load settings from a JSON file
     function loadSettings() {
         var scriptFile = new File($.fileName);
@@ -808,6 +812,26 @@ function buildUI(thisObj) {
 
         return settings;
     }
+
+    function loadVariableSettings() {
+        var scriptFile = new File($.fileName);
+        var scriptFolderPath = scriptFile.path + "/NitroNamer/scripts";
+        var variablesFile = new File(scriptFolderPath + "/variables.json");
+    
+        var variableSettings = {};
+        if (variablesFile.exists) {
+            variablesFile.open("r");
+            variableSettings = JSON.parse(variablesFile.read());
+            variablesFile.close();
+        }
+        return variableSettings;
+    }
+
+    function reloadVariableSettings() {
+        variableSettings = loadVariableSettings();
+    }
+    
+    var variableSettings = loadVariableSettings();    
 
     // Apply settings to the UI
     function applySettings(settings) {
@@ -970,7 +994,7 @@ function buildUI(thisObj) {
                     var template = txtTemplate.text;
                     var briefly = chkBriefly.value;
                     var brieflyType = ddBrieflyType.selection.text;
-                    var newName = generateNewName(layer, template, briefly, brieflyType);
+                    var newName = generateNewName(layer, template, briefly, brieflyType, variableSettings);
                     txtOriginal.text = originalName;
                     txtRenamed.text = newName;
                     if (txtRenamedCompact) {
@@ -997,10 +1021,10 @@ function buildUI(thisObj) {
                 txtRenamedCompact.text = "No project open.";
             }
         }
-    }
+    }    
 
     // Generate new name for a layer based on the template
-    function generateNewName(layer, template, briefly, brieflyType) {
+    function generateNewName(layer, template, briefly, brieflyType, settings) {
         var effectNames = [];
         if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
             for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
@@ -1008,7 +1032,7 @@ function buildUI(thisObj) {
                 effectNames.push(effect.name);
             }
         }
-
+    
         var effectsString = effectNames.length > 0 ? effectNames.join(", ") : "ClearLayer";
         var compName = app.project.activeItem.name;
         var frameRate = getFrameRate(layer);
@@ -1017,14 +1041,14 @@ function buildUI(thisObj) {
         var projectName = getProjectName();
         var expressionProps = getExpressionControlledProperties(layer);
         var fileExtension = getFileExtension(layer);
-
+    
         if (briefly) {
             frameRate = parseFloat(frameRate).toFixed(2); 
         }
-
-        var animatedProps = getAnimatedProperties(layer);
-        var animatedPropsString = animatedProps.join(", ");
-
+    
+        var animatedProps = getAnimatedProperties(layer, settings);
+        var animatedPropsString = isArray(animatedProps) ? animatedProps.join(", ") : animatedProps;
+    
         var variables = {
             "T": getLayerType(layer),
             "i": layer.index,
@@ -1054,10 +1078,10 @@ function buildUI(thisObj) {
             "Fext": fileExtension,
             "Lpnt": getLayerParentName(layer), // Parent layer name
             "LpntIndex": getLayerParentIndex(layer) // Parent layer index
-        };        
-
+        };
+    
         var newName = replaceVariables(template, variables);
-
+    
         if (briefly) {
             switch (brieflyType) {
                 case "Camel Case":
@@ -1077,9 +1101,10 @@ function buildUI(thisObj) {
                     break;
             }
         }
-
+    
         return newName;
     }
+    
 
     // Get the list of properties controlled by expressions
     function getExpressionControlledProperties(layer) {
@@ -1352,26 +1377,35 @@ function buildUI(thisObj) {
     }
 
     // Get the animated properties of a layer
-    function getAnimatedProperties(layer) {
+    function getAnimatedProperties(layer, settings) {
         var animatedProps = [];
-
+    
         function checkPropertyGroup(propertyGroup) {
             for (var i = 1; i <= propertyGroup.numProperties; i++) {
                 var prop = propertyGroup.property(i);
-
+    
                 if (prop.numKeys > 0) {
                     animatedProps.push(prop.name);
                 }
-
+    
                 if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
                     checkPropertyGroup(prop);
                 }
             }
         }
-
+    
         checkPropertyGroup(layer);
-        return animatedProps.length > 0 ? animatedProps : ["NoAnimations"];
-    }
+    
+        if (animatedProps.length > 0) {
+            return animatedProps;
+        } else {
+            if (settings && settings.An) {
+                return settings.An.active ? [settings.An.customValue] : [settings.An.defaultValue];
+            } else {
+                return ["NoAnimations"];
+            }
+        }
+    }    
 
     // Get the scale of a layer
     function getLayerScale(layer) {
@@ -1620,7 +1654,7 @@ function buildUI(thisObj) {
                         "I": sortedLayers.indexOf(layer) + 1,
                         "O": layer.name,
                         "E": getEffectNames(layer),
-                        "An": getAnimatedProperties(layer).join(", "),
+                        "An": getAnimatedProperties(layer, variableSettings).join(", "),
                         "F": getFrameRate(layer),
                         "R": getResolution(layer),
                         "D": getDuration(layer),
@@ -1683,8 +1717,7 @@ function buildUI(thisObj) {
         } else {
             alert("Please select a valid composition.");
         }
-    }
-       
+    }  
     
     // Show help window
     function showHelp() {
