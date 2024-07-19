@@ -1393,8 +1393,8 @@ function buildUI(thisObj) {
 
     // Get the rotation of a layer
     function getLayerRotation(layer) {
+        // For 3D layers, concatenate the X, Y, and Z rotations
         if (layer.threeDLayer) {
-            // For 3D layers, concatenate the X, Y, and Z rotations
             var rotationX = layer.transform.xRotation ? layer.transform.xRotation.value : 0;
             var rotationY = layer.transform.yRotation ? layer.transform.yRotation.value : 0;
             var rotationZ = layer.transform.zRotation ? layer.transform.zRotation.value : 0;
@@ -1410,8 +1410,19 @@ function buildUI(thisObj) {
                 var rotation = layer.transform.rotation.value;
                 return Math.round(rotation * 10) / 10;
             }
-            return "NoRotation";
         }
+        
+        // Handle Camera and Light layers
+        if (layer instanceof CameraLayer || layer instanceof LightLayer) {
+            var cameraLightRotation = layer.transform.orientation ? layer.transform.orientation.value : [0, 0, 0];
+            var roundedCameraLightRotation = [];
+            for (var j = 0; j < cameraLightRotation.length; j++) {
+                roundedCameraLightRotation.push(Math.round(cameraLightRotation[j] * 10) / 10);
+            }
+            return roundedCameraLightRotation.join(", ");
+        }
+
+        return "NoRotation";
     }
 
     // Get the file extension of a layer's source file
