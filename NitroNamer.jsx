@@ -1351,7 +1351,7 @@ function buildUI(thisObj) {
                 projectName = projectFileName;
             }
         }
-        return projectName;
+        return decodeURIComponent(projectName); // Decode any URL-encoded characters
     }
 
     // Get the animated properties of a layer
