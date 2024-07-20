@@ -1528,19 +1528,26 @@ function buildUI(thisObj) {
         return "NoDuration";
     }
 
-    // Get the parent name of a layer
+    // Get the parent name of a layer, keeping the original name for top-level parents
     function getLayerParentName(layer) {
+        if (!layer || !layer.containingComp) {
+            return "NoParent";
+        }
         if (layer.parent) {
             return layer.parent.name;
         }
-        // If the layer has no parent, check if it is a parent to any other layer
+        // If the layer has no parent but is a parent to another layer, keep its original name
         if (isParentLayer(layer)) {
-            return layer.name;  // Return the layer's own name if it's a parent
+            return layer.name;
         }
         return "NoParent";
     }
 
+    // Check if the layer is a parent layer
     function isParentLayer(layer) {
+        if (!layer || !layer.containingComp) {
+            return false;
+        }
         var comp = layer.containingComp;
         for (var i = 1; i <= comp.numLayers; i++) {
             if (comp.layer(i).parent === layer) {
@@ -1548,6 +1555,11 @@ function buildUI(thisObj) {
             }
         }
         return false;
+    }
+
+    // Check if the layer is bound to another layer
+    function isBoundLayer(layer) {
+        return layer.parent !== null;
     }
 
     // Get the index of the layer relative to other layers with the same parent
@@ -1569,6 +1581,11 @@ function buildUI(thisObj) {
         
         var relativeIndex = sameParentLayers.indexOf(layer) + 1;
         return relativeIndex;
+    }
+
+    // Function to check if a layer should preserve its name
+    function shouldPreserveName(layer) {
+        return !layer.parent && isParentLayer(layer);
     }
 
     function getParentChildHierarchy(comp) {
@@ -1604,12 +1621,12 @@ function buildUI(thisObj) {
     }                     
 
     // Replace variables in the template with actual values
-    function replaceVariables(template, variables, originalName) {
+    function replaceVariables(template, variables, originalName, layer) {
         var usedVariables = [];
-        
+
         // Regular expression to find variables and text in parentheses
         var regex = /\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|[A-Z]|i|I|S|W|H/g;
-        
+
         var result = template.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, durationFormat, customFext, parentIndex) {
             var value;
 
@@ -1682,9 +1699,13 @@ function buildUI(thisObj) {
                 value = variables['Lops'];
             } else if (match === 'Lpnt') {
                 // Handle layer parent name
-                value = variables['Lpnt'];
-            } else if (parentIndex !== undefined) {
-                // Handle layer parent index
+                // If the layer is not bound to another layer and is a parent, use the original name
+                if (isParentLayer(layer) && !isBoundLayer(layer)) {
+                    value = originalName;
+                } else {
+                    value = variables['Lpnt'];
+                }
+            } else if (parentIndex !== undefined) { // Handle Lpnt(i)
                 value = variables['LpntIndex'];
             } else {
                 // Handle all other variables
@@ -1705,36 +1726,36 @@ function buildUI(thisObj) {
         } else {
             return result;
         }
-    }   
+    }
 
     var localIndex = 1; // Global local index
 
     // Rename layers based on the template
     function renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed, isShiftPressed, isAltPressed, isCtrlShiftPressed) {
         checkAndUpdateSettings(); // Check and update settings before renaming layers
-    
+
         var proj = app.project;
         if (proj && proj.activeItem instanceof CompItem) {
             var comp = proj.activeItem;
             if (comp.numLayers > 0) {
                 app.beginUndoGroup("Rename Layers by Template");
-    
+
                 // Get and sort layers by hierarchy
                 var layerInfo = getParentChildHierarchy(comp);
                 var sortedLayers = sortLayersByHierarchy(layerInfo);
-    
+
                 if (reverseOrder) {
                     sortedLayers.reverse();
                 }
-    
+
                 for (var i = 0; i < sortedLayers.length; i++) {
                     var layer = sortedLayers[i];
                     if (layer.shy && !includeShyLayers) continue;
                     if (layer.locked) continue; // Skip locked layers
                     if (!allLayers && !layer.selected) continue;
-    
+
                     var indexValue = isAltPressed ? sortedLayers.length - i : i + 1;
-    
+
                     var variables = {
                         "T": getLayerType(layer),
                         "i": indexValue,
@@ -1765,9 +1786,9 @@ function buildUI(thisObj) {
                         "Lpnt": layer.parent ? layer.parent.name : "NoParent",
                         "LpntIndex": getLayerParentIndex(layer) // Ensure this is set
                     };
-    
-                    var newName = replaceVariables(template, variables, layer.name);
-    
+
+                    var newName = replaceVariables(template, variables, layer.name, layer);
+
                     if (briefly) {
                         switch (brieflyType) {
                             case "Camel Case":
@@ -1787,7 +1808,7 @@ function buildUI(thisObj) {
                                 break;
                         }
                     }
-    
+
                     if (isCtrlPressed && !isShiftPressed) {
                         layer.name = layer.name + newName;
                     } else if (isShiftPressed && !isCtrlPressed) {
@@ -1796,7 +1817,7 @@ function buildUI(thisObj) {
                         layer.name = newName;
                     }
                 }
-    
+
                 app.endUndoGroup();
             } else {
                 alert("No layers in the active composition.");

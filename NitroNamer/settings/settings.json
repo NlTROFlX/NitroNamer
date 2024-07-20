@@ -2,12 +2,18 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "S",
+        "template": "Lpnt",
         "briefly": false,
         "brieflyType": 0,
-        "selectedPresetIndex": 2
+        "selectedPresetIndex": 0
     },
     "userPresets": {
+        "preset_5": {
+            "allLayers": true,
+            "template": "T.i",
+            "briefly": false,
+            "brieflyType": 0
+        },
         "preset_4": {
             "allLayers": true,
             "template": "Ar [An]",
