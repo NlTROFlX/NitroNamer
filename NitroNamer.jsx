@@ -1072,7 +1072,7 @@ function buildUI(thisObj) {
     
         var effectsString = getEffectNames(layer, settings);
         var compName = app.project.activeItem.name;
-        var frameRate = getFrameRate(layer);
+        var frameRate = getFrameRate(layer, settings);
         var duration = getDuration(layer);
         var durationInFrames = getDurationInFrames(layer);
         var projectName = getProjectName();
@@ -1709,7 +1709,7 @@ function buildUI(thisObj) {
                         "O": layer.name,
                         "E": getEffectNames(layer, variableSettings),
                         "An": getAnimatedProperties(layer, variableSettings).join(", "),
-                        "F": getFrameRate(layer),
+                        "F": getFrameRate(layer, variableSettings),
                         "R": getResolution(layer),
                         "D": getDuration(layer),
                         "Df": getDurationInFrames(layer),
