@@ -1083,6 +1083,7 @@ function buildUI(thisObj) {
     
         var animatedProps = getAnimatedProperties(layer, settings);
         var animatedPropsString = isArray(animatedProps) ? animatedProps.join(", ") : animatedProps;
+        var aspectRatio = getAspectRatio(layer, settings);
     
         var variables = {
             "T": getLayerType(layer),
@@ -1102,7 +1103,7 @@ function buildUI(thisObj) {
             "W": getWidth(layer),
             "H": getHeight(layer),
             "Tm": getTrackMatteType(layer),
-            "Ar": getAspectRatio(layer),
+            "Ar": aspectRatio,
             "Ec": getEffectsCount(layer),
             "Pn": projectName,
             "Lpos": getLayerPosition(layer),
@@ -1372,9 +1373,9 @@ function buildUI(thisObj) {
     }
 
     // Get the aspect ratio of a layer
-    function getAspectRatio(layer) {
+    function getAspectRatio(layer, settings) {
         if (layer.nullLayer || layer.adjustmentLayer) {
-            return "NoAspectRatio";
+            return settings && settings.Ar ? (settings.Ar.active ? settings.Ar.customValue : settings.Ar.defaultValue) : "NoAspectRatio";
         }
         if (layer.source && layer.source.width && layer.source.height) {
             var width = layer.source.width;
@@ -1385,8 +1386,8 @@ function buildUI(thisObj) {
             var divisor = gcd(width, height);
             return (width / divisor) + ":" + (height / divisor);
         }
-        return "NoAspectRatio";
-    }
+        return settings && settings.Ar ? (settings.Ar.active ? settings.Ar.customValue : settings.Ar.defaultValue) : "NoAspectRatio";
+    }    
 
     // Get the number of effects applied to a layer
     function getEffectsCount(layer) {
@@ -1661,83 +1662,32 @@ function buildUI(thisObj) {
 
     // Rename layers based on the template
     function renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed, isShiftPressed, isAltPressed, isCtrlShiftPressed) {
-        checkAndUpdateSettings();
+        checkAndUpdateSettings(); // Check and update settings before renaming layers
 
         var proj = app.project;
         if (proj && proj.activeItem instanceof CompItem) {
             var comp = proj.activeItem;
             if (comp.numLayers > 0) {
                 app.beginUndoGroup("Rename Layers by Template");
-    
+
                 // Get and sort layers by hierarchy
                 var layerInfo = getParentChildHierarchy(comp);
                 var sortedLayers = sortLayersByHierarchy(layerInfo);
-    
+
                 if (reverseOrder) {
                     sortedLayers.reverse();
                 }
-    
+
                 for (var i = 0; i < sortedLayers.length; i++) {
                     var layer = sortedLayers[i];
                     if (layer.shy && !includeShyLayers) continue;
                     if (layer.locked) continue; // Skip locked layers
                     if (!allLayers && !layer.selected) continue;
-    
+
                     var indexValue = isAltPressed ? sortedLayers.length - i : i + 1;
-    
-                    var variables = {
-                        "T": getLayerType(layer),
-                        "i": indexValue,
-                        "I": sortedLayers.indexOf(layer) + 1,
-                        "O": layer.name,
-                        "E": getEffectNames(layer),
-                        "An": getAnimatedProperties(layer, variableSettings).join(", "),
-                        "F": getFrameRate(layer),
-                        "R": getResolution(layer),
-                        "D": getDuration(layer),
-                        "Df": getDurationInFrames(layer),
-                        "C": comp.name,
-                        "Ip": layer.inPoint.toFixed(2),
-                        "Op": layer.outPoint.toFixed(2),
-                        "S": getSourceName(layer),
-                        "W": getWidth(layer),
-                        "H": getHeight(layer),
-                        "Tm": getTrackMatteType(layer),
-                        "Ar": getAspectRatio(layer),
-                        "Ec": getEffectsCount(layer),
-                        "Pn": getProjectName(),
-                        "Lpos": getLayerPosition(layer),
-                        "Lsc": getLayerScale(layer),
-                        "Lrot": getLayerRotation(layer),
-                        "Lops": getLayerOpacity(layer),
-                        "Lexp": getExpressionControlledProperties(layer),
-                        "Fext": getFileExtension(layer),
-                        "Lpnt": layer.parent ? layer.parent.name : "NoParent",
-                        "LpntIndex": getLayerParentIndex(layer) // Ensure this is set
-                    };
-    
-                    var newName = replaceVariables(template, variables);
-    
-                    if (briefly) {
-                        switch (brieflyType) {
-                            case "Camel Case":
-                                newName = toCamelCase(newName);
-                                break;
-                            case "Pascal Case":
-                                newName = toPascalCase(newName);
-                                break;
-                            case "Snake Case":
-                                newName = toSnakeCase(newName);
-                                break;
-                            case "Kebab Case":
-                                newName = toKebabCase(newName);
-                                break;
-                            case "Screaming Snake Case":
-                                newName = toScreamingSnakeCase(newName);
-                                break;
-                        }
-                    }
-    
+
+                    var newName = generateNewName(layer, template, briefly, brieflyType, variableSettings);
+
                     if (isCtrlPressed && !isShiftPressed) {
                         layer.name = layer.name + newName;
                     } else if (isShiftPressed && !isCtrlPressed) {
@@ -1746,7 +1696,7 @@ function buildUI(thisObj) {
                         layer.name = newName;
                     }
                 }
-    
+
                 app.endUndoGroup();
             } else {
                 alert("No layers in the active composition.");
@@ -1754,7 +1704,7 @@ function buildUI(thisObj) {
         } else {
             alert("Please select a valid composition.");
         }
-    }  
+    }
     
     // Show help window
     function showHelp() {
