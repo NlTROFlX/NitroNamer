@@ -22,7 +22,7 @@
     "H": {
         "defaultValue": "NoHeight",
         "customValue": "Custom{H}",
-        "active": true
+        "active": false
     },
     "Lexp": {
         "defaultValue": "NoExpressions",

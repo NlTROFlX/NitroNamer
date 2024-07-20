@@ -1102,7 +1102,7 @@ function buildUI(thisObj) {
             "Op": layer.outPoint.toFixed(2),
             "S": getSourceName(layer),
             "W": getWidth(layer),
-            "H": getHeight(layer),
+            "H": getHeight(layer, settings),
             "Tm": getTrackMatteType(layer),
             "Ar": getAspectRatio(layer, settings),
             "Ec": getEffectsCount(layer),
@@ -1344,15 +1344,15 @@ function buildUI(thisObj) {
     }
 
     // Get the height of a layer
-    function getHeight(layer) {
+    function getHeight(layer, settings) {
         if (layer.nullLayer || layer.adjustmentLayer) {
-            return "NoHeight";
+            return settings && settings.H ? (settings.H.active ? settings.H.customValue : settings.H.defaultValue) : "NoHeight";
         }
         if (layer.source && layer.source.height) {
             return layer.source.height.toString();
         }
-        return "NoHeight";
-    }
+        return settings && settings.H ? (settings.H.active ? settings.H.customValue : settings.H.defaultValue) : "NoHeight";
+    }    
 
     // Get the position of a layer
     function getLayerPosition(layer) {
@@ -1718,7 +1718,7 @@ function buildUI(thisObj) {
                         "Op": layer.outPoint.toFixed(2),
                         "S": getSourceName(layer),
                         "W": getWidth(layer),
-                        "H": getHeight(layer),
+                        "H": getHeight(layer, variableSettings),
                         "Tm": getTrackMatteType(layer),
                         "Ar": getAspectRatio(layer, variableSettings),
                         "Ec": getEffectsCount(layer),
