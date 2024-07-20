@@ -42,6 +42,6 @@
     "W": {
         "defaultValue": "NoWidth",
         "customValue": "Custom{W}",
-        "active": true
+        "active": false
     }
 }
