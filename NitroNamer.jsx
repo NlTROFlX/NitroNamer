@@ -1103,7 +1103,7 @@ function buildUI(thisObj) {
             "S": getSourceName(layer),
             "W": getWidth(layer),
             "H": getHeight(layer, settings),
-            "Tm": getTrackMatteType(layer),
+            "Tm": getTrackMatteType(layer, settings),
             "Ar": getAspectRatio(layer, settings),
             "Ec": getEffectsCount(layer),
             "Pn": projectName,
@@ -1173,16 +1173,12 @@ function buildUI(thisObj) {
     }    
 
     // Get the track matte type of a layer
-    function getTrackMatteType(layer) {
+    function getTrackMatteType(layer, settings) {
         if (layer instanceof CameraLayer || layer instanceof LightLayer) {
-            return "NoTrackMate";
+            return settings && settings.Tm ? (settings.Tm.active ? settings.Tm.customValue : settings.Tm.defaultValue) : "NoTrackMate";
         } else if (layer.isTrackMatte) {
             return "TM:Source";
-        } else if (layer.trackMatteType !== undefined && layer.trackMatteType !== TrackMatteType.NO_TRACK_MATTE && (
-                layer.trackMatteType === TrackMatteType.ALPHA ||
-                layer.trackMatteType === TrackMatteType.ALPHA_INVERTED ||
-                layer.trackMatteType === TrackMatteType.LUMA ||
-                layer.trackMatteType === TrackMatteType.LUMA_INVERTED)) {
+        } else if (layer.trackMatteType !== undefined && layer.trackMatteType !== TrackMatteType.NO_TRACK_MATTE) {
             var matteType;
             switch (layer.trackMatteType) {
                 case TrackMatteType.ALPHA:
@@ -1202,9 +1198,9 @@ function buildUI(thisObj) {
             }
             return "TM:" + matteType;
         } else {
-            return "NoTrackMate";
+            return settings && settings.Tm ? (settings.Tm.active ? settings.Tm.customValue : settings.Tm.defaultValue) : "NoTrackMate";
         }
-    }
+    }    
 
     // Convert string to camel case
     function toCamelCase(str) {
@@ -1727,7 +1723,7 @@ function buildUI(thisObj) {
                         "S": getSourceName(layer),
                         "W": getWidth(layer),
                         "H": getHeight(layer, variableSettings),
-                        "Tm": getTrackMatteType(layer),
+                        "Tm": getTrackMatteType(layer, variableSettings),
                         "Ar": getAspectRatio(layer, variableSettings),
                         "Ec": getEffectsCount(layer),
                         "Pn": getProjectName(),
