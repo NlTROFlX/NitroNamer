@@ -27,7 +27,7 @@
     "Lexp": {
         "defaultValue": "NoExpressions",
         "customValue": "Custom{Lexp}",
-        "active": true
+        "active": false
     },
     "R": {
         "defaultValue": "NoResolution",

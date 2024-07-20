@@ -1076,7 +1076,7 @@ function buildUI(thisObj) {
         var duration = getDuration(layer);
         var durationInFrames = getDurationInFrames(layer);
         var projectName = getProjectName();
-        var expressionProps = getExpressionControlledProperties(layer);
+        var expressionProps = getExpressionControlledProperties(layer, settings);
         var fileExtension = getFileExtension(layer);
     
         if (briefly) {
@@ -1143,26 +1143,34 @@ function buildUI(thisObj) {
     }        
 
     // Get the list of properties controlled by expressions
-    function getExpressionControlledProperties(layer) {
+    function getExpressionControlledProperties(layer, settings) {
         var expressionProps = [];
-
+    
         function checkPropertyGroup(propertyGroup) {
             for (var i = 1; i <= propertyGroup.numProperties; i++) {
                 var prop = propertyGroup.property(i);
                 if (prop.expression && prop.expressionEnabled) {
                     expressionProps.push(prop.name);
                 }
-
+    
                 if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
                     checkPropertyGroup(prop);
                 }
             }
         }
-
+    
         checkPropertyGroup(layer);
-        return expressionProps.length > 0 ? expressionProps.join(", ") : "NoExpressions";
-    }
-
+    
+        if (expressionProps.length > 0) {
+            return expressionProps.join(", ");
+        } else {
+            if (settings && settings.Lexp) {
+                return settings.Lexp.active ? settings.Lexp.customValue : settings.Lexp.defaultValue;
+            } else {
+                return "NoExpressions";
+            }
+        }
+    }    
 
     // Get the track matte type of a layer
     function getTrackMatteType(layer) {
@@ -1727,7 +1735,7 @@ function buildUI(thisObj) {
                         "Lsc": getLayerScale(layer),
                         "Lrot": getLayerRotation(layer),
                         "Lops": getLayerOpacity(layer),
-                        "Lexp": getExpressionControlledProperties(layer),
+                        "Lexp": getExpressionControlledProperties(layer, variableSettings),
                         "Fext": getFileExtension(layer),
                         "Lpnt": layer.parent ? layer.parent.name : "NoParent",
                         "LpntIndex": getLayerParentIndex(layer) // Ensure this is set
