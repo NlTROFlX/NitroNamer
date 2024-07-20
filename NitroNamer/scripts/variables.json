@@ -1,18 +1,18 @@
 {
     "An": {
         "defaultValue": "NoAnimations",
-        "customValue": "",
+        "customValue": "An",
         "active": false
     },
     "Ar": {
         "defaultValue": "NoAspectRatio",
-        "customValue": "",
-        "active": true
+        "customValue": "NoAr",
+        "active": false
     },
     "E": {
         "defaultValue": "No effects",
         "customValue": "Custom{E}",
-        "active": true
+        "active": false
     },
     "F": {
         "defaultValue": "NoFrameRate",

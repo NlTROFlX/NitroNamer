@@ -1048,7 +1048,7 @@ function buildUI(thisObj) {
                 txtRenamedCompact.text = "No project open.";
             }
         }
-    }
+    }    
 
     function checkAndUpdateSettings() {
         var currentModifiedTime = getFileModifiedTime();
@@ -1070,7 +1070,7 @@ function buildUI(thisObj) {
             }
         }
     
-        var effectsString = effectNames.length > 0 ? effectNames.join(", ") : "ClearLayer";
+        var effectsString = getEffectNames(layer, settings);
         var compName = app.project.activeItem.name;
         var frameRate = getFrameRate(layer);
         var duration = getDuration(layer);
@@ -1104,7 +1104,7 @@ function buildUI(thisObj) {
             "W": getWidth(layer),
             "H": getHeight(layer),
             "Tm": getTrackMatteType(layer),
-            "Ar": getAspectRatio(layer),
+            "Ar": getAspectRatio(layer, settings),
             "Ec": getEffectsCount(layer),
             "Pn": projectName,
             "Lpos": getLayerPosition(layer),
@@ -1140,7 +1140,7 @@ function buildUI(thisObj) {
         }
     
         return newName;
-    }    
+    }        
 
     // Get the list of properties controlled by expressions
     function getExpressionControlledProperties(layer) {
@@ -1268,18 +1268,18 @@ function buildUI(thisObj) {
     }
 
     // Get the frame rate of a layer
-    function getFrameRate(layer) {
+    function getFrameRate(layer, settings) {
         if (layer.nullLayer || layer.adjustmentLayer || layer instanceof LightLayer || layer instanceof CameraLayer || layer instanceof TextLayer || layer instanceof ShapeLayer || layer.hasAudio) {
-            return "NoFrameRate";
+            return settings && settings.F ? (settings.F.active ? settings.F.customValue : settings.F.defaultValue) : "NoFrameRate";
         }
         if (layer.source && layer.source.mainSource instanceof SolidSource) {
-            return "NoFrameRate";
+            return settings && settings.F ? (settings.F.active ? settings.F.customValue : settings.F.defaultValue) : "NoFrameRate";
         }
         if (layer.source) {
             return layer.source.frameRate.toFixed(2);
         }
-        return "NoFrameRate";
-    }
+        return settings && settings.F ? (settings.F.active ? settings.F.customValue : settings.F.defaultValue) : "NoFrameRate";
+    }    
 
     // Get the resolution of a layer
     function getResolution(layer) {
@@ -1373,9 +1373,9 @@ function buildUI(thisObj) {
     }
 
     // Get the aspect ratio of a layer
-    function getAspectRatio(layer) {
+    function getAspectRatio(layer, settings) {
         if (layer.nullLayer || layer.adjustmentLayer) {
-            return "NoAspectRatio";
+            return settings && settings.Ar ? (settings.Ar.active ? settings.Ar.customValue : settings.Ar.defaultValue) : "NoAspectRatio";
         }
         if (layer.source && layer.source.width && layer.source.height) {
             var width = layer.source.width;
@@ -1386,8 +1386,8 @@ function buildUI(thisObj) {
             var divisor = gcd(width, height);
             return (width / divisor) + ":" + (height / divisor);
         }
-        return "NoAspectRatio";
-    }
+        return settings && settings.Ar ? (settings.Ar.active ? settings.Ar.customValue : settings.Ar.defaultValue) : "NoAspectRatio";
+    }    
 
     // Get the number of effects applied to a layer
     function getEffectsCount(layer) {
@@ -1707,7 +1707,7 @@ function buildUI(thisObj) {
                         "i": indexValue,
                         "I": sortedLayers.indexOf(layer) + 1,
                         "O": layer.name,
-                        "E": getEffectNames(layer),
+                        "E": getEffectNames(layer, variableSettings),
                         "An": getAnimatedProperties(layer, variableSettings).join(", "),
                         "F": getFrameRate(layer),
                         "R": getResolution(layer),
@@ -1720,7 +1720,7 @@ function buildUI(thisObj) {
                         "W": getWidth(layer),
                         "H": getHeight(layer),
                         "Tm": getTrackMatteType(layer),
-                        "Ar": getAspectRatio(layer),
+                        "Ar": getAspectRatio(layer, variableSettings),
                         "Ec": getEffectsCount(layer),
                         "Pn": getProjectName(),
                         "Lpos": getLayerPosition(layer),
@@ -1822,7 +1822,7 @@ function buildUI(thisObj) {
     }
 
     // Get the effect names applied to a layer
-    function getEffectNames(layer) {
+    function getEffectNames(layer, settings) {
         var effectNames = [];
         if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
             for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
@@ -1830,8 +1830,17 @@ function buildUI(thisObj) {
                 effectNames.push(effect.name);
             }
         }
-        return effectNames.length > 0 ? effectNames.join(", ") : "No effects";
-    }
+    
+        if (effectNames.length > 0) {
+            return effectNames.join(", ");
+        } else {
+            if (settings && settings.E) {
+                return settings.E.active ? settings.E.customValue : settings.E.defaultValue;
+            } else {
+                return "No effects";
+            }
+        }
+    }    
 
     function checkAndCreateVariablesFile() {
         var scriptFile = new File($.fileName);
