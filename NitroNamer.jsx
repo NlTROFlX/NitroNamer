@@ -1004,6 +1004,8 @@ function buildUI(thisObj) {
 
     // Update preview of the new layer name
     function updatePreview() {
+        checkAndUpdateSettings(); // Check and update settings before updating the preview
+    
         var proj = app.project;
         if (proj) {
             var comp = proj.activeItem;
@@ -1059,7 +1061,7 @@ function buildUI(thisObj) {
     // Generate new name for a layer based on the template
     function generateNewName(layer, template, briefly, brieflyType, settings) {
         checkAndUpdateSettings(); // Check and update settings before generating the new name
-
+    
         var effectNames = [];
         if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
             for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
@@ -1083,7 +1085,6 @@ function buildUI(thisObj) {
     
         var animatedProps = getAnimatedProperties(layer, settings);
         var animatedPropsString = isArray(animatedProps) ? animatedProps.join(", ") : animatedProps;
-        var aspectRatio = getAspectRatio(layer, settings);
     
         var variables = {
             "T": getLayerType(layer),
@@ -1103,7 +1104,7 @@ function buildUI(thisObj) {
             "W": getWidth(layer),
             "H": getHeight(layer),
             "Tm": getTrackMatteType(layer),
-            "Ar": aspectRatio,
+            "Ar": getAspectRatio(layer),
             "Ec": getEffectsCount(layer),
             "Pn": projectName,
             "Lpos": getLayerPosition(layer),
@@ -1116,7 +1117,7 @@ function buildUI(thisObj) {
             "LpntIndex": getLayerParentIndex(layer) // Parent layer index
         };
     
-        var newName = replaceVariables(template, variables);
+        var newName = replaceVariables(template, variables, layer.name);
     
         if (briefly) {
             switch (brieflyType) {
@@ -1139,8 +1140,7 @@ function buildUI(thisObj) {
         }
     
         return newName;
-    }
-    
+    }    
 
     // Get the list of properties controlled by expressions
     function getExpressionControlledProperties(layer) {
@@ -1373,9 +1373,9 @@ function buildUI(thisObj) {
     }
 
     // Get the aspect ratio of a layer
-    function getAspectRatio(layer, settings) {
+    function getAspectRatio(layer) {
         if (layer.nullLayer || layer.adjustmentLayer) {
-            return settings && settings.Ar ? (settings.Ar.active ? settings.Ar.customValue : settings.Ar.defaultValue) : "NoAspectRatio";
+            return "NoAspectRatio";
         }
         if (layer.source && layer.source.width && layer.source.height) {
             var width = layer.source.width;
@@ -1386,8 +1386,8 @@ function buildUI(thisObj) {
             var divisor = gcd(width, height);
             return (width / divisor) + ":" + (height / divisor);
         }
-        return settings && settings.Ar ? (settings.Ar.active ? settings.Ar.customValue : settings.Ar.defaultValue) : "NoAspectRatio";
-    }    
+        return "NoAspectRatio";
+    }
 
     // Get the number of effects applied to a layer
     function getEffectsCount(layer) {
@@ -1600,8 +1600,11 @@ function buildUI(thisObj) {
     }                     
 
     // Replace variables in the template with actual values
-    function replaceVariables(template, variables) {
-        return template.replace(/\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, durationFormat, customFext, parentIndex) {
+    function replaceVariables(template, variables, originalName) {
+        var usedVariables = [];
+    
+        var result = template.replace(/\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|[A-Z]|i|I|S|W|H/g, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, durationFormat, customFext, parentIndex) {
+            var value;
             if (group) {
                 return group;  // Handle text inside parentheses
             } else if (customEffectDelimiterParentheses !== undefined) {
@@ -1617,77 +1620,141 @@ function buildUI(thisObj) {
                 var animatedPropsString = variables['An'].split(', ').join(customAnimDelimiterBraces);
                 return animatedPropsString;
             } else if (durationFormat !== undefined) {
-                return typeof variables['D'] === 'function' ? variables['D'](durationFormat) : variables['D'];
+                value = typeof variables['D'] === 'function' ? variables['D'](durationFormat) : variables['D'];
             } else if (match === 'D') {
-                return typeof variables['D'] === 'function' ? variables['D']() : variables['D'];
+                value = typeof variables['D'] === 'function' ? variables['D']() : variables['D'];
             } else if (match === 'Df') {
-                return variables['Df'];
+                value = variables['Df'];
             } else if (match === 'Ec') {
-                return variables['Ec'];
+                value = variables['Ec'];
             } else if (match === 'Fext') {
-                return variables['Fext'];
+                value = variables['Fext'];
             } else if (customFext !== undefined) {
-                return variables['Fext'] === customFext ? customFext : "NoExtension";
+                value = variables['Fext'] === customFext ? customFext : "NoExtension";
             } else if (match === 'Lexp') {
-                return variables['Lexp'];
+                value = variables['Lexp'];
             } else if (match === 'Ip') {
-                return variables['Ip'];
+                value = variables['Ip'];
             } else if (match === 'Op') {
-                return variables['Op'];
+                value = variables['Op'];
             } else if (match === 'Tm') {
-                return variables['Tm'];
+                value = variables['Tm'];
             } else if (match === 'Ar') {
-                return variables['Ar'];
+                value = variables['Ar'];
             } else if (match === 'Pn') {
-                return variables['Pn'];
+                value = variables['Pn'];
             } else if (match === 'Lpos') {
-                return variables['Lpos'];
+                value = variables['Lpos'];
             } else if (match === 'Lsc') {
-                return variables['Lsc'];
+                value = variables['Lsc'];
             } else if (match === 'Lrot') {
-                return variables['Lrot'];
+                value = variables['Lrot'];
             } else if (match === 'Lops') {
-                return variables['Lops'];
+                value = variables['Lops'];
             } else if (match === 'Lpnt') {
-                return variables['Lpnt'];
+                value = variables['Lpnt'];
             } else if (parentIndex !== undefined) { // Handle Lpnt(i)
-                return variables['LpntIndex'];
+                value = variables['LpntIndex'];
             } else {
-                return variables[match] !== undefined ? variables[match] : match;
+                value = variables[match];
+            }
+    
+            if (value !== undefined && value !== "") {
+                usedVariables.push(match);
+                return value;
+            } else {
+                return "";
             }
         });
-    }
+    
+        if (usedVariables.length === 0) {
+            return originalName;
+        } else {
+            return result;
+        }
+    }    
 
     var localIndex = 1; // Global local index
 
     // Rename layers based on the template
     function renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed, isShiftPressed, isAltPressed, isCtrlShiftPressed) {
         checkAndUpdateSettings(); // Check and update settings before renaming layers
-
+    
         var proj = app.project;
         if (proj && proj.activeItem instanceof CompItem) {
             var comp = proj.activeItem;
             if (comp.numLayers > 0) {
                 app.beginUndoGroup("Rename Layers by Template");
-
+    
                 // Get and sort layers by hierarchy
                 var layerInfo = getParentChildHierarchy(comp);
                 var sortedLayers = sortLayersByHierarchy(layerInfo);
-
+    
                 if (reverseOrder) {
                     sortedLayers.reverse();
                 }
-
+    
                 for (var i = 0; i < sortedLayers.length; i++) {
                     var layer = sortedLayers[i];
                     if (layer.shy && !includeShyLayers) continue;
                     if (layer.locked) continue; // Skip locked layers
                     if (!allLayers && !layer.selected) continue;
-
+    
                     var indexValue = isAltPressed ? sortedLayers.length - i : i + 1;
-
-                    var newName = generateNewName(layer, template, briefly, brieflyType, variableSettings);
-
+    
+                    var variables = {
+                        "T": getLayerType(layer),
+                        "i": indexValue,
+                        "I": sortedLayers.indexOf(layer) + 1,
+                        "O": layer.name,
+                        "E": getEffectNames(layer),
+                        "An": getAnimatedProperties(layer, variableSettings).join(", "),
+                        "F": getFrameRate(layer),
+                        "R": getResolution(layer),
+                        "D": getDuration(layer),
+                        "Df": getDurationInFrames(layer),
+                        "C": comp.name,
+                        "Ip": layer.inPoint.toFixed(2),
+                        "Op": layer.outPoint.toFixed(2),
+                        "S": getSourceName(layer),
+                        "W": getWidth(layer),
+                        "H": getHeight(layer),
+                        "Tm": getTrackMatteType(layer),
+                        "Ar": getAspectRatio(layer),
+                        "Ec": getEffectsCount(layer),
+                        "Pn": getProjectName(),
+                        "Lpos": getLayerPosition(layer),
+                        "Lsc": getLayerScale(layer),
+                        "Lrot": getLayerRotation(layer),
+                        "Lops": getLayerOpacity(layer),
+                        "Lexp": getExpressionControlledProperties(layer),
+                        "Fext": getFileExtension(layer),
+                        "Lpnt": layer.parent ? layer.parent.name : "NoParent",
+                        "LpntIndex": getLayerParentIndex(layer) // Ensure this is set
+                    };
+    
+                    var newName = replaceVariables(template, variables, layer.name);
+    
+                    if (briefly) {
+                        switch (brieflyType) {
+                            case "Camel Case":
+                                newName = toCamelCase(newName);
+                                break;
+                            case "Pascal Case":
+                                newName = toPascalCase(newName);
+                                break;
+                            case "Snake Case":
+                                newName = toSnakeCase(newName);
+                                break;
+                            case "Kebab Case":
+                                newName = toKebabCase(newName);
+                                break;
+                            case "Screaming Snake Case":
+                                newName = toScreamingSnakeCase(newName);
+                                break;
+                        }
+                    }
+    
                     if (isCtrlPressed && !isShiftPressed) {
                         layer.name = layer.name + newName;
                     } else if (isShiftPressed && !isCtrlPressed) {
@@ -1696,7 +1763,7 @@ function buildUI(thisObj) {
                         layer.name = newName;
                     }
                 }
-
+    
                 app.endUndoGroup();
             } else {
                 alert("No layers in the active composition.");
