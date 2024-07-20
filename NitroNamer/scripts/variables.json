@@ -32,7 +32,7 @@
     "R": {
         "defaultValue": "NoResolution",
         "customValue": "Custom{R}",
-        "active": true
+        "active": false
     },
     "S": {
         "defaultValue": "NoSource",

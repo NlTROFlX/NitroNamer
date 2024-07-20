@@ -1094,7 +1094,7 @@ function buildUI(thisObj) {
             "E": effectsString,
             "An": animatedPropsString,
             "F": frameRate,
-            "R": getResolution(layer),
+            "R": getResolution(layer, settings),
             "D": duration,
             "Df": durationInFrames,
             "C": compName,
@@ -1290,15 +1290,15 @@ function buildUI(thisObj) {
     }    
 
     // Get the resolution of a layer
-    function getResolution(layer) {
+    function getResolution(layer, settings) {
         if (layer.nullLayer || layer.adjustmentLayer) {
-            return "NoResolution";
+            return settings && settings.R ? (settings.R.active ? settings.R.customValue : settings.R.defaultValue) : "NoResolution";
         }
         if (layer.source && layer.source.width && layer.source.height) {
             return layer.source.width + "*" + layer.source.height;
         }
-        return "NoResolution";
-    }
+        return settings && settings.R ? (settings.R.active ? settings.R.customValue : settings.R.defaultValue) : "NoResolution";
+    }    
 
     // Get the duration of a layer in HH:MM:SS format
     function getDuration(layer) {
@@ -1718,7 +1718,7 @@ function buildUI(thisObj) {
                         "E": getEffectNames(layer, variableSettings),
                         "An": getAnimatedProperties(layer, variableSettings).join(", "),
                         "F": getFrameRate(layer, variableSettings),
-                        "R": getResolution(layer),
+                        "R": getResolution(layer, variableSettings),
                         "D": getDuration(layer),
                         "Df": getDurationInFrames(layer),
                         "C": comp.name,
