@@ -1,18 +1,18 @@
 {
     "An": {
         "defaultValue": "NoAnimations",
-        "customValue": "Custom{An}",
+        "customValue": "1234",
         "active": true
     },
     "Ar": {
         "defaultValue": "NoAspectRatio",
-        "customValue": "Custom{Ar}",
+        "customValue": "1234",
         "active": true
     },
     "E": {
         "defaultValue": "No effects",
-        "customValue": "Custom{E}",
-        "active": false
+        "customValue": "1234",
+        "active": true
     },
     "F": {
         "defaultValue": "NoFrameRate",
@@ -21,7 +21,7 @@
     },
     "H": {
         "defaultValue": "NoHeight",
-        "customValue": "HHHHHHHHH",
+        "customValue": "Custom{H}",
         "active": true
     },
     "Lexp": {
@@ -37,11 +37,11 @@
     "Tm": {
         "defaultValue": "NoTrackMate",
         "customValue": "Custom{Tm}",
-        "active": false
+        "active": true
     },
     "W": {
         "defaultValue": "NoWidth",
-        "customValue": "WWWWW",
+        "customValue": "Custom{W}",
         "active": true
     }
 }

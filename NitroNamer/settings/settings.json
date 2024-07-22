@@ -2,7 +2,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "(Layer).i.I - T - Lpos | Lsc | Lrot | Lops",
+        "template": "An, Ar, E",
         "briefly": false,
         "brieflyType": 4,
         "selectedPresetIndex": 0

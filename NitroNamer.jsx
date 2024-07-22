@@ -1912,12 +1912,28 @@ function buildUI(thisObj) {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/scripts";
         var variablesFile = new File(scriptFolderPath + "/variables.json");
-    
+
         if (!variablesFile.exists) {
-            // Create the variables.json file
+            // Create the variables.json file and write initial settings
+            var initialData = {
+                "An": { "defaultValue": "NoAnimations", "customValue": "Custom{An}", "active": true },
+                "Ar": { "defaultValue": "NoAspectRatio", "customValue": "Custom{Ar}", "active": true },
+                "E": { "defaultValue": "No effects", "customValue": "Custom{E}", "active": true },
+                "F": { "defaultValue": "NoFrameRate", "customValue": "Custom{F}", "active": true },
+                "H": { "defaultValue": "NoHeight", "customValue": "Custom{H}", "active": true },
+                "Lexp": { "defaultValue": "NoExpressions", "customValue": "Custom{Lexp}", "active": true },
+                "R": { "defaultValue": "NoResolution", "customValue": "Custom{R}", "active": true },
+                "Tm": { "defaultValue": "NoTrackMate", "customValue": "Custom{Tm}", "active": true },
+                "W": { "defaultValue": "NoWidth", "customValue": "Custom{W}", "active": true }
+            };
+
             variablesFile.encoding = "UTF-8"; // Set encoding to UTF-8
-            variablesFile.open("w");
-            variablesFile.close();
+            if (variablesFile.open("w")) {
+                variablesFile.write(JSON.stringify(initialData, null, 4));
+                variablesFile.close();
+            } else {
+                alert("Error: Unable to create variables.json file.");
+            }
         }
     }    
 
