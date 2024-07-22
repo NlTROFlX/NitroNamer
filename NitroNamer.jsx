@@ -1838,54 +1838,6 @@ function buildUI(thisObj) {
             alert("Please select a valid composition.");
         }
     }    
-    
-    // Show help window
-    function showHelp() {
-        var helpWin = new Window("dialog", "NitroNamer - Help panel", undefined, {resizeable: true});
-        helpWin.orientation = "column";
-        helpWin.alignChildren = ["fill", "top"];
-        helpWin.add("statictext", undefined, "Available variables:");
-        helpWin.add("statictext", undefined, "C - Current composition name");
-        helpWin.add("statictext", undefined, "D - Duration (HH:MM:SS)");
-        helpWin.add("statictext", undefined, "E or E{#} - Name of effects. If you specify the variable E with curly braces, you can specify the character through which the effects will be listed.");
-        helpWin.add("statictext", undefined, "F - Frame Rate");
-        helpWin.add("statictext", undefined, "H - Height of the layer");
-        helpWin.add("statictext", undefined, "I - Local index of selected layers (for selected mode, works the same as 'i' for total mode)");
-        helpWin.add("statictext", undefined, "i - Layer index");
-        helpWin.add("statictext", undefined, "Ip - In point of the layer");
-        helpWin.add("statictext", undefined, "M - Source name (file or pre-comp)");
-        helpWin.add("statictext", undefined, "O - Original name of the layer");
-        helpWin.add("statictext", undefined, "Op - Out point of the layer");
-        helpWin.add("statictext", undefined, "R - Resolution (Width*Height)");
-        helpWin.add("statictext", undefined, "T - Layer type (Pre-comp, Footage, Shape, Solid, Null, Adjustment, Audio, Text, Light, Camera)");
-        helpWin.add("statictext", undefined, "W - Width of the layer");
-        helpWin.add("statictext", undefined, "(Any text) - You can write any text in parentheses, it will not be counted as variables");
-
-        var btnClose = helpWin.add("button", undefined, "Close");
-        btnClose.onClick = function() {
-            helpWin.close();
-        };
-
-        // Add the new button to open the URL
-        var btnNitrofix = helpWin.add("button", undefined, "NitroNamer 2024.2 | Say thanks or buy a coffee for NITROFIX");
-        btnNitrofix.onClick = function() {
-            var url = "https://boosty.to/nitrofix";
-            if ($.os.indexOf("Windows") !== -1) {
-                system.callSystem("cmd.exe /c start " + url);
-            } else {
-                system.callSystem("open " + url);
-            }
-        };
-
-        helpWin.center();
-        helpWin.show();
-    }
-
-    // Show current layer variables
-    function showVariables() {
-        var scriptFilePath = new File($.fileName).path + "/NitroNamer/scripts/NNLayerInfo.jsx";
-        $.evalFile(scriptFilePath);
-    }
 
     // Get the effect names applied to a layer
     function getEffectNames(layer, settings) {

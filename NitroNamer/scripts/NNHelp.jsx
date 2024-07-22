@@ -1,9 +1,8 @@
 function showHelp() {
-    var helpWin = new Window("dialog", "NitroNamer - Variable library", undefined, {resizeable: true});
+    var helpWin = new Window("dialog", "NitroNamer - Variable Library", undefined, {resizeable: true});
     helpWin.orientation = "column";
     helpWin.alignChildren = ["fill", "top"];
     helpWin.spacing = 10;
-    win.layout.layout(true);
 
     var totalVariables = 0;
 
@@ -36,17 +35,20 @@ function showHelp() {
 
     // Time and Duration Variables
     var timeVariables = [
-        "D - Duration (HH:MM:SS)",
-        "Df - Duration in frames",
         "Ip - In point of the layer",
-        "Op - Out point of the layer"
+        "Op - Out point of the layer",
+        "D - Duration (HH:MM:SS)",
+        "D(format) - Duration with custom format (1=hours, 2=minutes, 3=seconds, 4=milliseconds)",
+        "Df - Duration in frames",
+        "Cd - Current date (DD.MM.YYYY)",
+        "Cd(format) - Current date with custom format (1=day, 2=month, 3=year)"
     ];
     addGroupPanel(firstRow, "Time and Duration", timeVariables);
 
     // Effects Variables
     var effectsVariables = [
         "E - Name of effects",
-        "E{#} - Effects with custom delimiter",
+        "E{delimiter} - Effects with custom delimiter",
         "Ec - Effects count"
     ];
     addGroupPanel(firstRow, "Effects", effectsVariables);
@@ -84,15 +86,18 @@ function showHelp() {
         "Lops - Layer opacity",
         "Tm - Track matte type",
         "An - Animated properties",
+        "An{delimiter} - Animated properties with custom delimiter",
         "Lexp - List of properties controlled by expressions",
         "Fext - File extension of the layer",
-        "Fext(mp3) - Custom extension check"
+        "Fext(extension) - Custom extension check"
     ];
     addGroupPanel(secondRow, "Layer Properties", layerPropertiesVariables);
 
     // Other Variables
     var otherVariables = [
-        "O - Original name of the layer"
+        "O - Original name of the layer",
+        "Lpnt - Parent name",
+        "Lpnt(parentIndex) - Parent index relative to siblings"
     ];
     addGroupPanel(secondRow, "Other", otherVariables);
 
