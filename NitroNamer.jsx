@@ -1494,35 +1494,41 @@ function getLayerPosition(layer) {
 
     // Get the rotation of a layer
     function getLayerRotation(layer) {
-        // For 3D layers, concatenate the X, Y, and Z rotations
-        if (layer.threeDLayer) {
-            var rotationX = layer.transform.xRotation ? layer.transform.xRotation.value : 0;
-            var rotationY = layer.transform.yRotation ? layer.transform.yRotation.value : 0;
-            var rotationZ = layer.transform.zRotation ? layer.transform.zRotation.value : 0;
-            var rotations = [rotationX, rotationY, rotationZ];
-            var roundedRotations = [];
-            for (var i = 0; i < rotations.length; i++) {
-                roundedRotations.push(Math.round(rotations[i] * 10) / 10);
-            }
-            return roundedRotations.join(", ");
-        } else {
-            // For 2D layers, use the regular rotation property
-            if (layer.transform && layer.transform.rotation) {
-                var rotation = layer.transform.rotation.value;
-                return Math.round(rotation * 10) / 10;
-            }
-        }
-        
-        // Handle Camera and Light layers
-        if (layer instanceof CameraLayer || layer instanceof LightLayer) {
-            var cameraLightRotation = layer.transform.orientation ? layer.transform.orientation.value : [0, 0, 0];
-            var roundedCameraLightRotation = [];
-            for (var j = 0; j < cameraLightRotation.length; j++) {
-                roundedCameraLightRotation.push(Math.round(cameraLightRotation[j] * 10) / 10);
-            }
-            return roundedCameraLightRotation.join(", ");
-        }
+        if (layer.transform) {
+            var rotation;
 
+            // Handle 3D layers
+            if (layer.threeDLayer) {
+                var rotationX = layer.transform.xRotation ? layer.transform.xRotation.value : 0;
+                var rotationY = layer.transform.yRotation ? layer.transform.yRotation.value : 0;
+                var rotationZ = layer.transform.zRotation ? layer.transform.zRotation.value : 0;
+                rotation = [rotationX, rotationY, rotationZ];
+            } else {
+                // Handle 2D layers and layers without xRotation, yRotation, zRotation properties
+                rotation = layer.transform.rotation ? [layer.transform.rotation.value] : [0];
+            }
+
+            // Ensure rotation is an array
+            if (typeof rotation === 'number') {
+                rotation = [rotation];
+            } else if (Object.prototype.toString.call(rotation) !== '[object Array]') {
+                rotation = [].slice.call(rotation);
+            }
+
+            // Ensure position is returned as X, Y, Z for Camera, Light, and 3D layers
+            if (layer instanceof CameraLayer || layer instanceof LightLayer || layer.threeDLayer) {
+                var roundedRot = [0, 0, 0]; // Default to [0, 0, 0] for safety
+                for (var i = 0; i < 3; i++) {
+                    roundedRot[i] = rotation[i] !== undefined ? Math.round(rotation[i] * 10) / 10 : 0;
+                }
+                return roundedRot.join(", ");
+            } else {
+                // Return X for 2D layers
+                var roundedRot2D = [0]; // Default to [0] for safety
+                roundedRot2D[0] = rotation[0] !== undefined ? Math.round(rotation[0] * 10) / 10 : 0;
+                return roundedRot2D.join(", ");
+            }
+        }
         return "NoRotation";
     }
 
