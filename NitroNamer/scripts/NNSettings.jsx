@@ -6,7 +6,7 @@ var initialData = {
     "F": { "defaultValue": "NoFrameRate", "customValue": "Custom{F}", "active": true },
     "H": { "defaultValue": "NoHeight", "customValue": "Custom{H}", "active": true },
     "Lexp": { "defaultValue": "NoExpressions", "customValue": "Custom{Lexp}", "active": true },
-    "Fext": { "defaultValue": "NoExpressions", "customValue": "Custom{Lexp}", "active": true },
+    "Fext": { "defaultValue": "NoExtension", "customValue": "Custom{Fext}", "active": true },
     "R": { "defaultValue": "NoResolution", "customValue": "Custom{R}", "active": true },
     "Tm": { "defaultValue": "NoTrackMate", "customValue": "Custom{Tm}", "active": true },
     "W": { "defaultValue": "NoWidth", "customValue": "Custom{W}", "active": true }
