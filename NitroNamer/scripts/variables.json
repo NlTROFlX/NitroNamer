@@ -7,12 +7,12 @@
     "Ar": {
         "defaultValue": "NoAspectRatio",
         "customValue": "Custom{Ar}",
-        "active": false
+        "active": true
     },
     "E": {
         "defaultValue": "No effects",
         "customValue": "Custom{E}",
-        "active": true
+        "active": false
     },
     "F": {
         "defaultValue": "NoFrameRate",

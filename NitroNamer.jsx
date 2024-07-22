@@ -1359,23 +1359,36 @@ function buildUI(thisObj) {
         return settings && settings.H ? (settings.H.active ? settings.H.customValue : settings.H.defaultValue) : "NoHeight";
     }    
 
-    // Get the position of a layer
-    function getLayerPosition(layer) {
-        if (layer.transform && layer.transform.position) {
-            var pos = layer.transform.position.value;
-            if (typeof pos === 'object' && pos.length !== undefined) {
-                var roundedPos = [];
-                for (var i = 0; i < pos.length; i++) {
-                    roundedPos.push(Math.round(pos[i] * 10) / 10);
-                }
-                return layer.threeDLayer ? roundedPos.join(", ") : roundedPos.slice(0, 2).join(", ");
-            } else {
-                var roundedPos = Math.round(pos * 10) / 10;
-                return roundedPos.toString();
-            }
+// Get the position of a layer
+function getLayerPosition(layer) {
+    if (layer.transform && layer.transform.position) {
+        var pos = layer.transform.position.value;
+
+        // Ensure pos is an array
+        if (typeof pos === 'number') {
+            pos = [pos];
+        } else if (Object.prototype.toString.call(pos) !== '[object Array]') {
+            pos = [].slice.call(pos);
         }
-        return "NoPosition";
+
+        if (layer instanceof CameraLayer || layer instanceof LightLayer || layer.threeDLayer) {
+            // Ensure position is returned as X, Y, Z for Camera, Light, and 3D layers
+            var roundedPos = [0, 0, 0]; // Default to [0, 0, 0] for safety
+            for (var i = 0; i < 3; i++) {
+                roundedPos[i] = pos[i] !== undefined ? Math.round(pos[i] * 10) / 10 : 0;
+            }
+            return roundedPos.join(", ");
+        } else {
+            // Return X, Y for 2D layers
+            var roundedPos2D = [0, 0]; // Default to [0, 0] for safety
+            for (var j = 0; j < 2; j++) {
+                roundedPos2D[j] = pos[j] !== undefined ? Math.round(pos[j] * 10) / 10 : 0;
+            }
+            return roundedPos2D.join(", ");
+        }
     }
+    return "NoPosition";
+}
 
     // Get the aspect ratio of a layer
     function getAspectRatio(layer, settings) {
