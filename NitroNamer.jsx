@@ -1464,16 +1464,29 @@ function getLayerPosition(layer) {
     // Get the scale of a layer
     function getLayerScale(layer) {
         if (layer.transform && layer.transform.scale) {
-            var scale = layer.transform.scale.value;
-            if (typeof scale === 'object' && scale.length !== undefined) {
-                var roundedScale = [];
-                for (var i = 0; i < scale.length; i++) {
-                    roundedScale.push(Math.round(scale[i] * 10) / 10);
+            var sc = layer.transform.scale.value;
+
+            // Ensure sc is an array
+            if (typeof sc === 'number') {
+                sc = [sc];
+            } else if (Object.prototype.toString.call(sc) !== '[object Array]') {
+                sc = [].slice.call(sc);
+            }
+
+            if (layer instanceof CameraLayer || layer instanceof LightLayer || layer.threeDLayer) {
+                // Ensure scale is returned as X, Y, Z for Camera, Light, and 3D layers
+                var roundedSc = [0, 0, 0]; // Default to [0, 0, 0] for safety
+                for (var i = 0; i < 3; i++) {
+                    roundedSc[i] = sc[i] !== undefined ? Math.round(sc[i] * 10) / 10 : 0;
                 }
-                return layer.threeDLayer ? roundedScale.join(", ") : roundedScale.slice(0, 2).join(", ");
+                return roundedSc.join(", ");
             } else {
-                var roundedScale = Math.round(scale * 10) / 10;
-                return roundedScale.toString();
+                // Return X, Y for 2D layers
+                var roundedSc2D = [0, 0]; // Default to [0, 0] for safety
+                for (var j = 0; j < 2; j++) {
+                    roundedSc2D[j] = sc[j] !== undefined ? Math.round(sc[j] * 10) / 10 : 0;
+                }
+                return roundedSc2D.join(", ");
             }
         }
         return "NoScale";

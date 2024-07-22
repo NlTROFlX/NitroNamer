@@ -2,7 +2,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "[S] - (Layer).i.I - T - Lpos",
+        "template": "(Layer).i.I - T - Lpos | Lsc",
         "briefly": false,
         "brieflyType": 4,
         "selectedPresetIndex": 0
