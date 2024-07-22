@@ -6,6 +6,7 @@ var initialData = {
     "F": { "defaultValue": "NoFrameRate", "customValue": "Custom{F}", "active": true },
     "H": { "defaultValue": "NoHeight", "customValue": "Custom{H}", "active": true },
     "Lexp": { "defaultValue": "NoExpressions", "customValue": "Custom{Lexp}", "active": true },
+    "Lext": { "defaultValue": "NoExpressions", "customValue": "Custom{Lexp}", "active": true },
     "R": { "defaultValue": "NoResolution", "customValue": "Custom{R}", "active": true },
     "Tm": { "defaultValue": "NoTrackMate", "customValue": "Custom{Tm}", "active": true },
     "W": { "defaultValue": "NoWidth", "customValue": "Custom{W}", "active": true }
@@ -355,30 +356,6 @@ function buildNewUI(thisObj) {
 
     return win;
 }
-
-function initializeVariablesFile() {
-    var scriptFile = new File($.fileName);
-    var variablesFilePath = scriptFile.path.replace("/scripts", "/scripts/variables.json");
-    var variablesFile = new File(variablesFilePath);
-
-    // Check if the file exists and is not empty
-    if (variablesFile.exists) {
-        variablesFile.open("r");
-        var content = variablesFile.read();
-        variablesFile.close();
-        if (content) {
-            // File exists and is not empty, do nothing
-            return;
-        }
-    }
-
-    variablesFile.open("w");
-    variablesFile.encoding = "UTF-8";
-    variablesFile.write(JSON.stringify(initialData, null, 4));
-    variablesFile.close();
-}
-
-initializeVariablesFile(); // Initialize the variables file if necessary
 
 var myNewScriptPal = buildNewUI(this);
 if (myNewScriptPal instanceof Panel) {
