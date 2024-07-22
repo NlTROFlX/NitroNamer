@@ -6,7 +6,7 @@ var initialData = {
     "F": { "defaultValue": "NoFrameRate", "customValue": "Custom{F}", "active": true },
     "H": { "defaultValue": "NoHeight", "customValue": "Custom{H}", "active": true },
     "Lexp": { "defaultValue": "NoExpressions", "customValue": "Custom{Lexp}", "active": true },
-    "Lext": { "defaultValue": "NoExpressions", "customValue": "Custom{Lexp}", "active": true },
+    "Fext": { "defaultValue": "NoExpressions", "customValue": "Custom{Lexp}", "active": true },
     "R": { "defaultValue": "NoResolution", "customValue": "Custom{R}", "active": true },
     "Tm": { "defaultValue": "NoTrackMate", "customValue": "Custom{Tm}", "active": true },
     "W": { "defaultValue": "NoWidth", "customValue": "Custom{W}", "active": true }
@@ -64,7 +64,7 @@ function buildNewUI(thisObj) {
     }
 
     // Add drop-down list with variable names
-    var variableNames = ["An", "Ar", "E", "F", "H", "Lexp", "R", "Tm", "W"];
+    var variableNames = ["An", "Ar", "E", "F", "R", "H", "W", "Lexp", "Fext",  "Tm"];
     var ddVariableNames = grpDropdownAndInput.add("dropdownlist", undefined, variableNames);
     ddVariableNames.selection = 0; // Select the first item by default
 
