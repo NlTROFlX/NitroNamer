@@ -1637,7 +1637,27 @@ function buildUI(thisObj) {
         }
     
         return sortedLayers;
-    }                     
+    }
+    
+    // Get the layer order based on the mode and reverse flag
+    function getLayerOrder(comp, allLayers, reverseOrder) {
+        var layers = [];
+        if (allLayers) {
+            for (var i = 1; i <= comp.numLayers; i++) {
+                layers.push(comp.layer(i));
+            }
+        } else {
+            for (var j = 0; j < comp.selectedLayers.length; j++) {
+                layers.push(comp.selectedLayers[j]);
+            }
+        }
+    
+        // Reverse order if reverseOrder flag is true
+        if (reverseOrder) {
+            layers.reverse();
+        }
+        return layers;
+    }    
 
     // Replace variables in the template with actual values
     function replaceVariables(template, variables, originalName, layer) {
@@ -1730,33 +1750,28 @@ function buildUI(thisObj) {
     // Rename layers based on the template
     function renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed, isShiftPressed, isAltPressed, isCtrlShiftPressed) {
         checkAndUpdateSettings(); // Check and update settings before renaming layers
-
+    
         var proj = app.project;
         if (proj && proj.activeItem instanceof CompItem) {
             var comp = proj.activeItem;
             if (comp.numLayers > 0) {
                 app.beginUndoGroup("Rename Layers by Template");
-
-                // Get and sort layers by hierarchy
-                var layerInfo = getParentChildHierarchy(comp);
-                var sortedLayers = sortLayersByHierarchy(layerInfo);
-
-                if (reverseOrder) {
-                    sortedLayers.reverse();
-                }
-
-                for (var i = 0; i < sortedLayers.length; i++) {
-                    var layer = sortedLayers[i];
+    
+                // Determine the layer order
+                var layers = getLayerOrder(comp, allLayers, isCtrlShiftPressed); // Use isCtrlShiftPressed for inversion
+                
+                for (var i = 0; i < layers.length; i++) {
+                    var layer = layers[i];
                     if (layer.shy && !includeShyLayers) continue;
                     if (layer.locked) continue; // Skip locked layers
                     if (!allLayers && !layer.selected) continue;
-
-                    var indexValue = isAltPressed ? sortedLayers.length - i : i + 1;
-
+    
+                    var indexValue = i + 1; // Ascending order by default
+    
                     var variables = {
                         "T": getLayerType(layer),
-                        "i": indexValue,
-                        "I": sortedLayers.indexOf(layer) + 1,
+                        "i": layer.index,
+                        "I": indexValue,  // Set I to the calculated order value
                         "O": layer.name,
                         "E": getEffectNames(layer, variableSettings),
                         "An": getAnimatedProperties(layer, variableSettings).join(", "),
@@ -1783,9 +1798,9 @@ function buildUI(thisObj) {
                         "Lpnt": layer.parent ? layer.parent.name : "NoParent",
                         "LpntIndex": getLayerParentIndex(layer) // Ensure this is set
                     };
-
+    
                     var newName = replaceVariables(template, variables, layer.name, layer);
-
+    
                     if (briefly) {
                         switch (brieflyType) {
                             case "Camel Case":
@@ -1805,7 +1820,7 @@ function buildUI(thisObj) {
                                 break;
                         }
                     }
-
+    
                     if (isCtrlPressed && !isShiftPressed) {
                         layer.name = layer.name + newName;
                     } else if (isShiftPressed && !isCtrlPressed) {
@@ -1814,7 +1829,7 @@ function buildUI(thisObj) {
                         layer.name = newName;
                     }
                 }
-
+    
                 app.endUndoGroup();
             } else {
                 alert("No layers in the active composition.");
@@ -1822,7 +1837,7 @@ function buildUI(thisObj) {
         } else {
             alert("Please select a valid composition.");
         }
-    }
+    }    
     
     // Show help window
     function showHelp() {
