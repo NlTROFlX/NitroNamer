@@ -1113,9 +1113,10 @@ function buildUI(thisObj) {
             "Lops": getLayerOpacity(layer),
             "Lexp": expressionProps,
             "Fext": fileExtension,
-            "Lpnt": getLayerParentName(layer), // Parent layer name
-            "LpntIndex": getLayerParentIndex(layer) // Parent layer index
-        };
+            "Lpnt": getLayerParentName(layer),
+            "LpntIndex": getLayerParentIndex(layer),
+            "Cd": getCurrentDate()
+        };        
     
         var newName = replaceVariables(template, variables, layer.name);
     
@@ -1595,7 +1596,25 @@ function buildUI(thisObj) {
             layerInfo.push({layer: layer, parent: layer.parent});
         }
         return layerInfo;
-    }       
+    }
+    
+    function getCurrentDate(format) {
+        var date = new Date();
+        var day = ("0" + date.getDate()).slice(-2);
+        var month = ("0" + (date.getMonth() + 1)).slice(-2);
+        var year = date.getFullYear().toString();
+        
+        switch (format) {
+            case '1':
+                return day;
+            case '2':
+                return month;
+            case '3':
+                return year;
+            default:
+                return day + "." + month + "." + year;
+        }
+    }
     
     function sortLayersByHierarchy(layerInfo) {
         var sortedLayers = [];
@@ -1623,95 +1642,74 @@ function buildUI(thisObj) {
     // Replace variables in the template with actual values
     function replaceVariables(template, variables, originalName, layer) {
         var usedVariables = [];
-
-        // Regular expression to find variables and text in parentheses
-        var regex = /\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|[A-Z]|i|I|S|W|H/g;
-
-        var result = template.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, durationFormat, customFext, parentIndex) {
+    
+        var regex = /\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|Cd\(([^)]+)\)|Cd|[A-Z]|i|I|S|W|H/g;
+    
+        var result = template.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, durationFormat, customFext, parentIndex, dateFormat) {
             var value;
-
+    
             if (group !== undefined) {
-                // If it's a group match (static text in parentheses), return it as-is
                 return group;
             } else if (customEffectDelimiterParentheses !== undefined) {
-                // Handle custom effect delimiters in parentheses
                 var effectsString = variables['E'].split(', ').join(customEffectDelimiterParentheses);
                 return effectsString;
             } else if (customEffectDelimiterBraces !== undefined) {
-                // Handle custom effect delimiters in braces
                 var effectsString = variables['E'].split(', ').join(customEffectDelimiterBraces);
                 return effectsString;
             } else if (customAnimDelimiterParentheses !== undefined) {
-                // Handle custom animation delimiters in parentheses
                 var animatedPropsString = variables['An'].split(', ').join(customAnimDelimiterParentheses);
                 return animatedPropsString;
             } else if (customAnimDelimiterBraces !== undefined) {
-                // Handle custom animation delimiters in braces
                 var animatedPropsString = variables['An'].split(', ').join(customAnimDelimiterBraces);
                 return animatedPropsString;
             } else if (durationFormat !== undefined) {
-                // Handle duration format
                 value = typeof variables['D'] === 'function' ? variables['D'](durationFormat) : variables['D'];
             } else if (match === 'D') {
-                // Handle duration without format
                 value = typeof variables['D'] === 'function' ? variables['D']() : variables['D'];
             } else if (match === 'Df') {
-                // Handle duration in frames
                 value = variables['Df'];
             } else if (match === 'Ec') {
-                // Handle effect count
                 value = variables['Ec'];
             } else if (match === 'Fext') {
-                // Handle file extension
                 value = variables['Fext'];
             } else if (customFext !== undefined) {
-                // Handle custom file extension
                 value = variables['Fext'] === customFext ? customFext : "NoExtension";
             } else if (match === 'Lexp') {
-                // Handle expression properties
                 value = variables['Lexp'];
             } else if (match === 'Ip') {
-                // Handle in point
                 value = variables['Ip'];
             } else if (match === 'Op') {
-                // Handle out point
                 value = variables['Op'];
             } else if (match === 'Tm') {
-                // Handle track matte type
                 value = variables['Tm'];
             } else if (match === 'Ar') {
-                // Handle aspect ratio
                 value = variables['Ar'];
             } else if (match === 'Pn') {
-                // Handle project name
                 value = variables['Pn'];
             } else if (match === 'Lpos') {
-                // Handle layer position
                 value = variables['Lpos'];
             } else if (match === 'Lsc') {
-                // Handle layer scale
                 value = variables['Lsc'];
             } else if (match === 'Lrot') {
-                // Handle layer rotation
                 value = variables['Lrot'];
             } else if (match === 'Lops') {
-                // Handle layer opacity
                 value = variables['Lops'];
             } else if (match === 'Lpnt') {
-                // Handle layer parent name
-                // If the layer is not bound to another layer and is a parent, use the original name
                 if (isParentLayer(layer) && !isBoundLayer(layer)) {
                     value = originalName;
                 } else {
                     value = variables['Lpnt'];
                 }
-            } else if (parentIndex !== undefined) { // Handle Lpnt(i)
+            } else if (parentIndex !== undefined) {
                 value = variables['LpntIndex'];
+            } else if (dateFormat !== undefined) {
+                value = getCurrentDate(dateFormat);
+            } else if (match === 'Cd') {
+                value = getCurrentDate();
             } else {
-                // Handle all other variables
                 value = variables[match];
             }
-
+    
             if (value !== undefined && value !== "") {
                 usedVariables.push(match);
                 return value;
@@ -1719,14 +1717,13 @@ function buildUI(thisObj) {
                 return "";
             }
         });
-
-        // If no variables were used, return the original name
+    
         if (usedVariables.length === 0) {
             return originalName;
         } else {
             return result;
         }
-    }
+    }    
 
     var localIndex = 1; // Global local index
 
