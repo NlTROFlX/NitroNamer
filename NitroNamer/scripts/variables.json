@@ -7,7 +7,7 @@
     "Ar": {
         "defaultValue": "NoAspectRatio",
         "customValue": "Custom{Ar}",
-        "active": true
+        "active": false
     },
     "E": {
         "defaultValue": "No effects",
@@ -21,7 +21,7 @@
     },
     "H": {
         "defaultValue": "NoHeight",
-        "customValue": "Custom{H}",
+        "customValue": "HHHHHHHHH",
         "active": true
     },
     "Lexp": {
@@ -41,7 +41,7 @@
     },
     "W": {
         "defaultValue": "NoWidth",
-        "customValue": "Custom{W}",
-        "active": false
+        "customValue": "WWWWW",
+        "active": true
     }
 }

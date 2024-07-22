@@ -2,12 +2,24 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "(Layer).I.i",
+        "template": "(Шейп).I.i - Cd(3) - D[D(1)]:[D(2)]:[D(3)]:[D(4)]",
         "briefly": false,
         "brieflyType": 4,
-        "selectedPresetIndex": 1
+        "selectedPresetIndex": 0
     },
     "userPresets": {
+        "preset_7": {
+            "allLayers": true,
+            "template": "(Шейп).I.i - Cd(3) - D[D(1)]:[D(2)]:[D(3)]:[D(4)]",
+            "briefly": false,
+            "brieflyType": 4
+        },
+        "preset_6": {
+            "allLayers": true,
+            "template": "(Layer).I.i - Cd(1)",
+            "briefly": false,
+            "brieflyType": 4
+        },
         "preset_5": {
             "allLayers": true,
             "template": "T.i",

@@ -1,414 +1,498 @@
-function showLayerInfo() {
-    var win = new Window("palette", "Nitro Namer - Layer Info", undefined, {resizeable: true});
-    win.preferredSize = [284, 254];
+var scriptMessageHead_1 = "NitroNamer - Layer info";
 
-    var txtField = win.add("edittext", undefined, "", {multiline: true, readonly: true});
-    txtField.size = [284, 254];
+function showLayerInfoPanel(thisObj) {
+    var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", scriptMessageHead_1, undefined, {resizeable: true});
+    win.orientation = "column";
+    win.alignChildren = ["fill", "top"];
+    win.preferredSize.height = 400;
+    win.preferredSize.width = 300;
+    win.margins = [4,4,4,4];
 
-    var proj = app.project;
-    var comp = proj ? proj.activeItem : null;
+    var txtLayerInfo = win.add("edittext", undefined, "", {multiline: true, readonly: true});
+    txtLayerInfo.alignment = ["fill", "fill"];
+    txtLayerInfo.preferredSize.height = 350;
 
-    if (comp && comp instanceof CompItem && comp.numLayers > 0) {
-        var layer = comp.selectedLayers.length > 0 ? comp.selectedLayers[0] : comp.layer(1);
+    function loadVariableSettings() {
+        var scriptFile = new File($.fileName);
+        var variablesFilePath = scriptFile.path.replace("/scripts", "/scripts/variables.json");
+        var variablesFile = new File(variablesFilePath);
+    
+        var variableSettings = {};
+        if (variablesFile.exists) {
+            variablesFile.open("r");
+            variableSettings = JSON.parse(variablesFile.read());
+            variablesFile.close();
+        }
+        return variableSettings;
+    }    
 
-        var effectNames = getEffectNames(layer);
-        var effectsString = effectNames.length > 0 ? effectNames.join(", ") : "ClearLayer";
-        var compName = comp.name;
-        var projectName = getProjectName();
-        var expressionProps = getExpressionControlledProperties(layer);
-        var fileExtension = getFileExtension(layer);
-        var durationInFrames = getDurationInFrames(layer);
-
-        var animatedProps = getAnimatedProperties(layer);
-        var animatedPropsString = animatedProps.length > 0 ? animatedProps.join(", ") : "NoAnimations";
-
-        // Update the variables object in the showLayerInfo function
-        var variables = {
-            "T": getLayerType(layer),
-            "i": layer.index,
-            "I": 1, // Assuming localIndex is 1 for a single layer
-            "O": layer.name,
-            "E": effectsString,
-            "An": animatedPropsString,
-            "F": getFrameRate(layer),
-            "R": getResolution(layer),
-            "D": getDuration(layer)(),
-            "Df": durationInFrames,
-            "C": compName,
-            "Ip": layer.inPoint.toFixed(2),
-            "Op": layer.outPoint.toFixed(2),
-            "S": getSourceName(layer),
-            "W": getWidth(layer),
-            "H": getHeight(layer),
-            "Tm": getTrackMatteType(layer),
-            "Ar": getAspectRatio(layer),
-            "Ec": getEffectsCount(layer),
-            "Pn": projectName,
-            "Lpos": getLayerPosition(layer),
-            "Lsc": getLayerScale(layer),
-            "Lrot": getLayerRotation(layer),
-            "Lops": getLayerOpacity(layer),
-            "Lexp": expressionProps,
-            "Fext": fileExtension,
-            "Lpnt": getLayerParentName(layer), // Add parent name
-            "LpntIndex": getLayerParentIndex(layer) // Add parent index
-        };
-
-        var infoText = "";
-        for (var key in variables) {
-            if (variables.hasOwnProperty(key)) {
-                infoText += key + ": " + variables[key] + "\n";
+    function getEffectNames(layer, settings) {
+        var effectNames = [];
+        if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
+            for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
+                var effect = layer.property("ADBE Effect Parade").property(j);
+                effectNames.push(effect.name);
             }
         }
-
-        txtField.text = infoText;
-    } else {
-        txtField.text = "No composition or layers found.";
-    }
-
-    win.center();
-    win.show();
-
-    return win; // Ensure the window stays open
-}
-
-var layerInfoWin = showLayerInfo();
-
-// Utility functions
-function getEffectNames(layer) {
-    var effectNames = [];
-    if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
-        for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
-            var effect = layer.property("ADBE Effect Parade").property(j);
-            effectNames.push(effect.name);
-        }
-    }
-    return effectNames;
-}
-
-function getExpressionControlledProperties(layer) {
-    var expressionProps = [];
-
-    function checkPropertyGroup(propertyGroup) {
-        for (var i = 1; i <= propertyGroup.numProperties; i++) {
-            var prop = propertyGroup.property(i);
-            if (prop.expression && prop.expressionEnabled) {
-                expressionProps.push(prop.name);
-            }
-
-            if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
-                checkPropertyGroup(prop);
+    
+        if (effectNames.length > 0) {
+            return effectNames.join(", ");
+        } else {
+            if (settings && settings.E) {
+                return settings.E.active ? settings.E.customValue : settings.E.defaultValue;
+            } else {
+                return "No effects";
             }
         }
     }
 
-    checkPropertyGroup(layer);
-    return expressionProps.length > 0 ? expressionProps.join(", ") : "NoExpressions";
-}
-
-function getFileExtension(layer) {
-    if (layer.source && layer.source.file && layer.source.file.name) {
-        var fileName = layer.source.file.name;
-        var extension = fileName.split('.').pop();
-        return extension;
+    function getFrameRate(layer, settings) {
+        if (layer.nullLayer || layer.adjustmentLayer || layer instanceof LightLayer || layer instanceof CameraLayer || layer instanceof TextLayer || layer instanceof ShapeLayer || layer.hasAudio) {
+            return settings && settings.F ? (settings.F.active ? settings.F.customValue : settings.F.defaultValue) : "NoFrameRate";
+        }
+        if (layer.source && layer.source.mainSource instanceof SolidSource) {
+            return settings && settings.F ? (settings.F.active ? settings.F.customValue : settings.F.defaultValue) : "NoFrameRate";
+        }
+        if (layer.source) {
+            return layer.source.frameRate.toFixed(2);
+        }
+        return settings && settings.F ? (settings.F.active ? settings.F.customValue : settings.F.defaultValue) : "NoFrameRate";
     }
-    return "NoExtension";
-}
 
-function getDuration(layer) {
-    var duration;
-    if (layer.source && layer.source.duration) {
-        duration = layer.source.duration;
-    } else if (layer.hasAudio || layer.hasVideo) {
-        duration = layer.outPoint - layer.inPoint;
-    } else {
-        return function() {
-            return "NoLimit";
+    function getResolution(layer, settings) {
+        if (layer.nullLayer || layer.adjustmentLayer) {
+            return settings && settings.R ? (settings.R.active ? settings.R.customValue : settings.R.defaultValue) : "NoResolution";
+        }
+        if (layer.source && layer.source.width && layer.source.height) {
+            return layer.source.width + "*" + layer.source.height;
+        }
+        return settings && settings.R ? (settings.R.active ? settings.R.customValue : settings.R.defaultValue) : "NoResolution";
+    }
+
+    function getDuration(layer) {
+        var duration;
+        if (layer.source && layer.source.duration) {
+            duration = layer.source.duration;
+        } else {
+            duration = layer.outPoint - layer.inPoint;
+        }
+
+        var hours = Math.floor(duration / 3600);
+        var minutes = Math.floor((duration % 3600) / 60);
+        var seconds = Math.floor(duration % 60);
+        var milliseconds = Math.floor((duration * 1000) % 1000);
+
+        return function(format) {
+            switch (format) {
+                case '1':
+                    return (hours < 10 ? "0" + hours : hours);
+                case '2':
+                    return (minutes < 10 ? "0" + minutes : minutes);
+                case '3':
+                    return (seconds < 10 ? "0" + seconds : seconds);
+                case '4':
+                    return (milliseconds < 100 ? (milliseconds < 10 ? "00" + milliseconds : "0" + milliseconds) : milliseconds);
+                default:
+                    return (hours < 10 ? "0" + hours : hours) + ":" +
+                        (minutes < 10 ? "0" + minutes : minutes) + ":" +
+                        (seconds < 10 ? "0" + seconds : seconds);
+            }
         };
     }
 
-    var hours = Math.floor(duration / 3600);
-    var minutes = Math.floor((duration % 3600) / 60);
-    var seconds = Math.floor(duration % 60);
-    var milliseconds = Math.floor((duration * 1000) % 1000);
-
-    return function(format) {
-        switch (format) {
-            case '1':
-                return (hours < 10 ? "0" + hours : hours);
-            case '2':
-                return (minutes < 10 ? "0" + minutes : minutes);
-            case '3':
-                return (seconds < 10 ? "0" + seconds : seconds);
-            case '4':
-                return (milliseconds < 100 ? (milliseconds < 10 ? "00" + milliseconds : "0" + milliseconds) : milliseconds);
-            default:
-                return (hours < 10 ? "0" + hours : hours) + ":" +
-                       (minutes < 10 ? "0" + minutes : minutes) + ":" +
-                       (seconds < 10 ? "0" + seconds : seconds);
+    function getSourceName(layer) {
+        if (layer.source) {
+            return layer.source.name;
         }
-    };
-}
+        return layer.name;
+    }
 
-function getLayerType(layer) {
-    if (layer.nullLayer) return "Null";
-    if (layer.adjustmentLayer) return "Adjustment";
-    if (layer instanceof AVLayer && layer.hasVideo) {
-        if (layer.source instanceof CompItem) return "Pre-comp";
-        if (layer.source instanceof FootageItem) {
-            if (layer.source.mainSource instanceof SolidSource) return "Solid";
-            if (layer.source.mainSource instanceof FileSource) return "Footage";
-            if (layer.source.mainSource instanceof AudioSource) return "Audio";
+    function getWidth(layer, settings) {
+        if (layer.nullLayer || layer.adjustmentLayer) {
+            return settings && settings.W ? (settings.W.active ? settings.W.customValue : settings.W.defaultValue) : "NoWidth";
         }
+        if (layer.source && layer.source.width) {
+            return layer.source.width.toString();
+        }
+        return settings && settings.W ? (settings.W.active ? settings.W.customValue : settings.W.defaultValue) : "NoWidth";
     }
-    if (layer instanceof ShapeLayer) return "Shape";
-    if (layer instanceof TextLayer) return "Text";
-    if (layer instanceof LightLayer) return "Light";
-    if (layer instanceof CameraLayer) return "Camera";
-    if (layer.hasAudio && !layer.hasVideo) return "Audio";
-    return "Unknown";
-}
 
-function getFrameRate(layer) {
-    if (layer.nullLayer || layer.adjustmentLayer || layer instanceof LightLayer || layer instanceof CameraLayer || layer instanceof TextLayer || layer instanceof ShapeLayer || layer.hasAudio) {
-        return "NoFrameRate";
+    function getHeight(layer, settings) {
+        if (layer.nullLayer || layer.adjustmentLayer) {
+            return settings && settings.H ? (settings.H.active ? settings.H.customValue : settings.H.defaultValue) : "NoHeight";
+        }
+        if (layer.source && layer.source.height) {
+            return layer.source.height.toString();
+        }
+        return settings && settings.H ? (settings.H.active ? settings.H.customValue : settings.H.defaultValue) : "NoHeight";
     }
-    if (layer.source && layer.source.mainSource instanceof SolidSource) {
-        return "NoFrameRate";
-    }
-    if (layer.source) {
-        return layer.source.frameRate.toFixed(2);
-    }
-    return "NoFrameRate";
-}
 
-function getResolution(layer) {
-    if (layer.nullLayer || layer.adjustmentLayer) {
-        return "NoResolution";
-    }
-    if (layer.source && layer.source.width && layer.source.height) {
-        return layer.source.width + "*" + layer.source.height;
-    }
-    return "NoResolution";
-}
-
-function getSourceName(layer) {
-    if (layer.source) {
-        return layer.source.name;
-    }
-    return "NoSource";
-}
-
-function getWidth(layer) {
-    if (layer.nullLayer || layer.adjustmentLayer) {
-        return "NoWidth";
-    }
-    if (layer.source && layer.source.width) {
-        return layer.source.width.toString();
-    }
-    return "NoWidth";
-}
-
-function getHeight(layer) {
-    if (layer.nullLayer || layer.adjustmentLayer) {
-        return "NoHeight";
-    }
-    if (layer.source && layer.source.height) {
-        return layer.source.height.toString();
-    }
-    return "NoHeight";
-}
-
-// Get the position of a layer
-function getLayerPosition(layer) {
-    if (layer.transform && layer.transform.position) {
-        var pos = layer.transform.position.value;
-        if (typeof pos === 'object' && pos.length !== undefined) {
-            var roundedPos = [];
-            for (var i = 0; i < pos.length; i++) {
-                roundedPos.push(Math.round(pos[i] * 10) / 10);
+    function getLayerPosition(layer) {
+        if (layer.transform && layer.transform.position) {
+            var pos = layer.transform.position.value;
+            if (typeof pos === 'object' && pos.length !== undefined) {
+                var roundedPos = [];
+                for (var i = 0; i < pos.length; i++) {
+                    roundedPos.push(Math.round(pos[i] * 10) / 10);
+                }
+                return layer.threeDLayer ? roundedPos.join(", ") : roundedPos.slice(0, 2).join(", ");
+            } else {
+                var roundedPos = Math.round(pos * 10) / 10;
+                return roundedPos.toString();
             }
-            return layer.threeDLayer ? roundedPos.join(", ") : roundedPos.slice(0, 2).join(", ");
+        }
+        return "NoPosition";
+    }
+
+    function getAspectRatio(layer, settings) {
+        if (layer.nullLayer || layer.adjustmentLayer) {
+            return settings && settings.Ar ? (settings.Ar.active ? settings.Ar.customValue : settings.Ar.defaultValue) : "NoAspectRatio";
+        }
+        if (layer.source && layer.source.width && layer.source.height) {
+            var width = layer.source.width;
+            var height = layer.source.height;
+            var gcd = function(a, b) {
+                return b == 0 ? a : gcd(b, a % b);
+            };
+            var divisor = gcd(width, height);
+            return (width / divisor) + ":" + (height / divisor);
+        }
+        return settings && settings.Ar ? (settings.Ar.active ? settings.Ar.customValue : settings.Ar.defaultValue) : "NoAspectRatio";
+    }
+
+    function getEffectsCount(layer) {
+        if (layer.property("ADBE Effect Parade")) {
+            return layer.property("ADBE Effect Parade").numProperties;
+        }
+        return 0;
+    }
+
+    function getProjectName() {
+        var projectName = "Untitled Project";
+        if (app.project.file) {
+            var projectFileName = app.project.file.name;
+            var lastDotIndex = projectFileName.lastIndexOf('.');
+            if (lastDotIndex !== -1) {
+                projectName = projectFileName.substring(0, lastDotIndex);
+            } else {
+                projectName = projectFileName;
+            }
+        }
+        return decodeURIComponent(projectName);
+    }
+
+    function getAnimatedProperties(layer, settings) {
+        var animatedProps = [];
+
+        function checkPropertyGroup(propertyGroup) {
+            for (var i = 1; i <= propertyGroup.numProperties; i++) {
+                var prop = propertyGroup.property(i);
+
+                if (prop.numKeys > 0) {
+                    animatedProps.push(prop.name);
+                }
+
+                if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
+                    checkPropertyGroup(prop);
+                }
+            }
+        }
+
+        checkPropertyGroup(layer);
+
+        if (animatedProps.length > 0) {
+            return animatedProps;
         } else {
-            var roundedPos = Math.round(pos * 10) / 10;
-            return roundedPos.toString();
+            if (settings && settings.An) {
+                return settings.An.active ? [settings.An.customValue] : [settings.An.defaultValue];
+            } else {
+                return ["NoAnimations"];
+            }
         }
     }
-    return "NoPosition";
-}
 
-function getAspectRatio(layer) {
-    if (layer.nullLayer || layer.adjustmentLayer) {
-        return "NoAspectRatio";
+    function getLayerScale(layer) {
+        if (layer.transform && layer.transform.scale) {
+            var scale = layer.transform.scale.value;
+            if (typeof scale === 'object' && scale.length !== undefined) {
+                var roundedScale = [];
+                for (var i = 0; i < scale.length; i++) {
+                    roundedScale.push(Math.round(scale[i] * 10) / 10);
+                }
+                return layer.threeDLayer ? roundedScale.join(", ") : roundedScale.slice(0, 2).join(", ");
+            } else {
+                var roundedScale = Math.round(scale * 10) / 10;
+                return roundedScale.toString();
+            }
+        }
+        return "NoScale";
     }
-    if (layer.source && layer.source.width && layer.source.height) {
-        var width = layer.source.width;
-        var height = layer.source.height;
-        var gcd = function(a, b) {
-            return b == 0 ? a : gcd(b, a % b);
-        };
-        var divisor = gcd(width, height);
-        return (width / divisor) + ":" + (height / divisor);
-    }
-    return "NoAspectRatio";
-}
 
-function getEffectsCount(layer) {
-    if (layer.property("ADBE Effect Parade")) {
-        return layer.property("ADBE Effect Parade").numProperties;
-    }
-    return 0;
-}
-
-function getProjectName() {
-    var projectName = "Untitled Project";
-    if (app.project.file) {
-        var projectFileName = app.project.file.name;
-        var lastDotIndex = projectFileName.lastIndexOf('.');
-        if (lastDotIndex !== -1) {
-            projectName = projectFileName.substring(0, lastDotIndex);
+    function getLayerRotation(layer) {
+        if (layer.threeDLayer) {
+            var rotationX = layer.transform.xRotation ? layer.transform.xRotation.value : 0;
+            var rotationY = layer.transform.yRotation ? layer.transform.yRotation.value : 0;
+            var rotationZ = layer.transform.zRotation ? layer.transform.zRotation.value : 0;
+            var rotations = [rotationX, rotationY, rotationZ];
+            var roundedRotations = [];
+            for (var i = 0; i < rotations.length; i++) {
+                roundedRotations.push(Math.round(rotations[i] * 10) / 10);
+            }
+            return roundedRotations.join(", ");
         } else {
-            projectName = projectFileName;
-        }
-    }
-    return projectName;
-}
-
-function getAnimatedProperties(layer) {
-    var animatedProps = [];
-
-    function checkPropertyGroup(propertyGroup) {
-        for (var i = 1; i <= propertyGroup.numProperties; i++) {
-            var prop = propertyGroup.property(i);
-
-            if (prop.numKeys > 0) {
-                animatedProps.push(prop.name);
-            }
-
-            if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
-                checkPropertyGroup(prop);
+            if (layer.transform && layer.transform.rotation) {
+                var rotation = layer.transform.rotation.value;
+                return Math.round(rotation * 10) / 10;
             }
         }
-    }
-
-    checkPropertyGroup(layer);
-    return animatedProps;
-}
-
-// Get the scale of a layer
-function getLayerScale(layer) {
-    if (layer.transform && layer.transform.scale) {
-        var scale = layer.transform.scale.value;
-        if (typeof scale === 'object' && scale.length !== undefined) {
-            var roundedScale = [];
-            for (var i = 0; i < scale.length; i++) {
-                roundedScale.push(Math.round(scale[i] * 10) / 10);
+        if (layer instanceof CameraLayer || layer instanceof LightLayer) {
+            var cameraLightRotation = layer.transform.orientation ? layer.transform.orientation.value : [0, 0, 0];
+            var roundedCameraLightRotation = [];
+            for (var j = 0; j < cameraLightRotation.length; j++) {
+                roundedCameraLightRotation.push(Math.round(cameraLightRotation[j] * 10) / 10);
             }
-            return layer.threeDLayer ? roundedScale.join(", ") : roundedScale.slice(0, 2).join(", ");
-        } else {
-            var roundedScale = Math.round(scale * 10) / 10;
-            return roundedScale.toString();
-        }
-    }
-    return "NoScale";
-}
-
-// Get the rotation of a layer
-function getLayerRotation(layer) {
-    if (layer.threeDLayer) {
-        // For 3D layers, concatenate the X, Y, and Z rotations
-        var rotationX = layer.transform.xRotation ? layer.transform.xRotation.value : 0;
-        var rotationY = layer.transform.yRotation ? layer.transform.yRotation.value : 0;
-        var rotationZ = layer.transform.zRotation ? layer.transform.zRotation.value : 0;
-        var rotations = [rotationX, rotationY, rotationZ];
-        var roundedRotations = [];
-        for (var i = 0; i < rotations.length; i++) {
-            roundedRotations.push(Math.round(rotations[i] * 10) / 10);
-        }
-        return roundedRotations.join(", ");
-    } else {
-        // For 2D layers, use the regular rotation property
-        if (layer.transform && layer.transform.rotation) {
-            var rotation = layer.transform.rotation.value;
-            return Math.round(rotation * 10) / 10;
+            return roundedCameraLightRotation.join(", ");
         }
         return "NoRotation";
     }
-}
 
-function getLayerOpacity(layer) {
-    if (layer.transform && layer.transform.opacity) {
-        var opacity = layer.transform.opacity.value;
-        return Math.round(opacity * 10) / 10;
+    function getFileExtension(layer) {
+        if (layer.source && layer.source.file && layer.source.file.name) {
+            var fileName = layer.source.file.name;
+            var extension = fileName.split('.').pop();
+            return extension;
+        }
+        return "NoExtension";
     }
-    return "NoOpacity";
-}
 
-function getDurationInFrames(layer) {
-    if (layer && layer.containingComp) {
-        var frameRate = layer.containingComp.frameRate;
-        var duration = (layer.outPoint - layer.inPoint) * frameRate;
-        return Math.round(duration);
+    function getLayerOpacity(layer) {
+        if (layer.transform && layer.transform.opacity) {
+            var opacity = layer.transform.opacity.value;
+            return Math.round(opacity * 10) / 10;
+        }
+        return "NoOpacity";
     }
-    return "NoDuration";
-}
 
-function getTrackMatteType(layer) {
-    if (layer instanceof CameraLayer || layer instanceof LightLayer) {
-        return "NoTrackMate";
-    } else if (layer.isTrackMatte) {
-        return "TM:Source";
-    } else if (layer.trackMatteType !== undefined && layer.trackMatteType !== TrackMatteType.NO_TRACK_MATTE && (
-            layer.trackMatteType === TrackMatteType.ALPHA ||
-            layer.trackMatteType === TrackMatteType.ALPHA_INVERTED ||
-            layer.trackMatteType === TrackMatteType.LUMA ||
-            layer.trackMatteType.LUMA_INVERTED)) {
-        var matteType;
-        switch (layer.trackMatteType) {
-            case TrackMatteType.ALPHA:
-                matteType = "Alpha";
-                break;
-            case TrackMatteType.ALPHA_INVERTED:
-                matteType = "Alpha Inverted";
-                break;
-            case TrackMatteType.LUMA:
-                matteType = "Luma";
-                break;
-            case TrackMatteType.LUMA_INVERTED:
-                matteType = "Luma Inverted";
-                break;
+    function getDurationInFrames(layer) {
+        if (layer && layer.containingComp) {
+            var frameRate = layer.containingComp.frameRate;
+            var duration = (layer.outPoint - layer.inPoint) * frameRate;
+            return Math.round(duration);
+        }
+        return "NoDuration";
+    }
+
+    function getExpressionControlledProperties(layer, settings) {
+        var expressionProps = [];
+
+        function checkPropertyGroup(propertyGroup) {
+            for (var i = 1; i <= propertyGroup.numProperties; i++) {
+                var prop = propertyGroup.property(i);
+                if (prop.expression && prop.expressionEnabled) {
+                    expressionProps.push(prop.name);
+                }
+
+                if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
+                    checkPropertyGroup(prop);
+                }
+            }
+        }
+
+        checkPropertyGroup(layer);
+
+        if (expressionProps.length > 0) {
+            return expressionProps.join(", ");
+        } else {
+            if (settings && settings.Lexp) {
+                return settings.Lexp.active ? settings.Lexp.customValue : settings.Lexp.defaultValue;
+            } else {
+                return "NoExpressions";
+            }
+        }
+    }
+
+    function getTrackMatteType(layer, settings) {
+        if (layer instanceof CameraLayer || layer instanceof LightLayer) {
+            return settings && settings.Tm ? (settings.Tm.active ? settings.Tm.customValue : settings.Tm.defaultValue) : "NoTrackMate";
+        } else if (layer.isTrackMatte) {
+            return "TM:Source";
+        } else if (layer.trackMatteType !== undefined && layer.trackMatteType !== TrackMatteType.NO_TRACK_MATTE) {
+            var matteType;
+            switch (layer.trackMatteType) {
+                case TrackMatteType.ALPHA:
+                    matteType = "Alpha";
+                    break;
+                case TrackMatteType.ALPHA_INVERTED:
+                    matteType = "Alpha Inverted";
+                    break;
+                case TrackMatteType.LUMA:
+                    matteType = "Luma";
+                    break;
+                case TrackMatteType.LUMA_INVERTED:
+                    matteType = "Luma Inverted";
+                    break;
+                default:
+                    matteType = "Unknown Track Matte";
+            }
+            return "TM:" + matteType;
+        } else {
+            return settings && settings.Tm ? (settings.Tm.active ? settings.Tm.customValue : settings.Tm.defaultValue) : "NoTrackMate";
+        }
+    }
+
+    function getLayerType(layer) {
+        if (layer.nullLayer) return "Null";
+        if (layer.adjustmentLayer) return "Adjustment";
+        if (layer instanceof AVLayer && layer.hasVideo) {
+            if (layer.source instanceof CompItem) return "Pre-comp";
+            if (layer.source instanceof FootageItem) {
+                if (layer.source.mainSource instanceof SolidSource) return "Solid";
+                if (layer.source.mainSource instanceof FileSource) return "Footage";
+                if (layer.source.mainSource instanceof AudioSource) return "Audio";
+            }
+        }
+        if (layer instanceof ShapeLayer) return "Shape";
+        if (layer instanceof TextLayer) return "Text";
+        if (layer instanceof LightLayer) return "Light";
+        if (layer instanceof CameraLayer) return "Camera";
+        if (layer.hasAudio && !layer.hasVideo) return "Audio";
+        return "Unknown";
+    }
+
+    function getLayerParentName(layer) {
+        if (!layer || !layer.containingComp) {
+            return "NoParent";
+        }
+        if (layer.parent) {
+            return layer.parent.name;
+        }
+        if (isParentLayer(layer)) {
+            return layer.name;
+        }
+        return "NoParent";
+    }
+
+    function isParentLayer(layer) {
+        if (!layer || !layer.containingComp) {
+            return false;
+        }
+        var comp = layer.containingComp;
+        for (var i = 1; i <= comp.numLayers; i++) {
+            if (comp.layer(i).parent === layer) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function getLayerParentIndex(layer) {
+        if (!layer.parent) {
+            return "";
+        }
+
+        var parentLayer = layer.parent;
+        var comp = layer.containingComp;
+        var sameParentLayers = [];
+
+        for (var i = 1; i <= comp.numLayers; i++) {
+            var currentLayer = comp.layer(i);
+            if (currentLayer.parent === parentLayer) {
+                sameParentLayers.push(currentLayer);
+            }
+        }
+
+        var relativeIndex = sameParentLayers.indexOf(layer) + 1;
+        return relativeIndex;
+    }
+
+    function getCurrentDate(format) {
+        var date = new Date();
+        var day = ("0" + date.getDate()).slice(-2);
+        var month = ("0" + (date.getMonth() + 1)).slice(-2);
+        var year = date.getFullYear().toString();
+
+        switch (format) {
+            case '1':
+                return day;
+            case '2':
+                return month;
+            case '3':
+                return year;
             default:
-                matteType = "Unknown Track Matte";
+                return day + "." + month + "." + year;
         }
-        return "TM:" + matteType;
+    }
+
+    function updateLayerInfo() {
+        var proj = app.project;
+        if (proj && proj.activeItem instanceof CompItem) {
+            var comp = proj.activeItem;
+            var layer = comp.selectedLayers.length > 0 ? comp.selectedLayers[0] : comp.layer(1);
+    
+            if (layer) {
+                var settings = loadVariableSettings();
+                var durationFunction = getDuration(layer);
+                var info = [
+                    "C: " + comp.name,
+                    "Pn: " + getProjectName(),
+                    "T: " + getLayerType(layer),
+                    "i: " + layer.index,
+                    "I: " + layer.index,
+                    "Lpnt: " + getLayerParentName(layer),
+                    "LpntIndex: " + getLayerParentIndex(layer),
+                    "O: " + layer.name,
+                    "S: " + getSourceName(layer),
+                    "D: " + durationFunction(),
+                    "D(1): " + durationFunction('1'),
+                    "D(2): " + durationFunction('2'),
+                    "D(3): " + durationFunction('3'),
+                    "D(4): " + durationFunction('4'),
+                    "Df: " + getDurationInFrames(layer),
+                    "Ip: " + layer.inPoint.toFixed(2),
+                    "Op: " + layer.outPoint.toFixed(2),
+                    "F: " + getFrameRate(layer, settings),
+                    "W: " + getWidth(layer, settings),
+                    "H: " + getHeight(layer, settings),
+                    "R: " + getResolution(layer, settings),
+                    "Ar: " + getAspectRatio(layer, settings),
+                    "Lpos: " + getLayerPosition(layer),
+                    "Lsc: " + getLayerScale(layer),
+                    "Lrot: " + getLayerRotation(layer),
+                    "Lops: " + getLayerOpacity(layer),
+                    "E: " + getEffectNames(layer, settings),
+                    "Ec: " + getEffectsCount(layer),
+                    "An: " + getAnimatedProperties(layer, settings).join(", "),
+                    "Lexp: " + getExpressionControlledProperties(layer, settings),
+                    "Tm: " + getTrackMatteType(layer, settings),
+                    "Fext: " + getFileExtension(layer),
+                    "Cd: " + getCurrentDate()
+                ];
+    
+                txtLayerInfo.text = info.join("\n");
+            } else {
+                txtLayerInfo.text = "No layers in composition.";
+            }
+        } else {
+            txtLayerInfo.text = "Please select a valid composition.";
+        }
+    }    
+
+    updateLayerInfo();
+
+    if (win instanceof Window) {
+        win.center();
+        win.show();
     } else {
-        return "NoTrackMate";
+        win.layout.layout(true);
     }
+
+    return win;
 }
 
-function getLayerParentName(layer) {
-    if (layer.parent) {
-        return layer.parent.name;
-    }
-    return "NoParent";
-}
-
-function getLayerParentIndex(layer) {
-    if (!layer.parent) {
-        return "NoIndex";
-    }
-
-    var parentLayer = layer.parent;
-    var comp = layer.containingComp;
-    var sameParentLayers = [];
-    
-    for (var i = 1; i <= comp.numLayers; i++) {
-        var currentLayer = comp.layer(i);
-        if (currentLayer.parent === parentLayer) {
-            sameParentLayers.push(currentLayer);
-        }
-    }
-    
-    var relativeIndex = sameParentLayers.indexOf(layer) + 1;
-    return relativeIndex;
+var layerInfoPanel = showLayerInfoPanel(this);
+if (layerInfoPanel instanceof Panel) {
+    layerInfoPanel.layout.layout(true);
+} else {
+    layerInfoPanel.center();
+    layerInfoPanel.show();
 }
