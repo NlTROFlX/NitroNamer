@@ -1710,12 +1710,12 @@ function buildUI(thisObj) {
     // Replace variables in the template with actual values
     function replaceVariables(template, variables, originalName, layer) {
         var usedVariables = [];
-    
+
         var regex = /\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|Cd\(([^)]+)\)|Cd|[A-Z]|i|I|S|W|H/g;
-    
+
         var result = template.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, durationFormat, customFext, parentIndex, dateFormat) {
             var value;
-    
+
             if (group !== undefined) {
                 return group;
             } else if (customEffectDelimiterParentheses !== undefined) {
@@ -1777,7 +1777,7 @@ function buildUI(thisObj) {
             } else {
                 value = variables[match];
             }
-    
+
             if (value !== undefined && value !== "") {
                 usedVariables.push(match);
                 return value;
@@ -1785,13 +1785,19 @@ function buildUI(thisObj) {
                 return "";
             }
         });
-    
+
         if (usedVariables.length === 0) {
+            // Check if the template contains a custom separator for the "An" variable
+            var customAnimDelimiterMatch = template.match(/An\(([^)]+)\)/);
+            if (customAnimDelimiterMatch && customAnimDelimiterMatch[1]) {
+                var animatedPropsString = variables['An'].split(', ').join(customAnimDelimiterMatch[1]);
+                return animatedPropsString;
+            }
             return originalName;
         } else {
             return result;
         }
-    }    
+    }
 
     var localIndex = 1; // Global local index
 
