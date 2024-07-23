@@ -2,10 +2,10 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "Fext(png)",
+        "template": "An(/*)E( | )Lexp(#) - Fext",
         "briefly": false,
-        "brieflyType": 0,
-        "selectedPresetIndex": 8
+        "brieflyType": 4,
+        "selectedPresetIndex": 0
     },
     "userPresets": {
         "preset_10": {
