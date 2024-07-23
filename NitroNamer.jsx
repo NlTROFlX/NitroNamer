@@ -1712,14 +1712,15 @@ function buildUI(thisObj) {
         var usedVariables = [];
         var result = template;
 
-        var regex = /\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|Cd\(([^)]+)\)|Cd|[A-Z]|i|I|S|W|H/g;
+        var regex = /\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|Lexp\(([^)]+)\)|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|Cd\(([^)]+)\)|Cd|[A-Z]|i|I|S|W|H/g;
 
         var replacements = {
             'An': { 'regex': /An\(([^)]+)\)/, 'value': '' },
-            'E': { 'regex': /E\(([^)]+)\)/, 'value': '' }
+            'E': { 'regex': /E\(([^)]+)\)/, 'value': '' },
+            'Lexp': { 'regex': /Lexp\(([^)]+)\)/, 'value': '' }
         };
 
-        result = result.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, durationFormat, customFext, parentIndex, dateFormat) {
+        result = result.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, customLexpDelimiter, durationFormat, customFext, parentIndex, dateFormat) {
             var value;
 
             if (group !== undefined) {
@@ -1744,6 +1745,11 @@ function buildUI(thisObj) {
                 replacements['An'].value = animatedPropsString;
                 usedVariables.push('An');
                 return animatedPropsString;
+            } else if (customLexpDelimiter !== undefined) {
+                var lexpString = variables['Lexp'].split(', ').join(customLexpDelimiter);
+                replacements['Lexp'].value = lexpString;
+                usedVariables.push('Lexp');
+                return lexpString;
             } else if (durationFormat !== undefined) {
                 value = typeof variables['D'] === 'function' ? variables['D'](durationFormat) : variables['D'];
             } else if (match === 'D') {
@@ -1822,6 +1828,17 @@ function buildUI(thisObj) {
             }
         }
 
+        // Handle the case where Lexp(Separator) is the only variable in the template
+        if (usedVariables.length === 0 && template.indexOf('Lexp(') !== -1) {
+            var customLexpDelimiter = template.match(/Lexp\(([^)]+)\)/);
+            if (customLexpDelimiter) {
+                var customLexpDelimiterValue = customLexpDelimiter[1];
+                var lexpString = variables['Lexp'].split(', ').join(customLexpDelimiterValue);
+                result = lexpString;
+                usedVariables.push('Lexp');
+            }
+        }
+
         // If both "An" and "E" were used, replace their placeholders with actual values
         if (usedVariables.indexOf('An') !== -1) {
             result = result.replace(replacements['An'].regex, replacements['An'].value);
@@ -1829,6 +1846,11 @@ function buildUI(thisObj) {
 
         if (usedVariables.indexOf('E') !== -1) {
             result = result.replace(replacements['E'].regex, replacements['E'].value);
+        }
+
+        // If "Lexp" was used, replace its placeholder with actual values
+        if (usedVariables.indexOf('Lexp') !== -1) {
+            result = result.replace(replacements['Lexp'].regex, replacements['Lexp'].value);
         }
 
         if (usedVariables.length === 0) {
