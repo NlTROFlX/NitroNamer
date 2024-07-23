@@ -1061,7 +1061,7 @@ function buildUI(thisObj) {
     // Generate new name for a layer based on the template
     function generateNewName(layer, template, briefly, brieflyType, settings) {
         checkAndUpdateSettings(); // Check and update settings before generating the new name
-    
+
         var effectNames = [];
         if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
             for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
@@ -1069,7 +1069,7 @@ function buildUI(thisObj) {
                 effectNames.push(effect.name);
             }
         }
-    
+
         var effectsString = getEffectNames(layer, settings);
         var compName = app.project.activeItem.name;
         var frameRate = getFrameRate(layer, settings);
@@ -1077,15 +1077,15 @@ function buildUI(thisObj) {
         var durationInFrames = getDurationInFrames(layer);
         var projectName = getProjectName();
         var expressionProps = getExpressionControlledProperties(layer, settings);
-        var fileExtension = getFileExtension(layer);
-    
+        var fileExtension = getFileExtension(layer, settings);
+
         if (briefly) {
             frameRate = parseFloat(frameRate).toFixed(2); 
         }
-    
+
         var animatedProps = getAnimatedProperties(layer, settings);
         var animatedPropsString = isArray(animatedProps) ? animatedProps.join(", ") : animatedProps;
-    
+
         var variables = {
             "T": getLayerType(layer),
             "i": layer.index,
@@ -1116,10 +1116,10 @@ function buildUI(thisObj) {
             "Lpnt": getLayerParentName(layer),
             "LpntIndex": getLayerParentIndex(layer),
             "Cd": getCurrentDate()
-        };        
-    
-        var newName = replaceVariables(template, variables, layer.name);
-    
+        };
+
+        var newName = replaceVariables(template, variables, layer.name, layer, settings);
+
         if (briefly) {
             switch (brieflyType) {
                 case "Camel Case":
@@ -1139,9 +1139,9 @@ function buildUI(thisObj) {
                     break;
             }
         }
-    
+
         return newName;
-    }        
+    }
 
     // Get the list of properties controlled by expressions
     function getExpressionControlledProperties(layer, settings) {
@@ -1545,13 +1545,16 @@ function buildUI(thisObj) {
     }
 
     // Get the file extension of a layer's source file
-    function getFileExtension(layer) {
+    function getFileExtension(layer, settings, customExtension) {
         if (layer.source && layer.source.file && layer.source.file.name) {
             var fileName = layer.source.file.name;
             var extension = fileName.split('.').pop();
+            if (customExtension) {
+                return extension.toLowerCase() === customExtension.toLowerCase() ? customExtension : (settings && settings.Fext ? (settings.Fext.active ? settings.Fext.customValue : settings.Fext.defaultValue) : "NoExtension");
+            }
             return extension;
         }
-        return "NoExtension";
+        return settings && settings.Fext ? (settings.Fext.active ? settings.Fext.customValue : settings.Fext.defaultValue) : "NoExtension";
     }
 
     // Get the opacity of a layer
@@ -1708,7 +1711,7 @@ function buildUI(thisObj) {
     }    
 
     // Replace variables in the template with actual values
-    function replaceVariables(template, variables, originalName, layer) {
+    function replaceVariables(template, variables, originalName, layer, settings) {
         var usedVariables = [];
         var result = template;
 
@@ -1717,7 +1720,8 @@ function buildUI(thisObj) {
         var replacements = {
             'An': { 'regex': /An\(([^)]+)\)/, 'value': '' },
             'E': { 'regex': /E\(([^)]+)\)/, 'value': '' },
-            'Lexp': { 'regex': /Lexp\(([^)]+)\)/, 'value': '' }
+            'Lexp': { 'regex': /Lexp\(([^)]+)\)/, 'value': '' },
+            'Fext': { 'regex': /Fext\(([^)]+)\)/, 'value': '' }
         };
 
         result = result.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, customLexpDelimiter, durationFormat, customFext, parentIndex, dateFormat) {
@@ -1750,6 +1754,8 @@ function buildUI(thisObj) {
                 replacements['Lexp'].value = lexpString;
                 usedVariables.push('Lexp');
                 return lexpString;
+            } else if (customFext !== undefined) {
+                value = getFileExtension(layer, settings, customFext);
             } else if (durationFormat !== undefined) {
                 value = typeof variables['D'] === 'function' ? variables['D'](durationFormat) : variables['D'];
             } else if (match === 'D') {
@@ -1760,8 +1766,6 @@ function buildUI(thisObj) {
                 value = variables['Ec'];
             } else if (match === 'Fext') {
                 value = variables['Fext'];
-            } else if (customFext !== undefined) {
-                value = variables['Fext'] === customFext ? customFext : "NoExtension";
             } else if (match === 'Lexp') {
                 value = variables['Lexp'];
             } else if (match === 'Ip') {
@@ -1839,6 +1843,17 @@ function buildUI(thisObj) {
             }
         }
 
+        // Handle the case where Fext(Separator) is the only variable in the template
+        if (usedVariables.length === 0 && template.indexOf('Fext(') !== -1) {
+            var customFextDelimiter = template.match(/Fext\(([^)]+)\)/);
+            if (customFextDelimiter) {
+                var customFextDelimiterValue = customFextDelimiter[1];
+                var fextString = getFileExtension(layer, settings, customFextDelimiterValue);
+                result = fextString;
+                usedVariables.push('Fext');
+            }
+        }
+
         // If both "An" and "E" were used, replace their placeholders with actual values
         if (usedVariables.indexOf('An') !== -1) {
             result = result.replace(replacements['An'].regex, replacements['An'].value);
@@ -1851,6 +1866,11 @@ function buildUI(thisObj) {
         // If "Lexp" was used, replace its placeholder with actual values
         if (usedVariables.indexOf('Lexp') !== -1) {
             result = result.replace(replacements['Lexp'].regex, replacements['Lexp'].value);
+        }
+
+        // If "Fext" was used, replace its placeholder with actual values
+        if (usedVariables.indexOf('Fext') !== -1) {
+            result = result.replace(replacements['Fext'].regex, replacements['Fext'].value);
         }
 
         if (usedVariables.length === 0) {
@@ -1909,7 +1929,7 @@ function buildUI(thisObj) {
                         "Lrot": getLayerRotation(layer),
                         "Lops": getLayerOpacity(layer),
                         "Lexp": getExpressionControlledProperties(layer, variableSettings),
-                        "Fext": getFileExtension(layer),
+                        "Fext": getFileExtension(layer, variableSettings),
                         "Lpnt": layer.parent ? layer.parent.name : "NoParent",
                         "LpntIndex": getLayerParentIndex(layer) // Ensure this is set
                     };
