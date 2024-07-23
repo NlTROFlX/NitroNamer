@@ -1710,25 +1710,39 @@ function buildUI(thisObj) {
     // Replace variables in the template with actual values
     function replaceVariables(template, variables, originalName, layer) {
         var usedVariables = [];
+        var result = template;
 
         var regex = /\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|Cd\(([^)]+)\)|Cd|[A-Z]|i|I|S|W|H/g;
 
-        var result = template.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, durationFormat, customFext, parentIndex, dateFormat) {
+        var replacements = {
+            'An': { 'regex': /An\(([^)]+)\)/, 'value': '' },
+            'E': { 'regex': /E\(([^)]+)\)/, 'value': '' }
+        };
+
+        result = result.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, durationFormat, customFext, parentIndex, dateFormat) {
             var value;
 
             if (group !== undefined) {
                 return group;
             } else if (customEffectDelimiterParentheses !== undefined) {
                 var effectsString = variables['E'].split(', ').join(customEffectDelimiterParentheses);
+                replacements['E'].value = effectsString;
+                usedVariables.push('E');
                 return effectsString;
             } else if (customEffectDelimiterBraces !== undefined) {
                 var effectsString = variables['E'].split(', ').join(customEffectDelimiterBraces);
+                replacements['E'].value = effectsString;
+                usedVariables.push('E');
                 return effectsString;
             } else if (customAnimDelimiterParentheses !== undefined) {
                 var animatedPropsString = variables['An'].split(', ').join(customAnimDelimiterParentheses);
+                replacements['An'].value = animatedPropsString;
+                usedVariables.push('An');
                 return animatedPropsString;
             } else if (customAnimDelimiterBraces !== undefined) {
                 var animatedPropsString = variables['An'].split(', ').join(customAnimDelimiterBraces);
+                replacements['An'].value = animatedPropsString;
+                usedVariables.push('An');
                 return animatedPropsString;
             } else if (durationFormat !== undefined) {
                 value = typeof variables['D'] === 'function' ? variables['D'](durationFormat) : variables['D'];
@@ -1786,17 +1800,42 @@ function buildUI(thisObj) {
             }
         });
 
-        if (usedVariables.length === 0) {
-            // Check if the template contains a custom separator for the "An" variable
-            var customAnimDelimiterMatch = template.match(/An\(([^)]+)\)/);
-            if (customAnimDelimiterMatch && customAnimDelimiterMatch[1]) {
-                var animatedPropsString = variables['An'].split(', ').join(customAnimDelimiterMatch[1]);
-                return animatedPropsString;
+        // Handle the case where An(Separator) is the only variable in the template
+        if (usedVariables.length === 0 && template.indexOf('An(') !== -1) {
+            var customAnimDelimiter = template.match(/An\(([^)]+)\)/);
+            if (customAnimDelimiter) {
+                var customAnimDelimiterValue = customAnimDelimiter[1];
+                var animatedPropsString = variables['An'].split(', ').join(customAnimDelimiterValue);
+                result = animatedPropsString;
+                usedVariables.push('An');
             }
-            return originalName;
-        } else {
-            return result;
         }
+
+        // Handle the case where E(Separator) is the only variable in the template
+        if (usedVariables.length === 0 && template.indexOf('E(') !== -1) {
+            var customEffectDelimiter = template.match(/E\(([^)]+)\)/);
+            if (customEffectDelimiter) {
+                var customEffectDelimiterValue = customEffectDelimiter[1];
+                var effectsString = variables['E'].split(', ').join(customEffectDelimiterValue);
+                result = effectsString;
+                usedVariables.push('E');
+            }
+        }
+
+        // If both "An" and "E" were used, replace their placeholders with actual values
+        if (usedVariables.indexOf('An') !== -1) {
+            result = result.replace(replacements['An'].regex, replacements['An'].value);
+        }
+
+        if (usedVariables.indexOf('E') !== -1) {
+            result = result.replace(replacements['E'].regex, replacements['E'].value);
+        }
+
+        if (usedVariables.length === 0) {
+            return originalName;
+        }
+
+        return result;
     }
 
     var localIndex = 1; // Global local index
