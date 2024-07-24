@@ -6,8 +6,8 @@
     },
     "Ar": {
         "defaultValue": "NoAspectRatio",
-        "customValue": "Custom{Ar}",
-        "active": true
+        "customValue": "",
+        "active": false
     },
     "E": {
         "defaultValue": "No effects",

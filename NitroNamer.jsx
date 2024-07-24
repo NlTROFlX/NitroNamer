@@ -1399,14 +1399,19 @@ function buildUI(thisObj) {
         return "NoPosition";
     }
 
-    // Get the aspect ratio of a layer
-    function getAspectRatio(layer, settings) {
+    // Add new "Ar(px)" mode to get the aspect ratio in pixels
+    function getAspectRatio(layer, settings, inPixels) {
         if (layer.nullLayer || layer.adjustmentLayer) {
             return settings && settings.Ar ? (settings.Ar.active ? settings.Ar.customValue : settings.Ar.defaultValue) : "NoAspectRatio";
         }
         if (layer.source && layer.source.width && layer.source.height) {
             var width = layer.source.width;
             var height = layer.source.height;
+
+            if (inPixels) {
+                return width + "px:" + height + "px";
+            }
+
             var gcd = function(a, b) {
                 return b == 0 ? a : gcd(b, a % b);
             };
@@ -1414,7 +1419,7 @@ function buildUI(thisObj) {
             return (width / divisor) + ":" + (height / divisor);
         }
         return settings && settings.Ar ? (settings.Ar.active ? settings.Ar.customValue : settings.Ar.defaultValue) : "NoAspectRatio";
-    }    
+    }
 
     // Get the number of effects applied to a layer
     function getEffectsCount(layer) {
@@ -1725,7 +1730,7 @@ function buildUI(thisObj) {
             return template.match(/^\(([^()]+)\)$/)[1];
         }
 
-        var regex = /\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|Lexp\(([^)]+)\)|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|Cd\(([^)]+)\)|Cd|[A-Z]|i|I|S|W|H/g;
+        var regex = /\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|Lexp\(([^)]+)\)|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar\(([^)]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|Cd\(([^)]+)\)|Cd|[A-Z]|i|I|S|W|H/g;
 
         var replacements = {
             'An': { 'regex': /An\(([^)]+)\)/, 'value': '' },
@@ -1734,7 +1739,7 @@ function buildUI(thisObj) {
             'Fext': { 'regex': /Fext\(([^)]+)\)/, 'value': '' }
         };
 
-        result = result.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, customLexpDelimiter, durationFormat, customFext, parentIndex, dateFormat) {
+        result = result.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat) {
             var value;
 
             if (group !== undefined) {
@@ -1766,6 +1771,8 @@ function buildUI(thisObj) {
                 return lexpString;
             } else if (customFext !== undefined) {
                 value = getFileExtension(layer, settings, customFext);
+            } else if (customAr !== undefined) {
+                value = getAspectRatio(layer, settings, true);
             } else if (durationFormat !== undefined) {
                 value = typeof variables['D'] === 'function' ? variables['D'](durationFormat) : variables['D'];
             } else if (match === 'D') {
