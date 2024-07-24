@@ -1719,19 +1719,24 @@ function buildUI(thisObj) {
     function replaceVariables(template, variables, originalName, layer, settings) {
         var usedVariables = [];
         var result = template;
-    
+
+        // Check for parentheses without variables
+        if (template.match(/^\(([^()]+)\)$/)) {
+            return template.match(/^\(([^()]+)\)$/)[1];
+        }
+
         var regex = /\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|Lexp\(([^)]+)\)|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|Cd\(([^)]+)\)|Cd|[A-Z]|i|I|S|W|H/g;
-    
+
         var replacements = {
             'An': { 'regex': /An\(([^)]+)\)/, 'value': '' },
             'E': { 'regex': /E\(([^)]+)\)/, 'value': '' },
             'Lexp': { 'regex': /Lexp\(([^)]+)\)/, 'value': '' },
             'Fext': { 'regex': /Fext\(([^)]+)\)/, 'value': '' }
         };
-    
+
         result = result.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, customLexpDelimiter, durationFormat, customFext, parentIndex, dateFormat) {
             var value;
-    
+
             if (group !== undefined) {
                 return group;
             } else if (customEffectDelimiterParentheses !== undefined) {
@@ -1806,7 +1811,7 @@ function buildUI(thisObj) {
             } else {
                 value = variables[match];
             }
-    
+
             if (value !== undefined && value !== "") {
                 usedVariables.push(match);
                 return value;
@@ -1814,7 +1819,7 @@ function buildUI(thisObj) {
                 return "";
             }
         });
-    
+
         // Handle the case where An(Separator) is the only variable in the template
         if (usedVariables.length === 0 && template.indexOf('An(') !== -1) {
             var customAnimDelimiter = template.match(/An\(([^)]+)\)/);
@@ -1825,7 +1830,7 @@ function buildUI(thisObj) {
                 usedVariables.push('An');
             }
         }
-    
+
         // Handle the case where E(Separator) is the only variable in the template
         if (usedVariables.length === 0 && template.indexOf('E(') !== -1) {
             var customEffectDelimiter = template.match(/E\(([^)]+)\)/);
@@ -1836,7 +1841,7 @@ function buildUI(thisObj) {
                 usedVariables.push('E');
             }
         }
-    
+
         // Handle the case where Lexp(Separator) is the only variable in the template
         if (usedVariables.length === 0 && template.indexOf('Lexp(') !== -1) {
             var customLexpDelimiter = template.match(/Lexp\(([^)]+)\)/);
@@ -1847,7 +1852,7 @@ function buildUI(thisObj) {
                 usedVariables.push('Lexp');
             }
         }
-    
+
         // Handle the case where Fext(Separator) is the only variable in the template
         if (usedVariables.length === 0 && template.indexOf('Fext(') !== -1) {
             var customFextDelimiter = template.match(/Fext\(([^)]+)\)/);
@@ -1858,32 +1863,32 @@ function buildUI(thisObj) {
                 usedVariables.push('Fext');
             }
         }
-    
+
         // If both "An" and "E" were used, replace their placeholders with actual values
         if (usedVariables.indexOf('An') !== -1) {
             result = result.replace(replacements['An'].regex, replacements['An'].value);
         }
-    
+
         if (usedVariables.indexOf('E') !== -1) {
             result = result.replace(replacements['E'].regex, replacements['E'].value);
         }
-    
+
         // If "Lexp" was used, replace its placeholder with actual values
         if (usedVariables.indexOf('Lexp') !== -1) {
             result = result.replace(replacements['Lexp'].regex, replacements['Lexp'].value);
         }
-    
+
         // If "Fext" was used, replace its placeholder with actual values
         if (usedVariables.indexOf('Fext') !== -1) {
             result = result.replace(replacements['Fext'].regex, replacements['Fext'].value);
         }
-    
+
         if (usedVariables.length === 0) {
             return originalName;
         }
-    
+
         return result;
-    }    
+    }
 
     var localIndex = 1; // Global local index
 
