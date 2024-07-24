@@ -32,7 +32,7 @@
     "Fext": {
         "defaultValue": "NoExtension",
         "customValue": "Custom{Fext}",
-        "active": false
+        "active": true
     },
     "R": {
         "defaultValue": "NoResolution",

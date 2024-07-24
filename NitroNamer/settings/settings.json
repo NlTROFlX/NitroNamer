@@ -2,12 +2,18 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "An(/*)E( | )Lexp(#) - Fext",
+        "template": "(Layer).i \\ Lpos \\ Lsc \\ Lrot \\ Lops",
         "briefly": false,
         "brieflyType": 4,
         "selectedPresetIndex": 0
     },
     "userPresets": {
+        "preset_11": {
+            "allLayers": true,
+            "template": "(Layer).i \\ Lpos \\ Lsc \\ Lrot \\ Lops",
+            "briefly": false,
+            "brieflyType": 4
+        },
         "preset_10": {
             "allLayers": true,
             "template": "An(/*)E( | )Lexp(#)",
@@ -28,7 +34,7 @@
         },
         "preset_7": {
             "allLayers": true,
-            "template": "(Шейп).I.i - Cd(3) - D[D(1)]:[D(2)]:[D(3)]:[D(4)]",
+            "template": "(Р РЃР ВµР в„–Р С—).I.i - Cd(3) - D[D(1)]:[D(2)]:[D(3)]:[D(4)]",
             "briefly": false,
             "brieflyType": 4
         },

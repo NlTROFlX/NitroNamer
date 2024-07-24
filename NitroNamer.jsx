@@ -447,8 +447,13 @@ function buildUI(thisObj) {
 
     // Show variables when Variables button is clicked
     btnVariables.onClick = function() {
-        showVariables();
-    };
+        var scriptFilePath = File(scriptFolderPath + "/NitroNamer/scripts/NNLayerInfo.jsx");
+        if (scriptFilePath.exists) {
+            $.evalFile(scriptFilePath);
+        } else {
+            alert("Script file not found: " + scriptFilePath.fsName);
+        }
+    };    
 
     // Copy layer name to template input field
     btnCopy.onClick = function() {
