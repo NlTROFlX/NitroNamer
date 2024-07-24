@@ -1720,7 +1720,7 @@ function buildUI(thisObj) {
         var usedVariables = [];
         var result = template;
 
-        // Check for parentheses without variables
+        // Pre-check for any parentheses that don't contain variables
         if (template.match(/^\(([^()]+)\)$/)) {
             return template.match(/^\(([^()]+)\)$/)[1];
         }
@@ -1884,7 +1884,7 @@ function buildUI(thisObj) {
         }
 
         if (usedVariables.length === 0) {
-            return originalName;
+            return result;
         }
 
         return result;
