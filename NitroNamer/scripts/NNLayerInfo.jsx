@@ -24,7 +24,7 @@ function showLayerInfoPanel(thisObj) {
             variablesFile.close();
         }
         return variableSettings;
-    }    
+    }
 
     function getEffectNames(layer, settings) {
         var effectNames = [];
@@ -128,29 +128,51 @@ function showLayerInfoPanel(thisObj) {
     }
 
     function getLayerPosition(layer) {
+        if (layer instanceof AVLayer && layer.hasAudio && !layer.hasVideo) {
+            return ""; // Return an empty string for Audio type layers
+        }
+
         if (layer.transform && layer.transform.position) {
             var pos = layer.transform.position.value;
-            if (typeof pos === 'object' && pos.length !== undefined) {
-                var roundedPos = [];
-                for (var i = 0; i < pos.length; i++) {
-                    roundedPos.push(Math.round(pos[i] * 10) / 10);
+
+            // Ensure pos is an array
+            if (typeof pos === 'number') {
+                pos = [pos];
+            } else if (Object.prototype.toString.call(pos) !== '[object Array]') {
+                pos = [].slice.call(pos);
+            }
+
+            if (layer instanceof CameraLayer || layer instanceof LightLayer || layer.threeDLayer) {
+                // Ensure position is returned as X, Y, Z for Camera, Light, and 3D layers
+                var roundedPos = [0, 0, 0]; // Default to [0, 0, 0] for safety
+                for (var i = 0; i < 3; i++) {
+                    roundedPos[i] = pos[i] !== undefined ? Math.round(pos[i] * 10) / 10 : 0;
                 }
-                return layer.threeDLayer ? roundedPos.join(", ") : roundedPos.slice(0, 2).join(", ");
+                return roundedPos.join(", ");
             } else {
-                var roundedPos = Math.round(pos * 10) / 10;
-                return roundedPos.toString();
+                // Return X, Y for 2D layers
+                var roundedPos2D = [0, 0]; // Default to [0, 0] for safety
+                for (var j = 0; j < 2; j++) {
+                    roundedPos2D[j] = pos[j] !== undefined ? Math.round(pos[j] * 10) / 10 : 0;
+                }
+                return roundedPos2D.join(", ");
             }
         }
         return "NoPosition";
     }
 
-    function getAspectRatio(layer, settings) {
+    function getAspectRatio(layer, settings, inPixels) {
         if (layer.nullLayer || layer.adjustmentLayer) {
             return settings && settings.Ar ? (settings.Ar.active ? settings.Ar.customValue : settings.Ar.defaultValue) : "NoAspectRatio";
         }
         if (layer.source && layer.source.width && layer.source.height) {
             var width = layer.source.width;
             var height = layer.source.height;
+
+            if (inPixels) {
+                return width + "px:" + height + "px";
+            }
+
             var gcd = function(a, b) {
                 return b == 0 ? a : gcd(b, a % b);
             };
@@ -178,28 +200,28 @@ function showLayerInfoPanel(thisObj) {
                 projectName = projectFileName;
             }
         }
-        return decodeURIComponent(projectName);
+        return decodeURIComponent(projectName); // Decode any URL-encoded characters
     }
 
     function getAnimatedProperties(layer, settings) {
         var animatedProps = [];
-
+    
         function checkPropertyGroup(propertyGroup) {
             for (var i = 1; i <= propertyGroup.numProperties; i++) {
                 var prop = propertyGroup.property(i);
-
+    
                 if (prop.numKeys > 0) {
                     animatedProps.push(prop.name);
                 }
-
+    
                 if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
                     checkPropertyGroup(prop);
                 }
             }
         }
-
+    
         checkPropertyGroup(layer);
-
+    
         if (animatedProps.length > 0) {
             return animatedProps;
         } else {
@@ -212,60 +234,99 @@ function showLayerInfoPanel(thisObj) {
     }
 
     function getLayerScale(layer) {
+        if (layer instanceof AVLayer && layer.hasAudio && !layer.hasVideo) {
+            return ""; // Return an empty string for Audio type layers
+        }
+
         if (layer.transform && layer.transform.scale) {
-            var scale = layer.transform.scale.value;
-            if (typeof scale === 'object' && scale.length !== undefined) {
-                var roundedScale = [];
-                for (var i = 0; i < scale.length; i++) {
-                    roundedScale.push(Math.round(scale[i] * 10) / 10);
+            var sc = layer.transform.scale.value;
+
+            // Ensure sc is an array
+            if (typeof sc === 'number') {
+                sc = [sc];
+            } else if (Object.prototype.toString.call(sc) !== '[object Array]') {
+                sc = [].slice.call(sc);
+            }
+
+            if (layer instanceof CameraLayer || layer instanceof LightLayer || layer.threeDLayer) {
+                // Ensure scale is returned as X, Y, Z for Camera, Light, and 3D layers
+                var roundedSc = [0, 0, 0]; // Default to [0, 0, 0] for safety
+                for (var i = 0; i < 3; i++) {
+                    roundedSc[i] = sc[i] !== undefined ? Math.round(sc[i] * 10) / 10 : 0;
                 }
-                return layer.threeDLayer ? roundedScale.join(", ") : roundedScale.slice(0, 2).join(", ");
+                return roundedSc.join(", ");
             } else {
-                var roundedScale = Math.round(scale * 10) / 10;
-                return roundedScale.toString();
+                // Return X, Y for 2D layers
+                var roundedSc2D = [0, 0]; // Default to [0, 0] for safety
+                for (var j = 0; j < 2; j++) {
+                    roundedSc2D[j] = sc[j] !== undefined ? Math.round(sc[j] * 10) / 10 : 0;
+                }
+                return roundedSc2D.join(", ");
             }
         }
         return "NoScale";
     }
 
     function getLayerRotation(layer) {
-        if (layer.threeDLayer) {
-            var rotationX = layer.transform.xRotation ? layer.transform.xRotation.value : 0;
-            var rotationY = layer.transform.yRotation ? layer.transform.yRotation.value : 0;
-            var rotationZ = layer.transform.zRotation ? layer.transform.zRotation.value : 0;
-            var rotations = [rotationX, rotationY, rotationZ];
-            var roundedRotations = [];
-            for (var i = 0; i < rotations.length; i++) {
-                roundedRotations.push(Math.round(rotations[i] * 10) / 10);
-            }
-            return roundedRotations.join(", ");
-        } else {
-            if (layer.transform && layer.transform.rotation) {
-                var rotation = layer.transform.rotation.value;
-                return Math.round(rotation * 10) / 10;
-            }
+        if (layer instanceof AVLayer && layer.hasAudio && !layer.hasVideo) {
+            return ""; // Return an empty string for Audio type layers
         }
-        if (layer instanceof CameraLayer || layer instanceof LightLayer) {
-            var cameraLightRotation = layer.transform.orientation ? layer.transform.orientation.value : [0, 0, 0];
-            var roundedCameraLightRotation = [];
-            for (var j = 0; j < cameraLightRotation.length; j++) {
-                roundedCameraLightRotation.push(Math.round(cameraLightRotation[j] * 10) / 10);
+
+        if (layer.transform) {
+            var rotation;
+
+            // Handle 3D layers
+            if (layer.threeDLayer) {
+                var rotationX = layer.transform.xRotation ? layer.transform.xRotation.value : 0;
+                var rotationY = layer.transform.yRotation ? layer.transform.yRotation.value : 0;
+                var rotationZ = layer.transform.zRotation ? layer.transform.zRotation.value : 0;
+                rotation = [rotationX, rotationY, rotationZ];
+            } else {
+                // Handle 2D layers and layers without xRotation, yRotation, zRotation properties
+                rotation = layer.transform.rotation ? [layer.transform.rotation.value] : [0];
             }
-            return roundedCameraLightRotation.join(", ");
+
+            // Ensure rotation is an array
+            if (typeof rotation === 'number') {
+                rotation = [rotation];
+            } else if (Object.prototype.toString.call(rotation) !== '[object Array]') {
+                rotation = [].slice.call(rotation);
+            }
+
+            // Ensure position is returned as X, Y, Z for Camera, Light, and 3D layers
+            if (layer instanceof CameraLayer || layer instanceof LightLayer || layer.threeDLayer) {
+                var roundedRot = [0, 0, 0]; // Default to [0, 0, 0] for safety
+                for (var i = 0; i < 3; i++) {
+                    roundedRot[i] = rotation[i] !== undefined ? Math.round(rotation[i] * 10) / 10 : 0;
+                }
+                return roundedRot.join(", ");
+            } else {
+                // Return X for 2D layers
+                var roundedRot2D = [0]; // Default to [0] for safety
+                roundedRot2D[0] = rotation[0] !== undefined ? Math.round(rotation[0] * 10) / 10 : 0;
+                return roundedRot2D.join(", ");
+            }
         }
         return "NoRotation";
     }
 
-    function getFileExtension(layer) {
+    function getFileExtension(layer, settings, customExtension) {
         if (layer.source && layer.source.file && layer.source.file.name) {
             var fileName = layer.source.file.name;
             var extension = fileName.split('.').pop();
+            if (customExtension) {
+                return extension.toLowerCase() === customExtension.toLowerCase() ? customExtension : (settings && settings.Fext ? (settings.Fext.active ? settings.Fext.customValue : settings.Fext.defaultValue) : "NoExtension");
+            }
             return extension;
         }
-        return "NoExtension";
+        return settings && settings.Fext ? (settings.Fext.active ? settings.Fext.customValue : settings.Fext.defaultValue) : "NoExtension";
     }
 
     function getLayerOpacity(layer) {
+        if (layer instanceof AVLayer && layer.hasAudio && !layer.hasVideo) {
+            return ""; // Return an empty string for Audio type layers
+        }
+
         if (layer.transform && layer.transform.opacity) {
             var opacity = layer.transform.opacity.value;
             return Math.round(opacity * 10) / 10;
@@ -284,22 +345,22 @@ function showLayerInfoPanel(thisObj) {
 
     function getExpressionControlledProperties(layer, settings) {
         var expressionProps = [];
-
+    
         function checkPropertyGroup(propertyGroup) {
             for (var i = 1; i <= propertyGroup.numProperties; i++) {
                 var prop = propertyGroup.property(i);
                 if (prop.expression && prop.expressionEnabled) {
                     expressionProps.push(prop.name);
                 }
-
+    
                 if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
                     checkPropertyGroup(prop);
                 }
             }
         }
-
+    
         checkPropertyGroup(layer);
-
+    
         if (expressionProps.length > 0) {
             return expressionProps.join(", ");
         } else {
@@ -393,14 +454,14 @@ function showLayerInfoPanel(thisObj) {
         var parentLayer = layer.parent;
         var comp = layer.containingComp;
         var sameParentLayers = [];
-
+        
         for (var i = 1; i <= comp.numLayers; i++) {
             var currentLayer = comp.layer(i);
             if (currentLayer.parent === parentLayer) {
                 sameParentLayers.push(currentLayer);
             }
         }
-
+        
         var relativeIndex = sameParentLayers.indexOf(layer) + 1;
         return relativeIndex;
     }
@@ -410,7 +471,7 @@ function showLayerInfoPanel(thisObj) {
         var day = ("0" + date.getDate()).slice(-2);
         var month = ("0" + (date.getMonth() + 1)).slice(-2);
         var year = date.getFullYear().toString();
-
+        
         switch (format) {
             case '1':
                 return day;
@@ -420,6 +481,34 @@ function showLayerInfoPanel(thisObj) {
                 return year;
             default:
                 return day + "." + month + "." + year;
+        }
+    }
+
+    function getMaskCount(layer, settings) {
+        if (layer.mask && layer.mask.numProperties > 0) {
+            return layer.mask.numProperties;
+        } else {
+            if (settings && settings.Lmc) {
+                return settings.Lmc.active ? settings.Lmc.customValue : settings.Lmc.defaultValue;
+            } else {
+                return "NoMasks";
+            }
+        }
+    }
+
+    function getMaskNames(layer, settings) {
+        if (layer.mask && layer.mask.numProperties > 0) {
+            var maskNames = [];
+            for (var i = 1; i <= layer.mask.numProperties; i++) {
+                maskNames.push(layer.mask.property(i).name);
+            }
+            return maskNames.join(", ");
+        } else {
+            if (settings && settings.Lmn) {
+                return settings.Lmn.active ? settings.Lmn.customValue : settings.Lmn.defaultValue;
+            } else {
+                return "NoMaskNames";
+            }
         }
     }
 
@@ -459,12 +548,14 @@ function showLayerInfoPanel(thisObj) {
                     "Lsc: " + getLayerScale(layer),
                     "Lrot: " + getLayerRotation(layer),
                     "Lops: " + getLayerOpacity(layer),
+                    "Lmn: " + getMaskCount(layer, settings),
+                    "Lmc: " + getMaskNames(layer, settings),
                     "E: " + getEffectNames(layer, settings),
                     "Ec: " + getEffectsCount(layer),
                     "An: " + getAnimatedProperties(layer, settings).join(", "),
                     "Lexp: " + getExpressionControlledProperties(layer, settings),
                     "Tm: " + getTrackMatteType(layer, settings),
-                    "Fext: " + getFileExtension(layer),
+                    "Fext: " + getFileExtension(layer, settings),
                     "Cd: " + getCurrentDate()
                 ];
     
@@ -475,7 +566,7 @@ function showLayerInfoPanel(thisObj) {
         } else {
             txtLayerInfo.text = "Please select a valid composition.";
         }
-    }    
+    }
 
     updateLayerInfo();
 
