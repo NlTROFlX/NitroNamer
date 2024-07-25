@@ -1,8 +1,8 @@
 {
     "currentSettings": {
-        "UICompact": false,
+        "UICompact": true,
         "allLayers": true,
-        "template": "(Layer).Lmc | Lmn",
+        "template": "(Layer).I ([Layer Index).i]",
         "briefly": false,
         "brieflyType": 4,
         "selectedPresetIndex": 0

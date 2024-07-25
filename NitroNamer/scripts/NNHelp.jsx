@@ -2,7 +2,7 @@ function showHelp() {
     var helpWin = new Window("dialog", "NitroNamer - Variable Library", undefined, {resizeable: true});
     helpWin.orientation = "column";
     helpWin.alignChildren = ["fill", "top"];
-    helpWin.spacing = 10;
+    helpWin.spacing = 0;
 
     var totalVariables = 0;
 
@@ -88,8 +88,8 @@ function showHelp() {
         "An - Animated properties",
         "An{delimiter} - Animated properties with custom delimiter",
         "Lexp - List of properties controlled by expressions",
-        "Fext - File extension of the layer",
-        "Fext(extension) - Custom extension check"
+        "Lmn - List of mask names on a layer",
+        "Lmc - Number of masks on a layer"
     ];
     addGroupPanel(secondRow, "Layer Properties", layerPropertiesVariables);
 
@@ -97,7 +97,9 @@ function showHelp() {
     var otherVariables = [
         "O - Original name of the layer",
         "Lpnt - Parent name",
-        "Lpnt(parentIndex) - Parent index relative to siblings"
+        "Lpnt(parentIndex) - Parent index relative to siblings",
+        "Fext - File extension of the layer",
+        "Fext(format) - Custom extension check (mp3, mp4, mov and any other)"
     ];
     addGroupPanel(secondRow, "Other", otherVariables);
 

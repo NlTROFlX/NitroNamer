@@ -521,12 +521,36 @@ function showLayerInfoPanel(thisObj) {
             if (layer) {
                 var settings = loadVariableSettings();
                 var durationFunction = getDuration(layer);
+    
+                var validLayerCount = 0; // Initialize valid layer count
+    
+                // First pass to count valid layers
+                for (var i = 1; i <= comp.numLayers; i++) {
+                    var currentLayer = comp.layer(i);
+                    if (!currentLayer.locked) {
+                        validLayerCount++;
+                    }
+                }
+    
+                var validIndex = 0; // Initialize valid layer index
+    
+                // Second pass to find the index for the selected layer
+                for (var j = 1; j <= comp.numLayers; j++) {
+                    var currentLayer = comp.layer(j);
+                    if (!currentLayer.locked) {
+                        validIndex++;
+                    }
+                    if (currentLayer === layer) {
+                        break;
+                    }
+                }
+    
                 var info = [
                     "C: " + comp.name,
                     "Pn: " + getProjectName(),
                     "T: " + getLayerType(layer),
                     "i: " + layer.index,
-                    "I: " + layer.index,
+                    "I: " + validIndex,  // Set I to the valid layer index
                     "Lpnt: " + getLayerParentName(layer),
                     "LpntIndex: " + getLayerParentIndex(layer),
                     "O: " + layer.name,
@@ -566,7 +590,7 @@ function showLayerInfoPanel(thisObj) {
         } else {
             txtLayerInfo.text = "Please select a valid composition.";
         }
-    }
+    }    
 
     updateLayerInfo();
 

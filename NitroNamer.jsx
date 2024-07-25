@@ -1957,18 +1957,28 @@ function buildUI(thisObj) {
                 // Determine the layer order
                 var layers = getLayerOrder(comp, allLayers, isCtrlShiftPressed); // Use isCtrlShiftPressed for inversion
                 
+                var validLayerCount = 0; // Initialize valid layer count
+    
+                // First pass to count valid layers
+                for (var i = 0; i < layers.length; i++) {
+                    var layer = layers[i];
+                    if (layer.locked) continue; // Skip locked layers
+                    validLayerCount++;
+                }
+    
+                var validIndex = 1; // Initialize valid layer index
+    
+                // Second pass to rename layers
                 for (var i = 0; i < layers.length; i++) {
                     var layer = layers[i];
                     if (layer.shy && !includeShyLayers) continue;
                     if (layer.locked) continue; // Skip locked layers
                     if (!allLayers && !layer.selected) continue;
     
-                    var indexValue = i + 1; // Ascending order by default
-    
                     var variables = {
                         "T": getLayerType(layer),
                         "i": layer.index,
-                        "I": indexValue,  // Set I to the calculated order value
+                        "I": validIndex,  // Set I to the valid layer index
                         "O": layer.name,
                         "E": getEffectNames(layer, variableSettings),
                         "An": getAnimatedProperties(layer, variableSettings).join(", "),
@@ -2027,6 +2037,8 @@ function buildUI(thisObj) {
                     } else {
                         layer.name = newName;
                     }
+    
+                    validIndex++; // Increment valid layer index
                 }
     
                 app.endUndoGroup();
