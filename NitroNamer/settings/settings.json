@@ -1,6 +1,6 @@
 {
     "currentSettings": {
-        "UICompact": true,
+        "UICompact": false,
         "allLayers": true,
         "template": "(Layer).I ([Layer Index).i]",
         "briefly": false,

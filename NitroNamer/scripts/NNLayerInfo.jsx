@@ -12,6 +12,42 @@ function showLayerInfoPanel(thisObj) {
     txtLayerInfo.alignment = ["fill", "fill"];
     txtLayerInfo.preferredSize.height = 350;
 
+    // Add refresh button with icon and hover effect
+    var grpButtons = win.add("group", undefined);
+    grpButtons.orientation = "row";
+    grpButtons.alignChildren = ["fill", "center"];
+    var scriptFile = new File($.fileName);
+    var scriptFolderPath = scriptFile.path.replace("/scripts", "/img");
+    grpButtons.margins = [0, -10, 0, 0];
+
+    var btnRefresh = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/refresh.png"), {style: "toolbutton"});
+    btnRefresh.size = [24, 24];
+    btnRefresh.imageSize = [24, 24];
+    btnRefresh.alignment = ["center", "center"];
+
+    btnRefresh.addEventListener("mouseover", function () {
+        btnRefresh.image = File(scriptFolderPath + "/refreshHover.png");
+        btnRefresh.imageSize = [24, 24];
+    });
+
+    btnRefresh.addEventListener("mouseout", function () {
+        btnRefresh.image = File(scriptFolderPath + "/refresh.png");
+        btnRefresh.imageSize = [24, 24];
+    });
+
+    btnRefresh.onClick = function () {
+        updateLayerInfo();
+    };
+
+    // Add close button
+    var btnClose = grpButtons.add("button", undefined, "Close layer info panel");
+    btnClose.alignment = ["left", "center"];
+    btnClose.size = [260,24];
+
+    btnClose.onClick = function () {
+        win.close();
+    };
+
     function loadVariableSettings() {
         var scriptFile = new File($.fileName);
         var variablesFilePath = scriptFile.path.replace("/scripts", "/scripts/variables.json");
