@@ -836,18 +836,18 @@ function buildUI(thisObj) {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/scripts";
         var variablesFile = new File(scriptFolderPath + "/variables.json");
-
+    
         var variableSettings = {};
         if (variablesFile.exists) {
             variablesFile.open("r");
             variableSettings = JSON.parse(variablesFile.read());
             variablesFile.close();
-            
+    
             // Update the last modified time
             lastModifiedTime = variablesFile.modified;
         }
         return variableSettings;
-    } 
+    }
 
     function getFileModifiedTime() {
         var scriptFile = new File($.fileName);
@@ -859,6 +859,18 @@ function buildUI(thisObj) {
         }
         return null;
     }
+
+    function getMaskCount(layer, settings) {
+        if (layer.mask && layer.mask.numProperties > 0) {
+            return layer.mask.numProperties;
+        } else {
+            if (settings && settings.Lmc) {
+                return settings.Lmc.active ? settings.Lmc.customValue : settings.Lmc.defaultValue;
+            } else {
+                return "NoMasks";
+            }
+        }
+    }    
     
     // Load settings initially
     variableSettings = loadVariableSettings();
@@ -1120,7 +1132,8 @@ function buildUI(thisObj) {
             "Fext": fileExtension,
             "Lpnt": getLayerParentName(layer),
             "LpntIndex": getLayerParentIndex(layer),
-            "Cd": getCurrentDate()
+            "Cd": getCurrentDate(),
+            "Lmc": getMaskCount(layer, settings),
         };
 
         var newName = replaceVariables(template, variables, layer.name, layer, settings);
@@ -1730,7 +1743,7 @@ function buildUI(thisObj) {
             return template.match(/^\(([^()]+)\)$/)[1];
         }
 
-        var regex = /\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|Lexp\(([^)]+)\)|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar\(([^)]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|Cd\(([^)]+)\)|Cd|[A-Z]|i|I|S|W|H/g;
+        var regex = /\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|Lexp\(([^)]+)\)|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar\(([^)]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|Cd\(([^)]+)\)|Cd|Lmc|[A-Z]|i|I|S|W|H/g;
 
         var replacements = {
             'An': { 'regex': /An\(([^)]+)\)/, 'value': '' },
@@ -1815,6 +1828,8 @@ function buildUI(thisObj) {
                 value = getCurrentDate(dateFormat);
             } else if (match === 'Cd') {
                 value = getCurrentDate();
+            } else if (match === 'Lmc') {
+                value = variables['Lmc'];
             } else {
                 value = variables[match];
             }
@@ -1948,7 +1963,8 @@ function buildUI(thisObj) {
                         "Lexp": getExpressionControlledProperties(layer, variableSettings),
                         "Fext": getFileExtension(layer, variableSettings),
                         "Lpnt": layer.parent ? layer.parent.name : "NoParent",
-                        "LpntIndex": getLayerParentIndex(layer) // Ensure this is set
+                        "LpntIndex": getLayerParentIndex(layer),
+                        "Lmc": getMaskCount(layer, variableSettings)
                     };
     
                     var newName = replaceVariables(template, variables, layer.name, layer, variableSettings);
@@ -2027,6 +2043,7 @@ function buildUI(thisObj) {
                 "H": { "defaultValue": "NoHeight", "customValue": "Custom{H}", "active": true },
                 "Lexp": { "defaultValue": "NoExpressions", "customValue": "Custom{Lexp}", "active": true },
                 "Fext": { "defaultValue": "NoExtension", "customValue": "Custom{Fext}", "active": true },
+                "Lmc": { "defaultValue": "NoMasks", "customValue": "Custom{Lmc}", "active": true },
                 "R": { "defaultValue": "NoResolution", "customValue": "Custom{R}", "active": true },
                 "Tm": { "defaultValue": "NoTrackMate", "customValue": "Custom{Tm}", "active": true },
                 "W": { "defaultValue": "NoWidth", "customValue": "Custom{W}", "active": true }

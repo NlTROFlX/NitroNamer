@@ -6,8 +6,8 @@
     },
     "Ar": {
         "defaultValue": "NoAspectRatio",
-        "customValue": "",
-        "active": false
+        "customValue": "Custom{Ar}",
+        "active": true
     },
     "E": {
         "defaultValue": "No effects",
@@ -32,6 +32,11 @@
     "Fext": {
         "defaultValue": "NoExtension",
         "customValue": "Custom{Fext}",
+        "active": true
+    },
+    "Lmc": {
+        "defaultValue": "NoMasks",
+        "customValue": "Custom{Lmc}",
         "active": true
     },
     "R": {

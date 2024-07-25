@@ -1,4 +1,3 @@
-// File does not exist or is empty, write the initial structure
 var initialData = {
     "An": { "defaultValue": "NoAnimations", "customValue": "Custom{An}", "active": true },
     "Ar": { "defaultValue": "NoAspectRatio", "customValue": "Custom{Ar}", "active": true },
@@ -7,6 +6,7 @@ var initialData = {
     "H": { "defaultValue": "NoHeight", "customValue": "Custom{H}", "active": true },
     "Lexp": { "defaultValue": "NoExpressions", "customValue": "Custom{Lexp}", "active": true },
     "Fext": { "defaultValue": "NoExtension", "customValue": "Custom{Fext}", "active": true },
+    "Lmc": { "defaultValue": "NoMasks", "customValue": "Custom{Lmc}", "active": true },
     "R": { "defaultValue": "NoResolution", "customValue": "Custom{R}", "active": true },
     "Tm": { "defaultValue": "NoTrackMate", "customValue": "Custom{Tm}", "active": true },
     "W": { "defaultValue": "NoWidth", "customValue": "Custom{W}", "active": true }
@@ -64,7 +64,7 @@ function buildNewUI(thisObj) {
     }
 
     // Add drop-down list with variable names
-    var variableNames = ["An", "Ar", "E", "F", "R", "H", "W", "Lexp", "Fext",  "Tm"];
+    var variableNames = ["An", "Ar", "E", "F", "R", "H", "W", "Lexp", "Fext", "Lmc",  "Tm"];
     var ddVariableNames = grpDropdownAndInput.add("dropdownlist", undefined, variableNames);
     ddVariableNames.selection = 0; // Select the first item by default
 
