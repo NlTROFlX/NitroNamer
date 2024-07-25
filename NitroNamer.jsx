@@ -870,6 +870,22 @@ function buildUI(thisObj) {
                 return "NoMasks";
             }
         }
+    }
+
+    function getMaskNames(layer, settings) {
+        if (layer.mask && layer.mask.numProperties > 0) {
+            var maskNames = [];
+            for (var i = 1; i <= layer.mask.numProperties; i++) {
+                maskNames.push(layer.mask.property(i).name);
+            }
+            return maskNames.join(", ");
+        } else {
+            if (settings && settings.Lmn) {
+                return settings.Lmn.active ? settings.Lmn.customValue : settings.Lmn.defaultValue;
+            } else {
+                return "NoMaskNames";
+            }
+        }
     }    
     
     // Load settings initially
@@ -1134,6 +1150,7 @@ function buildUI(thisObj) {
             "LpntIndex": getLayerParentIndex(layer),
             "Cd": getCurrentDate(),
             "Lmc": getMaskCount(layer, settings),
+            "Lmn": getMaskNames(layer, settings)
         };
 
         var newName = replaceVariables(template, variables, layer.name, layer, settings);
@@ -1743,16 +1760,17 @@ function buildUI(thisObj) {
             return template.match(/^\(([^()]+)\)$/)[1];
         }
 
-        var regex = /\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|Lexp\(([^)]+)\)|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar\(([^)]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|Cd\(([^)]+)\)|Cd|Lmc|[A-Z]|i|I|S|W|H/g;
+        var regex = /\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|Lexp\(([^)]+)\)|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar\(([^)]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|Cd\(([^)]+)\)|Cd|Lmc|Lmn\(([^)]+)\)|Lmn|[A-Z]|i|I|S|W|H/g;
 
         var replacements = {
             'An': { 'regex': /An\(([^)]+)\)/, 'value': '' },
             'E': { 'regex': /E\(([^)]+)\)/, 'value': '' },
             'Lexp': { 'regex': /Lexp\(([^)]+)\)/, 'value': '' },
-            'Fext': { 'regex': /Fext\(([^)]+)\)/, 'value': '' }
+            'Fext': { 'regex': /Fext\(([^)]+)\)/, 'value': '' },
+            'Lmn': { 'regex': /Lmn\(([^)]+)\)/, 'value': '' }
         };
 
-        result = result.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat) {
+        result = result.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskNameDelimiter) {
             var value;
 
             if (group !== undefined) {
@@ -1830,6 +1848,13 @@ function buildUI(thisObj) {
                 value = getCurrentDate();
             } else if (match === 'Lmc') {
                 value = variables['Lmc'];
+            } else if (customMaskNameDelimiter !== undefined) {
+                var maskNamesString = variables['Lmn'].split(', ').join(customMaskNameDelimiter);
+                replacements['Lmn'].value = maskNamesString;
+                usedVariables.push('Lmn');
+                return maskNamesString;
+            } else if (match === 'Lmn') {
+                value = variables['Lmn'];
             } else {
                 value = variables[match];
             }
@@ -1905,6 +1930,11 @@ function buildUI(thisObj) {
             result = result.replace(replacements['Fext'].regex, replacements['Fext'].value);
         }
 
+        // Если "Lmn" была использована, замените ее заполнитель фактическими значениями
+        if (usedVariables.indexOf('Lmn') !== -1) {
+            result = result.replace(replacements['Lmn'].regex, replacements['Lmn'].value);
+        }
+
         if (usedVariables.length === 0) {
             return result;
         }
@@ -1964,7 +1994,8 @@ function buildUI(thisObj) {
                         "Fext": getFileExtension(layer, variableSettings),
                         "Lpnt": layer.parent ? layer.parent.name : "NoParent",
                         "LpntIndex": getLayerParentIndex(layer),
-                        "Lmc": getMaskCount(layer, variableSettings)
+                        "Lmc": getMaskCount(layer, variableSettings),
+                        "Lmn": getMaskNames(layer, variableSettings)
                     };
     
                     var newName = replaceVariables(template, variables, layer.name, layer, variableSettings);
@@ -2044,6 +2075,7 @@ function buildUI(thisObj) {
                 "Lexp": { "defaultValue": "NoExpressions", "customValue": "Custom{Lexp}", "active": true },
                 "Fext": { "defaultValue": "NoExtension", "customValue": "Custom{Fext}", "active": true },
                 "Lmc": { "defaultValue": "NoMasks", "customValue": "Custom{Lmc}", "active": true },
+                "Lmn": { "defaultValue": "NoMaskNames", "customValue": "Custom{Lmn}", "active": true },
                 "R": { "defaultValue": "NoResolution", "customValue": "Custom{R}", "active": true },
                 "Tm": { "defaultValue": "NoTrackMate", "customValue": "Custom{Tm}", "active": true },
                 "W": { "defaultValue": "NoWidth", "customValue": "Custom{W}", "active": true }

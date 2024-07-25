@@ -2,7 +2,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "T.i - Lmc",
+        "template": "(Layer).Lmc | Lmn",
         "briefly": false,
         "brieflyType": 4,
         "selectedPresetIndex": 0

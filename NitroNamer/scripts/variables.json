@@ -17,7 +17,7 @@
     "F": {
         "defaultValue": "NoFrameRate",
         "customValue": "Custom{F}",
-        "active": true
+        "active": false
     },
     "H": {
         "defaultValue": "NoHeight",
@@ -37,7 +37,12 @@
     "Lmc": {
         "defaultValue": "NoMasks",
         "customValue": "Custom{Lmc}",
-        "active": true
+        "active": false
+    },
+    "Lmn": {
+        "defaultValue": "NoMaskNames",
+        "customValue": "Custom{Lmn}",
+        "active": false
     },
     "R": {
         "defaultValue": "NoResolution",
