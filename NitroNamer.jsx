@@ -872,13 +872,26 @@ function buildUI(thisObj) {
         }
     }
 
-    function getMaskNames(layer, settings) {
+    function getMaskNames(layer, settings, customMaskNameDelimiter, filterNone) {
         if (layer.mask && layer.mask.numProperties > 0) {
             var maskNames = [];
             for (var i = 1; i <= layer.mask.numProperties; i++) {
-                maskNames.push(layer.mask.property(i).name);
+                var mask = layer.mask.property(i);
+                var maskName = mask.name;
+                var maskMode = mask.maskMode;
+    
+                if (filterNone && maskMode !== MaskMode.NONE) {
+                    continue; // Skip masks that are not "none"
+                }
+    
+                maskNames.push(maskName);
             }
-            return maskNames.join(", ");
+    
+            if (customMaskNameDelimiter) {
+                return maskNames.join(customMaskNameDelimiter);
+            } else {
+                return maskNames.join(", ");
+            }
         } else {
             if (settings && settings.Lmn) {
                 return settings.Lmn.active ? settings.Lmn.customValue : settings.Lmn.defaultValue;
@@ -886,7 +899,7 @@ function buildUI(thisObj) {
                 return "NoMaskNames";
             }
         }
-    }    
+    }     
     
     // Load settings initially
     variableSettings = loadVariableSettings();
@@ -1152,6 +1165,12 @@ function buildUI(thisObj) {
             "Lmc": getMaskCount(layer, settings),
             "Lmn": getMaskNames(layer, settings)
         };
+
+        // Check for "Lmn(off)" in the template
+        var lmnOffRegex = /Lmn\(off\)/g;
+        if (template.match(lmnOffRegex)) {
+            variables["Lmn"] = getMaskNames(layer, settings, "", true);
+        }
 
         var newName = replaceVariables(template, variables, layer.name, layer, settings);
 
@@ -1767,7 +1786,8 @@ function buildUI(thisObj) {
             'E': { 'regex': /E\(([^)]+)\)/, 'value': '' },
             'Lexp': { 'regex': /Lexp\(([^)]+)\)/, 'value': '' },
             'Fext': { 'regex': /Fext\(([^)]+)\)/, 'value': '' },
-            'Lmn': { 'regex': /Lmn\(([^)]+)\)/, 'value': '' }
+            'Lmn': { 'regex': /Lmn\(([^)]+)\)/, 'value': '' },
+            'LmnOff': { 'regex': /Lmn\(off\)/, 'value': '' },
         };
 
         result = result.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskNameDelimiter) {
@@ -1855,6 +1875,8 @@ function buildUI(thisObj) {
                 return maskNamesString;
             } else if (match === 'Lmn') {
                 value = variables['Lmn'];
+            } else if (match === 'Lmn(off)') {
+                value = getMaskNames(layer, settings, "", true); // Use empty string as delimiter and filter for "none" masks
             } else {
                 value = variables[match];
             }
@@ -2007,6 +2029,11 @@ function buildUI(thisObj) {
                         "Lmc": getMaskCount(layer, variableSettings),
                         "Lmn": getMaskNames(layer, variableSettings)
                     };
+
+                    var lmnOffRegex = /Lmn\(off\)/g;
+                    if (template.match(lmnOffRegex)) {
+                        variables["Lmn"] = getMaskNames(layer, variableSettings, "", true); // Use empty string as delimiter and filter for "none" masks
+                    }
     
                     var newName = replaceVariables(template, variables, layer.name, layer, variableSettings);
     
