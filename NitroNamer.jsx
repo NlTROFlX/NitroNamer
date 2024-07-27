@@ -30,42 +30,18 @@ function buildUI(thisObj) {
     btnCopy.size = [24, 24];
     btnCopy.imageSize = [24, 24];
     btnCopy.alignment = ["right", "center"];
-    btnCopy.addEventListener("mouseover", function() {
-        btnCopy.image = File(scriptFolderPath + "/NitroNamer/img/copyHover.png");
-        btnCopy.imageSize = [24, 24];
-    });
-    btnCopy.addEventListener("mouseout", function() {
-        btnCopy.image = File(scriptFolderPath + "/NitroNamer/img/copy.png");
-        btnCopy.imageSize = [24, 24];
-    });
 
     // Add Save button with icon and hover effect
     var btnSave = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/save.png"), {style: "toolbutton"});
     btnSave.size = [24, 24];
     btnSave.imageSize = [24, 24];
     btnSave.alignment = ["right", "center"];
-    btnSave.addEventListener("mouseover", function() {
-        btnSave.image = File(scriptFolderPath + "/NitroNamer/img/saveHover.png");
-        btnSave.imageSize = [24, 24];
-    });
-    btnSave.addEventListener("mouseout", function() {
-        btnSave.image = File(scriptFolderPath + "/NitroNamer/img/save.png");
-        btnSave.imageSize = [24, 24];
-    });
 
     // Add Delete button with icon and hover effect
     var btnCircleMinus = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/delete.png"), {style: "toolbutton"});
     btnCircleMinus.size = [24, 24];
     btnCircleMinus.imageSize = [24, 24];
     btnCircleMinus.alignment = ["right", "center"];
-    btnCircleMinus.addEventListener("mouseover", function() {
-        btnCircleMinus.image = File(scriptFolderPath + "/NitroNamer/img/deleteHover.png");
-        btnCircleMinus.imageSize = [24, 24];
-    });
-    btnCircleMinus.addEventListener("mouseout", function() {
-        btnCircleMinus.image = File(scriptFolderPath + "/NitroNamer/img/delete.png");
-        btnCircleMinus.imageSize = [24, 24];
-    });
 
     // Add Minimize button with icon and hover effect
     var btnMinimize = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/minimize.png"), {style: "toolbutton"});
@@ -350,15 +326,6 @@ function buildUI(thisObj) {
     btnSettings.imageSize = [24, 24]; // Set image size
     btnSettings.alignment = ["left", "center"];
 
-    btnSettings.addEventListener("mouseover", function() {
-        btnSettings.image = File(scriptFolderPath + "/NitroNamer/img/settingsHover.png");
-        btnSettings.imageSize = [24, 24];
-    });
-    btnSettings.addEventListener("mouseout", function() {
-        btnSettings.image = File(scriptFolderPath + "/NitroNamer/img/settings.png");
-        btnSettings.imageSize = [24, 24];
-    });
-
     var chkBriefly = grpBriefly.add("checkbox", undefined);
     var ddBrieflyType = grpBriefly.add("dropdownlist", undefined, ["Camel Case", "Pascal Case", "Snake Case", "Kebab Case", "Screaming Snake Case"]);
     ddBrieflyType.maximumSize.width = 100;
@@ -399,6 +366,27 @@ function buildUI(thisObj) {
         btnRename.imageSize = [24, 24];
     }
 
+    function addHoverEffect(button, iconPath) {
+        button.addEventListener("mouseover", function() {
+            button.image = File(iconPath + "Hover.png");
+            button.imageSize = [24, 24];
+        });
+        button.addEventListener("mouseout", function() {
+            button.image = File(iconPath + ".png");
+            button.imageSize = [24, 24];
+        });
+    }
+
+    addHoverEffect(btnCopy, scriptFolderPath + "/NitroNamer/img/copy");
+    addHoverEffect(btnSave, scriptFolderPath + "/NitroNamer/img/save");
+    addHoverEffect(btnCircleMinus, scriptFolderPath + "/NitroNamer/img/delete");
+    addHoverEffect(btnMinimize, scriptFolderPath + "/NitroNamer/img/minimize");
+    addHoverEffect(btnHelp, scriptFolderPath + "/NitroNamer/img/helpIcon");
+    addHoverEffect(btnVariables, scriptFolderPath + "/NitroNamer/img/variablesIcon");
+    addHoverEffect(btnReset, scriptFolderPath + "/NitroNamer/img/resetIcon");
+    addHoverEffect(btnSettings, scriptFolderPath + "/NitroNamer/img/settings");
+
+
     // Event handlers for Rename button hover effect
     btnRename.addEventListener("mouseover", function() {
         checkAndUpdateSettings();
@@ -413,36 +401,6 @@ function buildUI(thisObj) {
     });
     btnRename.addEventListener("mouseout", function() {
         updateRenameButtonIcon(); // Re-check the field value when mouse out
-    });
-
-    // Event handlers for Help button hover effect
-    btnHelp.addEventListener("mouseover", function() {
-        btnHelp.image = File(scriptFolderPath + "/NitroNamer/img/helpIconHover.png");
-        btnHelp.imageSize = [24, 24];
-    });
-    btnHelp.addEventListener("mouseout", function() {
-        btnHelp.image = File(scriptFolderPath + "/NitroNamer/img/helpIcon.png");
-        btnHelp.imageSize = [24, 24];
-    });
-
-    // Event handlers for Reset button hover effect
-    btnReset.addEventListener("mouseover", function() {
-        btnReset.image = File(scriptFolderPath + "/NitroNamer/img/resetIconHover.png");
-        btnReset.imageSize = [24, 24];
-    });
-    btnReset.addEventListener("mouseout", function() {
-        btnReset.image = File(scriptFolderPath + "/NitroNamer/img/resetIcon.png");
-        btnReset.imageSize = [24, 24];
-    });
-
-    // Event handlers for Variables button hover effect
-    btnVariables.addEventListener("mouseover", function() {
-        btnVariables.image = File(scriptFolderPath + "/NitroNamer/img/variablesIconHover.png");
-        btnVariables.imageSize = [24, 24];
-    });
-    btnVariables.addEventListener("mouseout", function() {
-        btnVariables.image = File(scriptFolderPath + "/NitroNamer/img/variablesIcon.png");
-        btnVariables.imageSize = [24, 24];
     });
 
     // Show variables when Variables button is clicked
@@ -543,7 +501,6 @@ function buildUI(thisObj) {
     function trim(str) {
         return str.replace(/^\s+|\s+$/g, '');
     }
-
 
     // Delete preset when Delete button is clicked
     btnCircleMinus.onClick = function() {
@@ -872,26 +829,13 @@ function buildUI(thisObj) {
         }
     }
 
-    function getMaskNames(layer, settings, customMaskNameDelimiter, filterNone) {
+    function getMaskNames(layer, settings) {
         if (layer.mask && layer.mask.numProperties > 0) {
             var maskNames = [];
             for (var i = 1; i <= layer.mask.numProperties; i++) {
-                var mask = layer.mask.property(i);
-                var maskName = mask.name;
-                var maskMode = mask.maskMode;
-    
-                if (filterNone && maskMode !== MaskMode.NONE) {
-                    continue; // Skip masks that are not "none"
-                }
-    
-                maskNames.push(maskName);
+                maskNames.push(layer.mask.property(i).name);
             }
-    
-            if (customMaskNameDelimiter) {
-                return maskNames.join(customMaskNameDelimiter);
-            } else {
-                return maskNames.join(", ");
-            }
+            return maskNames.join(", ");
         } else {
             if (settings && settings.Lmn) {
                 return settings.Lmn.active ? settings.Lmn.customValue : settings.Lmn.defaultValue;
@@ -899,7 +843,7 @@ function buildUI(thisObj) {
                 return "NoMaskNames";
             }
         }
-    }     
+    }    
     
     // Load settings initially
     variableSettings = loadVariableSettings();
@@ -1165,12 +1109,6 @@ function buildUI(thisObj) {
             "Lmc": getMaskCount(layer, settings),
             "Lmn": getMaskNames(layer, settings)
         };
-
-        // Check for "Lmn(off)" in the template
-        var lmnOffRegex = /Lmn\(off\)/g;
-        if (template.match(lmnOffRegex)) {
-            variables["Lmn"] = getMaskNames(layer, settings, "", true);
-        }
 
         var newName = replaceVariables(template, variables, layer.name, layer, settings);
 
@@ -1786,8 +1724,7 @@ function buildUI(thisObj) {
             'E': { 'regex': /E\(([^)]+)\)/, 'value': '' },
             'Lexp': { 'regex': /Lexp\(([^)]+)\)/, 'value': '' },
             'Fext': { 'regex': /Fext\(([^)]+)\)/, 'value': '' },
-            'Lmn': { 'regex': /Lmn\(([^)]+)\)/, 'value': '' },
-            'LmnOff': { 'regex': /Lmn\(off\)/, 'value': '' },
+            'Lmn': { 'regex': /Lmn\(([^)]+)\)/, 'value': '' }
         };
 
         result = result.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskNameDelimiter) {
@@ -1875,8 +1812,6 @@ function buildUI(thisObj) {
                 return maskNamesString;
             } else if (match === 'Lmn') {
                 value = variables['Lmn'];
-            } else if (match === 'Lmn(off)') {
-                value = getMaskNames(layer, settings, "", true); // Use empty string as delimiter and filter for "none" masks
             } else {
                 value = variables[match];
             }
@@ -2029,11 +1964,6 @@ function buildUI(thisObj) {
                         "Lmc": getMaskCount(layer, variableSettings),
                         "Lmn": getMaskNames(layer, variableSettings)
                     };
-
-                    var lmnOffRegex = /Lmn\(off\)/g;
-                    if (template.match(lmnOffRegex)) {
-                        variables["Lmn"] = getMaskNames(layer, variableSettings, "", true); // Use empty string as delimiter and filter for "none" masks
-                    }
     
                     var newName = replaceVariables(template, variables, layer.name, layer, variableSettings);
     
