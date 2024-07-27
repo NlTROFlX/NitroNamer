@@ -2,12 +2,18 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "T.i",
+        "template": "An(/*)E( | )Lexp(#)",
         "briefly": false,
-        "brieflyType": 0,
-        "selectedPresetIndex": 6
+        "brieflyType": 4,
+        "selectedPresetIndex": 2
     },
     "userPresets": {
+        "preset_12": {
+            "allLayers": true,
+            "template": "An, Ar, E, | Lmn",
+            "briefly": false,
+            "brieflyType": 0
+        },
         "preset_1": {
             "allLayers": true,
             "template": "(Layer).i \\ Lpos \\ Lsc \\ Lrot \\ Lops",

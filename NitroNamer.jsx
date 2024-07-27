@@ -802,30 +802,18 @@ function buildUI(thisObj) {
     function loadVariableSettings() {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/scripts";
-        var variablesFile = new File(scriptFolderPath + "/variables.json");
-    
-        var variableSettings = {};
-        if (variablesFile.exists) {
-            variablesFile.open("r");
-            variableSettings = JSON.parse(variablesFile.read());
-            variablesFile.close();
-    
-            // Update the last modified time
-            lastModifiedTime = variablesFile.modified;
-        }
-        return variableSettings;
-    }
+        var variablesFile = scriptFolderPath + "/variables.json";
+        
+        return readJSONFile(variablesFile);
+    }    
 
-    function getFileModifiedTime() {
-        var scriptFile = new File($.fileName);
-        var scriptFolderPath = scriptFile.path + "/NitroNamer/scripts";
-        var variablesFile = new File(scriptFolderPath + "/variables.json");
-    
-        if (variablesFile.exists) {
-            return variablesFile.modified;
+    function getFileModifiedTime(filePath) {
+        var file = new File(filePath);
+        if (file.exists) {
+            return file.modified;
         }
         return null;
-    }
+    }    
 
     function getMaskCount(layer, settings) {
         if (layer.mask && layer.mask.numProperties > 0) {
@@ -1051,12 +1039,16 @@ function buildUI(thisObj) {
     }    
 
     function checkAndUpdateSettings() {
-        var currentModifiedTime = getFileModifiedTime();
+        var scriptFile = new File($.fileName);
+        var scriptFolderPath = scriptFile.path + "/NitroNamer/scripts";
+        var variablesFile = scriptFolderPath + "/variables.json";
+        
+        var currentModifiedTime = getFileModifiedTime(variablesFile);
         if (currentModifiedTime && (!lastModifiedTime || currentModifiedTime.getTime() !== lastModifiedTime.getTime())) {
             variableSettings = loadVariableSettings();
             lastModifiedTime = currentModifiedTime;
         }
-    }      
+    }    
 
     // Generate new name for a layer based on the template
     function generateNewName(layer, template, briefly, brieflyType, settings) {
