@@ -706,18 +706,18 @@ function buildUI(thisObj) {
     function saveSettings(settings, isCurrent) {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
-        var settingsFile = new File(scriptFolderPath + "/settings.json");
-
+        var settingsFile = scriptFolderPath + "/settings.json";
+    
         if (!Folder(scriptFolderPath).exists) {
             Folder(scriptFolderPath).create();
         }
-
+    
         var existingSettings = loadSettings() || {};
         var userPresets = existingSettings.userPresets || {};
         var currentSettings = existingSettings.currentSettings || {};
-
+    
         var newPresetKey = null; // Initialize new preset key
-
+    
         if (isCurrent) {
             // Only update properties in currentSettings without replacing the entire object
             for (var key in settings) {
@@ -735,7 +735,7 @@ function buildUI(thisObj) {
             }
             newPresetKey = "preset_" + nextPresetNumber;
             userPresets[newPresetKey] = settings;
-
+    
             // Move the new preset to the beginning
             var newUserPresets = {};
             newUserPresets[newPresetKey] = settings;
@@ -746,45 +746,55 @@ function buildUI(thisObj) {
             }
             userPresets = newUserPresets;
         }
-
+    
         existingSettings.userPresets = userPresets;
         existingSettings.currentSettings = currentSettings;
-
-        settingsFile.encoding = "UTF-8"; // Set encoding to UTF-8
-        settingsFile.open("w");
-        settingsFile.write(JSON.stringify(existingSettings, null, 4));
-        settingsFile.close();
-
+    
+        writeJSONFile(settingsFile, existingSettings);
+    
         return newPresetKey; // Return the key of the newly saved preset
-    }
+    }    
 
     function isArray(value) {
         return Object.prototype.toString.call(value) === '[object Array]';
     }
 
-    // Load settings from a JSON file
+    function readJSONFile(filePath) {
+        var file = new File(filePath);
+        var data = {};
+        if (file.exists) {
+            file.open("r");
+            data = JSON.parse(file.read());
+            file.close();
+        }
+        return data;
+    }
+
+    function writeJSONFile(filePath, data) {
+        var file = new File(filePath);
+        file.encoding = "UTF-8"; // Set encoding to UTF-8
+        file.open("w");
+        file.write(JSON.stringify(data, null, 4));
+        file.close();
+    }
+
     function loadSettings() {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
-        var settingsFile = new File(scriptFolderPath + "/settings.json");
-
-        var settings = {};
-        if (settingsFile.exists) {
-            settingsFile.open("r");
-            settings = JSON.parse(settingsFile.read());
-            settingsFile.close();
-        }
-
+        var settingsFile = scriptFolderPath + "/settings.json";
+    
+        var settings = readJSONFile(settingsFile);
+    
         if (!settings.currentSettings) {
             settings.currentSettings = {};
         }
-
+    
         if (settings.currentSettings.UICompact === undefined) {
             settings.currentSettings.UICompact = false;
         }
-
+    
         return settings;
-    }
+    }    
 
     var variableSettings;
     var lastModifiedTime;
