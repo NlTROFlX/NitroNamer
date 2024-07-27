@@ -497,11 +497,6 @@ function buildUI(thisObj) {
         txtTemplate.text = settings.template;
     };
 
-    // Реализация функции trim
-    function trim(str) {
-        return str.replace(/^\s+|\s+$/g, '');
-    }
-
     // Delete preset when Delete button is clicked
     btnCircleMinus.onClick = function() {
         var selectedPreset = ddLayerMode.selection;
@@ -1053,43 +1048,19 @@ function buildUI(thisObj) {
     // Generate new name for a layer based on the template
     function generateNewName(layer, template, briefly, brieflyType, settings) {
         checkAndUpdateSettings(); // Check and update settings before generating the new name
-
-        var effectNames = [];
-        if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
-            for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
-                var effect = layer.property("ADBE Effect Parade").property(j);
-                effectNames.push(effect.name);
-            }
-        }
-
-        var effectsString = getEffectNames(layer, settings);
-        var compName = app.project.activeItem.name;
-        var frameRate = getFrameRate(layer, settings);
-        var duration = getDuration(layer);
-        var durationInFrames = getDurationInFrames(layer);
-        var projectName = getProjectName();
-        var expressionProps = getExpressionControlledProperties(layer, settings);
-        var fileExtension = getFileExtension(layer, settings);
-
-        if (briefly) {
-            frameRate = parseFloat(frameRate).toFixed(2); 
-        }
-
-        var animatedProps = getAnimatedProperties(layer, settings);
-        var animatedPropsString = isArray(animatedProps) ? animatedProps.join(", ") : animatedProps;
-
+    
         var variables = {
             "T": getLayerType(layer),
             "i": layer.index,
             "I": localIndex,
             "O": layer.name,
-            "E": effectsString,
-            "An": animatedPropsString,
-            "F": frameRate,
+            "E": getEffectNames(layer, settings),
+            "An": getAnimatedProperties(layer, settings).join(", "),
+            "F": getFrameRate(layer, settings),
             "R": getResolution(layer, settings),
-            "D": duration,
-            "Df": durationInFrames,
-            "C": compName,
+            "D": getDuration(layer),
+            "Df": getDurationInFrames(layer),
+            "C": app.project.activeItem.name,
             "Ip": layer.inPoint.toFixed(2),
             "Op": layer.outPoint.toFixed(2),
             "S": getSourceName(layer),
@@ -1098,44 +1069,50 @@ function buildUI(thisObj) {
             "Tm": getTrackMatteType(layer, settings),
             "Ar": getAspectRatio(layer, settings),
             "Ec": getEffectsCount(layer),
-            "Pn": projectName,
+            "Pn": getProjectName(),
             "Lpos": getLayerPosition(layer),
             "Lsc": getLayerScale(layer),
             "Lrot": getLayerRotation(layer),
             "Lops": getLayerOpacity(layer),
-            "Lexp": expressionProps,
-            "Fext": fileExtension,
+            "Lexp": getExpressionControlledProperties(layer, settings),
+            "Fext": getFileExtension(layer, settings),
             "Lpnt": getLayerParentName(layer),
             "LpntIndex": getLayerParentIndex(layer),
             "Cd": getCurrentDate(),
             "Lmc": getMaskCount(layer, settings),
             "Lmn": getMaskNames(layer, settings)
         };
-
-        var newName = replaceVariables(template, variables, layer.name, layer, settings);
-
+    
         if (briefly) {
-            switch (brieflyType) {
-                case "Camel Case":
-                    newName = toCamelCase(newName);
-                    break;
-                case "Pascal Case":
-                    newName = toPascalCase(newName);
-                    break;
-                case "Snake Case":
-                    newName = toSnakeCase(newName);
-                    break;
-                case "Kebab Case":
-                    newName = toKebabCase(newName);
-                    break;
-                case "Screaming Snake Case":
-                    newName = toScreamingSnakeCase(newName);
-                    break;
-            }
+            variables.F = parseFloat(variables.F).toFixed(2); 
         }
-
+    
+        var newName = replaceVariables(template, variables, layer.name, layer, settings);
+    
+        if (briefly) {
+            newName = toBrieflyCase(newName, brieflyType);
+        }
+    
         return newName;
     }
+    
+    function toBrieflyCase(str, caseType) {
+        switch (caseType) {
+            case "Camel Case":
+                return toCamelCase(str);
+            case "Pascal Case":
+                return toPascalCase(str);
+            case "Snake Case":
+                return toSnakeCase(str);
+            case "Kebab Case":
+                return toKebabCase(str);
+            case "Screaming Snake Case":
+                return toScreamingSnakeCase(str);
+            default:
+                return str;
+        }
+    }
+    
 
     // Get the list of properties controlled by expressions
     function getExpressionControlledProperties(layer, settings) {

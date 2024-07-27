@@ -17,7 +17,7 @@
     "F": {
         "defaultValue": "NoFrameRate",
         "customValue": "Custom{F}",
-        "active": false
+        "active": true
     },
     "H": {
         "defaultValue": "NoHeight",
@@ -32,7 +32,7 @@
     "Fext": {
         "defaultValue": "NoExtension",
         "customValue": "Custom{Fext}",
-        "active": true
+        "active": false
     },
     "Lmc": {
         "defaultValue": "NoMasks",
