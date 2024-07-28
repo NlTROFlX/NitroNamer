@@ -2,7 +2,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "Lmn(add)",
+        "template": "Lmc - Lmc(none) | Lmc(add) | Lmn - Lmn(none) | Lmn(add)",
         "briefly": false,
         "brieflyType": 4,
         "selectedPresetIndex": 0

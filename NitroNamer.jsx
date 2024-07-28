@@ -810,9 +810,37 @@ function buildUI(thisObj) {
         return null;
     }    
 
-    function getMaskCount(layer, settings) {
+    function getMaskCount(layer, settings, mode) {
+        var maskCount = 0;
+        var customSeparator = mode;
+    
+        // Define mask modes
+        var maskModes = {
+            "none": MaskMode.NONE,
+            "add": MaskMode.ADD,
+            "subtract": MaskMode.SUBTRACT,
+            "intersect": MaskMode.INTERSECT,
+            "lighten": MaskMode.LIGHTEN,
+            "darken": MaskMode.DARKEN,
+            "difference": MaskMode.DIFFERENCE
+        };
+    
+        // Check if the mode is valid
+        var isValidMode = maskModes.hasOwnProperty(mode);
+    
         if (layer.mask && layer.mask.numProperties > 0) {
-            return layer.mask.numProperties;
+            for (var i = 1; i <= layer.mask.numProperties; i++) {
+                var mask = layer.mask.property(i);
+    
+                // Check the mask mode
+                if (isValidMode && mask.maskMode === maskModes[mode]) {
+                    maskCount++;
+                } else if (!isValidMode) {
+                    maskCount++;
+                }
+            }
+    
+            return maskCount.toString();
         } else {
             if (settings && settings.Lmc) {
                 return settings.Lmc.active ? settings.Lmc.customValue : settings.Lmc.defaultValue;
@@ -1726,17 +1754,18 @@ function buildUI(thisObj) {
             return template.match(/^\(([^()]+)\)$/)[1];
         }
 
-        var regex = /\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|Lexp\(([^)]+)\)|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar\(([^)]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|Cd\(([^)]+)\)|Cd|Lmc|Lmn\(([^)]+)\)|Lmn|[A-Z]|i|I|S|W|H/g;
+        var regex = /\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|Lexp\(([^)]+)\)|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar\(([^)]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|Cd\(([^)]+)\)|Cd|Lmc\(([^)]+)\)|Lmc|Lmn\(([^)]+)\)|Lmn|[A-Z]|i|I|S|W|H/g;
 
         var replacements = {
             'An': { 'regex': /An\(([^)]+)\)/, 'value': '' },
             'E': { 'regex': /E\(([^)]+)\)/, 'value': '' },
             'Lexp': { 'regex': /Lexp\(([^)]+)\)/, 'value': '' },
             'Fext': { 'regex': /Fext\(([^)]+)\)/, 'value': '' },
+            'Lmc': { 'regex': /Lmc\(([^)]+)\)/, 'value': '' },
             'Lmn': { 'regex': /Lmn\(([^)]+)\)/, 'value': '' }
         };
-
-        result = result.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskNameDelimiter) {
+    
+        result = result.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskCountMode, customMaskNameDelimiter) {
             var value;
 
             if (group !== undefined) {
@@ -1812,13 +1841,18 @@ function buildUI(thisObj) {
                 value = getCurrentDate(dateFormat);
             } else if (match === 'Cd') {
                 value = getCurrentDate();
-            } else if (match === 'Lmc') {
-                value = variables['Lmc'];
+            } else if (customMaskCountMode !== undefined) {
+                var maskCountString = getMaskCount(layer, settings, customMaskCountMode);
+                replacements['Lmc'].value = maskCountString;
+                usedVariables.push('Lmc');
+                return maskCountString;
             } else if (customMaskNameDelimiter !== undefined) {
                 var maskNamesString = getMaskNames(layer, settings, customMaskNameDelimiter);
                 replacements['Lmn'].value = maskNamesString;
                 usedVariables.push('Lmn');
                 return maskNamesString;
+            } else if (match === 'Lmc') {
+                value = getMaskCount(layer, settings);
             } else if (match === 'Lmn') {
                 value = getMaskNames(layer, settings);
             } else {
