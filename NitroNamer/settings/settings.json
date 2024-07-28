@@ -2,7 +2,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "Lmn(differEnce)",
+        "template": "(Layer).i - An(rotation) \\ An(Scale) | Lmn(none)[Lmc]",
         "briefly": false,
         "brieflyType": 4,
         "selectedPresetIndex": 0

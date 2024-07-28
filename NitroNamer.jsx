@@ -1119,7 +1119,7 @@ function buildUI(thisObj) {
             "I": localIndex,
             "O": layer.name,
             "E": getEffectNames(layer, settings),
-            "An": getAnimatedProperties(layer, settings).join(", "),
+            "An": getAnimatedProperties(layer, settings),
             "F": getFrameRate(layer, settings),
             "R": getResolution(layer, settings),
             "D": getDuration(layer),
@@ -1475,15 +1475,23 @@ function buildUI(thisObj) {
     }
 
     // Get the animated properties of a layer
-    function getAnimatedProperties(layer, settings) {
+    function getAnimatedProperties(layer, settings, filter) {
         var animatedProps = [];
+        var customSeparator = filter || ", ";
     
         function checkPropertyGroup(propertyGroup) {
             for (var i = 1; i <= propertyGroup.numProperties; i++) {
                 var prop = propertyGroup.property(i);
     
                 if (prop.numKeys > 0) {
-                    animatedProps.push(prop.name);
+                    if (filter) {
+                        // Filter animated properties based on the filter value (case-insensitive)
+                        if (prop.name.toLowerCase() === filter.toLowerCase()) {
+                            animatedProps.push(prop.name);
+                        }
+                    } else {
+                        animatedProps.push(prop.name);
+                    }
                 }
     
                 if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
@@ -1495,12 +1503,12 @@ function buildUI(thisObj) {
         checkPropertyGroup(layer);
     
         if (animatedProps.length > 0) {
-            return animatedProps;
+            return animatedProps.join(customSeparator);
         } else {
             if (settings && settings.An) {
-                return settings.An.active ? [settings.An.customValue] : [settings.An.defaultValue];
+                return settings.An.active ? settings.An.customValue : settings.An.defaultValue;
             } else {
-                return ["NoAnimations"];
+                return "NoAnimations";
             }
         }
     }    
@@ -1770,7 +1778,7 @@ function buildUI(thisObj) {
             'Lmc': { 'regex': /Lmc\(([^)]+)\)/, 'value': '' },
             'Lmn': { 'regex': /Lmn\(([^)]+)\)/, 'value': '' }
         };
-    
+
         result = result.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskCountMode, customMaskNameDelimiter) {
             var value;
 
@@ -1787,12 +1795,12 @@ function buildUI(thisObj) {
                 usedVariables.push('E');
                 return effectsString;
             } else if (customAnimDelimiterParentheses !== undefined) {
-                var animatedPropsString = variables['An'].split(', ').join(customAnimDelimiterParentheses);
+                var animatedPropsString = getAnimatedProperties(layer, settings, customAnimDelimiterParentheses);
                 replacements['An'].value = animatedPropsString;
                 usedVariables.push('An');
                 return animatedPropsString;
             } else if (customAnimDelimiterBraces !== undefined) {
-                var animatedPropsString = variables['An'].split(', ').join(customAnimDelimiterBraces);
+                var animatedPropsString = getAnimatedProperties(layer, settings, customAnimDelimiterBraces);
                 replacements['An'].value = animatedPropsString;
                 usedVariables.push('An');
                 return animatedPropsString;
@@ -1878,7 +1886,7 @@ function buildUI(thisObj) {
             var customAnimDelimiter = template.match(/An\(([^)]+)\)/);
             if (customAnimDelimiter) {
                 var customAnimDelimiterValue = customAnimDelimiter[1];
-                var animatedPropsString = variables['An'].split(', ').join(customAnimDelimiterValue);
+                var animatedPropsString = getAnimatedProperties(layer, settings, customAnimDelimiterValue);
                 result = animatedPropsString;
                 usedVariables.push('An');
             }
@@ -1901,8 +1909,7 @@ function buildUI(thisObj) {
             if (customLexpDelimiter) {
                 var customLexpDelimiterValue = customLexpDelimiter[1];
                 var lexpString = variables['Lexp'].split(', ').join(customLexpDelimiterValue);
-                result = lexpString;
-                usedVariables.push('Lexp');
+                result = lexpString, usedVariables.push('Lexp');
             }
         }
 
@@ -1941,7 +1948,7 @@ function buildUI(thisObj) {
             result = result.replace(replacements['Lmc'].regex, replacements['Lmc'].value);
         }
 
-        // Если "Lmn" была использована, замените ее заполнитель фактическими значениями
+        // If "Lmn" was used, replace its placeholder with actual values
         if (usedVariables.indexOf('Lmn') !== -1) {
             result = result.replace(replacements['Lmn'].regex, replacements['Lmn'].value);
         }
@@ -1992,7 +1999,7 @@ function buildUI(thisObj) {
                         "I": validIndex,  // Set I to the valid layer index
                         "O": layer.name,
                         "E": getEffectNames(layer, variableSettings),
-                        "An": getAnimatedProperties(layer, variableSettings).join(", "),
+                        "An": getAnimatedProperties(layer, variableSettings),
                         "F": getFrameRate(layer, variableSettings),
                         "R": getResolution(layer, variableSettings),
                         "D": getDuration(layer),
