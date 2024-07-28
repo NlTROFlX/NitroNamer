@@ -812,9 +812,9 @@ function buildUI(thisObj) {
 
     function getMaskCount(layer, settings, mode) {
         var maskCount = 0;
-        var customSeparator = mode;
+        var customSeparator = mode || ",";
     
-        // Define mask modes
+        // Define mask modes (converted to lowercase)
         var maskModes = {
             "none": MaskMode.NONE,
             "add": MaskMode.ADD,
@@ -825,15 +825,18 @@ function buildUI(thisObj) {
             "difference": MaskMode.DIFFERENCE
         };
     
+        // Convert the mode to lowercase for case-insensitive comparison
+        var lowerMode = mode ? mode.toLowerCase() : "";
+    
         // Check if the mode is valid
-        var isValidMode = maskModes.hasOwnProperty(mode);
+        var isValidMode = maskModes.hasOwnProperty(lowerMode);
     
         if (layer.mask && layer.mask.numProperties > 0) {
             for (var i = 1; i <= layer.mask.numProperties; i++) {
                 var mask = layer.mask.property(i);
     
                 // Check the mask mode
-                if (isValidMode && mask.maskMode === maskModes[mode]) {
+                if (isValidMode && mask.maskMode === maskModes[lowerMode]) {
                     maskCount++;
                 } else if (!isValidMode) {
                     maskCount++;
@@ -852,9 +855,9 @@ function buildUI(thisObj) {
 
     function getMaskNames(layer, settings, mode) {
         var maskNames = [];
-        var customSeparator = mode;
+        var customSeparator = mode || ",";
     
-        // Define mask modes
+        // Define mask modes (converted to lowercase)
         var maskModes = {
             "none": MaskMode.NONE,
             "add": MaskMode.ADD,
@@ -865,15 +868,18 @@ function buildUI(thisObj) {
             "difference": MaskMode.DIFFERENCE
         };
     
+        // Convert the mode to lowercase for case-insensitive comparison
+        var lowerMode = mode ? mode.toLowerCase() : "";
+    
         // Check if the mode is valid
-        var isValidMode = maskModes.hasOwnProperty(mode);
+        var isValidMode = maskModes.hasOwnProperty(lowerMode);
     
         if (layer.mask && layer.mask.numProperties > 0) {
             for (var i = 1; i <= layer.mask.numProperties; i++) {
                 var mask = layer.mask.property(i);
     
                 // Check the mask mode
-                if (isValidMode && mask.maskMode === maskModes[mode]) {
+                if (isValidMode && mask.maskMode === maskModes[lowerMode]) {
                     maskNames.push(mask.name);
                 } else if (!isValidMode) {
                     maskNames.push(mask.name);
@@ -894,7 +900,7 @@ function buildUI(thisObj) {
                 return "NoMaskNames";
             }
         }
-    }
+    }    
     
     // Load settings initially
     variableSettings = loadVariableSettings();
