@@ -1930,6 +1930,11 @@ function buildUI(thisObj) {
             result = result.replace(replacements['Fext'].regex, replacements['Fext'].value);
         }
 
+        // If "Lmc" was used, replace its placeholder with actual values
+        if (usedVariables.indexOf('Lmc') !== -1) {
+            result = result.replace(replacements['Lmc'].regex, replacements['Lmc'].value);
+        }
+
         // Если "Lmn" была использована, замените ее заполнитель фактическими значениями
         if (usedVariables.indexOf('Lmn') !== -1) {
             result = result.replace(replacements['Lmn'].regex, replacements['Lmn'].value);
