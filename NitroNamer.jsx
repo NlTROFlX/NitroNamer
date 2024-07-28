@@ -1179,14 +1179,22 @@ function buildUI(thisObj) {
     
 
     // Get the list of properties controlled by expressions
-    function getExpressionControlledProperties(layer, settings) {
+    function getExpressionControlledProperties(layer, settings, filter) {
         var expressionProps = [];
+        var customSeparator = filter || ", ";
     
         function checkPropertyGroup(propertyGroup) {
             for (var i = 1; i <= propertyGroup.numProperties; i++) {
                 var prop = propertyGroup.property(i);
                 if (prop.expression && prop.expressionEnabled) {
-                    expressionProps.push(prop.name);
+                    if (filter) {
+                        // Filter expression-controlled properties based on the filter value (case-insensitive)
+                        if (prop.name.toLowerCase() === filter.toLowerCase()) {
+                            expressionProps.push(prop.name);
+                        }
+                    } else {
+                        expressionProps.push(prop.name);
+                    }
                 }
     
                 if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
@@ -1198,7 +1206,7 @@ function buildUI(thisObj) {
         checkPropertyGroup(layer);
     
         if (expressionProps.length > 0) {
-            return expressionProps.join(", ");
+            return expressionProps.join(customSeparator);
         } else {
             if (settings && settings.Lexp) {
                 return settings.Lexp.active ? settings.Lexp.customValue : settings.Lexp.defaultValue;
@@ -1805,7 +1813,7 @@ function buildUI(thisObj) {
                 usedVariables.push('An');
                 return animatedPropsString;
             } else if (customLexpDelimiter !== undefined) {
-                var lexpString = variables['Lexp'].split(', ').join(customLexpDelimiter);
+                var lexpString = getExpressionControlledProperties(layer, settings, customLexpDelimiter);
                 replacements['Lexp'].value = lexpString;
                 usedVariables.push('Lexp');
                 return lexpString;
@@ -1908,8 +1916,9 @@ function buildUI(thisObj) {
             var customLexpDelimiter = template.match(/Lexp\(([^)]+)\)/);
             if (customLexpDelimiter) {
                 var customLexpDelimiterValue = customLexpDelimiter[1];
-                var lexpString = variables['Lexp'].split(', ').join(customLexpDelimiterValue);
-                result = lexpString, usedVariables.push('Lexp');
+                var lexpString = getExpressionControlledProperties(layer, settings, customLexpDelimiterValue);
+                result = lexpString;
+                usedVariables.push('Lexp');
             }
         }
 
