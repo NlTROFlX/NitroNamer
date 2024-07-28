@@ -822,13 +822,43 @@ function buildUI(thisObj) {
         }
     }
 
-    function getMaskNames(layer, settings) {
+    function getMaskNames(layer, settings, mode) {
+        var maskNames = [];
+        var customSeparator = mode;
+    
+        // Define mask modes
+        var maskModes = {
+            "none": MaskMode.NONE,
+            "add": MaskMode.ADD,
+            "subtract": MaskMode.SUBTRACT,
+            "intersect": MaskMode.INTERSECT,
+            "lighten": MaskMode.LIGHTEN,
+            "darken": MaskMode.DARKEN,
+            "difference": MaskMode.DIFFERENCE
+        };
+    
+        // Check if the mode is valid
+        var isValidMode = maskModes.hasOwnProperty(mode);
+    
         if (layer.mask && layer.mask.numProperties > 0) {
-            var maskNames = [];
             for (var i = 1; i <= layer.mask.numProperties; i++) {
-                maskNames.push(layer.mask.property(i).name);
+                var mask = layer.mask.property(i);
+    
+                // Check the mask mode
+                if (isValidMode && mask.maskMode === maskModes[mode]) {
+                    maskNames.push(mask.name);
+                } else if (!isValidMode) {
+                    maskNames.push(mask.name);
+                }
             }
-            return maskNames.join(", ");
+    
+            if (isValidMode) {
+                // Return mask names with specified mode
+                return maskNames.join(", ");
+            } else {
+                // Return mask names with custom separator
+                return maskNames.join(customSeparator);
+            }
         } else {
             if (settings && settings.Lmn) {
                 return settings.Lmn.active ? settings.Lmn.customValue : settings.Lmn.defaultValue;
@@ -836,7 +866,7 @@ function buildUI(thisObj) {
                 return "NoMaskNames";
             }
         }
-    }    
+    }
     
     // Load settings initially
     variableSettings = loadVariableSettings();
@@ -1785,12 +1815,12 @@ function buildUI(thisObj) {
             } else if (match === 'Lmc') {
                 value = variables['Lmc'];
             } else if (customMaskNameDelimiter !== undefined) {
-                var maskNamesString = variables['Lmn'].split(', ').join(customMaskNameDelimiter);
+                var maskNamesString = getMaskNames(layer, settings, customMaskNameDelimiter);
                 replacements['Lmn'].value = maskNamesString;
                 usedVariables.push('Lmn');
                 return maskNamesString;
             } else if (match === 'Lmn') {
-                value = variables['Lmn'];
+                value = getMaskNames(layer, settings);
             } else {
                 value = variables[match];
             }
