@@ -1,13 +1,19 @@
 {
     "currentSettings": {
         "UICompact": false,
-        "allLayers": true,
-        "template": "Lexp(opacity), Lexp(Overflow), Lexp(RED PHASE)",
+        "allLayers": false,
+        "template": "I",
         "briefly": false,
         "brieflyType": 4,
         "selectedPresetIndex": 0
     },
     "userPresets": {
+        "preset_15": {
+            "allLayers": true,
+            "template": "E(levels), An | An(Scale) \\ Lmn(add)[Lmc]",
+            "briefly": false,
+            "brieflyType": 4
+        },
         "preset_14": {
             "allLayers": true,
             "template": "(Layer).i - An(rotation) \\ An(Scale) | Lmn(none)[Lmc]",

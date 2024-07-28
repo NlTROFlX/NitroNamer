@@ -1793,12 +1793,12 @@ function buildUI(thisObj) {
             if (group !== undefined) {
                 return group;
             } else if (customEffectDelimiterParentheses !== undefined) {
-                var effectsString = variables['E'].split(', ').join(customEffectDelimiterParentheses);
+                var effectsString = getEffectNames(layer, settings, customEffectDelimiterParentheses);
                 replacements['E'].value = effectsString;
                 usedVariables.push('E');
                 return effectsString;
             } else if (customEffectDelimiterBraces !== undefined) {
-                var effectsString = variables['E'].split(', ').join(customEffectDelimiterBraces);
+                var effectsString = getEffectNames(layer, settings, customEffectDelimiterBraces);
                 replacements['E'].value = effectsString;
                 usedVariables.push('E');
                 return effectsString;
@@ -1905,7 +1905,7 @@ function buildUI(thisObj) {
             var customEffectDelimiter = template.match(/E\(([^)]+)\)/);
             if (customEffectDelimiter) {
                 var customEffectDelimiterValue = customEffectDelimiter[1];
-                var effectsString = variables['E'].split(', ').join(customEffectDelimiterValue);
+                var effectsString = getEffectNames(layer, settings, customEffectDelimiterValue);
                 result = effectsString;
                 usedVariables.push('E');
             }
@@ -2078,25 +2078,35 @@ function buildUI(thisObj) {
     }    
 
     // Get the effect names applied to a layer
-    function getEffectNames(layer, settings) {
+    function getEffectNames(layer, settings, filter) {
         var effectNames = [];
+        var customSeparator = filter || ", ";
+    
         if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
             for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
                 var effect = layer.property("ADBE Effect Parade").property(j);
-                effectNames.push(effect.name);
+                if (filter) {
+                    // Filter effects based on the filter value (case-insensitive)
+                    if (effect.name.toLowerCase() === filter.toLowerCase()) {
+                        effectNames.push(effect.name);
+                    }
+                } else {
+                    effectNames.push(effect.name);
+                }
+            }
+    
+            if (effectNames.length > 0) {
+                return effectNames.join(customSeparator);
             }
         }
     
-        if (effectNames.length > 0) {
-            return effectNames.join(", ");
+        if (settings && settings.E) {
+            return settings.E.active ? settings.E.customValue : settings.E.defaultValue;
         } else {
-            if (settings && settings.E) {
-                return settings.E.active ? settings.E.customValue : settings.E.defaultValue;
-            } else {
-                return "No effects";
-            }
+            return "NoEffects";
         }
-    }    
+    }
+    
 
     function checkAndCreateVariablesFile() {
         var scriptFile = new File($.fileName);
