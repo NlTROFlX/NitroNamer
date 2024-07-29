@@ -40,7 +40,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "E | E(glow) | E(123)",
+        "template": "Lmn(none)",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0

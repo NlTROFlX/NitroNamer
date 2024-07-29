@@ -946,19 +946,22 @@ function buildUI(thisObj) {
                 }
             }
     
-            if (isValidMode) {
-                // Return mask names with specified mode
-                return maskNames.join(", ");
-            } else {
-                // Return mask names with custom separator
-                return maskNames.join(customSeparator);
+            if (maskNames.length > 0) {
+                if (isValidMode) {
+                    // Return mask names with specified mode
+                    return maskNames.join(", ");
+                } else {
+                    // Return mask names with custom separator
+                    return maskNames.join(customSeparator);
+                }
             }
+        } 
+    
+        // If no masks found or no valid mode, return the custom or default value from settings
+        if (settings && settings.Lmn) {
+            return settings.Lmn.active ? settings.Lmn.customValue : settings.Lmn.defaultValue;
         } else {
-            if (settings && settings.Lmn) {
-                return settings.Lmn.active ? settings.Lmn.customValue : settings.Lmn.defaultValue;
-            } else {
-                return "NoMaskNames";
-            }
+            return "NoMaskNames";
         }
     }    
     
