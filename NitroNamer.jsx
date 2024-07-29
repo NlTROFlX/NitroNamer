@@ -1242,29 +1242,27 @@ function buildUI(thisObj) {
     function getExpressionControlledProperties(layer, settings, filter) {
         var expressionProps = [];
         var customSeparator = filter || ", ";
-    
+        var filterMode = filter && !/[*,]/.test(filter);
+
         function checkPropertyGroup(propertyGroup) {
             for (var i = 1; i <= propertyGroup.numProperties; i++) {
                 var prop = propertyGroup.property(i);
                 if (prop.expression && prop.expressionEnabled) {
-                    if (filter) {
-                        // Filter expression-controlled properties based on the filter value (case-insensitive)
-                        if (prop.name.toLowerCase() === filter.toLowerCase()) {
-                            expressionProps.push(prop.name);
-                        }
-                    } else {
+                    if (filterMode && prop.name.toLowerCase() === filter.toLowerCase()) {
+                        expressionProps.push(prop.name);
+                    } else if (!filterMode) {
                         expressionProps.push(prop.name);
                     }
                 }
-    
+
                 if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
                     checkPropertyGroup(prop);
                 }
             }
         }
-    
+
         checkPropertyGroup(layer);
-    
+
         if (expressionProps.length > 0) {
             return expressionProps.join(customSeparator);
         } else {
@@ -1274,7 +1272,7 @@ function buildUI(thisObj) {
                 return "NoExpressions";
             }
         }
-    }    
+    }
 
     // Get the track matte type of a layer
     function getTrackMatteType(layer, settings) {

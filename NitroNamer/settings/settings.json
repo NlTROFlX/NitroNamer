@@ -1,5 +1,11 @@
 {
     "userPresets": {
+        "preset_2": {
+            "allLayers": true,
+            "template": "Lexp | Lexp(scale)\\Lexp(position) | Lexp(*)",
+            "briefly": false,
+            "brieflyType": 0
+        },
         "preset_1": {
             "allLayers": true,
             "template": "(Слой).i",
@@ -10,8 +16,9 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "Lexp | Lexp (scale)\\Lexp (Position) | Lexp (*)",
+        "template": "Lexp | Lexp(scale)\\Lexp(position) | Lexp(*)",
         "briefly": false,
-        "brieflyType": 0
+        "brieflyType": 0,
+        "selectedPresetIndex": 0
     }
 }
