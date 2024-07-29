@@ -1242,7 +1242,27 @@ function buildUI(thisObj) {
     function getExpressionControlledProperties(layer, settings, filter) {
         var expressionProps = [];
         var customSeparator = filter || ", ";
-        var filterMode = filter && !/[*,]/.test(filter);
+        var filterMode = false;
+
+        if (filter) {
+            // Check if the filter matches any expression controlled property names
+            filterMode = false;
+            function checkPropertyGroupForFilter(propertyGroup) {
+                for (var i = 1; i <= propertyGroup.numProperties; i++) {
+                    var prop = propertyGroup.property(i);
+                    if (prop.expression && prop.expressionEnabled) {
+                        if (prop.name.toLowerCase() === filter.toLowerCase()) {
+                            filterMode = true;
+                            return; // Stop checking further if match is found
+                        }
+                    }
+                    if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
+                        checkPropertyGroupForFilter(prop);
+                    }
+                }
+            }
+            checkPropertyGroupForFilter(layer);
+        }
 
         function checkPropertyGroup(propertyGroup) {
             for (var i = 1; i <= propertyGroup.numProperties; i++) {
@@ -1254,7 +1274,6 @@ function buildUI(thisObj) {
                         expressionProps.push(prop.name);
                     }
                 }
-
                 if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
                     checkPropertyGroup(prop);
                 }
@@ -1264,7 +1283,11 @@ function buildUI(thisObj) {
         checkPropertyGroup(layer);
 
         if (expressionProps.length > 0) {
-            return expressionProps.join(customSeparator);
+            if (filterMode) {
+                return expressionProps.join(customSeparator);
+            } else {
+                return expressionProps.join(filter || ", ");
+            }
         } else {
             if (settings && settings.Lexp) {
                 return settings.Lexp.active ? settings.Lexp.customValue : settings.Lexp.defaultValue;
