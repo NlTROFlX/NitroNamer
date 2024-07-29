@@ -2077,38 +2077,6 @@ function buildUI(thisObj) {
         }
     }    
 
-<<<<<<< Updated upstream
-    // Get the effect names applied to a layer
-    function getEffectNames(layer, settings, filter) {
-        var effectNames = [];
-        var customSeparator = filter || ", ";
-    
-        if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
-            for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
-                var effect = layer.property("ADBE Effect Parade").property(j);
-                if (filter) {
-                    // Filter effects based on the filter value (case-insensitive)
-                    if (effect.name.toLowerCase() === filter.toLowerCase()) {
-                        effectNames.push(effect.name);
-                    }
-                } else {
-                    effectNames.push(effect.name);
-                }
-            }
-    
-            if (effectNames.length > 0) {
-                return effectNames.join(customSeparator);
-            }
-        }
-    
-        if (settings && settings.E) {
-            return settings.E.active ? settings.E.customValue : settings.E.defaultValue;
-        } else {
-            return "NoEffects";
-        }
-    }
-    
-=======
     // Get the effect names applied to a layer with optional filtering and custom separator
     function getEffectNames(layer, settings, filter) {
         var effectNames = [];
@@ -2141,7 +2109,6 @@ function buildUI(thisObj) {
             }
         }
     }
->>>>>>> Stashed changes
 
     function checkAndCreateVariablesFile() {
         var scriptFile = new File($.fileName);
