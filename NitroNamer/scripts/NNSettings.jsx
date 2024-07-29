@@ -15,19 +15,27 @@ var initialData = {
 
 var scriptMessageHead_1 = "NitroNamer - variable settings";
 
-// Function to load variables from JSON file
+function readJSONFile(filePath) {
+    var file = new File(filePath);
+    var data = {};
+    if (file.exists) {
+        file.open("r");
+        try {
+            data = eval("(" + file.read() + ")");
+        } catch (e) {
+            alert("Error parsing JSON file: " + filePath);
+        }
+        file.close();
+    }
+    return data;
+}
+
 function loadVariables() {
     var scriptFile = new File($.fileName);
     var variablesFilePath = scriptFile.path.replace("/scripts", "/scripts/variables.json");
     var variablesFile = new File(variablesFilePath);
-
-    if (variablesFile.exists) {
-        variablesFile.open("r");
-        var content = variablesFile.read();
-        variablesFile.close();
-        return JSON.parse(content);
-    }
-    return {};
+    
+    return readJSONFile(variablesFile);
 }
 
 var variablesData = loadVariables();

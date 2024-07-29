@@ -1,11 +1,16 @@
 {
     "userPresets": {
-        
+        "preset_1": {
+            "allLayers": true,
+            "template": "(Слой).i",
+            "briefly": false,
+            "brieflyType": 0
+        }
     },
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "(Template for renaming)O_T.i",
+        "template": "An",
         "briefly": false,
         "brieflyType": 0
     }
