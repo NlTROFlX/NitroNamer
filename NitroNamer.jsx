@@ -454,48 +454,80 @@ function buildUI(thisObj) {
             briefly: chkBriefly.value,
             brieflyType: ddBrieflyType.selection.index
         };
-
+    
         // Проверяем пустой шаблон
         if (!trim(settings.template)) {
             alert("Template cannot be empty.");
             return;
         }
-
+    
         // Load current settings
         var existingSettings = loadSettings();
         var userPresets = existingSettings.userPresets || {};
-
-        // Check for unique template
-        for (var key in userPresets) {
-            if (userPresets.hasOwnProperty(key) && userPresets[key].template === settings.template) {
-                alert("A preset with this template already exists.");
-                return;
+    
+        // Если клавиша Shift зажата, пересохраняем текущий выбранный пресет
+        if (ScriptUI.environment.keyboardState.shiftKey) {
+            var selectedPreset = ddLayerMode.selection;
+            if (selectedPreset && selectedPreset.text !== "Save your new preset" && selectedPreset.text !== "Please select a preset to delete") {
+                var presetTemplate = selectedPreset.text;
+    
+                // Пересохранение текущего пресета
+                for (var key in userPresets) {
+                    if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
+                        userPresets[key] = settings;
+                        writeJSONFile(new File(scriptFolderPath + "/NitroNamer/settings/settings.json"), existingSettings);
+                        btnSave.image = File(scriptFolderPath + "/NitroNamer/img/refreshHover.png");
+                        updatePresetsDropdown(existingSettings);
+                        break;
+                    }
+                }
             }
-        }
-
-        // Save the new preset
-        var newPresetKey = saveSettings(settings, false);
-
-        // Load updated settings
-        var updatedSettings = loadSettings();
-        updatePresetsDropdown(updatedSettings);
-
-        // Set the selection to the newly saved preset
-        var presetKeys = [];
-        for (var key in updatedSettings.userPresets) {
-            if (updatedSettings.userPresets.hasOwnProperty(key)) {
-                presetKeys.push(key);
+        } else {
+            // Check for unique template
+            for (var key in userPresets) {
+                if (userPresets.hasOwnProperty(key) && userPresets[key].template === settings.template) {
+                    alert("A preset with this template already exists.");
+                    return;
+                }
             }
+    
+            // Save the new preset
+            var newPresetKey = saveSettings(settings, false);
+    
+            // Load updated settings
+            var updatedSettings = loadSettings();
+            updatePresetsDropdown(updatedSettings);
+    
+            // Set the selection to the newly saved preset
+            var presetKeys = [];
+            for (var key in updatedSettings.userPresets) {
+                if (updatedSettings.userPresets.hasOwnProperty(key)) {
+                    presetKeys.push(key);
+                }
+            }
+    
+            var newPresetIndex = presetKeys.indexOf(newPresetKey);
+            if (newPresetIndex !== -1) {
+                ddLayerMode.selection = newPresetIndex;
+            }
+    
+            // Ensure the template field remains the same
+            txtTemplate.text = settings.template;
         }
-
-        var newPresetIndex = presetKeys.indexOf(newPresetKey);
-        if (newPresetIndex !== -1) {
-            ddLayerMode.selection = newPresetIndex;
-        }
-
-        // Ensure the template field remains the same
-        txtTemplate.text = settings.template;
     };
+
+    // Обработчики для смены иконок при наведении и убирании курсора
+    btnSave.addEventListener("mouseover", function() {
+        if (ScriptUI.environment.keyboardState.shiftKey) {
+            btnSave.image = File(scriptFolderPath + "/NitroNamer/img/refreshHover.png");
+        } else {
+            btnSave.image = File(scriptFolderPath + "/NitroNamer/img/saveHover.png");
+        }
+    });
+
+    btnSave.addEventListener("mouseout", function() {
+        btnSave.image = File(scriptFolderPath + "/NitroNamer/img/save.png");
+    });
 
     // Delete preset when Delete button is clicked
     btnCircleMinus.onClick = function() {
@@ -701,7 +733,7 @@ function buildUI(thisObj) {
     function saveSettings(settings, isCurrent) {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
-        var settingsFile = scriptFolderPath + "/settings.json";
+        var settingsFile = new File(scriptFolderPath + "/settings.json");
     
         if (!Folder(scriptFolderPath).exists) {
             Folder(scriptFolderPath).create();
@@ -721,7 +753,7 @@ function buildUI(thisObj) {
                 }
             }
         } else {
-            // Считаем количество ключей в userPresets
+            // Count number of keys in userPresets
             var nextPresetNumber = 1;
             for (var key in userPresets) {
                 if (userPresets.hasOwnProperty(key)) {
@@ -748,7 +780,7 @@ function buildUI(thisObj) {
         writeJSONFile(settingsFile, existingSettings);
     
         return newPresetKey; // Return the key of the newly saved preset
-    }    
+    }
 
     function isArray(value) {
         return Object.prototype.toString.call(value) === '[object Array]';

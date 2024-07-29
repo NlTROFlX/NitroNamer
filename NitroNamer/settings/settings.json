@@ -1,46 +1,16 @@
 {
     "userPresets": {
-        "preset_6": {
-            "allLayers": true,
-            "template": "Lexp | Lexp(scale) | Lexp(###) | An | An(SCALE) | An(###)",
-            "briefly": false,
-            "brieflyType": 0
-        },
-        "preset_5": {
-            "allLayers": true,
-            "template": "Lexp | Lexp(scale) | Lexp(###)",
-            "briefly": false,
-            "brieflyType": 0
-        },
-        "preset_4": {
-            "allLayers": true,
-            "template": "An | An(opacity) | An(###)",
-            "briefly": false,
-            "brieflyType": 0
-        },
-        "preset_3": {
-            "allLayers": true,
-            "template": "E | E(glow) | E(*)",
-            "briefly": false,
-            "brieflyType": 0
-        },
-        "preset_2": {
-            "allLayers": true,
-            "template": "Lexp | Lexp(scale)\\Lexp(position) | Lexp(*)",
-            "briefly": false,
-            "brieflyType": 0
-        },
         "preset_1": {
-            "allLayers": true,
-            "template": "(Слой).i",
+            "allLayers": false,
+            "template": "(Preset.2_version3)",
             "briefly": false,
             "brieflyType": 0
         }
     },
     "currentSettings": {
         "UICompact": false,
-        "allLayers": true,
-        "template": "Lmn(none)",
+        "allLayers": false,
+        "template": "(Preset.2_version3)",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0
