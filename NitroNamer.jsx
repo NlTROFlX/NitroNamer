@@ -2077,6 +2077,7 @@ function buildUI(thisObj) {
         }
     }    
 
+<<<<<<< Updated upstream
     // Get the effect names applied to a layer
     function getEffectNames(layer, settings, filter) {
         var effectNames = [];
@@ -2107,6 +2108,40 @@ function buildUI(thisObj) {
         }
     }
     
+=======
+    // Get the effect names applied to a layer with optional filtering and custom separator
+    function getEffectNames(layer, settings, filter) {
+        var effectNames = [];
+        var customSeparator = filter || ", ";
+
+        if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
+            for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
+                var effect = layer.property("ADBE Effect Parade").property(j);
+                if (filter && effect.name.toLowerCase() === filter.toLowerCase()) {
+                    effectNames.push(effect.name);
+                    break; // Stop after finding the matching effect
+                } else if (!filter) {
+                    effectNames.push(effect.name);
+                }
+            }
+        }
+
+        if (filter && effectNames.length === 0) {
+            // If filter is provided and no matching effects found, treat the filter as a custom separator
+            return getEffectNames(layer, { E: { active: true, customValue: "No effects", defaultValue: "No effects" } }).split(", ").join(filter);
+        } else {
+            if (effectNames.length > 0) {
+                return effectNames.join(customSeparator);
+            } else {
+                if (settings && settings.E) {
+                    return settings.E.active ? settings.E.customValue : settings.E.defaultValue;
+                } else {
+                    return "No effects";
+                }
+            }
+        }
+    }
+>>>>>>> Stashed changes
 
     function checkAndCreateVariablesFile() {
         var scriptFile = new File($.fileName);

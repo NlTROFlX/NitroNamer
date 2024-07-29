@@ -1,8 +1,13 @@
 {
     "currentSettings": {
         "UICompact": false,
+<<<<<<< Updated upstream
         "allLayers": false,
         "template": "I",
+=======
+        "allLayers": true,
+        "template": "E(glow), E(Posterize Time), E(warp) | E | E(*)",
+>>>>>>> Stashed changes
         "briefly": false,
         "brieflyType": 4,
         "selectedPresetIndex": 0
