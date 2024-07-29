@@ -2182,7 +2182,7 @@ function buildUI(thisObj) {
     function getEffectNames(layer, settings, filter) {
         var effectNames = [];
         var customSeparator = filter || ", ";
-
+    
         if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
             for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
                 var effect = layer.property("ADBE Effect Parade").property(j);
@@ -2194,10 +2194,10 @@ function buildUI(thisObj) {
                 }
             }
         }
-
+    
         if (filter && effectNames.length === 0) {
             // If filter is provided and no matching effects found, treat the filter as a custom separator
-            return getEffectNames(layer, { E: { active: true, customValue: "No effects", defaultValue: "No effects" } }).split(", ").join(filter);
+            return getEffectNames(layer, settings).split(", ").join(customSeparator);
         } else {
             if (effectNames.length > 0) {
                 return effectNames.join(customSeparator);
