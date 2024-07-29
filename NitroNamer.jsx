@@ -1546,30 +1546,26 @@ function buildUI(thisObj) {
     function getAnimatedProperties(layer, settings, filter) {
         var animatedProps = [];
         var customSeparator = filter || ", ";
-    
+        var filterMode = filter && !/[*,]/.test(filter);
+
         function checkPropertyGroup(propertyGroup) {
             for (var i = 1; i <= propertyGroup.numProperties; i++) {
                 var prop = propertyGroup.property(i);
-    
                 if (prop.numKeys > 0) {
-                    if (filter) {
-                        // Filter animated properties based on the filter value (case-insensitive)
-                        if (prop.name.toLowerCase() === filter.toLowerCase()) {
-                            animatedProps.push(prop.name);
-                        }
-                    } else {
+                    if (filterMode && prop.name.toLowerCase() === filter.toLowerCase()) {
+                        animatedProps.push(prop.name);
+                    } else if (!filterMode) {
                         animatedProps.push(prop.name);
                     }
                 }
-    
                 if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
                     checkPropertyGroup(prop);
                 }
             }
         }
-    
+
         checkPropertyGroup(layer);
-    
+
         if (animatedProps.length > 0) {
             return animatedProps.join(customSeparator);
         } else {
@@ -1579,7 +1575,7 @@ function buildUI(thisObj) {
                 return "NoAnimations";
             }
         }
-    }    
+    }
 
     // Get the scale of a layer
     function getLayerScale(layer) {
