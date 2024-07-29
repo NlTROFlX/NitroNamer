@@ -759,7 +759,11 @@ function buildUI(thisObj) {
         var data = {};
         if (file.exists) {
             file.open("r");
-            data = JSON.parse(file.read());
+            try {
+                data = eval("(" + file.read() + ")");
+            } catch (e) {
+                alert("Error parsing JSON file: " + filePath);
+            }
             file.close();
         }
         return data;
@@ -771,6 +775,62 @@ function buildUI(thisObj) {
         file.open("w");
         file.write(JSON.stringify(data, null, 4));
         file.close();
+    }
+
+    function checkAndCreateSettingsFile() {
+        var scriptFile = new File($.fileName);
+        var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
+        var settingsFile = new File(scriptFolderPath + "/settings.json");
+    
+        if (!settingsFile.exists) {
+            // Create the settings.json file and write initial settings
+            var initialData = {
+                "userPresets": {},
+                "currentSettings": {
+                    "UICompact": false
+                }
+            };
+    
+            settingsFile.encoding = "UTF-8"; // Set encoding to UTF-8
+            if (settingsFile.open("w")) {
+                settingsFile.write(JSON.stringify(initialData, null, 4));
+                settingsFile.close();
+            } else {
+                alert("Error: Unable to create settings.json file.");
+            }
+        }
+    }
+
+    function checkAndCreateVariablesFile() {
+        var scriptFile = new File($.fileName);
+        var scriptFolderPath = scriptFile.path + "/NitroNamer/scripts";
+        var variablesFile = new File(scriptFolderPath + "/variables.json");
+    
+        if (!variablesFile.exists) {
+            // Create the variables.json file and write initial settings
+            var initialData = {
+                "An": { "defaultValue": "NoAnimations", "customValue": "Custom{An}", "active": true },
+                "Ar": { "defaultValue": "NoAspectRatio", "customValue": "Custom{Ar}", "active": true },
+                "E": { "defaultValue": "No effects", "customValue": "Custom{E}", "active": true },
+                "F": { "defaultValue": "NoFrameRate", "customValue": "Custom{F}", "active": true },
+                "H": { "defaultValue": "NoHeight", "customValue": "Custom{H}", "active": true },
+                "Lexp": { "defaultValue": "NoExpressions", "customValue": "Custom{Lexp}", "active": true },
+                "Fext": { "defaultValue": "NoExtension", "customValue": "Custom{Fext}", "active": true },
+                "Lmc": { "defaultValue": "NoMasks", "customValue": "Custom{Lmc}", "active": true },
+                "Lmn": { "defaultValue": "NoMaskNames", "customValue": "Custom{Lmn}", "active": true },
+                "R": { "defaultValue": "NoResolution", "customValue": "Custom{R}", "active": true },
+                "Tm": { "defaultValue": "NoTrackMate", "customValue": "Custom{Tm}", "active": true },
+                "W": { "defaultValue": "NoWidth", "customValue": "Custom{W}", "active": true }
+            };
+    
+            variablesFile.encoding = "UTF-8"; // Set encoding to UTF-8
+            if (variablesFile.open("w")) {
+                variablesFile.write(JSON.stringify(initialData, null, 4));
+                variablesFile.close();
+            } else {
+                alert("Error: Unable to create variables.json file.");
+            }
+        }
     }
 
     function loadSettings() {
@@ -2110,44 +2170,14 @@ function buildUI(thisObj) {
         }
     }
 
-    function checkAndCreateVariablesFile() {
-        var scriptFile = new File($.fileName);
-        var scriptFolderPath = scriptFile.path + "/NitroNamer/scripts";
-        var variablesFile = new File(scriptFolderPath + "/variables.json");
-
-        if (!variablesFile.exists) {
-            // Create the variables.json file and write initial settings
-            var initialData = {
-                "An": { "defaultValue": "NoAnimations", "customValue": "Custom{An}", "active": true },
-                "Ar": { "defaultValue": "NoAspectRatio", "customValue": "Custom{Ar}", "active": true },
-                "E": { "defaultValue": "No effects", "customValue": "Custom{E}", "active": true },
-                "F": { "defaultValue": "NoFrameRate", "customValue": "Custom{F}", "active": true },
-                "H": { "defaultValue": "NoHeight", "customValue": "Custom{H}", "active": true },
-                "Lexp": { "defaultValue": "NoExpressions", "customValue": "Custom{Lexp}", "active": true },
-                "Fext": { "defaultValue": "NoExtension", "customValue": "Custom{Fext}", "active": true },
-                "Lmc": { "defaultValue": "NoMasks", "customValue": "Custom{Lmc}", "active": true },
-                "Lmn": { "defaultValue": "NoMaskNames", "customValue": "Custom{Lmn}", "active": true },
-                "R": { "defaultValue": "NoResolution", "customValue": "Custom{R}", "active": true },
-                "Tm": { "defaultValue": "NoTrackMate", "customValue": "Custom{Tm}", "active": true },
-                "W": { "defaultValue": "NoWidth", "customValue": "Custom{W}", "active": true }
-            };
-
-            variablesFile.encoding = "UTF-8"; // Set encoding to UTF-8
-            if (variablesFile.open("w")) {
-                variablesFile.write(JSON.stringify(initialData, null, 4));
-                variablesFile.close();
-            } else {
-                alert("Error: Unable to create variables.json file.");
-            }
-        }
-    }    
+    checkAndCreateSettingsFile();
+    checkAndCreateVariablesFile();
 
     var settings = loadSettings();
     applySettings(settings);
 
     updateLayerCounts();
     updatePreview();
-    checkAndCreateVariablesFile();
     updateRenameButtonIcon();
 
     if (win instanceof Window) {
