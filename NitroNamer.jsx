@@ -1544,7 +1544,27 @@ function buildUI(thisObj) {
     function getAnimatedProperties(layer, settings, filter) {
         var animatedProps = [];
         var customSeparator = filter || ", ";
-        var filterMode = filter && !/[*,]/.test(filter);
+        var filterMode = false;
+
+        if (filter) {
+            // Check if the filter matches any animated property names
+            filterMode = false;
+            function checkPropertyGroupForFilter(propertyGroup) {
+                for (var i = 1; i <= propertyGroup.numProperties; i++) {
+                    var prop = propertyGroup.property(i);
+                    if (prop.numKeys > 0) {
+                        if (prop.name.toLowerCase() === filter.toLowerCase()) {
+                            filterMode = true;
+                            return; // Stop checking further if match is found
+                        }
+                    }
+                    if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
+                        checkPropertyGroupForFilter(prop);
+                    }
+                }
+            }
+            checkPropertyGroupForFilter(layer);
+        }
 
         function checkPropertyGroup(propertyGroup) {
             for (var i = 1; i <= propertyGroup.numProperties; i++) {
@@ -1565,7 +1585,11 @@ function buildUI(thisObj) {
         checkPropertyGroup(layer);
 
         if (animatedProps.length > 0) {
-            return animatedProps.join(customSeparator);
+            if (filterMode) {
+                return animatedProps.join(customSeparator);
+            } else {
+                return animatedProps.join(filter || ", ");
+            }
         } else {
             if (settings && settings.An) {
                 return settings.An.active ? settings.An.customValue : settings.An.defaultValue;
