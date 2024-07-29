@@ -48,18 +48,27 @@ function showLayerInfoPanel(thisObj) {
         win.close();
     };
 
+    function readJSONFile(filePath) {
+        var file = new File(filePath);
+        var data = {};
+        if (file.exists) {
+            file.open("r");
+            try {
+                data = eval("(" + file.read() + ")");
+            } catch (e) {
+                alert("Error parsing JSON file: " + filePath);
+            }
+            file.close();
+        }
+        return data;
+    }
+    
     function loadVariableSettings() {
         var scriptFile = new File($.fileName);
         var variablesFilePath = scriptFile.path.replace("/scripts", "/scripts/variables.json");
         var variablesFile = new File(variablesFilePath);
-    
-        var variableSettings = {};
-        if (variablesFile.exists) {
-            variablesFile.open("r");
-            variableSettings = JSON.parse(variablesFile.read());
-            variablesFile.close();
-        }
-        return variableSettings;
+        
+        return readJSONFile(variablesFile);
     }
 
     function getEffectNames(layer, settings) {
