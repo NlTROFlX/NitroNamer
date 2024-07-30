@@ -12,7 +12,7 @@ function showLayerInfoPanel(thisObj) {
     txtLayerInfo.alignment = ["fill", "fill"];
     txtLayerInfo.preferredSize.height = 350;
 
-    // Add refresh button with icon and hover effect
+    // Add buttons group
     var grpButtons = win.add("group", undefined);
     grpButtons.orientation = "row";
     grpButtons.alignChildren = ["fill", "center"];
@@ -20,6 +20,7 @@ function showLayerInfoPanel(thisObj) {
     var scriptFolderPath = scriptFile.path.replace("/scripts", "/img");
     grpButtons.margins = [0, -10, 0, 0];
 
+    // Add refresh button with icon and hover effect
     var btnRefresh = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/refresh.png"), {style: "toolbutton"});
     btnRefresh.size = [24, 24];
     btnRefresh.imageSize = [24, 24];
@@ -39,10 +40,50 @@ function showLayerInfoPanel(thisObj) {
         updateLayerInfo();
     };
 
+    // Add arrow down button with icon and hover effect
+    var btnArrowDown = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/arrowDown.png"), {style: "toolbutton"});
+    btnArrowDown.size = [24, 24];
+    btnArrowDown.imageSize = [24, 24];
+    btnArrowDown.alignment = ["center", "center"];
+
+    btnArrowDown.addEventListener("mouseover", function () {
+        btnArrowDown.image = File(scriptFolderPath + "/arrowDownHover.png");
+        btnArrowDown.imageSize = [24, 24];
+    });
+
+    btnArrowDown.addEventListener("mouseout", function () {
+        btnArrowDown.image = File(scriptFolderPath + "/arrowDown.png");
+        btnArrowDown.imageSize = [24, 24];
+    });
+
+    btnArrowDown.onClick = function () {
+        switchToNextLayer();
+    };
+
+    // Add arrow up button with icon and hover effect
+    var btnArrowUp = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/arrowUp.png"), {style: "toolbutton"});
+    btnArrowUp.size = [24, 24];
+    btnArrowUp.imageSize = [24, 24];
+    btnArrowUp.alignment = ["center", "center"];
+
+    btnArrowUp.addEventListener("mouseover", function () {
+        btnArrowUp.image = File(scriptFolderPath + "/arrowUpHover.png");
+        btnArrowUp.imageSize = [24, 24];
+    });
+
+    btnArrowUp.addEventListener("mouseout", function () {
+        btnArrowUp.image = File(scriptFolderPath + "/arrowUp.png");
+        btnArrowUp.imageSize = [24, 24];
+    });
+
+    btnArrowUp.onClick = function () {
+        switchToPreviousLayer();
+    };
+
     // Add close button
     var btnClose = grpButtons.add("button", undefined, "Close layer info panel");
     btnClose.alignment = ["left", "center"];
-    btnClose.size = [260,24];
+    btnClose.size = [260, 24];
 
     btnClose.onClick = function () {
         win.close();
@@ -634,6 +675,48 @@ function showLayerInfoPanel(thisObj) {
             }
         } else {
             txtLayerInfo.text = "Please select a valid composition.";
+        }
+    }
+
+    function switchToNextLayer() {
+        var proj = app.project;
+        if (proj && proj.activeItem instanceof CompItem) {
+            var comp = proj.activeItem;
+            var selectedLayer = comp.selectedLayers.length > 0 ? comp.selectedLayers[0] : null;
+            
+            if (selectedLayer) {
+                var nextLayerIndex = selectedLayer.index + 1;
+                while (nextLayerIndex <= comp.numLayers && comp.layer(nextLayerIndex).locked) {
+                    nextLayerIndex++;
+                }
+                
+                if (nextLayerIndex <= comp.numLayers) {
+                    comp.layer(nextLayerIndex).selected = true;
+                    selectedLayer.selected = false;
+                    updateLayerInfo();
+                }
+            }
+        }
+    }
+    
+    function switchToPreviousLayer() {
+        var proj = app.project;
+        if (proj && proj.activeItem instanceof CompItem) {
+            var comp = proj.activeItem;
+            var selectedLayer = comp.selectedLayers.length > 0 ? comp.selectedLayers[0] : null;
+            
+            if (selectedLayer) {
+                var prevLayerIndex = selectedLayer.index - 1;
+                while (prevLayerIndex >= 1 && comp.layer(prevLayerIndex).locked) {
+                    prevLayerIndex--;
+                }
+                
+                if (prevLayerIndex >= 1) {
+                    comp.layer(prevLayerIndex).selected = true;
+                    selectedLayer.selected = false;
+                    updateLayerInfo();
+                }
+            }
         }
     }    
 
