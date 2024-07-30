@@ -686,16 +686,26 @@ function showLayerInfoPanel(thisObj) {
             
             if (selectedLayer) {
                 var nextLayerIndex = selectedLayer.index + 1;
-                while (nextLayerIndex <= comp.numLayers && comp.layer(nextLayerIndex).locked) {
+                while (nextLayerIndex <= comp.numLayers && (comp.layer(nextLayerIndex).locked || comp.layer(nextLayerIndex).shy)) {
                     nextLayerIndex++;
                 }
                 
                 if (nextLayerIndex <= comp.numLayers) {
                     comp.layer(nextLayerIndex).selected = true;
                     selectedLayer.selected = false;
-                    updateLayerInfo();
+                }
+            } else {
+                // Если ни один слой не выбран, выбрать первый доступный слой
+                for (var i = 1; i <= comp.numLayers; i++) {
+                    var layer = comp.layer(i);
+                    if (!layer.locked && !layer.shy) {
+                        layer.selected = true;
+                        break;
+                    }
                 }
             }
+            
+            updateLayerInfo();
         }
     }
     
@@ -707,16 +717,26 @@ function showLayerInfoPanel(thisObj) {
             
             if (selectedLayer) {
                 var prevLayerIndex = selectedLayer.index - 1;
-                while (prevLayerIndex >= 1 && comp.layer(prevLayerIndex).locked) {
+                while (prevLayerIndex >= 1 && (comp.layer(prevLayerIndex).locked || comp.layer(prevLayerIndex).shy)) {
                     prevLayerIndex--;
                 }
                 
                 if (prevLayerIndex >= 1) {
                     comp.layer(prevLayerIndex).selected = true;
                     selectedLayer.selected = false;
-                    updateLayerInfo();
+                }
+            } else {
+                // Если ни один слой не выбран, выбрать первый доступный слой
+                for (var i = 1; i <= comp.numLayers; i++) {
+                    var layer = comp.layer(i);
+                    if (!layer.locked && !layer.shy) {
+                        layer.selected = true;
+                        break;
+                    }
                 }
             }
+            
+            updateLayerInfo();
         }
     }    
 
