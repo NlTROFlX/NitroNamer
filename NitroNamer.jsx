@@ -1781,19 +1781,65 @@ function buildUI(thisObj) {
     }
 
     // Get the parent name of a layer, keeping the original name for top-level parents
-    function getLayerParentName(layer) {
-        if (!layer || !layer.containingComp) {
-            return "NoParent";
+    function getLayerParentName(layers) {
+        // Функция для определения цепочки переименования
+        function buildRenameChain(layer, layerChain) {
+            if (!layer || !layer.parent) {
+                return layerChain;
+            }
+            layerChain.unshift(layer.parent);
+            return buildRenameChain(layer.parent, layerChain);
         }
-        if (layer.parent) {
-            return layer.parent.name;
+    
+        // Функция для переименования слоев в цепочке
+        function renameLayersInChain(layerChain) {
+            for (var i = 0; i < layerChain.length; i++) {
+                var layer = layerChain[i];
+                if (layer.parent) {
+                    // Если у слоя есть родитель, имя родителя устанавливается
+                    layer.newName = layer.parent.name;
+                } else {
+                    // Если у слоя нет родителя, его имя остается неизменным
+                    layer.newName = layer.name;
+                }
+            }
         }
-        // If the layer has no parent but is a parent to another layer, keep its original name
-        if (isParentLayer(layer)) {
-            return layer.name;
+    
+        var layerNames = {};
+    
+        // Проходим по каждому слою
+        for (var i = 0; i < layers.length; i++) {
+            var layer = layers[i];
+    
+            // Проверяем, был ли слой уже обработан
+            if (layerNames[layer.index] !== undefined) {
+                continue;
+            }
+    
+            var layerChain = [layer];
+            buildRenameChain(layer, layerChain);
+            renameLayersInChain(layerChain);
+    
+            // Заполняем словарь layerNames
+            for (var j = 0; j < layerChain.length; j++) {
+                var chainLayer = layerChain[j];
+                layerNames[chainLayer.index] = chainLayer.newName;
+            }
         }
-        return "NoParent";
-    }
+    
+        // Возвращаем результаты для всех слоев
+        var results = [];
+        for (var i = 0; i < layers.length; i++) {
+            var layer = layers[i];
+            if (layerNames[layer.index] !== undefined) {
+                results.push(layerNames[layer.index]);
+            } else {
+                results.push(layer.name); // Имя остается неизменным
+            }
+        }
+    
+        return results;
+    }    
 
     // Check if the layer is a parent layer
     function isParentLayer(layer) {
@@ -2218,7 +2264,7 @@ function buildUI(thisObj) {
                         "Lops": getLayerOpacity(layer),
                         "Lexp": getExpressionControlledProperties(layer, variableSettings),
                         "Fext": getFileExtension(layer, variableSettings),
-                        "Lpnt": layer.parent ? layer.parent.name : "NoParent",
+                        "Lpnt": layer.parent ? layer.parent.name : layer.name,
                         "LpntIndex": getLayerParentIndex(layer),
                         "Lmc": getMaskCount(layer, variableSettings),
                         "Lmn": getMaskNames(layer, variableSettings)
