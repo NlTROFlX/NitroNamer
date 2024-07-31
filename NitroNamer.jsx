@@ -473,13 +473,13 @@ function buildUI(thisObj) {
         var existingSettings = loadSettings();
         var userPresets = existingSettings.userPresets || {};
     
-        // Если клавиша Shift зажата, пересохраняем текущий выбранный пресет
+        // If the Shift key is pressed, rescan the current selected preset
         if (ScriptUI.environment.keyboardState.shiftKey) {
             var selectedPreset = ddLayerMode.selection;
             if (selectedPreset && selectedPreset.text !== "Save your new preset" && selectedPreset.text !== "Please select a preset to delete") {
                 var presetTemplate = selectedPreset.text;
     
-                // Пересохранение текущего пресета
+                // Protect current press
                 for (var key in userPresets) {
                     if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
                         userPresets[key] = settings;
@@ -1782,7 +1782,7 @@ function buildUI(thisObj) {
 
     // Get the parent name of a layer, keeping the original name for top-level parents
     function getLayerParentName(layers) {
-        // Функция для определения цепочки переименования
+        // Renaming chain function
         function buildRenameChain(layer, layerChain) {
             if (!layer || !layer.parent) {
                 return layerChain;
@@ -1791,7 +1791,7 @@ function buildUI(thisObj) {
             return buildRenameChain(layer.parent, layerChain);
         }
     
-        // Функция для переименования слоев в цепочке
+        // Function for renaming layers in the chain
         function renameLayersInChain(layerChain) {
             for (var i = 0; i < layerChain.length; i++) {
                 var layer = layerChain[i];
@@ -1807,11 +1807,11 @@ function buildUI(thisObj) {
     
         var layerNames = {};
     
-        // Проходим по каждому слою
+        // Go through each layer
         for (var i = 0; i < layers.length; i++) {
             var layer = layers[i];
     
-            // Проверяем, был ли слой уже обработан
+            // Check if the layer has already been processed
             if (layerNames[layer.index] !== undefined) {
                 continue;
             }
@@ -1820,21 +1820,21 @@ function buildUI(thisObj) {
             buildRenameChain(layer, layerChain);
             renameLayersInChain(layerChain);
     
-            // Заполняем словарь layerNames
+            // Fill in the layerNames dictionary
             for (var j = 0; j < layerChain.length; j++) {
                 var chainLayer = layerChain[j];
                 layerNames[chainLayer.index] = chainLayer.newName;
             }
         }
     
-        // Возвращаем результаты для всех слоев
+        // Return results for all layers
         var results = [];
         for (var i = 0; i < layers.length; i++) {
             var layer = layers[i];
             if (layerNames[layer.index] !== undefined) {
                 results.push(layerNames[layer.index]);
             } else {
-                results.push(layer.name); // Имя остается неизменным
+                results.push(layer.name); // Name remains unchanged
             }
         }
     
