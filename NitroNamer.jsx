@@ -1864,22 +1864,22 @@ function buildUI(thisObj) {
     function getLayerParentIndex(layer) {
         var comp = layer.containingComp;
     
-        // Если слой не имеет родителя и не является родительским, возвращаем его исходное имя
+        // If the layer has no parent and is not a parent layer, return its original name
         if (!layer.parent && !isParentLayer(layer)) {
             return layer.name;
         }
     
-        // Если слой является родителем, но не имеет родителя, возвращаем его исходное имя
+        // If the layer is a parent but has no parent, return its original name
         if (isParentLayer(layer) && !layer.parent) {
             return layer.name;
         }
     
-        // Если слой имеет родителя, находим все дочерние слои этого родителя
+        // If a layer has a parent, find all child layers of this parent
         if (layer.parent) {
             var parentLayer = layer.parent;
             var childLayers = [];
     
-            // Находим все слои, которые являются дочерними для родительского слоя
+            // Find all layers that are children of the parent layer
             for (var i = 1; i <= comp.numLayers; i++) {
                 var currentLayer = comp.layer(i);
                 if (currentLayer.parent === parentLayer) {
@@ -1887,12 +1887,12 @@ function buildUI(thisObj) {
                 }
             }
     
-            // Сортируем дочерние слои по их индексу в композиции в порядке возрастания
+            // Sort child layers by their index in the composition in ascending order
             childLayers.sort(function(a, b) {
                 return a.index - b.index;
             });
     
-            // Проверяем, где находятся дочерние слои относительно родительского
+            // Check where the child layers are located relative to the parent layer
             var allAbove = true;
             var allBelow = true;
     
@@ -1906,15 +1906,15 @@ function buildUI(thisObj) {
             }
     
             var relativeIndex;
-            // Если все дочерние слои находятся над родителем, индексация по возрастанию
+            // If all child layers are above the parent, index in ascending order
             if (allAbove) {
                 relativeIndex = childLayers.length - childLayers.indexOf(layer);
             } 
-            // Если все дочерние слои находятся под родителем, индексация по убыванию
+            // If all child layers are below the parent, indexing is descending
             else if (allBelow) {
                 relativeIndex = childLayers.indexOf(layer) + 1;
             } 
-            // Если слои как над, так и под родителем, индексация остается в исходном порядке
+            // If layers are both above and below the parent, indexing remains in the original order
             else {
                 relativeIndex = childLayers.indexOf(layer) + 1;
             }
@@ -1922,22 +1922,8 @@ function buildUI(thisObj) {
             return relativeIndex.toString();
         }
     
-        // Если слой попадает в какую-то другую категорию, возвращаем его имя
+        // If a layer falls into some other category, return its name
         return layer.name;
-    }
-
-    // Function to check if a layer should preserve its name
-    function shouldPreserveName(layer) {
-        return !layer.parent && isParentLayer(layer);
-    }
-
-    function getParentChildHierarchy(comp) {
-        var layerInfo = [];
-        for (var i = 1; i <= comp.numLayers; i++) {
-            var layer = comp.layer(i);
-            layerInfo.push({layer: layer, parent: layer.parent});
-        }
-        return layerInfo;
     }
     
     function getCurrentDate(format) {
@@ -1956,29 +1942,6 @@ function buildUI(thisObj) {
             default:
                 return day + "." + month + "." + year;
         }
-    }
-    
-    function sortLayersByHierarchy(layerInfo) {
-        var sortedLayers = [];
-        var visitedLayers = []; // Use an array instead of Set
-    
-        function addLayerAndChildren(layer) {
-            if (visitedLayers.indexOf(layer) === -1) {
-                visitedLayers.push(layer);
-                for (var j = 0; j < layerInfo.length; j++) {
-                    if (layerInfo[j].parent === layer) {
-                        addLayerAndChildren(layerInfo[j].layer);
-                    }
-                }
-                sortedLayers.push(layer);
-            }
-        }
-    
-        for (var i = 0; i < layerInfo.length; i++) {
-            addLayerAndChildren(layerInfo[i].layer);
-        }
-    
-        return sortedLayers;
     }
     
     // Get the layer order based on the mode and reverse flag
