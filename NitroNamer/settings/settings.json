@@ -9,8 +9,8 @@
     },
     "currentSettings": {
         "UICompact": false,
-        "allLayers": false,
-        "template": "(Preset.2_version3)",
+        "allLayers": true,
+        "template": "1",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0

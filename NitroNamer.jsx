@@ -392,8 +392,16 @@ function buildUI(thisObj) {
         checkAndUpdateSettings();
         updatePreview();
         updateLayerCounts();
+        
+        var isCtrlPressed = ScriptUI.environment.keyboardState.ctrlKey;
+        var isShiftPressed = ScriptUI.environment.keyboardState.shiftKey;
+    
         if (trim(txtTemplate.text) === "") {
             btnRename.image = warningIconHover;
+        } else if (isCtrlPressed) {
+            btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHoverAfter.png");
+        } else if (isShiftPressed) {
+            btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHoverBefore.png");
         } else {
             btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHover.png");
         }
@@ -411,7 +419,7 @@ function buildUI(thisObj) {
         } else {
             alert("Script file not found: " + scriptFilePath.fsName);
         }
-    };    
+    };
 
     // Copy layer name to template input field
     btnCopy.onClick = function() {
