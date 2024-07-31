@@ -1816,23 +1816,37 @@ function buildUI(thisObj) {
 
     // Get the index of the layer relative to other layers with the same parent
     function getLayerParentIndex(layer) {
-        if (!layer.parent) {
-            return "";
+        // Если слой не имеет родителя и не является родительским, возвращаем его исходное имя
+        if (!layer.parent && !isParentLayer(layer)) {
+            return layer.name;
         }
-
-        var parentLayer = layer.parent;
-        var comp = layer.containingComp;
-        var sameParentLayers = [];
-        
-        for (var i = 1; i <= comp.numLayers; i++) {
-            var currentLayer = comp.layer(i);
-            if (currentLayer.parent === parentLayer) {
-                sameParentLayers.push(currentLayer);
+    
+        // Если слой является родителем, но не имеет родителя, возвращаем его исходное имя
+        if (isParentLayer(layer) && !layer.parent) {
+            return layer.name;
+        }
+    
+        // Если слой имеет родителя, находим индекс этого слоя среди всех слоев с тем же родителем
+        if (layer.parent) {
+            var parentLayer = layer.parent;
+            var comp = layer.containingComp;
+            var sameParentLayers = [];
+            
+            // Находим все слои с тем же родителем
+            for (var i = 1; i <= comp.numLayers; i++) {
+                var currentLayer = comp.layer(i);
+                if (currentLayer.parent === parentLayer) {
+                    sameParentLayers.push(currentLayer);
+                }
             }
+            
+            // Возвращаем индекс слоя среди других слоев с тем же родителем
+            var relativeIndex = sameParentLayers.indexOf(layer) + 1;
+            return relativeIndex.toString();  // Преобразуем индекс в строку для возврата
         }
-        
-        var relativeIndex = sameParentLayers.indexOf(layer) + 1;
-        return relativeIndex;
+    
+        // Если слой попадает в какую-то другую категорию, возвращаем его имя
+        return layer.name;
     }
 
     // Function to check if a layer should preserve its name
