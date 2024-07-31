@@ -10,7 +10,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "Lpnt(i)",
+        "template": "Lpnt(i) - i",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0

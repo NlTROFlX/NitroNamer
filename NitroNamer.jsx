@@ -1816,6 +1816,8 @@ function buildUI(thisObj) {
 
     // Get the index of the layer relative to other layers with the same parent
     function getLayerParentIndex(layer) {
+        var comp = layer.containingComp;
+    
         // Если слой не имеет родителя и не является родительским, возвращаем его исходное имя
         if (!layer.parent && !isParentLayer(layer)) {
             return layer.name;
@@ -1826,23 +1828,52 @@ function buildUI(thisObj) {
             return layer.name;
         }
     
-        // Если слой имеет родителя, находим индекс этого слоя среди всех слоев с тем же родителем
+        // Если слой имеет родителя, находим все дочерние слои этого родителя
         if (layer.parent) {
             var parentLayer = layer.parent;
-            var comp = layer.containingComp;
-            var sameParentLayers = [];
-            
-            // Находим все слои с тем же родителем
+            var childLayers = [];
+    
+            // Находим все слои, которые являются дочерними для родительского слоя
             for (var i = 1; i <= comp.numLayers; i++) {
                 var currentLayer = comp.layer(i);
                 if (currentLayer.parent === parentLayer) {
-                    sameParentLayers.push(currentLayer);
+                    childLayers.push(currentLayer);
                 }
             }
-            
-            // Возвращаем индекс слоя среди других слоев с тем же родителем
-            var relativeIndex = sameParentLayers.indexOf(layer) + 1;
-            return relativeIndex.toString();  // Преобразуем индекс в строку для возврата
+    
+            // Сортируем дочерние слои по их индексу в композиции в порядке возрастания
+            childLayers.sort(function(a, b) {
+                return a.index - b.index;
+            });
+    
+            // Проверяем, где находятся дочерние слои относительно родительского
+            var allAbove = true;
+            var allBelow = true;
+    
+            for (var i = 0; i < childLayers.length; i++) {
+                if (childLayers[i].index > parentLayer.index) {
+                    allAbove = false;
+                }
+                if (childLayers[i].index < parentLayer.index) {
+                    allBelow = false;
+                }
+            }
+    
+            var relativeIndex;
+            // Если все дочерние слои находятся над родителем, индексация по возрастанию
+            if (allAbove) {
+                relativeIndex = childLayers.length - childLayers.indexOf(layer);
+            } 
+            // Если все дочерние слои находятся под родителем, индексация по убыванию
+            else if (allBelow) {
+                relativeIndex = childLayers.indexOf(layer) + 1;
+            } 
+            // Если слои как над, так и под родителем, индексация остается в исходном порядке
+            else {
+                relativeIndex = childLayers.indexOf(layer) + 1;
+            }
+    
+            return relativeIndex.toString();
         }
     
         // Если слой попадает в какую-то другую категорию, возвращаем его имя
