@@ -1243,7 +1243,7 @@ function buildUI(thisObj) {
             "Lops": getLayerOpacity(layer),
             "Lexp": getExpressionControlledProperties(layer, settings),
             "Fext": getFileExtension(layer, settings),
-            "Lpnt": getLayerParentName(layer),
+            "Lpnt": getImmediateParentName(layer),
             "LpntIndex": getLayerParentIndex(layer),
             "Cd": getCurrentDate(),
             "Lmc": getMaskCount(layer, settings),
@@ -1781,65 +1781,9 @@ function buildUI(thisObj) {
     }
 
     // Get the parent name of a layer, keeping the original name for top-level parents
-    function getLayerParentName(layers) {
-        // Renaming chain function
-        function buildRenameChain(layer, layerChain) {
-            if (!layer || !layer.parent) {
-                return layerChain;
-            }
-            layerChain.unshift(layer.parent);
-            return buildRenameChain(layer.parent, layerChain);
-        }
-    
-        // Function for renaming layers in the chain
-        function renameLayersInChain(layerChain) {
-            for (var i = 0; i < layerChain.length; i++) {
-                var layer = layerChain[i];
-                if (layer.parent) {
-                    // Если у слоя есть родитель, имя родителя устанавливается
-                    layer.newName = layer.parent.name;
-                } else {
-                    // Если у слоя нет родителя, его имя остается неизменным
-                    layer.newName = layer.name;
-                }
-            }
-        }
-    
-        var layerNames = {};
-    
-        // Go through each layer
-        for (var i = 0; i < layers.length; i++) {
-            var layer = layers[i];
-    
-            // Check if the layer has already been processed
-            if (layerNames[layer.index] !== undefined) {
-                continue;
-            }
-    
-            var layerChain = [layer];
-            buildRenameChain(layer, layerChain);
-            renameLayersInChain(layerChain);
-    
-            // Fill in the layerNames dictionary
-            for (var j = 0; j < layerChain.length; j++) {
-                var chainLayer = layerChain[j];
-                layerNames[chainLayer.index] = chainLayer.newName;
-            }
-        }
-    
-        // Return results for all layers
-        var results = [];
-        for (var i = 0; i < layers.length; i++) {
-            var layer = layers[i];
-            if (layerNames[layer.index] !== undefined) {
-                results.push(layerNames[layer.index]);
-            } else {
-                results.push(layer.name); // Name remains unchanged
-            }
-        }
-    
-        return results;
-    }    
+    function getImmediateParentName(layer) {
+        return layer.parent ? layer.parent.name : layer.name;
+    }
 
     // Check if the layer is a parent layer
     function isParentLayer(layer) {
@@ -2171,17 +2115,17 @@ function buildUI(thisObj) {
 
     // Rename layers based on the template
     function renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed, isShiftPressed, isAltPressed, isCtrlShiftPressed) {
-        checkAndUpdateSettings(); // Check and update settings before renaming layers
-    
+        checkAndUpdateSettings(); // Проверка и обновление настроек перед переименованием слоев
+        
         var proj = app.project;
         if (proj && proj.activeItem instanceof CompItem) {
             var comp = proj.activeItem;
             if (comp.numLayers > 0) {
                 app.beginUndoGroup("Rename Layers by Template");
-    
-                // Determine the layer order
-                var layers = getLayerOrder(comp, allLayers, isCtrlShiftPressed); // Use isCtrlShiftPressed for inversion
                 
+                // Получение порядка слоев
+                var layers = getLayerOrder(comp, allLayers, isCtrlShiftPressed); // Используем isCtrlShiftPressed для инверсии
+
                 var validLayerCount = 0; // Initialize valid layer count
     
                 // First pass to count valid layers
@@ -2192,18 +2136,20 @@ function buildUI(thisObj) {
                 }
     
                 var validIndex = 1; // Initialize valid layer index
-    
-                // Second pass to rename layers
+                
+                var newNames = []; // Массив для хранения новых имен слоев
+                
+                // Первый проход: определение новых имен
                 for (var i = 0; i < layers.length; i++) {
                     var layer = layers[i];
                     if (layer.shy && !includeShyLayers) continue;
-                    if (layer.locked) continue; // Skip locked layers
+                    if (layer.locked) continue; // Пропуск заблокированных слоев
                     if (!allLayers && !layer.selected) continue;
-    
+
                     var variables = {
                         "T": getLayerType(layer),
                         "i": layer.index,
-                        "I": validIndex,  // Set I to the valid layer index
+                        "I": validIndex,  // Локальный индекс
                         "O": layer.name,
                         "E": getEffectNames(layer, variableSettings),
                         "An": getAnimatedProperties(layer, variableSettings),
@@ -2227,14 +2173,14 @@ function buildUI(thisObj) {
                         "Lops": getLayerOpacity(layer),
                         "Lexp": getExpressionControlledProperties(layer, variableSettings),
                         "Fext": getFileExtension(layer, variableSettings),
-                        "Lpnt": layer.parent ? layer.parent.name : layer.name,
                         "LpntIndex": getLayerParentIndex(layer),
+                        "Lpnt": getImmediateParentName(layer), // Используем непосредственного родителя
                         "Lmc": getMaskCount(layer, variableSettings),
                         "Lmn": getMaskNames(layer, variableSettings)
                     };
-    
+
                     var newName = replaceVariables(template, variables, layer.name, layer, variableSettings);
-    
+                    
                     if (briefly) {
                         switch (brieflyType) {
                             case "Camel Case":
@@ -2254,7 +2200,20 @@ function buildUI(thisObj) {
                                 break;
                         }
                     }
-    
+
+                    // Сохраняем новое имя в массив
+                    newNames.push({
+                        layer: layer,
+                        newName: newName
+                    });
+                }
+
+                // Второй проход: применение новых имен
+                for (var j = 0; j < newNames.length; j++) {
+                    var layerData = newNames[j];
+                    var layer = layerData.layer;
+                    var newName = layerData.newName;
+                    
                     if (isCtrlPressed && !isShiftPressed) {
                         layer.name = layer.name + newName;
                     } else if (isShiftPressed && !isCtrlPressed) {
@@ -2262,10 +2221,8 @@ function buildUI(thisObj) {
                     } else {
                         layer.name = newName;
                     }
-    
-                    validIndex++; // Increment valid layer index
                 }
-    
+
                 app.endUndoGroup();
             } else {
                 alert("No layers in the active composition.");
@@ -2273,7 +2230,7 @@ function buildUI(thisObj) {
         } else {
             alert("Please select a valid composition.");
         }
-    }    
+    }
 
     // Get the effect names applied to a layer with optional filtering and custom separator
     function getEffectNames(layer, settings, filter) {
