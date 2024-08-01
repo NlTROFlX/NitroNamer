@@ -10,7 +10,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "I(2)_T.i_[I(10)]_I(10)",
+        "template": "I(2)_T.i_[I(10)]_[I(10)]_[I(100)]",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0

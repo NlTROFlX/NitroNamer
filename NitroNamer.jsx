@@ -1216,7 +1216,6 @@ function buildUI(thisObj) {
     function generateNewName(layer, template, briefly, brieflyType, settings) {
         checkAndUpdateSettings(); // Check and update settings before generating the new name
         incrementValues = {}; // Сброс значений для каждой новой итерации генерации имени
-        localIndex = 1;
     
         var variables = {
             "T": getLayerType(layer),
@@ -1947,18 +1946,18 @@ function buildUI(thisObj) {
             if (group !== undefined) {
                 return group;
             } else if (customI !== undefined) {
-                // Обработка инкрементируемой переменной с начальным значением
+                // Создаем уникальный ключ для каждой переменной I с начальным значением
+                var uniqueKey = "I(" + customI + ")_" + usedVariables.length;
                 var initialValue = parseInt(customI, 10);
-                if (!incrementValues[customI]) {
-                    incrementValues[customI] = initialValue; // Инициализация
+                if (!incrementValues[uniqueKey]) {
+                    incrementValues[uniqueKey] = initialValue; // Инициализация
                 }
-                value = incrementValues[customI]++;
+                value = incrementValues[uniqueKey]++;
                 replacements['I'].value = value;
-                usedVariables.push('I');
+                usedVariables.push(uniqueKey);
                 return value;
             } else if (match === 'I') {
-                value = localIndex; // Используем текущее значение
-                localIndex++; // Затем увеличиваем его для следующего использования
+                value = localIndex++; // Используем текущее значение и затем увеличиваем его
             } else if (customEffectDelimiterParentheses !== undefined) {
                 var effectsString = getEffectNames(layer, settings, customEffectDelimiterParentheses);
                 replacements['E'].value = effectsString;
