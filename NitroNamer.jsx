@@ -1215,6 +1215,8 @@ function buildUI(thisObj) {
     // Generate new name for a layer based on the template
     function generateNewName(layer, template, briefly, brieflyType, settings) {
         checkAndUpdateSettings(); // Check and update settings before generating the new name
+        incrementValues = {}; // Сброс значений для каждой новой итерации генерации имени
+        localIndex = 1;
     
         var variables = {
             "T": getLayerType(layer),
@@ -1913,7 +1915,9 @@ function buildUI(thisObj) {
             layers.reverse();
         }
         return layers;
-    }    
+    }
+
+    var incrementValues = {};
 
     // Replace variables in the template with actual values
     function replaceVariables(template, variables, originalName, layer, settings) {
@@ -1925,7 +1929,7 @@ function buildUI(thisObj) {
             return template.match(/^\(([^()]+)\)$/)[1];
         }
 
-        var regex = /\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|Lexp\(([^)]+)\)|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar\(([^)]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|Cd\(([^)]+)\)|Cd|Lmc\(([^)]+)\)|Lmc|Lmn\(([^)]+)\)|Lmn|[A-Z]|i|I|S|W|H/g;
+        var regex = /\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|Lexp\(([^)]+)\)|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar\(([^)]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|Cd\(([^)]+)\)|Cd|Lmc\(([^)]+)\)|Lmc|Lmn\(([^)]+)\)|Lmn|I\(([^)]+)\)|I|[A-Z]|i|S|W|H/g;
 
         var replacements = {
             'An': { 'regex': /An\(([^)]+)\)/, 'value': '' },
@@ -1933,14 +1937,28 @@ function buildUI(thisObj) {
             'Lexp': { 'regex': /Lexp\(([^)]+)\)/, 'value': '' },
             'Fext': { 'regex': /Fext\(([^)]+)\)/, 'value': '' },
             'Lmc': { 'regex': /Lmc\(([^)]+)\)/, 'value': '' },
-            'Lmn': { 'regex': /Lmn\(([^)]+)\)/, 'value': '' }
+            'Lmn': { 'regex': /Lmn\(([^)]+)\)/, 'value': '' },
+            'I': { 'regex': /I\(([^)]+)\)/, 'value': '' }
         };
 
-        result = result.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskCountMode, customMaskNameDelimiter) {
+        result = result.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskCountMode, customMaskNameDelimiter, customI) {
             var value;
 
             if (group !== undefined) {
                 return group;
+            } else if (customI !== undefined) {
+                // Обработка инкрементируемой переменной с начальным значением
+                var initialValue = parseInt(customI, 10);
+                if (!incrementValues[customI]) {
+                    incrementValues[customI] = initialValue; // Инициализация
+                }
+                value = incrementValues[customI]++;
+                replacements['I'].value = value;
+                usedVariables.push('I');
+                return value;
+            } else if (match === 'I') {
+                value = localIndex; // Используем текущее значение
+                localIndex++; // Затем увеличиваем его для следующего использования
             } else if (customEffectDelimiterParentheses !== undefined) {
                 var effectsString = getEffectNames(layer, settings, customEffectDelimiterParentheses);
                 replacements['E'].value = effectsString;
@@ -2111,6 +2129,10 @@ function buildUI(thisObj) {
             result = result.replace(replacements['Lmn'].regex, replacements['Lmn'].value);
         }
 
+        if (usedVariables.indexOf('I') !== -1) {
+            result = result.replace(replacements['I'].regex, replacements['I'].value);
+        }
+
         if (usedVariables.length === 0) {
             return result;
         }
@@ -2118,11 +2140,13 @@ function buildUI(thisObj) {
         return result;
     }
 
-    var localIndex = 1; // Global local index
+    var localIndex = 0; // Global local index
 
     // Rename layers based on the template
     function renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed, isShiftPressed, isAltPressed, isCtrlShiftPressed) {
         checkAndUpdateSettings(); // Проверка и обновление настроек перед переименованием слоев
+        incrementValues = {};
+        localIndex = 1;
         
         var proj = app.project;
         if (proj && proj.activeItem instanceof CompItem) {
@@ -2141,8 +2165,6 @@ function buildUI(thisObj) {
                     if (layer.locked) continue; // Skip locked layers
                     validLayerCount++;
                 }
-    
-                var validIndex = 1; // Initialize valid layer index
                 
                 var newNames = []; // Массив для хранения новых имен слоев
                 
@@ -2156,7 +2178,7 @@ function buildUI(thisObj) {
                     var variables = {
                         "T": getLayerType(layer),
                         "i": layer.index,
-                        "I": validIndex,  // Локальный индекс
+                        "I": localIndex,  // Локальный индекс
                         "O": layer.name,
                         "E": getEffectNames(layer, variableSettings),
                         "An": getAnimatedProperties(layer, variableSettings),
@@ -2185,7 +2207,7 @@ function buildUI(thisObj) {
                         "Lmc": getMaskCount(layer, variableSettings),
                         "Lmn": getMaskNames(layer, variableSettings)
                     };
-
+                    
                     var newName = replaceVariables(template, variables, layer.name, layer, variableSettings);
                     
                     if (briefly) {
