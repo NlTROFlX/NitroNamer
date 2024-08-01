@@ -1782,7 +1782,14 @@ function buildUI(thisObj) {
 
     // Get the parent name of a layer, keeping the original name for top-level parents
     function getImmediateParentName(layer) {
-        return layer.parent ? layer.parent.name : layer.name;
+        var currentLayer = layer;
+    
+        // Go up the hierarchy to the top parent layer
+        while (currentLayer.parent) {
+            currentLayer = currentLayer.parent;
+        }
+        
+        return currentLayer.name; // Return the name of the top parent layer
     }
 
     // Check if the layer is a parent layer
