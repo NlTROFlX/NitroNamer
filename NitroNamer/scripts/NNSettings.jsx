@@ -145,6 +145,7 @@ function buildNewUI(thisObj) {
     grpRadioButtons.orientation = "row"; // Set orientation to horizontal
     grpRadioButtons.alignChildren = ["center", "center"]; // Center the buttons
     grpRadioButtons.alignment = ["center", "bottom"]; // Align the group to the center bottom
+    grpRadioButtons.margins = [0,-10,0,0];
 
     // Add radio buttons
     var rdoDefault = grpRadioButtons.add("radiobutton", undefined, "Default value");

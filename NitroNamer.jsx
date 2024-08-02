@@ -2061,9 +2061,9 @@ function buildUI(thisObj) {
             }
         });
 
-        // Проверка на совпадение оригинального имени с новым именем
+        // Match original name to new name
         if (result === originalName || result === "") {
-            return originalName; // Возвращаем оригинальное имя, если новое имя пустое или не изменилось
+            return originalName; // Return the original name if the new name is empty or unchanged
         }
 
         // Handle the case where An(Separator) is the only variable in the template
