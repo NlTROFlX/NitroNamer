@@ -1,12 +1,12 @@
 {
     "An": {
         "defaultValue": "NoAnimations",
-        "customValue": "Custom{An}",
-        "active": true
+        "customValue": "",
+        "active": false
     },
     "Ar": {
         "defaultValue": "NoAspectRatio",
-        "customValue": "Custom{Ar}",
+        "customValue": "",
         "active": true
     },
     "E": {
@@ -46,7 +46,7 @@
     },
     "R": {
         "defaultValue": "NoResolution",
-        "customValue": "Custom{R}",
+        "customValue": "",
         "active": true
     },
     "Tm": {

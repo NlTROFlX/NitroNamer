@@ -2061,6 +2061,11 @@ function buildUI(thisObj) {
             }
         });
 
+        // Проверка на совпадение оригинального имени с новым именем
+        if (result === originalName || result === "") {
+            return originalName; // Возвращаем оригинальное имя, если новое имя пустое или не изменилось
+        }
+
         // Handle the case where An(Separator) is the only variable in the template
         if (usedVariables.length === 0 && template.indexOf('An(') !== -1) {
             var customAnimDelimiter = template.match(/An\(([^)]+)\)/);
