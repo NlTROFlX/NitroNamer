@@ -1154,6 +1154,7 @@ function buildUI(thisObj) {
 
     // Update preview of the new layer name
     function updatePreview() {
+        resetLocalIndex();
         checkAndUpdateSettings(); // Check and update settings before updating the preview
     
         var proj = app.project;
@@ -1214,6 +1215,7 @@ function buildUI(thisObj) {
 
     // Generate new name for a layer based on the template
     function generateNewName(layer, template, briefly, brieflyType, settings) {
+        resetLocalIndex();
         checkAndUpdateSettings(); // Check and update settings before generating the new name
         incrementValues = {}; // Сброс значений для каждой новой итерации генерации имени
     
@@ -1914,6 +1916,10 @@ function buildUI(thisObj) {
             layers.reverse();
         }
         return layers;
+    }
+
+    function resetLocalIndex() {
+        localIndex = 1;
     }
 
     var incrementValues = {};
