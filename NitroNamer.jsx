@@ -1,25 +1,37 @@
 function buildUI(thisObj) {
     // Create a window or panel for the UI
     var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "NitroNamer", undefined, {resizeable: true});
-    var globalWidthSizeElements = 300; // Set global width for UI elements
+    var globalWidthSizeElements = 310; // Set global width for UI elements
+    var globalWidthSizeElementsCorrect = 14;
+    var globalHeightSizeElementsMax = 376;
+    var globalHeightSizeElementsMin = 146;
+    var globalSpacingElements = 4;
     win.orientation = "column";
     win.alignChildren = ["fill", "top"];
-    win.preferredSize.height = 122;
     win.active = true;
     win.margins = [4,4,4,4];
+    win.layout.layout(true);
 
     // Create group for layer selection options
     var grpLayerSelection = win.add("group", undefined);
     grpLayerSelection.orientation = "row"; // Set orientation to horizontal
     grpLayerSelection.maximumSize.width = globalWidthSizeElements;
+    grpLayerSelection.alignChildren = ["fill", "left"];
+    grpLayerSelection.spacing = globalSpacingElements;
 
     // Add radio buttons for layer selection mode
     var rdoAllLayers = grpLayerSelection.add("radiobutton", undefined, "Total: ");
     rdoAllLayers.value = true; // Default to selecting all layers
+    rdoAllLayers.alignment = ["left", "center"];
     var txtAllLayersCount = grpLayerSelection.add("statictext", undefined, "");
+    txtAllLayersCount.alignment = ["left", "center"];
+    txtAllLayersCount.margins = [10,0,10,0];
 
     var rdoOnlySelected = grpLayerSelection.add("radiobutton", undefined, "Selected: ");
+    rdoOnlySelected.alignment = ["left", "center"];
     var txtSelectedLayersCount = grpLayerSelection.add("statictext", undefined, "");
+    txtSelectedLayersCount.alignment = ["left", "center"];
+    txtSelectedLayersCount.margins = [10,0,10,0];
 
     // Get the script's file and folder path
     var scriptFile = new File($.fileName);
@@ -83,9 +95,11 @@ function buildUI(thisObj) {
     grpDropdownAndButtons.orientation = "row";
     grpDropdownAndButtons.alignment = ["fill", "top"];
     grpDropdownAndButtons.margins = [0, -10, 0, 0];
+    grpDropdownAndButtons.spacing = globalSpacingElements;
 
     // Add dropdown list for layer mode presets
     var ddLayerMode = grpDropdownAndButtons.add("dropdownlist", undefined, presetTemplates);
+    ddLayerMode.minimumSize.width = globalWidthSizeElements - 12;
     ddLayerMode.selection = 0;
 
     // Update presets dropdown change handler
@@ -183,6 +197,7 @@ function buildUI(thisObj) {
     var grpTemplate = win.add("group", undefined);
     grpTemplate.orientation = "column";
     grpTemplate.margins = [0,-10,0,0];
+    grpTemplate.spacing = globalSpacingElements;
     var txtTemplate = grpTemplate.add("edittext", undefined, "(Template for renaming)O_T.i", {multiline: false, scrolling: false});
     txtTemplate.alignment = ["fill", "top"];
     txtTemplate.margins = [0,-10,0,0];
@@ -261,34 +276,23 @@ function buildUI(thisObj) {
     // Create group for text fields
     var grpTextFields = win.add("group", undefined);
     grpTextFields.orientation = "column";
-    grpTextFields.alignChildren = ["fill", "top"];
-    grpTextFields.alignment = ["right", "center"];
-    grpTextFields.maximumSize.width = globalWidthSizeElements;
+    grpTextFields.alignChildren = ["left", "top"];
+    grpTextFields.alignment = ["left", "center"];
+    grpTextFields.maximumSize.width = globalWidthSizeElements - globalWidthSizeElementsCorrect;
+    grpTextFields.spacing = globalSpacingElements
 
     // Add text fields for original and renamed layer names
     var txtOriginalLabel = grpTextFields.add("statictext", undefined, "The original name of the layer: ");
     txtOriginalLabel.maximumSize.height = 12;
     var txtOriginal = grpTextFields.add("edittext", undefined, "", {readonly: true});
-    txtOriginal.alignment = ["fill", "top"];
-    txtOriginal.maximumSize.width = globalWidthSizeElements;
+    txtOriginal.alignment = ["left", "top"];
     txtOriginal.margins = [0, -10, 0, 0];
 
     var txtRenamedLabel = grpTextFields.add("statictext", undefined, "Template result for layer(s): ");
     txtRenamedLabel.maximumSize.height = 12;
     var txtRenamed = grpTextFields.add("edittext", undefined, "", {readonly: true});
-    txtRenamed.alignment = ["fill", "top"];
-    txtRenamed.maximumSize.width = globalWidthSizeElements;
+    txtRenamed.alignment = ["left", "top"];
     txtRenamed.margins = [0, -10, 0, 0];
-
-    // Set maximum and minimum width for text fields and dropdown
-    txtTemplate.maximumSize.width = globalWidthSizeElements;
-    txtTemplate.minimumSize.width = globalWidthSizeElements;
-    txtOriginal.maximumSize.width = globalWidthSizeElements;
-    txtOriginal.minimumSize.width = globalWidthSizeElements;
-    txtRenamed.maximumSize.width = globalWidthSizeElements;
-    txtRenamed.minimumSize.width = globalWidthSizeElements;
-    ddLayerMode.maximumSize.width = globalWidthSizeElements;
-    ddLayerMode.minimumSize.width = globalWidthSizeElements;
 
     var txtRenamedCompact;
 
@@ -296,6 +300,7 @@ function buildUI(thisObj) {
     var grpBriefly = win.add("group", undefined);
     grpBriefly.orientation = "row";
     grpBriefly.alignChildren = [ "right", "center"];
+    grpBriefly.spacing = grpTextFields;
 
     // Move buttons to the grpBriefly group
     var btnRename = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/renameIcon.png"), { style: "toolbutton" });
@@ -328,7 +333,7 @@ function buildUI(thisObj) {
 
     var chkBriefly = grpBriefly.add("checkbox", undefined);
     var ddBrieflyType = grpBriefly.add("dropdownlist", undefined, ["Camel Case", "Pascal Case", "Snake Case", "Kebab Case", "Screaming Snake Case"]);
-    ddBrieflyType.maximumSize.width = 100;
+    ddBrieflyType.maximumSize.width = 150;
     ddBrieflyType.selection = 0;
 
     // Event handler for "Briefly" checkbox
@@ -674,6 +679,11 @@ function buildUI(thisObj) {
             btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/maximize.png");
             btnMinimize.addEventListener("mouseover", handleMouseOverMaximize);
             btnMinimize.addEventListener("mouseout", handleMouseOutMaximize);
+
+            txtOriginal.minimumSize.width = globalWidthSizeElements;
+            txtOriginal.margins = [0,0,0,0];
+            txtRenamed.minimumSize.width = globalWidthSizeElements;
+            txtRenamed.margins = [0,0,0,0];
     
             // Remove original name elements
             grpTextFields.remove(txtOriginalLabel);
@@ -683,6 +693,7 @@ function buildUI(thisObj) {
             // Set references to null to avoid duplicates
             txtOriginalLabel = null;
             txtOriginal = null;
+            txtRenamedLabel = null;
 
             grpTextFields.margins = [0, -10, 0, -10];
     
@@ -692,6 +703,11 @@ function buildUI(thisObj) {
             }
             
             updatePreview();
+            win.minimumSize.height = globalHeightSizeElementsMin;
+            win.maximumSize.height = globalHeightSizeElementsMin;
+            /*
+            win.minimumSize.width = globalWidthSizeElements;
+            win.maximumSize.width = globalWidthSizeElements;*/
         } else {
             btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimize.png");
             btnMinimize.addEventListener("mouseover", handleMouseOverMinimize);
@@ -705,23 +721,23 @@ function buildUI(thisObj) {
             // Re-create and add elements in the correct order
             txtOriginalLabel = grpTextFields.add("statictext", undefined, "The original name of the layer: ");
             txtOriginalLabel.maximumSize.height = 12;
-            txtOriginalLabel.alignment = ["fill", "top"];
-            txtOriginalLabel.margins = [0, -10, 0, -10];
+            txtOriginalLabel.alignment = ["left", "top"];
+            txtOriginalLabel.margins = [0, -100, 0, -100];
     
             txtOriginal = grpTextFields.add("edittext", undefined, "", { readonly: true });
-            txtOriginal.alignment = ["fill", "top"];
+            txtOriginal.alignment = ["left", "top"];
             txtOriginal.minimumSize.width = globalWidthSizeElements;
-            txtOriginal.margins = [0, -10, 0, -10];
+            txtOriginal.margins = [0, -100, 0, -100];
     
             txtRenamedLabel = grpTextFields.add("statictext", undefined, "Template result for layer(s): ");
             txtRenamedLabel.maximumSize.height = 12;
-            txtRenamedLabel.alignment = ["fill", "top"];
-            txtRenamedLabel.margins = [0, -10, 0, -10];
+            txtRenamedLabel.alignment = ["left", "top"];
+            txtRenamedLabel.margins = [0, -100, 0, -100];
     
             txtRenamed = grpTextFields.add("edittext", undefined, "", { readonly: true });
-            txtRenamed.alignment = ["fill", "top"];
+            txtRenamed.alignment = ["left", "top"];
             txtRenamed.minimumSize.width = globalWidthSizeElements;
-            txtRenamed.margins = [0, -10, 0, -10];
+            txtRenamed.margins = [0, -100, 0, -100];
     
             // Hide compact preview if it exists
             if (txtRenamedCompact) {
@@ -729,6 +745,11 @@ function buildUI(thisObj) {
             }
 
             updatePreview();
+
+            win.minimumSize.height = globalHeightSizeElementsMax;
+            win.maximumSize.height = globalHeightSizeElementsMax;
+            win.minimumSize.width = globalWidthSizeElements  - globalWidthSizeElementsCorrect;
+            win.maximumSize.width = globalWidthSizeElements;
         }
     
         // Force layout update to adjust the positions of the remaining elements
