@@ -266,7 +266,7 @@ function buildUI(thisObj) {
     grpTextFields.maximumSize.width = globalWidthSizeElements;
 
     // Add text fields for original and renamed layer names
-    var txtOriginalLabel = grpTextFields.add("statictext", undefined, "Input layer with original name: ");
+    var txtOriginalLabel = grpTextFields.add("statictext", undefined, "The original name of the layer: ");
     txtOriginalLabel.maximumSize.height = 12;
     var txtOriginal = grpTextFields.add("edittext", undefined, "", {readonly: true});
     txtOriginal.alignment = ["fill", "top"];
@@ -675,67 +675,66 @@ function buildUI(thisObj) {
             btnMinimize.addEventListener("mouseover", handleMouseOverMaximize);
             btnMinimize.addEventListener("mouseout", handleMouseOutMaximize);
     
-            // Hide UI elements
-            btnRename.visible = false;
-            btnHelp.visible = false;
-            btnVariables.visible = false;
-            btnReset.visible = false;
-            btnSettings.visible = false; // Hide the settings button
-            chkBriefly.visible = false;
-            ddBrieflyType.visible = false;
-            txtOriginalLabel.visible = false;
-            txtOriginal.visible = false;
-            txtRenamedLabel.visible = false;
-            txtRenamed.visible = false;
+            // Remove original name elements
+            grpTextFields.remove(txtOriginalLabel);
+            grpTextFields.remove(txtOriginal);
+            grpTextFields.remove(txtRenamedLabel);
     
-            // Create a new txtRenamed field after txtTemplate
-            if (!txtRenamedCompact) {
-                txtRenamedCompact = grpTemplate.add("edittext", undefined, txtRenamed.text, {readonly: true});
-                txtRenamedCompact.alignment = ["fill", "top"];
-                txtRenamedCompact.margins = [0, -10, 0, 0];
+            // Set references to null to avoid duplicates
+            txtOriginalLabel = null;
+            txtOriginal = null;
+
+            grpTextFields.margins = [0, -10, 0, -10];
+    
+            // Show compact preview if it exists
+            if (txtRenamedCompact) {
+                txtRenamedCompact.visible = true;
             }
-    
-            // Adjust panel height
-            win.layout.layout(true);
-            win.layout.resize();
-            win.size.height = 122;
-            win.maximumSize.height = 122;
-            win.maximumSize.width = globalWidthSizeElements + 8;
+            
+            updatePreview();
         } else {
             btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimize.png");
             btnMinimize.addEventListener("mouseover", handleMouseOverMinimize);
             btnMinimize.addEventListener("mouseout", handleMouseOutMinimize);
     
-            // Show UI elements
-            btnRename.visible = true;
-            btnHelp.visible = true;
-            btnVariables.visible = true;
-            btnReset.visible = true;
-            btnSettings.visible = true; // Show the settings button
-            chkBriefly.visible = true;
-            ddBrieflyType.visible = true;
-            txtOriginalLabel.visible = true;
-            txtOriginal.visible = true;
-            txtRenamedLabel.visible = true;
-            txtRenamed.visible = true;
-    
-            // Remove the compact txtRenamed field if it exists
-            if (txtRenamedCompact) {
-                grpTemplate.remove(txtRenamedCompact);
-                txtRenamedCompact = null;
+            // Remove all elements from the group
+            while (grpTextFields.children.length > 0) {
+                grpTextFields.remove(grpTextFields.children[0]);
             }
     
-            // Adjust panel height to automatic
-            win.layout.layout(true);
-            win.layout.resize();
-            win.size.height = 122;
-            win.maximumSize.height = 260;
+            // Re-create and add elements in the correct order
+            txtOriginalLabel = grpTextFields.add("statictext", undefined, "The original name of the layer: ");
+            txtOriginalLabel.maximumSize.height = 12;
+            txtOriginalLabel.alignment = ["fill", "top"];
+            txtOriginalLabel.margins = [0, -10, 0, -10];
+    
+            txtOriginal = grpTextFields.add("edittext", undefined, "", { readonly: true });
+            txtOriginal.alignment = ["fill", "top"];
+            txtOriginal.minimumSize.width = globalWidthSizeElements;
+            txtOriginal.margins = [0, -10, 0, -10];
+    
+            txtRenamedLabel = grpTextFields.add("statictext", undefined, "Template result for layer(s): ");
+            txtRenamedLabel.maximumSize.height = 12;
+            txtRenamedLabel.alignment = ["fill", "top"];
+            txtRenamedLabel.margins = [0, -10, 0, -10];
+    
+            txtRenamed = grpTextFields.add("edittext", undefined, "", { readonly: true });
+            txtRenamed.alignment = ["fill", "top"];
+            txtRenamed.minimumSize.width = globalWidthSizeElements;
+            txtRenamed.margins = [0, -10, 0, -10];
+    
+            // Hide compact preview if it exists
+            if (txtRenamedCompact) {
+                txtRenamedCompact.visible = false;
+            }
+
+            updatePreview();
         }
     
-        // Force layout update
+        // Force layout update to adjust the positions of the remaining elements
         win.layout.layout(true);
         win.layout.resize();
-    }
+    }    
 
     // Save settings to a JSON file
     function saveSettings(settings, isCurrent) {
@@ -1154,6 +1153,9 @@ function buildUI(thisObj) {
 
     // Update preview of the new layer name
     function updatePreview() {
+        var settings = loadSettings();
+        var isCompact = settings.currentSettings && settings.currentSettings.UICompact;
+    
         resetLocalIndex();
         checkAndUpdateSettings(); // Check and update settings before updating the preview
     
@@ -1173,30 +1175,39 @@ function buildUI(thisObj) {
                     var briefly = chkBriefly.value;
                     var brieflyType = ddBrieflyType.selection.text;
                     var newName = generateNewName(layer, template, briefly, brieflyType, variableSettings);
-                    txtOriginal.text = originalName;
-                    txtRenamed.text = newName;
-                    if (txtRenamedCompact) {
-                        txtRenamedCompact.text = newName;
+    
+                    if (!isCompact) {
+                        txtOriginal.text = originalName;
+                        txtRenamed.text = newName;
+                    }
+                    if (txtRenamed) {
+                        txtRenamed.text = newName; // Update the compact preview field
                     }
                 } else {
-                    txtOriginal.text = "No layers in composition.";
-                    txtRenamed.text = "No layers in composition.";
-                    if (txtRenamedCompact) {
-                        txtRenamedCompact.text = "No layers in composition.";
+                    if (!isCompact) {
+                        txtOriginal.text = "No layers in composition.";
+                        txtRenamed.text = "No layers in composition.";
+                    }
+                    if (txtRenamed) {
+                        txtRenamed.text = "No layers in composition.";
                     }
                 }
             } else {
-                txtOriginal.text = "No composition selected.";
-                txtRenamed.text = "No composition selected.";
-                if (txtRenamedCompact) {
-                    txtRenamedCompact.text = "No composition selected.";
+                if (!isCompact) {
+                    txtOriginal.text = "No composition selected.";
+                    txtRenamed.text = "No composition selected.";
+                }
+                if (txtRenamed) {
+                    txtRenamed.text = "No composition selected.";
                 }
             }
         } else {
-            txtOriginal.text = "No project open.";
-            txtRenamed.text = "No project open.";
-            if (txtRenamedCompact) {
-                txtRenamedCompact.text = "No project open.";
+            if (!isCompact) {
+                txtOriginal.text = "No project open.";
+                txtRenamed.text = "No project open.";
+            }
+            if (txtRenamed) {
+                txtRenamed.text = "No project open.";
             }
         }
     }    
