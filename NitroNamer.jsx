@@ -25,13 +25,13 @@ function buildUI(thisObj) {
     rdoAllLayers.alignment = ["left", "center"];
     var txtAllLayersCount = grpLayerSelection.add("statictext", undefined, "");
     txtAllLayersCount.alignment = ["left", "center"];
-    txtAllLayersCount.margins = [10,0,10,0];
+    txtAllLayersCount.margins = [22,0,22,0];
 
     var rdoOnlySelected = grpLayerSelection.add("radiobutton", undefined, "Selected: ");
     rdoOnlySelected.alignment = ["left", "center"];
     var txtSelectedLayersCount = grpLayerSelection.add("statictext", undefined, "");
     txtSelectedLayersCount.alignment = ["left", "center"];
-    txtSelectedLayersCount.margins = [10,0,10,0];
+    txtSelectedLayersCount.margins = [22,0,22,0];
 
     // Get the script's file and folder path
     var scriptFile = new File($.fileName);
@@ -279,17 +279,20 @@ function buildUI(thisObj) {
     grpTextFields.alignChildren = ["left", "top"];
     grpTextFields.alignment = ["left", "center"];
     grpTextFields.maximumSize.width = globalWidthSizeElements - globalWidthSizeElementsCorrect;
-    grpTextFields.spacing = globalSpacingElements
+    grpTextFields.spacing = globalSpacingElements;
+    grpTextFields.margins = [0, 0, 0, 0];
 
     // Add text fields for original and renamed layer names
     var txtOriginalLabel = grpTextFields.add("statictext", undefined, "The original name of the layer: ");
-    txtOriginalLabel.maximumSize.height = 12;
+    txtOriginalLabel.maximumSize.height = 14;
+    txtOriginalLabel.margins = [0, -10, 0, 0];
     var txtOriginal = grpTextFields.add("edittext", undefined, "", {readonly: true});
     txtOriginal.alignment = ["left", "top"];
     txtOriginal.margins = [0, -10, 0, 0];
 
     var txtRenamedLabel = grpTextFields.add("statictext", undefined, "Template result for layer(s): ");
-    txtRenamedLabel.maximumSize.height = 12;
+    txtRenamedLabel.maximumSize.height = 14;
+    txtRenamedLabel.margins = [0, -10, 0, 0];
     var txtRenamed = grpTextFields.add("edittext", undefined, "", {readonly: true});
     txtRenamed.alignment = ["left", "top"];
     txtRenamed.margins = [0, -10, 0, 0];
@@ -301,6 +304,7 @@ function buildUI(thisObj) {
     grpBriefly.orientation = "row";
     grpBriefly.alignChildren = [ "right", "center"];
     grpBriefly.spacing = grpTextFields;
+    grpBriefly.margins = [0, 0, 0, 0];
 
     // Move buttons to the grpBriefly group
     var btnRename = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/renameIcon.png"), { style: "toolbutton" });
@@ -720,7 +724,7 @@ function buildUI(thisObj) {
     
             // Re-create and add elements in the correct order
             txtOriginalLabel = grpTextFields.add("statictext", undefined, "The original name of the layer: ");
-            txtOriginalLabel.maximumSize.height = 12;
+            txtOriginalLabel.maximumSize.height = 14;
             txtOriginalLabel.alignment = ["left", "top"];
             txtOriginalLabel.margins = [0, -100, 0, -100];
     
@@ -730,7 +734,7 @@ function buildUI(thisObj) {
             txtOriginal.margins = [0, -100, 0, -100];
     
             txtRenamedLabel = grpTextFields.add("statictext", undefined, "Template result for layer(s): ");
-            txtRenamedLabel.maximumSize.height = 12;
+            txtRenamedLabel.maximumSize.height = 14;
             txtRenamedLabel.alignment = ["left", "top"];
             txtRenamedLabel.margins = [0, -100, 0, -100];
     
