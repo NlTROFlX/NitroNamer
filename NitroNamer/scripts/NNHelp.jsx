@@ -38,17 +38,18 @@ function showHelp() {
         "Ip - In point of the layer",
         "Op - Out point of the layer",
         "D - Duration (HH:MM:SS)",
-        "D(format) - Duration with custom format (1=hours, 2=minutes, 3=seconds, 4=milliseconds)",
+        "D(Format) - Duration with custom format (1=hours, 2=minutes, 3=seconds, 4=milliseconds)",
         "Df - Duration in frames",
         "Cd - Current date (DD.MM.YYYY)",
-        "Cd(format) - Current date with custom format (1=day, 2=month, 3=year)"
+        "Cd(Format) - Current date with custom format (1=day, 2=month, 3=year)"
     ];
     addGroupPanel(firstRow, "Time and Duration", timeVariables);
 
     // Effects Variables
     var effectsVariables = [
         "E - Name of effects",
-        "E{delimiter} - Effects with custom delimiter",
+        "E(Delimiter) - Effects with custom delimiter",
+        "E(Effect name filter)",
         "Ec - Effects count"
     ];
     addGroupPanel(firstRow, "Effects", effectsVariables);
@@ -57,7 +58,8 @@ function showHelp() {
     var frameResVariables = [
         "F - Frame Rate",
         "R - Resolution (Width*Height)",
-        "Ar - Aspect ratio"
+        "Ar - Aspect ratio",
+        "Ar(px) - Pixel aspect ratio"
     ];
     addGroupPanel(firstRow, "Frame Rate and Resolution", frameResVariables);
 
@@ -69,8 +71,10 @@ function showHelp() {
 
     // Indexes and Identifiers Variables
     var indexVariables = [
-        "I - Local index of selected layers",
-        "i - Layer index"
+        "I - Index of available layers",
+        "I(0) - index with initial number",
+        "i - Global layer index",
+        "Lpnt(i) - Depth index relative to the parent layer"
     ];
     addGroupPanel(secondRow, "Indexes and Identifiers", indexVariables);
 
@@ -86,18 +90,21 @@ function showHelp() {
         "Lops - Layer opacity",
         "Tm - Track matte type",
         "An - Animated properties",
-        "An{delimiter} - Animated properties with custom delimiter",
+        "An(Delimiter) - Animated properties with custom delimiter",
         "Lexp - List of properties controlled by expressions",
+        "Lexp(Property name filter)",
         "Lmn - List of mask names on a layer",
-        "Lmc - Number of masks on a layer"
+        "Lmn(Mode filter)",
+        "Lmn(Mask name filter)",
+        "Lmc - Number of masks on a layer",
+        "Lmc(Mode filter)"
     ];
     addGroupPanel(secondRow, "Layer Properties", layerPropertiesVariables);
 
     // Other Variables
     var otherVariables = [
         "O - Original name of the layer",
-        "Lpnt - Parent name",
-        "Lpnt(parentIndex) - Parent index relative to siblings",
+        "Lpnt - Name of the final parent layer",
         "Fext - File extension of the layer",
         "Fext(format) - Custom extension check (mp3, mp4, mov and any other)"
     ];
