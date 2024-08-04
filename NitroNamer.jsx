@@ -873,18 +873,18 @@ function buildUI(thisObj) {
         if (!variablesFile.exists) {
             // Create the variables.json file and write initial settings
             var initialData = {
-                "An": { "defaultValue": "NoAnimations", "customValue": "Custom{An}", "active": true },
-                "Ar": { "defaultValue": "NoAspectRatio", "customValue": "Custom{Ar}", "active": true },
-                "E": { "defaultValue": "No effects", "customValue": "Custom{E}", "active": true },
-                "F": { "defaultValue": "NoFrameRate", "customValue": "Custom{F}", "active": true },
-                "H": { "defaultValue": "NoHeight", "customValue": "Custom{H}", "active": true },
-                "Lexp": { "defaultValue": "NoExpressions", "customValue": "Custom{Lexp}", "active": true },
-                "Fext": { "defaultValue": "NoExtension", "customValue": "Custom{Fext}", "active": true },
-                "Lmc": { "defaultValue": "NoMasks", "customValue": "Custom{Lmc}", "active": true },
-                "Lmn": { "defaultValue": "NoMaskNames", "customValue": "Custom{Lmn}", "active": true },
-                "R": { "defaultValue": "NoResolution", "customValue": "Custom{R}", "active": true },
-                "Tm": { "defaultValue": "NoTrackMate", "customValue": "Custom{Tm}", "active": true },
-                "W": { "defaultValue": "NoWidth", "customValue": "Custom{W}", "active": true }
+                "An": { "defaultValue": "NoAnimations", "customValue": "Custom{An}", "active": false },
+                "Ar": { "defaultValue": "NoAspectRatio", "customValue": "Custom{Ar}", "active": false },
+                "E": { "defaultValue": "No effects", "customValue": "Custom{E}", "active": false },
+                "F": { "defaultValue": "NoFrameRate", "customValue": "Custom{F}", "active": false },
+                "H": { "defaultValue": "NoHeight", "customValue": "Custom{H}", "active": false },
+                "Lexp": { "defaultValue": "NoExpressions", "customValue": "Custom{Lexp}", "active": false },
+                "Fext": { "defaultValue": "NoExtension", "customValue": "Custom{Fext}", "active": false },
+                "Lmc": { "defaultValue": "NoMasks", "customValue": "Custom{Lmc}", "active": false },
+                "Lmn": { "defaultValue": "NoMaskNames", "customValue": "Custom{Lmn}", "active": false },
+                "R": { "defaultValue": "NoResolution", "customValue": "Custom{R}", "active": false },
+                "Tm": { "defaultValue": "NoTrackMate", "customValue": "Custom{Tm}", "active": false },
+                "W": { "defaultValue": "NoWidth", "customValue": "Custom{W}", "active": false }
             };
     
             variablesFile.encoding = "UTF-8"; // Set encoding to UTF-8
