@@ -1311,15 +1311,15 @@ function buildUI(thisObj) {
     
     function toBrieflyCase(str, caseType) {
         switch (caseType) {
-            case "Camel Case":
+            case "camelCase":
                 return toCamelCase(str);
-            case "Pascal Case":
+            case "PascalCase":
                 return toPascalCase(str);
-            case "Snake Case":
+            case "shake_case":
                 return toSnakeCase(str);
-            case "Kebab Case":
+            case "kebab-case":
                 return toKebabCase(str);
-            case "Screaming Snake Case":
+            case "SCREAMING_SHAKE_CASE":
                 return toScreamingSnakeCase(str);
             default:
                 return str;
