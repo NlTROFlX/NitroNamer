@@ -200,7 +200,7 @@ function buildUI(thisObj) {
     grpTemplate.orientation = "column";
     grpTemplate.margins = [0,-10,0,0];
     grpTemplate.spacing = globalSpacingElements;
-    var txtTemplate = grpTemplate.add("edittext", undefined, "(Template for renaming)O_T.i", {multiline: false, scrolling: false});
+    var txtTemplate = grpTemplate.add("edittext", undefined, "(LayerName).i", {multiline: false, scrolling: false});
     txtTemplate.alignment = ["fill", "top"];
     txtTemplate.margins = [0,-10,0,0];
 
@@ -660,7 +660,7 @@ function buildUI(thisObj) {
     btnReset.onClick = function() {
         rdoAllLayers.value = true;
         rdoOnlySelected.value = false;
-        txtTemplate.text = "(Template for renaming)O_T.i";
+        txtTemplate.text = "(LayerName).i";
         chkBriefly.value = false;
         ddBrieflyType.selection = 0;
         updateLayerCounts();
@@ -1042,7 +1042,7 @@ function buildUI(thisObj) {
         if (settings && settings.currentSettings) {
             rdoAllLayers.value = settings.currentSettings.allLayers;
             rdoOnlySelected.value = !settings.currentSettings.allLayers;
-            txtTemplate.text = settings.currentSettings.template || "(Template for renaming)O_T.i";
+            txtTemplate.text = settings.currentSettings.template || "(LayerName).i";
             chkBriefly.value = settings.currentSettings.briefly;
             ddBrieflyType.selection = settings.currentSettings.brieflyType || 0;
 
@@ -1055,7 +1055,7 @@ function buildUI(thisObj) {
 
             rdoAllLayers.value = lastPreset.allLayers;
             rdoOnlySelected.value = !lastPreset.allLayers;
-            txtTemplate.text = lastPreset.template || "(Template for renaming)O_T.i";
+            txtTemplate.text = lastPreset.template || "(LayerName).i";
             chkBriefly.value = lastPreset.briefly;
             ddBrieflyType.selection = lastPreset.brieflyType || 0;
 
@@ -1078,7 +1078,7 @@ function buildUI(thisObj) {
         }
 
         // Explicitly set txtTemplate.text after updating the dropdown
-        txtTemplate.text = settings.currentSettings.template || "(Template for renaming)O_T.i";
+        txtTemplate.text = settings.currentSettings.template || "(LayerName).i";
 
         // Re-enable the dropdown change handler
         ddLayerMode.onChange = dropdownChangeHandler;

@@ -9,7 +9,7 @@
     },
     "currentSettings": {
         "UICompact": true,
-        "allLayers": true,
+        "allLayers": false,
         "template": "1",
         "briefly": false,
         "brieflyType": 4,
