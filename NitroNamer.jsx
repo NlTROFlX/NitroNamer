@@ -25,13 +25,15 @@ function buildUI(thisObj) {
     rdoAllLayers.alignment = ["left", "center"];
     var txtAllLayersCount = grpLayerSelection.add("statictext", undefined, "");
     txtAllLayersCount.alignment = ["left", "center"];
-    txtAllLayersCount.margins = [22,0,22,0];
+    txtAllLayersCount.minimumSize = [20, txtAllLayersCount.minimumSize.height];
+    txtAllLayersCount.maximumSize = [50, txtAllLayersCount.maximumSize.height];
 
     var rdoOnlySelected = grpLayerSelection.add("radiobutton", undefined, "Selected: ");
     rdoOnlySelected.alignment = ["left", "center"];
     var txtSelectedLayersCount = grpLayerSelection.add("statictext", undefined, "");
     txtSelectedLayersCount.alignment = ["left", "center"];
-    txtSelectedLayersCount.margins = [22,0,22,0];
+    txtSelectedLayersCount.minimumSize = [20, txtSelectedLayersCount.minimumSize.height];
+    txtSelectedLayersCount.maximumSize = [50, txtSelectedLayersCount.maximumSize.height];
 
     // Get the script's file and folder path
     var scriptFile = new File($.fileName);
