@@ -1152,20 +1152,25 @@ function buildUI(thisObj) {
         ddLayerMode.onChange = dropdownChangeHandler;
     }
 
-    // Update layer counts in the UI
     function updateLayerCounts() {
         var proj = app.project;
         if (proj) {
             var comp = proj.activeItem;
             if (comp && comp instanceof CompItem) {
-                txtAllLayersCount.text = comp.numLayers;
-                var selectedLayersCount = 0;
+                var totalLayerCount = 0;
+                var selectedLayerCount = 0;
                 for (var i = 1; i <= comp.numLayers; i++) {
-                    if (comp.layer(i).selected) {
-                        selectedLayersCount++;
+                    var layer = comp.layer(i);
+                    // Учитываем только слои, которые не заблокированы и не имеют режим shy
+                    if (!layer.locked && !layer.shy) {
+                        totalLayerCount++;
+                        if (layer.selected) {
+                            selectedLayerCount++;
+                        }
                     }
                 }
-                txtSelectedLayersCount.text = selectedLayersCount;
+                txtAllLayersCount.text = totalLayerCount.toString();
+                txtSelectedLayersCount.text = selectedLayerCount.toString();
                 txtAllLayersCount.visible = rdoAllLayers.value;
                 txtSelectedLayersCount.visible = rdoOnlySelected.value;
             } else {
@@ -1176,7 +1181,7 @@ function buildUI(thisObj) {
             txtAllLayersCount.text = "0";
             txtSelectedLayersCount.text = "0";
         }
-    }
+    }    
 
     // Update preview of the new layer name
     function updatePreview() {
