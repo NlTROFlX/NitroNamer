@@ -2189,7 +2189,7 @@ function buildUI(thisObj) {
     var localIndex = 0; // Global local index
 
     // Rename layers based on the template
-    function renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed, isShiftPressed, isAltPressed, isCtrlShiftPressed) {
+    function renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed, isShiftPressed, isAltPressed) {
         checkAndUpdateSettings(); // Проверка и обновление настроек перед переименованием слоев
         incrementValues = {};
         localIndex = 1;
@@ -2200,18 +2200,9 @@ function buildUI(thisObj) {
             if (comp.numLayers > 0) {
                 app.beginUndoGroup("Rename Layers by Template");
                 
-                // Получение порядка слоев
-                var layers = getLayerOrder(comp, allLayers, isCtrlShiftPressed); // Используем isCtrlShiftPressed для инверсии
-
-                var validLayerCount = 0; // Initialize valid layer count
+                // Если зажат Alt, инвертируем порядок слоев
+                var layers = getLayerOrder(comp, allLayers, isAltPressed);
     
-                // First pass to count valid layers
-                for (var i = 0; i < layers.length; i++) {
-                    var layer = layers[i];
-                    if (layer.locked) continue; // Skip locked layers
-                    validLayerCount++;
-                }
-                
                 var newNames = []; // Массив для хранения новых имен слоев
                 
                 // Первый проход: определение новых имен
@@ -2220,7 +2211,7 @@ function buildUI(thisObj) {
                     if (layer.shy && !includeShyLayers) continue;
                     if (layer.locked) continue; // Пропуск заблокированных слоев
                     if (!allLayers && !layer.selected) continue;
-
+    
                     var variables = {
                         "T": getLayerType(layer),
                         "i": layer.index,
@@ -2275,29 +2266,29 @@ function buildUI(thisObj) {
                                 break;
                         }
                     }
-
+    
                     // Сохраняем новое имя в массив
                     newNames.push({
                         layer: layer,
                         newName: newName
                     });
                 }
-
+    
                 // Второй проход: применение новых имен
                 for (var j = 0; j < newNames.length; j++) {
                     var layerData = newNames[j];
                     var layer = layerData.layer;
                     var newName = layerData.newName;
                     
-                    if (isCtrlPressed && !isShiftPressed) {
+                    if (isCtrlPressed) {
                         layer.name = layer.name + newName;
-                    } else if (isShiftPressed && !isCtrlPressed) {
+                    } else if (isShiftPressed) {
                         layer.name = newName + layer.name;
                     } else {
                         layer.name = newName;
                     }
                 }
-
+    
                 app.endUndoGroup();
             } else {
                 alert("No layers in the active composition.");
