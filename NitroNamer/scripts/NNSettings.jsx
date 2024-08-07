@@ -23,7 +23,7 @@ function readJSONFile(filePath) {
         try {
             data = eval("(" + file.read() + ")");
         } catch (e) {
-            alert("Error parsing JSON file: " + filePath);
+            alert("Error parsing JSON file: " + filePath, scriptMessageHead_1);
         }
         file.close();
     }
@@ -273,7 +273,7 @@ function buildNewUI(thisObj) {
                     variablesFile.close();
 
                     resetUIFields();
-                    alert("Settings reset for variable: " + variableName);
+                    alert("Settings reset for variable: " + variableName, scriptMessageHead_1);
                 }
             } else if (ScriptUI.environment.keyboardState.ctrlKey && ScriptUI.environment.keyboardState.altKey) {
                 // Reset all variables to initialData
@@ -293,7 +293,7 @@ function buildNewUI(thisObj) {
                 variablesFile.close();
 
                 resetUIFields();
-                alert("All settings reset to initial values.");
+                alert("All settings reset to initial values.", scriptMessageHead_1);
             } else {
                 // Save current settings
                 if (variablesData && inputFieldVariableName.text) {
@@ -335,7 +335,7 @@ function buildNewUI(thisObj) {
                         btnSave.removeEventListener("mouseout", resetIconAndText);
                     });
                 } else {
-                    alert("Please enter a valid variable name.");
+                    alert("Please enter a valid variable name.", scriptMessageHead_1);
                 }
             }
         }

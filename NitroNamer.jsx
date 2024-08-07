@@ -12,6 +12,8 @@ function buildUI(thisObj) {
     win.margins = [4,4,4,4];
     win.layout.layout(true);
 
+    var scriptMessageHead_1 = "NitroNamer 2024.3";
+
     // Create group for layer selection options
     var grpLayerSelection = win.add("group", undefined);
     grpLayerSelection.orientation = "row"; // Set orientation to horizontal
@@ -432,7 +434,7 @@ function buildUI(thisObj) {
         if (scriptFilePath.exists) {
             $.evalFile(scriptFilePath);
         } else {
-            alert("Script file not found: " + scriptFilePath.fsName);
+            alert("Script file not found: " + scriptFilePath.fsName, scriptMessageHead_1);
         }
     };
 
@@ -462,10 +464,10 @@ function buildUI(thisObj) {
                 };
                 saveSettings(currentSettings, true);
             } else {
-                alert("No layers in the composition.");
+                alert("No layers in the composition.", scriptMessageHead_1);
             }
         } else {
-            alert("Please select a valid composition.");
+            alert("Please select a valid composition.", scriptMessageHead_1);
         }
     };
     
@@ -480,7 +482,7 @@ function buildUI(thisObj) {
     
         // Проверяем пустой шаблон
         if (!trim(settings.template)) {
-            alert("Template cannot be empty.");
+            alert("Template cannot be empty.", scriptMessageHead_1);
             return;
         }
     
@@ -509,7 +511,7 @@ function buildUI(thisObj) {
             // Check for unique template
             for (var key in userPresets) {
                 if (userPresets.hasOwnProperty(key) && userPresets[key].template === settings.template) {
-                    alert("A preset with this template already exists.");
+                    alert("A preset with this template already exists.", scriptMessageHead_1);
                     return;
                 }
             }
@@ -832,7 +834,7 @@ function buildUI(thisObj) {
             try {
                 data = eval("(" + file.read() + ")");
             } catch (e) {
-                alert("Error parsing JSON file: " + filePath);
+                alert("Error parsing JSON file: " + filePath, scriptMessageHead_1);
             }
             file.close();
         }
@@ -866,7 +868,7 @@ function buildUI(thisObj) {
                 settingsFile.write(JSON.stringify(initialData, null, 4));
                 settingsFile.close();
             } else {
-                alert("Error: Unable to create settings.json file.");
+                alert("Error: Unable to create settings.json file.", scriptMessageHead_1);
             }
         }
     }
@@ -898,7 +900,7 @@ function buildUI(thisObj) {
                 variablesFile.write(JSON.stringify(initialData, null, 4));
                 variablesFile.close();
             } else {
-                alert("Error: Unable to create variables.json file.");
+                alert("Error: Unable to create variables.json file.", scriptMessageHead_1);
             }
         }
     }
@@ -2302,10 +2304,10 @@ function buildUI(thisObj) {
     
                 app.endUndoGroup();
             } else {
-                alert("No layers in the active composition.");
+                alert("No layers in the active composition.", scriptMessageHead_1);
             }
         } else {
-            alert("Please select a valid composition.");
+            alert("Please select a valid composition.", scriptMessageHead_1);
         }
     }
 
