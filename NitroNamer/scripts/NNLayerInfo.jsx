@@ -97,7 +97,7 @@ function showLayerInfoPanel(thisObj) {
             try {
                 data = eval("(" + file.read() + ")");
             } catch (e) {
-                alert("Error parsing JSON file: " + filePath);
+                alert("Error parsing JSON file: " + filePath, scriptMessageHead_1);
             }
             file.close();
         }
