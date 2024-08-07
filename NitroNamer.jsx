@@ -284,7 +284,7 @@ function buildUI(thisObj) {
     grpTextFields.alignment = ["left", "center"];
     grpTextFields.maximumSize.width = globalWidthSizeElements - globalWidthSizeElementsCorrect;
     grpTextFields.spacing = globalSpacingElements;
-    grpTextFields.margins = [0, 0, 0, 0];
+    grpTextFields.margins = [0, -10, 0, 0];
 
     // Add text fields for original and renamed layer names
     var txtOriginalLabel = grpTextFields.add("statictext", undefined, "The original name of the layer: ");
