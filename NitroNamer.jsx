@@ -403,12 +403,15 @@ function buildUI(thisObj) {
         checkAndUpdateSettings();
         updatePreview();
         updateLayerCounts();
-        
+
         var isCtrlPressed = ScriptUI.environment.keyboardState.ctrlKey;
         var isShiftPressed = ScriptUI.environment.keyboardState.shiftKey;
-    
+        var isAltPressed = ScriptUI.environment.keyboardState.altKey; // Проверка нажатия клавиши Alt
+
         if (trim(txtTemplate.text) === "") {
             btnRename.image = warningIconHover;
+        } else if (isAltPressed) { // Изменяем иконку на renameIconHoverRevese.png при зажатой клавише Alt
+            btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHoverReverse.png");
         } else if (isCtrlPressed) {
             btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHoverAfter.png");
         } else if (isShiftPressed) {
@@ -418,6 +421,7 @@ function buildUI(thisObj) {
         }
         btnRename.imageSize = [24, 24];
     });
+
     btnRename.addEventListener("mouseout", function() {
         updateRenameButtonIcon(); // Re-check the field value when mouse out
     });
