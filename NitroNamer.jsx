@@ -756,7 +756,7 @@ function buildUI(thisObj) {
 
             updatePreview();
 
-            win.minimumSize.height = globalHeightSizeElementsMax;
+            win.minimumSize.height = globalHeightSizeElementsMin;
             win.maximumSize.height = globalHeightSizeElementsMax;
             win.minimumSize.width = globalWidthSizeElements  - globalWidthSizeElementsCorrect;
             win.maximumSize.width = globalWidthSizeElements;
