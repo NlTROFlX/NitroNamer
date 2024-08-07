@@ -316,15 +316,15 @@ function buildUI(thisObj) {
     btnRename.imageSize = [24, 24]; // Set image size
     btnRename.alignment = ["left", "center"];
 
-    var btnHelp = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/helpIcon.png"), { style: "toolbutton" });
-    btnHelp.size = [24, 24]; // Set button size
-    btnHelp.imageSize = [24, 24]; // Set image size
-    btnHelp.alignment = ["left", "center"];
-
     var btnVariables = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/variablesIcon.png"), { style: "toolbutton" });
     btnVariables.size = [24, 24]; // Set button size
     btnVariables.imageSize = [24, 24]; // Set image size
     btnVariables.alignment = ["left", "center"];
+
+    var btnHelp = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/helpIcon.png"), { style: "toolbutton" });
+    btnHelp.size = [24, 24]; // Set button size
+    btnHelp.imageSize = [24, 24]; // Set image size
+    btnHelp.alignment = ["left", "center"];
 
     var btnReset = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/resetIcon.png"), { style: "toolbutton" });
     btnReset.size = [24, 24]; // Set button size

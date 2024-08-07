@@ -8,9 +8,9 @@
         }
     },
     "currentSettings": {
-        "UICompact": true,
-        "allLayers": false,
-        "template": "1",
+        "UICompact": false,
+        "allLayers": true,
+        "template": "I",
         "briefly": false,
         "brieflyType": 4,
         "selectedPresetIndex": 0
