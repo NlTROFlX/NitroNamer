@@ -1,3 +1,5 @@
+![NitroNamer 2024 3](https://github.com/user-attachments/assets/8e285814-f42d-4cfc-af94-78065dc76062)
+
 > **Если вы заметили какой либо еще (недостаток/проблему) на ваш взгляд, то пишите мне в [телеграмм в личные сообщения](https://t.me/Nitrofix) 💬 или на почту [forward.ultimate@gmail.com](mailto:forward.ultimate@gmail.com) 📫, или же укажите проблему в репозитории для этого проекта на [GitHub](https://github.com/NlTROFlX/NitroNamer) 🧑‍💻**
 > 
 
