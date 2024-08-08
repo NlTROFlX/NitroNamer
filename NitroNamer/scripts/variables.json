@@ -1,0 +1,62 @@
+{
+    "An": {
+        "defaultValue": "NoAnimations",
+        "customValue": "Custom{An}",
+        "active": false
+    },
+    "Ar": {
+        "defaultValue": "NoAspectRatio",
+        "customValue": "Custom{Ar}",
+        "active": false
+    },
+    "E": {
+        "defaultValue": "No effects",
+        "customValue": "Custom{E}",
+        "active": false
+    },
+    "F": {
+        "defaultValue": "NoFrameRate",
+        "customValue": "Custom{F}",
+        "active": false
+    },
+    "H": {
+        "defaultValue": "NoHeight",
+        "customValue": "Custom{H}",
+        "active": false
+    },
+    "Lexp": {
+        "defaultValue": "NoExpressions",
+        "customValue": "Custom{Lexp}",
+        "active": false
+    },
+    "Fext": {
+        "defaultValue": "NoExtension",
+        "customValue": "Custom{Fext}",
+        "active": false
+    },
+    "Lmc": {
+        "defaultValue": "NoMasks",
+        "customValue": "Custom{Lmc}",
+        "active": false
+    },
+    "Lmn": {
+        "defaultValue": "NoMaskNames",
+        "customValue": "Custom{Lmn}",
+        "active": false
+    },
+    "R": {
+        "defaultValue": "NoResolution",
+        "customValue": "Custom{R}",
+        "active": false
+    },
+    "Tm": {
+        "defaultValue": "NoTrackMate",
+        "customValue": "Custom{Tm}",
+        "active": false
+    },
+    "W": {
+        "defaultValue": "NoWidth",
+        "customValue": "Custom{W}",
+        "active": false
+    }
+}
