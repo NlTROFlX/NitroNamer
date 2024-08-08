@@ -9,7 +9,7 @@
 > **Желаете поддержать или отблагодарить? Можете сделать это [здесь (✿◠‿◠)](https://boosty.to/nitrofix)**
 > 
 
-### Скачать актуальную версию: [GitHub](https://github.com/NlTROFlX/NitroNamer/releases) | Telegram
+### Скачать актуальную версию: [GitHub](https://github.com/NlTROFlX/NitroNamer/releases) | [Telegram](https://t.me/FixYourVFX/17)
 
 ---
 
