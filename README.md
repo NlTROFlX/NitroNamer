@@ -1,40 +1,40 @@
 ![NitroNamer 2024 3](https://github.com/user-attachments/assets/8c5ae374-a823-48fb-a5cd-b1eed9317284)
 
-> **Если вы заметили какой либо еще (недостаток/проблему) на ваш взгляд, то пишите мне в [телеграмм в личные сообщения](https://t.me/Nitrofix) 💬 или на почту [forward.ultimate@gmail.com](mailto:forward.ultimate@gmail.com) 📫, или же укажите проблему в репозитории для этого проекта на [GitHub](https://github.com/NlTROFlX/NitroNamer) 🧑‍💻**
+> **If you notice any other (flaw/problem) in your opinion, then write to me in [telegram private messages](https://t.me/Nitrofix) 💬 or email [forward.ultimate@gmail.com](mailto:forward.ultimate@gmail.com) 📫, or specify the problem in the repository for this project on [GitHub](https://github.com/NlTROFlX/NitroNamer) 🧑‍💻**
 > 
 
-> **Следить за анонсами обновлений можно в этом [телеграм канале](https://t.me/FixYourVFX) 📨, там же можно обсуждать ваши идеи и предложения по улучшению.**
+> **Watch for announcements of updates in this [telegram channel](https://t.me/FixYourVFX) 📨, there you can also discuss your ideas and suggestions for improvement.**
 > 
 
-> **Желаете поддержать или отблагодарить? Можете сделать это [здесь (✿◠‿◠)](https://boosty.to/nitrofix)**
+> **Would you like to support or thank me? You can do it [here (✿◠‿◠)](https://boosty.to/nitrofix)**
 > 
 
-### Скачать актуальную версию: [GitHub](https://github.com/NlTROFlX/NitroNamer/releases) | [Telegram](https://t.me/FixYourVFX/17)
+### Download the current version: [GitHub](https://github.com/NlTROFlX/NitroNamer/releases) | [Telegram](https://t.me/FixYourVFX/17)
 
 ---
 
-## Установка NitroNamer для Adobe After Effects (Windows)
+### Install NitroNamer for Adobe After Effects (Windows)
 
-### Шаг 1: Распаковка архива
+### Step 1: Unzip the archive
 
-1. **Скачайте архив**.
-2. **Распакуйте архив** в любое удобное место на вашем компьютере, используя любой архиватор (WinRAR или 7-Zip).
+1. **Download the archive**.
+2. **Unzip the archive** to any convenient location on your computer using any archiver (WinRAR or 7-Zip).
 
-### Шаг 2: Перемещение файлов
+### Step 2: Move Files
 
-1. **Откройте папку**, куда вы распаковали архив.
-2. В папке вы найдете следующую структуру:
-    - `NitroNamer.jsx`
-    - Папка `NitroNamer`, содержащая:
-        - `img` - папка с иконками и изображениями
-        - `settings` - папка с файлами настроек (`settings.json`)
-        - `scripts` - папка со вспомогательными скриптами (`NNLayerInfo.jsx`, `NNHelp.jsx`, `NNSettings.jsx` и др.)
-3. **Переместите файлы** и папку `NitroNamer` в папку скриптов Adobe After Effects:
-    - Откройте проводник и перейдите в место, где установлена программа Adobe After Effects. Обычно это: `C:\Program Files\Adobe\Adobe After Effects <версия>\Support Files\Script\ScriptUI Panels`
-    - Распакуйте архив в указанном месте или перетащите распакованные файлы и папки по указанному выше пути
+1. **Open the folder** where you unzipped the archive.
+2. In the folder you will find the following structure:
+    - `NitroNamer.jsx`.
+    - The `NitroNamer` folder containing:
+        - `img` - folder with icons and images
+        - `settings` - folder with settings files (`settings.json`)
+        - `scripts` - folder with auxiliary scripts (`NNNLayerInfo.jsx`, `NNNHelp.jsx`, `NNNSettings.jsx`, etc.).
+3. **Move the files** and the `NitroNamer` folder to the Adobe After Effects scripts folder:
+    - Open Explorer and navigate to the location where the Adobe After Effects program is installed. This is usually: `C:\Program Files\Adobe\Adobe After Effects <version>\Support Files\Script\Script\ScriptUI Panels`.
+    - Unzip the archive to the specified location or drag and drop the unzipped files and folders to the above path
 
-### Шаг 3: Настройка скрипта в After Effects
+### Step 3: Customize the script in After Effects
 
-1. **Запустите Adobe After Effects**.
-2. **Откройте меню** `File > Windows > NitroNamer`.
-3. Скрипт откроется в виде панели, которую можно использовать для переименования слоев в проекте.
+1. **Start Adobe After Effects**.
+2. **Open the menu** `File > Windows > NitroNamer`.
+3. The script will open in a panel that you can use to rename layers in your project.
