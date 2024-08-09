@@ -10,6 +10,7 @@
 > 
 
 ### Download the current version: [GitHub](https://github.com/NlTROFlX/NitroNamer/releases) | [Telegram](https://t.me/FixYourVFX/17)
+### Online documentation on how to use the script - [EU](https://www.notion.so/NitroNamer-en-Documentation-268ba1251c924273927e83c5573d059c) | [RU](https://www.notion.so/NitroNamer-ru-68f0f4417d4f4d2a9b41fffaffc5a1c2)
 
 ---
 
