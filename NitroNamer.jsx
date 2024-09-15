@@ -1310,21 +1310,20 @@ function buildUI(thisObj) {
     
     function toBrieflyCase(str, caseType) {
         switch (caseType) {
-            case "camelCase":
+            case "Camel Case":
                 return toCamelCase(str);
-            case "PascalCase":
+            case "Pascal Case":
                 return toPascalCase(str);
-            case "shake_case":
+            case "Snake Case":
                 return toSnakeCase(str);
-            case "kebab-case":
+            case "Kebab Case":
                 return toKebabCase(str);
-            case "SCREAMING_SHAKE_CASE":
+            case "Screaming Snake Case":
                 return toScreamingSnakeCase(str);
             default:
                 return str;
         }
     }
-    
 
     // Get the list of properties controlled by expressions
     function getExpressionControlledProperties(layer, settings, filter) {
@@ -1492,7 +1491,7 @@ function buildUI(thisObj) {
         if (layer.source && layer.source.mainSource instanceof SolidSource) {
             return settings && settings.F ? (settings.F.active ? settings.F.customValue : settings.F.defaultValue) : "NoFrameRate";
         }
-        if (layer.source) {
+        if (layer.source && !isNaN(layer.source.frameRate)) {
             return layer.source.frameRate.toFixed(2);
         }
         return settings && settings.F ? (settings.F.active ? settings.F.customValue : settings.F.defaultValue) : "NoFrameRate";
