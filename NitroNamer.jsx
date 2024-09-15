@@ -1295,9 +1295,9 @@ function buildUI(thisObj) {
             "Lmn": getMaskNames(layer, settings)
         };
     
-        if (briefly) {
-            variables.F = parseFloat(variables.F).toFixed(2); 
-        }
+        if (briefly && !isNaN(parseFloat(variables.F))) {
+            variables.F = parseFloat(variables.F).toFixed(2);
+        }        
     
         var newName = replaceVariables(template, variables, layer.name, layer, settings);
     
