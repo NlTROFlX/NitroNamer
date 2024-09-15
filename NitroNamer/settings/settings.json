@@ -3,6 +3,10 @@
         
     },
     "currentSettings": {
-        "UICompact": false
+        "UICompact": false,
+        "allLayers": true,
+        "template": "1234",
+        "briefly": true,
+        "brieflyType": 4
     }
 }

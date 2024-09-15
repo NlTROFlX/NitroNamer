@@ -142,42 +142,35 @@ function buildUI(thisObj) {
         }
     };
 
-    // Event handlers for radio buttons to update UI and save settings
-    rdoAllLayers.onClick = function() {
-        if (rdoAllLayers.value) {
+    // Определение функции saveCurrentSettings
+    function saveCurrentSettings() {
+        var currentSettings = {
+            allLayers: rdoAllLayers.value,
+            template: txtTemplate.text,
+            briefly: chkBriefly.value,
+            brieflyType: ddBrieflyType.selection.index
+        };
+        saveSettings(currentSettings, true);
+    }
+
+    // Исправленный обработчик для переключателей
+    function handleRadioButtonClick() {
+        if (this === rdoAllLayers) {
+            rdoAllLayers.value = true;
             rdoOnlySelected.value = false;
-        } else {
+        } else if (this === rdoOnlySelected) {
+            rdoAllLayers.value = false;
             rdoOnlySelected.value = true;
         }
         updateLayerCounts();
         updatePreview();
         resetRenameButtonIcon();
-        var currentSettings = {
-            allLayers: rdoAllLayers.value,
-            template: txtTemplate.text,
-            briefly: chkBriefly.value,
-            brieflyType: ddBrieflyType.selection.index
-        };
-        saveSettings(currentSettings, true);
-    };
+        saveCurrentSettings();
+    }
 
-    rdoOnlySelected.onClick = function() {
-        if (rdoOnlySelected.value) {
-            rdoAllLayers.value = false;
-        } else {
-            rdoAllLayers.value = true;
-        }
-        updateLayerCounts();
-        updatePreview();
-        resetRenameButtonIcon();
-        var currentSettings = {
-            allLayers: rdoAllLayers.value,
-            template: txtTemplate.text,
-            briefly: chkBriefly.value,
-            brieflyType: ddBrieflyType.selection.index
-        };
-        saveSettings(currentSettings, true);
-    };
+    rdoAllLayers.onClick = handleRadioButtonClick;
+    rdoOnlySelected.onClick = handleRadioButtonClick;
+
 
     // Custom trim function
     function trim(str) {
