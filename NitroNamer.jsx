@@ -1969,131 +1969,146 @@ function buildUI(thisObj) {
     function replaceVariables(template, variables, originalName, layer, settings) {
         var usedVariables = [];
         var result = template;
-
+    
         // Pre-check for any parentheses that don't contain variables
         if (template.match(/^\(([^()]+)\)$/)) {
             return template.match(/^\(([^()]+)\)$/)[1];
         }
-
-        var regex = /\(([^()]+)\)|E\(([^)]+)\)|E\{([^}]+)\}|An\(([^)]+)\)|An\{([^}]+)\}|Lexp\(([^)]+)\)|D\(([^)]+)\)|Df|D|Ec|Fext\(([^)]+)\)|Fext|Lexp|Ip|Op|Tm|An|Ar\(([^)]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^)]+)\)|Lpnt|Cd\(([^)]+)\)|Cd|Lmc\(([^)]+)\)|Lmc|Lmn\(([^)]+)\)|Lmn|I\(([^)]+)\)|I|[A-Z]|i|S|W|H/g;
-
-        var replacements = {
-            'An': { 'regex': /An\(([^)]+)\)/, 'value': '' },
-            'E': { 'regex': /E\(([^)]+)\)/, 'value': '' },
-            'Lexp': { 'regex': /Lexp\(([^)]+)\)/, 'value': '' },
-            'Fext': { 'regex': /Fext\(([^)]+)\)/, 'value': '' },
-            'Lmc': { 'regex': /Lmc\(([^)]+)\)/, 'value': '' },
-            'Lmn': { 'regex': /Lmn\(([^)]+)\)/, 'value': '' },
-            'I': { 'regex': /I\(([^)]+)\)/, 'value': '' }
-        };
-
-        result = result.replace(regex, function(match, group, customEffectDelimiterParentheses, customEffectDelimiterBraces, customAnimDelimiterParentheses, customAnimDelimiterBraces, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskCountMode, customMaskNameDelimiter, customI) {
+    
+        var regex = /\(([^()]+)\)|E\(([^()\[\]]+(?:\[[^\[\]]*\])?)\)|E|An\(([^()\[\]]+)\)|An\{([^{}\[\]]+)\}|An|Lexp\(([^()\[\]]+)\)|Lexp|D\(([^()\[\]]+)\)|D|Df|Ec|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(([^()\[\]]+)\)|Lmc|Lmn\(([^()\[\]]+)\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
+    
+        var incrementValues = {}; // Ensure this is declared if not already
+    
+        result = result.replace(regex, function(match, group, eFilter, customAnimDelimiterParentheses, customAnimDelimiterBraces, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskCountMode, customMaskNameDelimiter, customI) {
             var value;
-
+    
             if (group !== undefined) {
+                // Return the content inside parentheses without changes
                 return group;
+            } else if (match === 'E') {
+                // User wrote just "E"
+                value = getEffectNames(layer, settings);
+            } else if (eFilter !== undefined) {
+                // User wrote "E(filter[separator])"
+                value = getEffectNames(layer, settings, eFilter);
             } else if (customI !== undefined) {
-                // Создаем уникальный ключ для каждой переменной I с начальным значением
+                // Handle I(initial value)
                 var uniqueKey = "I(" + customI + ")_" + usedVariables.length;
                 var initialValue = parseInt(customI, 10);
                 if (!incrementValues[uniqueKey]) {
-                    incrementValues[uniqueKey] = initialValue; // Инициализация
+                    incrementValues[uniqueKey] = initialValue; // Initialization
                 }
                 value = incrementValues[uniqueKey]++;
-                replacements['I'].value = value;
                 usedVariables.push(uniqueKey);
                 return value;
             } else if (match === 'I') {
-                value = localIndex++; // Используем текущее значение и затем увеличиваем его
-            } else if (customEffectDelimiterParentheses !== undefined) {
-                var effectsString = getEffectNames(layer, settings, customEffectDelimiterParentheses);
-                replacements['E'].value = effectsString;
-                usedVariables.push('E');
-                return effectsString;
-            } else if (customEffectDelimiterBraces !== undefined) {
-                var effectsString = getEffectNames(layer, settings, customEffectDelimiterBraces);
-                replacements['E'].value = effectsString;
-                usedVariables.push('E');
-                return effectsString;
-            } else if (customAnimDelimiterParentheses !== undefined) {
-                var animatedPropsString = getAnimatedProperties(layer, settings, customAnimDelimiterParentheses);
-                replacements['An'].value = animatedPropsString;
-                usedVariables.push('An');
-                return animatedPropsString;
-            } else if (customAnimDelimiterBraces !== undefined) {
-                var animatedPropsString = getAnimatedProperties(layer, settings, customAnimDelimiterBraces);
-                replacements['An'].value = animatedPropsString;
-                usedVariables.push('An');
-                return animatedPropsString;
+                // Handle I
+                value = localIndex++; // Use the current value and then increment
+            } else if (customAnimDelimiterParentheses !== undefined || customAnimDelimiterBraces !== undefined) {
+                // Handle An(delimiter)
+                var customDelimiter = customAnimDelimiterParentheses || customAnimDelimiterBraces;
+                value = getAnimatedProperties(layer, settings, customDelimiter);
+            } else if (match === 'An') {
+                // Handle An
+                value = variables['An'];
             } else if (customLexpDelimiter !== undefined) {
-                var lexpString = getExpressionControlledProperties(layer, settings, customLexpDelimiter);
-                replacements['Lexp'].value = lexpString;
-                usedVariables.push('Lexp');
-                return lexpString;
+                // Handle Lexp(delimiter)
+                value = getExpressionControlledProperties(layer, settings, customLexpDelimiter);
+            } else if (match === 'Lexp') {
+                // Handle Lexp
+                value = variables['Lexp'];
             } else if (customFext !== undefined) {
+                // Handle Fext(custom extension)
                 value = getFileExtension(layer, settings, customFext);
+            } else if (match === 'Fext') {
+                // Handle Fext
+                value = variables['Fext'];
             } else if (customAr !== undefined) {
+                // Handle Ar(format)
                 value = getAspectRatio(layer, settings, true);
+            } else if (match === 'Ar') {
+                // Handle Ar
+                value = variables['Ar'];
             } else if (durationFormat !== undefined) {
+                // Handle D(format)
                 value = typeof variables['D'] === 'function' ? variables['D'](durationFormat) : variables['D'];
             } else if (match === 'D') {
+                // Handle D
                 value = typeof variables['D'] === 'function' ? variables['D']() : variables['D'];
             } else if (match === 'Df') {
+                // Handle Df
                 value = variables['Df'];
             } else if (match === 'Ec') {
+                // Handle Ec
                 value = variables['Ec'];
-            } else if (match === 'Fext') {
-                value = variables['Fext'];
-            } else if (match === 'Lexp') {
-                value = variables['Lexp'];
             } else if (match === 'Ip') {
+                // Handle Ip
                 value = variables['Ip'];
             } else if (match === 'Op') {
+                // Handle Op
                 value = variables['Op'];
             } else if (match === 'Tm') {
+                // Handle Tm
                 value = variables['Tm'];
-            } else if (match === 'Ar') {
-                value = variables['Ar'];
             } else if (match === 'Pn') {
+                // Handle Pn
                 value = variables['Pn'];
             } else if (match === 'Lpos') {
+                // Handle Lpos
                 value = variables['Lpos'];
             } else if (match === 'Lsc') {
+                // Handle Lsc
                 value = variables['Lsc'];
             } else if (match === 'Lrot') {
+                // Handle Lrot
                 value = variables['Lrot'];
             } else if (match === 'Lops') {
+                // Handle Lops
                 value = variables['Lops'];
             } else if (match === 'Lpnt') {
-                if (isParentLayer(layer) && !isBoundLayer(layer)) {
-                    value = originalName;
-                } else {
-                    value = variables['Lpnt'];
-                }
+                // Handle Lpnt
+                value = variables['Lpnt'];
             } else if (parentIndex !== undefined) {
+                // Handle Lpnt(index)
                 value = variables['LpntIndex'];
             } else if (dateFormat !== undefined) {
+                // Handle Cd(format)
                 value = getCurrentDate(dateFormat);
             } else if (match === 'Cd') {
+                // Handle Cd
                 value = getCurrentDate();
             } else if (customMaskCountMode !== undefined) {
-                var maskCountString = getMaskCount(layer, settings, customMaskCountMode);
-                replacements['Lmc'].value = maskCountString;
-                usedVariables.push('Lmc');
-                return maskCountString;
-            } else if (customMaskNameDelimiter !== undefined) {
-                var maskNamesString = getMaskNames(layer, settings, customMaskNameDelimiter);
-                replacements['Lmn'].value = maskNamesString;
-                usedVariables.push('Lmn');
-                return maskNamesString;
+                // Handle Lmc(mode)
+                value = getMaskCount(layer, settings, customMaskCountMode);
             } else if (match === 'Lmc') {
+                // Handle Lmc
                 value = getMaskCount(layer, settings);
+            } else if (customMaskNameDelimiter !== undefined) {
+                // Handle Lmn(delimiter)
+                value = getMaskNames(layer, settings, customMaskNameDelimiter);
             } else if (match === 'Lmn') {
+                // Handle Lmn
                 value = getMaskNames(layer, settings);
-            } else {
+            } else if (/[A-Z]/.test(match)) {
+                // Handle other single uppercase letter variables
                 value = variables[match];
+            } else if (match === 'i') {
+                // Handle i
+                value = variables['i'];
+            } else if (match === 'S') {
+                // Handle S
+                value = variables['S'];
+            } else if (match === 'W') {
+                // Handle W
+                value = variables['W'];
+            } else if (match === 'H') {
+                // Handle H
+                value = variables['H'];
+            } else {
+                // Unknown variable
+                value = '';
             }
-
+    
             if (value !== undefined && value !== "") {
                 usedVariables.push(match);
                 return value;
@@ -2101,95 +2116,14 @@ function buildUI(thisObj) {
                 return "";
             }
         });
-
-        // Match original name to new name
+    
+        // If the result matches the original name or is empty, return the original name
         if (result === originalName || result === "") {
-            return originalName; // Return the original name if the new name is empty or unchanged
+            return originalName;
         }
-
-        // Handle the case where An(Separator) is the only variable in the template
-        if (usedVariables.length === 0 && template.indexOf('An(') !== -1) {
-            var customAnimDelimiter = template.match(/An\(([^)]+)\)/);
-            if (customAnimDelimiter) {
-                var customAnimDelimiterValue = customAnimDelimiter[1];
-                var animatedPropsString = getAnimatedProperties(layer, settings, customAnimDelimiterValue);
-                result = animatedPropsString;
-                usedVariables.push('An');
-            }
-        }
-
-        // Handle the case where E(Separator) is the only variable in the template
-        if (usedVariables.length === 0 && template.indexOf('E(') !== -1) {
-            var customEffectDelimiter = template.match(/E\(([^)]+)\)/);
-            if (customEffectDelimiter) {
-                var customEffectDelimiterValue = customEffectDelimiter[1];
-                var effectsString = getEffectNames(layer, settings, customEffectDelimiterValue);
-                result = effectsString;
-                usedVariables.push('E');
-            }
-        }
-
-        // Handle the case where Lexp(Separator) is the only variable in the template
-        if (usedVariables.length === 0 && template.indexOf('Lexp(') !== -1) {
-            var customLexpDelimiter = template.match(/Lexp\(([^)]+)\)/);
-            if (customLexpDelimiter) {
-                var customLexpDelimiterValue = customLexpDelimiter[1];
-                var lexpString = getExpressionControlledProperties(layer, settings, customLexpDelimiterValue);
-                result = lexpString;
-                usedVariables.push('Lexp');
-            }
-        }
-
-        // Handle the case where Fext(Separator) is the only variable in the template
-        if (usedVariables.length === 0 && template.indexOf('Fext(') !== -1) {
-            var customFextDelimiter = template.match(/Fext\(([^)]+)\)/);
-            if (customFextDelimiter) {
-                var customFextDelimiterValue = customFextDelimiter[1];
-                var fextString = getFileExtension(layer, settings, customFextDelimiterValue);
-                result = fextString;
-                usedVariables.push('Fext');
-            }
-        }
-
-        // If both "An" and "E" were used, replace their placeholders with actual values
-        if (usedVariables.indexOf('An') !== -1) {
-            result = result.replace(replacements['An'].regex, replacements['An'].value);
-        }
-
-        if (usedVariables.indexOf('E') !== -1) {
-            result = result.replace(replacements['E'].regex, replacements['E'].value);
-        }
-
-        // If "Lexp" was used, replace its placeholder with actual values
-        if (usedVariables.indexOf('Lexp') !== -1) {
-            result = result.replace(replacements['Lexp'].regex, replacements['Lexp'].value);
-        }
-
-        // If "Fext" was used, replace its placeholder with actual values
-        if (usedVariables.indexOf('Fext') !== -1) {
-            result = result.replace(replacements['Fext'].regex, replacements['Fext'].value);
-        }
-
-        // If "Lmc" was used, replace its placeholder with actual values
-        if (usedVariables.indexOf('Lmc') !== -1) {
-            result = result.replace(replacements['Lmc'].regex, replacements['Lmc'].value);
-        }
-
-        // If "Lmn" was used, replace its placeholder with actual values
-        if (usedVariables.indexOf('Lmn') !== -1) {
-            result = result.replace(replacements['Lmn'].regex, replacements['Lmn'].value);
-        }
-
-        if (usedVariables.indexOf('I') !== -1) {
-            result = result.replace(replacements['I'].regex, replacements['I'].value);
-        }
-
-        if (usedVariables.length === 0) {
-            return result;
-        }
-
+    
         return result;
-    }
+    }    
 
     var localIndex = 0; // Global local index
 
@@ -2306,33 +2240,55 @@ function buildUI(thisObj) {
     // Get the effect names applied to a layer with optional filtering and custom separator
     function getEffectNames(layer, settings, filter) {
         var effectNames = [];
-        var customSeparator = filter || ", ";
-    
-        if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
-            for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
-                var effect = layer.property("ADBE Effect Parade").property(j);
-                if (filter && effect.name.toLowerCase() === filter.toLowerCase()) {
-                    effectNames.push(effect.name);
-                    break; // Stop after finding the matching effect
-                } else if (!filter) {
-                    effectNames.push(effect.name);
-                }
+        var filterName = null;
+        var customSeparator = ", "; // Default separator
+
+        // Parse the filter parameter to get the filterName and customSeparator
+        if (filter) {
+            var bracketStart = filter.indexOf('[');
+            var bracketEnd = filter.indexOf(']', bracketStart);
+            if (bracketStart >= 0 && bracketEnd > bracketStart) {
+                filterName = filter.substring(0, bracketStart).trim();
+                customSeparator = filter.substring(bracketStart + 1, bracketEnd);
+            } else {
+                filterName = filter.trim();
             }
         }
-    
-        if (filter && effectNames.length === 0) {
-            // If filter is provided and no matching effects found, treat the filter as a custom separator
-            return getEffectNames(layer, settings).split(", ").join(customSeparator);
-        } else {
-            if (effectNames.length > 0) {
-                return effectNames.join(customSeparator);
-            } else {
-                if (settings && settings.E) {
-                    return settings.E.active ? settings.E.customValue : settings.E.defaultValue;
-                } else {
-                    return "No effects";
+
+        if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
+            var hasFilterEffect = false;
+            var otherEffects = [];
+            for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
+                var effect = layer.property("ADBE Effect Parade").property(j);
+                if (filterName && effect.name.toLowerCase() === filterName.toLowerCase()) {
+                    effectNames.push(effect.name);
+                    hasFilterEffect = true;
+                    break; // Stop after finding the matching effect
+                } else if (!filterName) {
+                    effectNames.push(effect.name);
+                } else if (filterName && effect.name.toLowerCase() !== filterName.toLowerCase()) {
+                    otherEffects.push(effect.name);
                 }
             }
+
+            if (filterName) {
+                if (hasFilterEffect) {
+                    // If the layer contains the filter effect, return its name
+                    return effectNames.join(customSeparator);
+                } else if (otherEffects.length > 0) {
+                    // The layer doesn't contain the filter effect but has other effects
+                    return otherEffects.join(customSeparator);
+                } else {
+                    // The layer has no effects
+                    return settings && settings.E ? (settings.E.active ? settings.E.customValue : settings.E.defaultValue) : "No effects";
+                }
+            } else {
+                // No filter, return all effects
+                return effectNames.join(customSeparator);
+            }
+        } else {
+            // The layer has no effects
+            return settings && settings.E ? (settings.E.active ? settings.E.customValue : settings.E.defaultValue) : "No effects";
         }
     }
 
