@@ -1975,7 +1975,7 @@ function buildUI(thisObj) {
             return template.match(/^\(([^()]+)\)$/)[1];
         }
     
-        var regex = /\(([^()]+)\)|E\(([^()\[\]]+(?:\[[^\[\]]*\])?)\)|E|An\(([^()\[\]]+)\)|An\{([^{}\[\]]+)\}|An|Lexp\(([^()\[\]]+)\)|Lexp|D\(([^()\[\]]+)\)|D|Df|Ec|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(([^()\[\]]+)\)|Lmc|Lmn\(([^()\[\]]+)\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
+        var regex = /\(([^()]+)\)|Df|Ec|E\(([^()\[\]]+(?:\[[^\[\]]*\])?)\)|E|An\(([^()\[\]]+)\)|An\{([^{}\[\]]+)\}|An|Lexp\(([^()\[\]]+)\)|Lexp|D\(([^()\[\]]+)\)|D|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(([^()\[\]]+)\)|Lmc|Lmn\(([^()\[\]]+)\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
     
         var incrementValues = {}; // Ensure this is declared if not already
     
