@@ -1975,22 +1975,25 @@ function buildUI(thisObj) {
             return template.match(/^\(([^()]+)\)$/)[1];
         }
     
-        var regex = /\(([^()]+)\)|Df|Ec|E\(([^()\[\]]+(?:\[[^\[\]]*\])?)\)|E|An\(([^()\[\]]+)\)|An\{([^{}\[\]]+)\}|An|Lexp\(([^()\[\]]+)\)|Lexp|D\(([^()\[\]]+)\)|D|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(([^()\[\]]+)\)|Lmc|Lmn\(([^()\[\]]+)\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
+        var regex = /\(([^()]+)\)|Df|Ec|E\(\[([^\[\]]*)\]\)|E\(([^()\[\]]+)\)|E|An\(([^()\[\]]+)\)|An\{([^{}\[\]]+)\}|An|Lexp\(([^()\[\]]+)\)|Lexp|D\(([^()\[\]]+)\)|D|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(([^()\[\]]+)\)|Lmc|Lmn\(([^()\[\]]+)\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
     
         var incrementValues = {}; // Ensure this is declared if not already
     
-        result = result.replace(regex, function(match, group, eFilter, customAnimDelimiterParentheses, customAnimDelimiterBraces, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskCountMode, customMaskNameDelimiter, customI) {
+        result = result.replace(regex, function(match, group, eSeparator, eFilter, customAnimDelimiterParentheses, customAnimDelimiterBraces, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskCountMode, customMaskNameDelimiter, customI) {
             var value;
     
             if (group !== undefined) {
                 // Return the content inside parentheses without changes
                 return group;
+            } else if (eSeparator !== undefined) {
+                // User wrote "E([separator])"
+                value = getEffectNames(layer, settings, "[" + eSeparator + "]");
+            } else if (eFilter !== undefined) {
+                // User wrote "E(filterName)"
+                value = getEffectNames(layer, settings, eFilter);
             } else if (match === 'E') {
                 // User wrote just "E"
                 value = getEffectNames(layer, settings);
-            } else if (eFilter !== undefined) {
-                // User wrote "E(filter[separator])"
-                value = getEffectNames(layer, settings, eFilter);
             } else if (customI !== undefined) {
                 // Handle I(initial value)
                 var uniqueKey = "I(" + customI + ")_" + usedVariables.length;
@@ -2242,22 +2245,18 @@ function buildUI(thisObj) {
         var effectNames = [];
         var filterName = null;
         var customSeparator = ", "; // Default separator
-
-        // Parse the filter parameter to get the filterName and customSeparator
+    
         if (filter) {
-            var bracketStart = filter.indexOf('[');
-            var bracketEnd = filter.indexOf(']', bracketStart);
-            if (bracketStart >= 0 && bracketEnd > bracketStart) {
-                filterName = filter.substring(0, bracketStart).trim();
-                customSeparator = filter.substring(bracketStart + 1, bracketEnd);
+            // Check if filter starts and ends with [ and ]
+            if (filter.charAt(0) === '[' && filter.charAt(filter.length - 1) === ']') {
+                customSeparator = filter.substring(1, filter.length - 1);
             } else {
-                filterName = filter.trim();
+                filterName = filter.replace(/^\s+|\s+$/g, ''); // Using custom trim function
             }
         }
-
+    
         if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
             var hasFilterEffect = false;
-            var otherEffects = [];
             for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
                 var effect = layer.property("ADBE Effect Parade").property(j);
                 if (filterName && effect.name.toLowerCase() === filterName.toLowerCase()) {
@@ -2266,20 +2265,15 @@ function buildUI(thisObj) {
                     break; // Stop after finding the matching effect
                 } else if (!filterName) {
                     effectNames.push(effect.name);
-                } else if (filterName && effect.name.toLowerCase() !== filterName.toLowerCase()) {
-                    otherEffects.push(effect.name);
                 }
             }
-
+    
             if (filterName) {
                 if (hasFilterEffect) {
                     // If the layer contains the filter effect, return its name
                     return effectNames.join(customSeparator);
-                } else if (otherEffects.length > 0) {
-                    // The layer doesn't contain the filter effect but has other effects
-                    return otherEffects.join(customSeparator);
                 } else {
-                    // The layer has no effects
+                    // The layer doesn't contain the specified effect
                     return settings && settings.E ? (settings.E.active ? settings.E.customValue : settings.E.defaultValue) : "No effects";
                 }
             } else {

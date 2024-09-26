@@ -10,7 +10,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "Ip, Op",
+        "template": "E(cc color offset)",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0
