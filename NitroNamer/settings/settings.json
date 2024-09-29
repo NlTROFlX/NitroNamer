@@ -10,7 +10,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "An(opacity, scale[ * ])",
+        "template": "E(levels, warp[ ///])",
         "briefly": true,
         "brieflyType": 1,
         "selectedPresetIndex": 0

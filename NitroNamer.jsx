@@ -1965,24 +1965,24 @@ function buildUI(thisObj) {
             return template.match(/^\(([^()]+)\)$/)[1];
         }
     
-        var regex = /\(([^()]+)\)|Df|Ec|E\(\[([^\[\]]+)\]\)|E\(([^()\[\]]+)\)|E|An\(\[([^\[\]]+)\]\)|An\(([^()\[\]]+?)(?:\[(.*?)\])?\)|An|Lexp\(([^()\[\]]+)\)|Lexp|D\(([^()\[\]]+)\)|D|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(([^()\[\]]+)\)|Lmc|Lmn\(([^()\[\]]+)\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
+        var regex = /\(([^()]+)\)|Df|Ec|E\(\[([^\[\]]+)\]\)|E\(([^()\[\]]+?)(?:\[(.*?)\])?\)|E|An\(\[([^\[\]]+)\]\)|An\(([^()\[\]]+?)(?:\[(.*?)\])?\)|An|Lexp\(([^()\[\]]+)\)|Lexp|D\(([^()\[\]]+)\)|D|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(([^()\[\]]+)\)|Lmc|Lmn\(([^()\[\]]+)\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
     
         var incrementValues = {}; // Ensure this is declared if not already
     
-        result = result.replace(regex, function(match, group, eSeparator, eFilter, anSeparatorOnly, anProps, anSeparator, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskCountMode, customMaskNameDelimiter, customI) {
+        result = result.replace(regex, function(match, group, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskCountMode, customMaskNameDelimiter, customI) {
             var value;
     
             if (group !== undefined) {
                 // Return the content inside parentheses without changes
                 return group;
-            } else if (eSeparator !== undefined) {
-                // User wrote "E([separator])"
-                value = getEffectNames(layer, settings, "[" + eSeparator + "]");
-            } else if (eFilter !== undefined) {
-                // User wrote "E(filterName)"
-                value = getEffectNames(layer, settings, eFilter);
+            } else if (eSeparatorOnly !== undefined) {
+                // Пользователь ввёл "E([separator])"
+                value = getEffectNames(layer, settings, null, eSeparatorOnly);
+            } else if (eEffects !== undefined) {
+                // Пользователь ввёл "E(effect1,effect2)" или "E(effect1,effect2[separator])"
+                value = getEffectNames(layer, settings, eEffects, eSeparator);
             } else if (match === 'E') {
-                // User wrote just "E"
+                // Пользователь ввёл просто "E"
                 value = getEffectNames(layer, settings);
             } else if (customI !== undefined) {
                 // Handle I(initial value)
@@ -2230,50 +2230,54 @@ function buildUI(thisObj) {
     }
 
     // Get the effect names applied to a layer with optional filtering and custom separator
-    function getEffectNames(layer, settings, filter) {
+    function getEffectNames(layer, settings, effectsFilter, customSeparator) {
         var effectNames = [];
-        var filterName = null;
-        var customSeparator = ", "; // Default separator
+        var effectNamesFilter = null;
+        var separator = customSeparator || ", "; // Разделитель по умолчанию
     
-        if (filter) {
-            // Check if filter starts and ends with [ and ]
-            if (filter.charAt(0) === '[' && filter.charAt(filter.length - 1) === ']') {
-                customSeparator = filter.substring(1, filter.length - 1);
-            } else {
-                filterName = filter.replace(/^\s+|\s+$/g, ''); // Using custom trim function
-            }
+        if (effectsFilter) {
+            // Разделяем effectsFilter по запятым и преобразуем названия эффектов в нижний регистр
+            effectNamesFilter = effectsFilter.split(',').map(function(name) {
+                return name.trim().toLowerCase();
+            });
         }
     
         if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
-            var hasFilterEffect = false;
-            for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
-                var effect = layer.property("ADBE Effect Parade").property(j);
-                if (filterName && effect.name.toLowerCase() === filterName.toLowerCase()) {
-                    effectNames.push(effect.name);
-                    hasFilterEffect = true;
-                    break; // Stop after finding the matching effect
-                } else if (!filterName) {
-                    effectNames.push(effect.name);
+            function checkEffects() {
+                for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
+                    var effect = layer.property("ADBE Effect Parade").property(j);
+                    if (effectNamesFilter) {
+                        // Сравниваем названия эффектов без учёта регистра
+                        if (effectNamesFilter.indexOf(effect.name.toLowerCase()) !== -1) {
+                            effectNames.push(effect.name);
+                        }
+                    } else {
+                        effectNames.push(effect.name);
+                    }
                 }
             }
     
-            if (filterName) {
-                if (hasFilterEffect) {
-                    // If the layer contains the filter effect, return its name
-                    return effectNames.join(customSeparator);
-                } else {
-                    // The layer doesn't contain the specified effect
-                    return settings && settings.E ? (settings.E.active ? settings.E.customValue : settings.E.defaultValue) : "No effects";
-                }
+            checkEffects();
+    
+            if (effectNames.length > 0) {
+                return effectNames.join(separator);
             } else {
-                // No filter, return all effects
-                return effectNames.join(customSeparator);
+                // Если указанные эффекты не применены, возвращаем значение из настроек
+                if (settings && settings.E) {
+                    return settings.E.active ? settings.E.customValue : settings.E.defaultValue;
+                } else {
+                    return "NoEffects";
+                }
             }
         } else {
-            // The layer has no effects
-            return settings && settings.E ? (settings.E.active ? settings.E.customValue : settings.E.defaultValue) : "No effects";
+            // Слой не имеет эффектов
+            if (settings && settings.E) {
+                return settings.E.active ? settings.E.customValue : settings.E.defaultValue;
+            } else {
+                return "NoEffects";
+            }
         }
-    }
+    }    
 
     checkAndCreateSettingsFile();
     checkAndCreateVariablesFile();
