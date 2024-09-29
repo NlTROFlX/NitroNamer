@@ -2,7 +2,7 @@
     "An": {
         "defaultValue": "NoAnimations",
         "customValue": "Custom{An}",
-        "active": false
+        "active": true
     },
     "Ar": {
         "defaultValue": "NoAspectRatio",

@@ -1650,39 +1650,32 @@ function buildUI(thisObj) {
         return decodeURIComponent(projectName); // Decode any URL-encoded characters
     }
 
-    // Get the animated properties of a layer
+    // Получение анимированных свойств слоя с поддержкой фильтра и пользовательского разделителя
     function getAnimatedProperties(layer, settings, filter) {
         var animatedProps = [];
-        var customSeparator = filter || ", ";
-        var filterMode = false;
+        var filterName = null;
+        var customSeparator = ", "; // Разделитель по умолчанию
 
         if (filter) {
-            // Check if the filter matches any animated property names
-            filterMode = false;
-            function checkPropertyGroupForFilter(propertyGroup) {
-                for (var i = 1; i <= propertyGroup.numProperties; i++) {
-                    var prop = propertyGroup.property(i);
-                    if (prop.numKeys > 0) {
-                        if (prop.name.toLowerCase() === filter.toLowerCase()) {
-                            filterMode = true;
-                            return; // Stop checking further if match is found
-                        }
-                    }
-                    if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
-                        checkPropertyGroupForFilter(prop);
-                    }
-                }
+            // Проверка, начинается ли фильтр с [ и заканчивается ]
+            if (filter.charAt(0) === '[' && filter.charAt(filter.length - 1) === ']') {
+                customSeparator = filter.substring(1, filter.length - 1);
+            } else {
+                filterName = filter.replace(/^\s+|\s+$/g, ''); // Удаление пробелов
             }
-            checkPropertyGroupForFilter(layer);
         }
+
+        var hasFilterProperty = false;
 
         function checkPropertyGroup(propertyGroup) {
             for (var i = 1; i <= propertyGroup.numProperties; i++) {
                 var prop = propertyGroup.property(i);
                 if (prop.numKeys > 0) {
-                    if (filterMode && prop.name.toLowerCase() === filter.toLowerCase()) {
+                    if (filterName && prop.name.toLowerCase() === filterName.toLowerCase()) {
                         animatedProps.push(prop.name);
-                    } else if (!filterMode) {
+                        hasFilterProperty = true;
+                        return; // Останавливаем поиск после нахождения соответствующего свойства
+                    } else if (!filterName) {
                         animatedProps.push(prop.name);
                     }
                 }
@@ -1694,17 +1687,27 @@ function buildUI(thisObj) {
 
         checkPropertyGroup(layer);
 
-        if (animatedProps.length > 0) {
-            if (filterMode) {
+        if (filterName) {
+            if (hasFilterProperty) {
+                // Возвращаем название свойства, если оно анимировано
                 return animatedProps.join(customSeparator);
             } else {
-                return animatedProps.join(filter || ", ");
+                // Если свойство не анимировано, возвращаем значение из настроек
+                if (settings && settings.An) {
+                    return settings.An.active ? settings.An.customValue : settings.An.defaultValue;
+                } else {
+                    return "NoAnimations";
+                }
             }
         } else {
-            if (settings && settings.An) {
-                return settings.An.active ? settings.An.customValue : settings.An.defaultValue;
+            if (animatedProps.length > 0) {
+                return animatedProps.join(customSeparator);
             } else {
-                return "NoAnimations";
+                if (settings && settings.An) {
+                    return settings.An.active ? settings.An.customValue : settings.An.defaultValue;
+                } else {
+                    return "NoAnimations";
+                }
             }
         }
     }
@@ -1975,11 +1978,11 @@ function buildUI(thisObj) {
             return template.match(/^\(([^()]+)\)$/)[1];
         }
     
-        var regex = /\(([^()]+)\)|Df|Ec|E\(\[([^\[\]]*)\]\)|E\(([^()\[\]]+)\)|E|An\(([^()\[\]]+)\)|An\{([^{}\[\]]+)\}|An|Lexp\(([^()\[\]]+)\)|Lexp|D\(([^()\[\]]+)\)|D|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(([^()\[\]]+)\)|Lmc|Lmn\(([^()\[\]]+)\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
+        var regex = /\(([^()]+)\)|Df|Ec|E\(\[([^\[\]]*)\]\)|E\(([^()\[\]]+)\)|E|An\(\[([^\[\]]*)\]\)|An\(([^()\[\]]+)\)|An|Lexp\(([^()\[\]]+)\)|Lexp|D\(([^()\[\]]+)\)|D|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(([^()\[\]]+)\)|Lmc|Lmn\(([^()\[\]]+)\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
     
         var incrementValues = {}; // Ensure this is declared if not already
     
-        result = result.replace(regex, function(match, group, eSeparator, eFilter, customAnimDelimiterParentheses, customAnimDelimiterBraces, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskCountMode, customMaskNameDelimiter, customI) {
+        result = result.replace(regex, function(match, group, eSeparator, eFilter, anSeparator, anFilter, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskCountMode, customMaskNameDelimiter, customI) {
             var value;
     
             if (group !== undefined) {
@@ -2007,16 +2010,15 @@ function buildUI(thisObj) {
             } else if (match === 'I') {
                 // Handle I
                 value = localIndex++; // Use the current value and then increment
-            } else if (customAnimDelimiterParentheses !== undefined || customAnimDelimiterBraces !== undefined) {
-                // Handle An(delimiter)
-                var customDelimiter = customAnimDelimiterParentheses || customAnimDelimiterBraces;
-                value = getAnimatedProperties(layer, settings, customDelimiter);
+            } else if (anSeparator !== undefined) {
+                // Пользователь ввел "An([разделитель])"
+                value = getAnimatedProperties(layer, settings, "[" + anSeparator + "]");
+            } else if (anFilter !== undefined) {
+                // Пользователь ввел "An(название_свойства)"
+                value = getAnimatedProperties(layer, settings, anFilter);
             } else if (match === 'An') {
-                // Handle An
-                value = variables['An'];
-            } else if (customLexpDelimiter !== undefined) {
-                // Handle Lexp(delimiter)
-                value = getExpressionControlledProperties(layer, settings, customLexpDelimiter);
+                // Пользователь ввел просто "An"
+                value = getAnimatedProperties(layer, settings);
             } else if (match === 'Lexp') {
                 // Handle Lexp
                 value = variables['Lexp'];
