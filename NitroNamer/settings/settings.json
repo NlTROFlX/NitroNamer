@@ -10,9 +10,9 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "An | An(scale) | An(scale[*])",
-        "briefly": false,
-        "brieflyType": 0,
+        "template": "An(opacity, scale[ * ])",
+        "briefly": true,
+        "brieflyType": 1,
         "selectedPresetIndex": 0
     }
 }

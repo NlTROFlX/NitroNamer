@@ -1651,31 +1651,31 @@ function buildUI(thisObj) {
     }
 
     // Получение анимированных свойств слоя с поддержкой фильтра и пользовательского разделителя
-    function getAnimatedProperties(layer, settings, filter) {
+    function getAnimatedProperties(layer, settings, propertiesFilter, customSeparator) {
         var animatedProps = [];
-        var filterName = null;
-        var customSeparator = ", "; // Разделитель по умолчанию
-
-        if (filter) {
-            // Проверка, начинается ли фильтр с [ и заканчивается ]
-            if (filter.charAt(0) === '[' && filter.charAt(filter.length - 1) === ']') {
-                customSeparator = filter.substring(1, filter.length - 1);
-            } else {
-                filterName = filter.replace(/^\s+|\s+$/g, ''); // Удаление пробелов
-            }
+        var propertyNames = null;
+        var separator = customSeparator || ", "; // Разделитель по умолчанию
+    
+        if (propertiesFilter) {
+            // Разделяем propertiesFilter по запятым и преобразуем названия свойств в нижний регистр
+            propertyNames = propertiesFilter.split(',').map(function(name) {
+                return name.trim().toLowerCase();
+            });
         }
-
-        var hasFilterProperty = false;
-
+    
+        var hasAnyAnimatedProperty = false;
+    
         function checkPropertyGroup(propertyGroup) {
             for (var i = 1; i <= propertyGroup.numProperties; i++) {
                 var prop = propertyGroup.property(i);
                 if (prop.numKeys > 0) {
-                    if (filterName && prop.name.toLowerCase() === filterName.toLowerCase()) {
-                        animatedProps.push(prop.name);
-                        hasFilterProperty = true;
-                        return; // Останавливаем поиск после нахождения соответствующего свойства
-                    } else if (!filterName) {
+                    hasAnyAnimatedProperty = true;
+                    if (propertyNames) {
+                        // Сравниваем названия свойств без учёта регистра
+                        if (propertyNames.indexOf(prop.name.toLowerCase()) !== -1) {
+                            animatedProps.push(prop.name);
+                        }
+                    } else {
                         animatedProps.push(prop.name);
                     }
                 }
@@ -1684,33 +1684,20 @@ function buildUI(thisObj) {
                 }
             }
         }
-
+    
         checkPropertyGroup(layer);
-
-        if (filterName) {
-            if (hasFilterProperty) {
-                // Возвращаем название свойства, если оно анимировано
-                return animatedProps.join(customSeparator);
-            } else {
-                // Если свойство не анимировано, возвращаем значение из настроек
-                if (settings && settings.An) {
-                    return settings.An.active ? settings.An.customValue : settings.An.defaultValue;
-                } else {
-                    return "NoAnimations";
-                }
-            }
+    
+        if (animatedProps.length > 0) {
+            return animatedProps.join(separator);
         } else {
-            if (animatedProps.length > 0) {
-                return animatedProps.join(customSeparator);
+            // Если указанные свойства не анимированы, возвращаем значение из настроек
+            if (settings && settings.An) {
+                return settings.An.active ? settings.An.customValue : settings.An.defaultValue;
             } else {
-                if (settings && settings.An) {
-                    return settings.An.active ? settings.An.customValue : settings.An.defaultValue;
-                } else {
-                    return "NoAnimations";
-                }
+                return "NoAnimations";
             }
         }
-    }
+    }    
 
     // Get the scale of a layer
     function getLayerScale(layer) {
@@ -1978,11 +1965,11 @@ function buildUI(thisObj) {
             return template.match(/^\(([^()]+)\)$/)[1];
         }
     
-        var regex = /\(([^()]+)\)|Df|Ec|E\(\[([^\[\]]*)\]\)|E\(([^()\[\]]+)\)|E|An\(\[([^\[\]]*)\]\)|An\(([^()\[\]]+)\)|An|Lexp\(([^()\[\]]+)\)|Lexp|D\(([^()\[\]]+)\)|D|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(([^()\[\]]+)\)|Lmc|Lmn\(([^()\[\]]+)\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
+        var regex = /\(([^()]+)\)|Df|Ec|E\(\[([^\[\]]+)\]\)|E\(([^()\[\]]+)\)|E|An\(\[([^\[\]]+)\]\)|An\(([^()\[\]]+?)(?:\[(.*?)\])?\)|An|Lexp\(([^()\[\]]+)\)|Lexp|D\(([^()\[\]]+)\)|D|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(([^()\[\]]+)\)|Lmc|Lmn\(([^()\[\]]+)\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
     
         var incrementValues = {}; // Ensure this is declared if not already
     
-        result = result.replace(regex, function(match, group, eSeparator, eFilter, anSeparator, anFilter, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskCountMode, customMaskNameDelimiter, customI) {
+        result = result.replace(regex, function(match, group, eSeparator, eFilter, anSeparatorOnly, anProps, anSeparator, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskCountMode, customMaskNameDelimiter, customI) {
             var value;
     
             if (group !== undefined) {
@@ -2010,14 +1997,14 @@ function buildUI(thisObj) {
             } else if (match === 'I') {
                 // Handle I
                 value = localIndex++; // Use the current value and then increment
-            } else if (anSeparator !== undefined) {
-                // Пользователь ввел "An([разделитель])"
-                value = getAnimatedProperties(layer, settings, "[" + anSeparator + "]");
-            } else if (anFilter !== undefined) {
-                // Пользователь ввел "An(название_свойства)"
-                value = getAnimatedProperties(layer, settings, anFilter);
+            } else if (anSeparatorOnly !== undefined) {
+                // Пользователь ввёл "An([separator])"
+                value = getAnimatedProperties(layer, settings, null, anSeparatorOnly);
+            } else if (anProps !== undefined) {
+                // Пользователь ввёл "An(prop1,prop2)" или "An(prop1,prop2[separator])"
+                value = getAnimatedProperties(layer, settings, anProps, anSeparator);
             } else if (match === 'An') {
-                // Пользователь ввел просто "An"
+                // Пользователь ввёл просто "An"
                 value = getAnimatedProperties(layer, settings);
             } else if (match === 'Lexp') {
                 // Handle Lexp
