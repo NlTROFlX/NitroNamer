@@ -1326,38 +1326,28 @@ function buildUI(thisObj) {
     }
 
     // Get the list of properties controlled by expressions
-    function getExpressionControlledProperties(layer, settings, filter) {
+    function getExpressionControlledProperties(layer, settings, propertiesFilter, customSeparator) {
         var expressionProps = [];
-        var customSeparator = filter || ", ";
-        var filterMode = false;
-
-        if (filter) {
-            // Check if the filter matches any expression controlled property names
-            filterMode = false;
-            function checkPropertyGroupForFilter(propertyGroup) {
-                for (var i = 1; i <= propertyGroup.numProperties; i++) {
-                    var prop = propertyGroup.property(i);
-                    if (prop.expression && prop.expressionEnabled) {
-                        if (prop.name.toLowerCase() === filter.toLowerCase()) {
-                            filterMode = true;
-                            return; // Stop checking further if match is found
-                        }
-                    }
-                    if (prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
-                        checkPropertyGroupForFilter(prop);
-                    }
-                }
-            }
-            checkPropertyGroupForFilter(layer);
+        var propertyNames = null;
+        var separator = customSeparator || ", "; // Разделитель по умолчанию
+    
+        if (propertiesFilter) {
+            // Разделяем propertiesFilter по запятым и преобразуем названия свойств в нижний регистр
+            propertyNames = propertiesFilter.split(',').map(function(name) {
+                return name.trim().toLowerCase();
+            });
         }
-
+    
         function checkPropertyGroup(propertyGroup) {
             for (var i = 1; i <= propertyGroup.numProperties; i++) {
                 var prop = propertyGroup.property(i);
                 if (prop.expression && prop.expressionEnabled) {
-                    if (filterMode && prop.name.toLowerCase() === filter.toLowerCase()) {
-                        expressionProps.push(prop.name);
-                    } else if (!filterMode) {
+                    if (propertyNames) {
+                        // Сравниваем названия свойств без учёта регистра
+                        if (propertyNames.indexOf(prop.name.toLowerCase()) !== -1) {
+                            expressionProps.push(prop.name);
+                        }
+                    } else {
                         expressionProps.push(prop.name);
                     }
                 }
@@ -1366,23 +1356,20 @@ function buildUI(thisObj) {
                 }
             }
         }
-
+    
         checkPropertyGroup(layer);
-
+    
         if (expressionProps.length > 0) {
-            if (filterMode) {
-                return expressionProps.join(customSeparator);
-            } else {
-                return expressionProps.join(filter || ", ");
-            }
+            return expressionProps.join(separator);
         } else {
+            // Если указанные свойства не управляются выражениями, возвращаем значение из настроек
             if (settings && settings.Lexp) {
                 return settings.Lexp.active ? settings.Lexp.customValue : settings.Lexp.defaultValue;
             } else {
                 return "NoExpressions";
             }
         }
-    }
+    }    
 
     // Get the track matte type of a layer
     function getTrackMatteType(layer, settings) {
@@ -1965,11 +1952,11 @@ function buildUI(thisObj) {
             return template.match(/^\(([^()]+)\)$/)[1];
         }
     
-        var regex = /\(([^()]+)\)|Df|Ec|E\(\[([^\[\]]+)\]\)|E\(([^()\[\]]+?)(?:\[(.*?)\])?\)|E|An\(\[([^\[\]]+)\]\)|An\(([^()\[\]]+?)(?:\[(.*?)\])?\)|An|Lexp\(([^()\[\]]+)\)|Lexp|D\(([^()\[\]]+)\)|D|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(([^()\[\]]+)\)|Lmc|Lmn\(([^()\[\]]+)\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
+        var regex = /\(([^()]+)\)|Df|Ec|E\(\[([^\[\]]+)\]\)|E\(([^()\[\]]+?)(?:\[(.*?)\])?\)|E|An\(\[([^\[\]]+)\]\)|An\(([^()\[\]]+?)(?:\[(.*?)\])?\)|An|Lexp\(\[([^\[\]]+)\]\)|Lexp\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lexp|D\(([^()\[\]]+)\)|D|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(([^()\[\]]+)\)|Lmc|Lmn\(([^()\[\]]+)\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
     
         var incrementValues = {}; // Ensure this is declared if not already
     
-        result = result.replace(regex, function(match, group, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, customLexpDelimiter, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskCountMode, customMaskNameDelimiter, customI) {
+        result = result.replace(regex, function(match, group, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, customMaskCountMode, customMaskNameDelimiter, customI) {
             var value;
     
             if (group !== undefined) {
@@ -2006,12 +1993,15 @@ function buildUI(thisObj) {
             } else if (match === 'An') {
                 // Пользователь ввёл просто "An"
                 value = getAnimatedProperties(layer, settings);
+            } else if (lexpSeparatorOnly !== undefined) {
+                // Пользователь ввёл "Lexp([separator])"
+                value = getExpressionControlledProperties(layer, settings, null, lexpSeparatorOnly);
+            } else if (lexpProps !== undefined) {
+                // Пользователь ввёл "Lexp(prop1,prop2)" или "Lexp(prop1,prop2[separator])"
+                value = getExpressionControlledProperties(layer, settings, lexpProps, lexpSeparator);
             } else if (match === 'Lexp') {
-                // Handle Lexp
-                value = variables['Lexp'];
-            } else if (customFext !== undefined) {
-                // Handle Fext(custom extension)
-                value = getFileExtension(layer, settings, customFext);
+                // Пользователь ввёл просто "Lexp"
+                value = getExpressionControlledProperties(layer, settings);
             } else if (match === 'Fext') {
                 // Handle Fext
                 value = variables['Fext'];

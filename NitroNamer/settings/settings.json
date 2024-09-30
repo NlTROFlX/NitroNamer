@@ -1,5 +1,11 @@
 {
     "userPresets": {
+        "preset_2": {
+            "allLayers": true,
+            "template": "Lexp(opacity,position[ / ]) | An(scale, rotation[ * ]) | E(levels)",
+            "briefly": false,
+            "brieflyType": 0
+        },
         "preset_1": {
             "allLayers": true,
             "template": "T.i",
@@ -10,9 +16,9 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "E(levels, warp[ ///])",
+        "template": "I, I(10)",
         "briefly": true,
         "brieflyType": 1,
-        "selectedPresetIndex": 0
+        "selectedPresetIndex": 1
     }
 }
