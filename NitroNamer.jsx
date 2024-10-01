@@ -2272,27 +2272,63 @@ function buildUI(thisObj) {
     checkAndCreateSettingsFile();
     checkAndCreateVariablesFile();
 
-    function loadTooltips() {
-        var scriptFile = new File($.fileName);
-        var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
-        var tooltipsRUFile = new File(scriptFolderPath + "/tooltipsRU.json");
-        var tooltipsEUFile = new File(scriptFolderPath + "/tooltipsEU.json");
-        var tooltipsFile;
-    
-        if (tooltipsRUFile.exists) {
-            tooltipsFile = tooltipsRUFile;
-        } else if (tooltipsEUFile.exists) {
-            tooltipsFile = tooltipsEUFile;
-        } else {
-            return; // No tooltips file found
+    // Define the path to the tooltips file
+    var tooltipsFilePath = scriptFolderPath + "/NitroNamer/settings/tooltips.json";
+
+    // Function to check if the tooltips file exists
+    function checkAndCreateTooltipsFile() {
+        var tooltipsFile = new File(tooltipsFilePath);
+        if (!tooltipsFile.exists) {
+            // Tooltips file doesn't exist, run initialSettings.jsx
+            var initialSettingsScriptPath = scriptFolderPath + "/NitroNamer/settings/initialSettings.jsx";
+            var initialSettingsScriptFile = new File(initialSettingsScriptPath);
+
+            if (initialSettingsScriptFile.exists) {
+                // Run the initialSettings.jsx script
+                $.evalFile(initialSettingsScriptFile);
+            } else {
+                alert("Error: initialSettings.jsx not found at " + initialSettingsScriptPath, scriptMessageHead_1);
+            }
+
+            // After running initialSettings.jsx, check if the tooltips file was created
+            if (!tooltipsFile.exists) {
+                // User did not select a language or closed the panel, run forceSettings.jsx
+                var forceSettingsScriptPath = scriptFolderPath + "/NitroNamer/settings/forceSettings.jsx";
+                var forceSettingsScriptFile = new File(forceSettingsScriptPath);
+
+                if (forceSettingsScriptFile.exists) {
+                    // Run the forceSettings.jsx script to create the tooltips file in English
+                    $.evalFile(forceSettingsScriptFile);
+                } else {
+                    alert("Error: forceSettings.jsx not found at " + forceSettingsScriptPath, scriptMessageHead_1);
+                }
+            }
         }
-    
-        var tooltipsData = readJSONFile(tooltipsFile.fsName);
-    
+    }
+
+    // Function to load tooltips from JSON file
+    function loadTooltips() {
+        var tooltipsFile = new File(tooltipsFilePath);
+        if (tooltipsFile.exists) {
+            var tooltipsData = readJSONFile(tooltipsFilePath);
+            return tooltipsData;
+        } else {
+            return null;
+        }
+    }
+
+    // Call the function to check and create the tooltips file
+    checkAndCreateTooltipsFile();
+
+    // Load tooltips data
+    var tooltipsData = loadTooltips();
+
+    // Apply tooltips to UI elements
+    function applyTooltips(tooltipsData) {
         if (tooltipsData && tooltipsData.NitroNamer && tooltipsData.NitroNamer.tooltips) {
             var tooltips = tooltipsData.NitroNamer.tooltips;
     
-            // Assign tooltips to UI elements
+            // Buttons
             if (tooltips.buttons) {
                 if (tooltips.buttons.btnCopy) {
                     btnCopy.helpTip = tooltips.buttons.btnCopy;
@@ -2323,6 +2359,7 @@ function buildUI(thisObj) {
                 }
             }
     
+            // Radio Buttons
             if (tooltips.radioButtons) {
                 if (tooltips.radioButtons.rdoAllLayers) {
                     rdoAllLayers.helpTip = tooltips.radioButtons.rdoAllLayers;
@@ -2332,33 +2369,34 @@ function buildUI(thisObj) {
                 }
             }
     
+            // Text Fields
             if (tooltips.textFields) {
                 if (tooltips.textFields.txtTemplate) {
                     txtTemplate.helpTip = tooltips.textFields.txtTemplate;
                 }
-                if (tooltips.textFields.txtOriginal && txtOriginal) {
-                    txtOriginal.helpTip = tooltips.textFields.txtOriginal;
-                }
-                if (tooltips.textFields.txtRenamed && txtRenamed) {
-                    txtRenamed.helpTip = tooltips.textFields.txtRenamed;
-                }
             }
     
+            // Checkboxes
             if (tooltips.checkboxes) {
                 if (tooltips.checkboxes.chkBriefly) {
                     chkBriefly.helpTip = tooltips.checkboxes.chkBriefly;
                 }
             }
     
+            // Dropdowns
             if (tooltips.dropdowns) {
                 if (tooltips.dropdowns.ddLayerMode) {
                     ddLayerMode.helpTip = tooltips.dropdowns.ddLayerMode;
                 }
+                if (tooltips.dropdowns.ddBrieflyType) {
+                    ddBrieflyType.helpTip = tooltips.dropdowns.ddBrieflyType;
+                }
             }
         }
-    }
-    
-    loadTooltips();
+    }    
+
+    // Call the function to apply tooltips
+    applyTooltips(tooltipsData);
 
     var settings = loadSettings();
     applySettings(settings);
