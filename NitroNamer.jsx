@@ -2267,10 +2267,98 @@ function buildUI(thisObj) {
                 return "NoEffects";
             }
         }
-    }    
+    }
 
     checkAndCreateSettingsFile();
     checkAndCreateVariablesFile();
+
+    function loadTooltips() {
+        var scriptFile = new File($.fileName);
+        var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
+        var tooltipsRUFile = new File(scriptFolderPath + "/tooltipsRU.json");
+        var tooltipsEUFile = new File(scriptFolderPath + "/tooltipsEU.json");
+        var tooltipsFile;
+    
+        if (tooltipsRUFile.exists) {
+            tooltipsFile = tooltipsRUFile;
+        } else if (tooltipsEUFile.exists) {
+            tooltipsFile = tooltipsEUFile;
+        } else {
+            return; // No tooltips file found
+        }
+    
+        var tooltipsData = readJSONFile(tooltipsFile.fsName);
+    
+        if (tooltipsData && tooltipsData.NitroNamer && tooltipsData.NitroNamer.tooltips) {
+            var tooltips = tooltipsData.NitroNamer.tooltips;
+    
+            // Assign tooltips to UI elements
+            if (tooltips.buttons) {
+                if (tooltips.buttons.btnCopy) {
+                    btnCopy.helpTip = tooltips.buttons.btnCopy;
+                }
+                if (tooltips.buttons.btnSave) {
+                    btnSave.helpTip = tooltips.buttons.btnSave;
+                }
+                if (tooltips.buttons.btnCircleMinus) {
+                    btnCircleMinus.helpTip = tooltips.buttons.btnCircleMinus;
+                }
+                if (tooltips.buttons.btnMinimize) {
+                    btnMinimize.helpTip = tooltips.buttons.btnMinimize;
+                }
+                if (tooltips.buttons.btnRename) {
+                    btnRename.helpTip = tooltips.buttons.btnRename;
+                }
+                if (tooltips.buttons.btnVariables) {
+                    btnVariables.helpTip = tooltips.buttons.btnVariables;
+                }
+                if (tooltips.buttons.btnHelp) {
+                    btnHelp.helpTip = tooltips.buttons.btnHelp;
+                }
+                if (tooltips.buttons.btnReset) {
+                    btnReset.helpTip = tooltips.buttons.btnReset;
+                }
+                if (tooltips.buttons.btnSettings) {
+                    btnSettings.helpTip = tooltips.buttons.btnSettings;
+                }
+            }
+    
+            if (tooltips.radioButtons) {
+                if (tooltips.radioButtons.rdoAllLayers) {
+                    rdoAllLayers.helpTip = tooltips.radioButtons.rdoAllLayers;
+                }
+                if (tooltips.radioButtons.rdoOnlySelected) {
+                    rdoOnlySelected.helpTip = tooltips.radioButtons.rdoOnlySelected;
+                }
+            }
+    
+            if (tooltips.textFields) {
+                if (tooltips.textFields.txtTemplate) {
+                    txtTemplate.helpTip = tooltips.textFields.txtTemplate;
+                }
+                if (tooltips.textFields.txtOriginal && txtOriginal) {
+                    txtOriginal.helpTip = tooltips.textFields.txtOriginal;
+                }
+                if (tooltips.textFields.txtRenamed && txtRenamed) {
+                    txtRenamed.helpTip = tooltips.textFields.txtRenamed;
+                }
+            }
+    
+            if (tooltips.checkboxes) {
+                if (tooltips.checkboxes.chkBriefly) {
+                    chkBriefly.helpTip = tooltips.checkboxes.chkBriefly;
+                }
+            }
+    
+            if (tooltips.dropdowns) {
+                if (tooltips.dropdowns.ddLayerMode) {
+                    ddLayerMode.helpTip = tooltips.dropdowns.ddLayerMode;
+                }
+            }
+        }
+    }
+    
+    loadTooltips();
 
     var settings = loadSettings();
     applySettings(settings);
