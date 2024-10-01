@@ -98,10 +98,10 @@
     // Now that all UI elements are defined, define the updateInterfaceText function
     function updateInterfaceText() {
         if (rdoEnglish.value) {
-            lblPrompt.text = "Choose Tooltip Language";
+            lblPrompt.text = "Tooltip Language";
             btnConfirm.text = "Confirm";
         } else {
-            lblPrompt.text = "Выберите язык подсказок";
+            lblPrompt.text = "Язык подсказок";
             btnConfirm.text = "Подтвердить";
         }
     }
@@ -115,7 +115,7 @@
     btnConfirm.onClick = function() {
         var selectedLanguage = rdoEnglish.value ? "English" : "Russian";
         var tooltipsData = rdoEnglish.value ? tooltipsEU : tooltipsRU;
-        var fileName = "tooltips.json"; // We'll use a common file name
+        //var fileName = "tooltips.json"; // We'll use a common file name
 
         // Define the path to the tooltips file
         var tooltipsFilePath = scriptFolderPath + "/tooltips.json";
