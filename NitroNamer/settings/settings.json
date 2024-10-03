@@ -5,7 +5,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "Lmc(mask 2, mask 3[*])",
+        "template": "Ec(levels, drop shadow)",
         "briefly": false,
         "brieflyType": 0
     },

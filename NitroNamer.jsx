@@ -1322,7 +1322,7 @@ function buildUI(thisObj) {
             "H": getHeight(layer, settings),
             "Tm": getTrackMatteType(layer, settings),
             "Ar": getAspectRatio(layer, settings),
-            "Ec": getEffectsCount(layer),
+            "Ec": getEffectsCount(layer, settings),
             "Pn": getProjectName(),
             "Lpos": getLayerPosition(layer),
             "Lsc": getLayerScale(layer),
@@ -1657,12 +1657,38 @@ function buildUI(thisObj) {
     }
 
     // Get the number of effects applied to a layer
-    function getEffectsCount(layer) {
-        if (layer.property("ADBE Effect Parade")) {
-            return layer.property("ADBE Effect Parade").numProperties;
+    function getEffectsCount(layer, settings, effectsFilter) {
+        var effectsCount = 0;
+        var effectsNamesFilter = null;
+    
+        if (effectsFilter) {
+            effectsNamesFilter = effectsFilter.split(',').map(function(name) {
+                return name.trim().toLowerCase();
+            });
         }
-        return 0;
-    }
+    
+        if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
+            for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
+                var effect = layer.property("ADBE Effect Parade").property(j);
+    
+                if (effectsNamesFilter) {
+                    if (effectsNamesFilter.indexOf(effect.name.trim().toLowerCase()) !== -1) {
+                        effectsCount++;
+                    }
+                } else {
+                    effectsCount++;
+                }
+            }
+    
+            return effectsCount.toString();
+        } else {
+            if (settings && settings.Ec) {
+                return settings.Ec.active ? settings.Ec.customValue : settings.Ec.defaultValue;
+            } else {
+                return "NoEffects";
+            }
+        }
+    }    
 
     // Get the project name
     function getProjectName() {
@@ -1994,12 +2020,13 @@ function buildUI(thisObj) {
             return template.match(/^\(([^()]+)\)$/)[1];
         }
     
-        var regex = /\(([^()]+)\)|Df|Ec|E\(\[([^\[\]]+)\]\)|E\(([^()\[\]]+?)(?:\[(.*?)\])?\)|E|An\(\[([^\[\]]+)\]\)|An\(([^()\[\]]+?)(?:\[(.*?)\])?\)|An|Lexp\(\[([^\[\]]+)\]\)|Lexp\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lexp|D\(([^()\[\]]+)\)|D|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(\[([^\[\]]+)\]\)|Lmc\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lmc|Lmn\(\[([^\[\]]+)\]\)|Lmn\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
+        var regex = /\(([^()]+)\)|Df|Ec\(([^()\[\]]+?)\)|Ec|E\(\[([^\[\]]+)\]\)|E\(([^()\[\]]+?)(?:\[(.*?)\])?\)|E|An\(\[([^\[\]]+)\]\)|An\(([^()\[\]]+?)(?:\[(.*?)\])?\)|An|Lexp\(\[([^\[\]]+)\]\)|Lexp\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lexp|D\(([^()\[\]]+)\)|D|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(\[([^\[\]]+)\]\)|Lmc\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lmc|Lmn\(\[([^\[\]]+)\]\)|Lmn\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
     
         var incrementValues = {}; // Ensure this is declared if not already
     
         result = result.replace(regex, function(match,
             group,
+            ecFilters,
             eSeparatorOnly, eEffects, eSeparator,
             anSeparatorOnly, anProps, anSeparator,
             lexpSeparatorOnly, lexpProps, lexpSeparator,
@@ -2093,9 +2120,12 @@ function buildUI(thisObj) {
             } else if (match === 'Df') {
                 // Handle Df
                 value = variables['Df'];
+            } else if (ecFilters !== undefined) {
+                // Пользователь ввёл "Ec(effect1, effect2)"
+                value = getEffectsCount(layer, settings, ecFilters);
             } else if (match === 'Ec') {
-                // Handle Ec
-                value = variables['Ec'];
+                // Пользователь ввёл просто "Ec"
+                value = getEffectsCount(layer, settings);
             } else if (match === 'Ip') {
                 // Handle Ip
                 value = variables['Ip'];
@@ -2213,7 +2243,7 @@ function buildUI(thisObj) {
                         "H": getHeight(layer, variableSettings),
                         "Tm": getTrackMatteType(layer, variableSettings),
                         "Ar": getAspectRatio(layer, variableSettings),
-                        "Ec": getEffectsCount(layer),
+                        "Ec": getEffectsCount(layer, variableSettings),
                         "Pn": getProjectName(),
                         "Lpos": getLayerPosition(layer),
                         "Lsc": getLayerScale(layer),
