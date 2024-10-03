@@ -5,9 +5,9 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "(LayerName).i",
+        "template": "Lexp([ / ])",
         "briefly": false,
         "brieflyType": 0
     },
-    "selectedLanguage": "Russian"
+    "selectedLanguage": "English"
 }
