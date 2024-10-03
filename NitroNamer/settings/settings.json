@@ -5,7 +5,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "Lexp([ / ])",
+        "template": "Lmc(mask 2, mask 3[*])",
         "briefly": false,
         "brieflyType": 0
     },

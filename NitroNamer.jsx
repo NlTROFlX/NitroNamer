@@ -935,11 +935,9 @@ function buildUI(thisObj) {
         return null;
     }    
 
-    function getMaskCount(layer, settings, mode) {
+    function getMaskCount(layer, settings, maskFilter, customSeparator) {
         var maskCount = 0;
-        var customSeparator = mode || ",";
     
-        // Define mask modes (converted to lowercase)
         var maskModes = {
             "none": MaskMode.NONE,
             "add": MaskMode.ADD,
@@ -950,33 +948,59 @@ function buildUI(thisObj) {
             "difference": MaskMode.DIFFERENCE
         };
     
-        // Convert the mode to lowercase for case-insensitive comparison
-        var lowerMode = mode ? mode.toLowerCase() : "";
+        var filterList = null;
     
-        // Check if the mode is valid
-        var isValidMode = maskModes.hasOwnProperty(lowerMode);
+        if (maskFilter) {
+            // Разделяем фильтры по запятым и удаляем лишние пробелы
+            filterList = maskFilter.split(',').map(function(item) {
+                return item.trim();
+            });
+        }
     
         if (layer.mask && layer.mask.numProperties > 0) {
             for (var i = 1; i <= layer.mask.numProperties; i++) {
                 var mask = layer.mask.property(i);
     
-                // Check the mask mode
-                if (isValidMode && mask.maskMode === maskModes[lowerMode]) {
-                    maskCount++;
-                } else if (!isValidMode) {
+                var includeMask = false;
+    
+                if (filterList) {
+                    // Проверяем, соответствует ли имя маски или режим маски любому из фильтров
+                    for (var j = 0; j < filterList.length; j++) {
+                        var filterItem = filterList[j];
+                        // Проверяем имя маски (без учета регистра и пробелов)
+                        if (mask.name.trim().toLowerCase() === filterItem.trim().toLowerCase()) {
+                            includeMask = true;
+                            break;
+                        }
+                        // Проверяем режим маски (без учета регистра)
+                        var lowerFilterItem = filterItem.trim().toLowerCase();
+                        if (maskModes.hasOwnProperty(lowerFilterItem)) {
+                            if (mask.maskMode === maskModes[lowerFilterItem]) {
+                                includeMask = true;
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    // Если фильтры не заданы, включаем все маски
+                    includeMask = true;
+                }
+    
+                if (includeMask) {
                     maskCount++;
                 }
             }
     
             return maskCount.toString();
         } else {
+            // Если масок нет, возвращаем значение из настроек или значение по умолчанию
             if (settings && settings.Lmc) {
                 return settings.Lmc.active ? settings.Lmc.customValue : settings.Lmc.defaultValue;
             } else {
                 return "NoMasks";
             }
         }
-    }
+    }    
 
     function getMaskNames(layer, settings, maskFilter, customSeparator) {
         var maskNames = [];
@@ -1970,7 +1994,7 @@ function buildUI(thisObj) {
             return template.match(/^\(([^()]+)\)$/)[1];
         }
     
-        var regex = /\(([^()]+)\)|Df|Ec|E\(\[([^\[\]]+)\]\)|E\(([^()\[\]]+?)(?:\[(.*?)\])?\)|E|An\(\[([^\[\]]+)\]\)|An\(([^()\[\]]+?)(?:\[(.*?)\])?\)|An|Lexp\(\[([^\[\]]+)\]\)|Lexp\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lexp|D\(([^()\[\]]+)\)|D|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(([^()\[\]]+)\)|Lmc|Lmn\(\[([^\[\]]+)\]\)|Lmn\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
+        var regex = /\(([^()]+)\)|Df|Ec|E\(\[([^\[\]]+)\]\)|E\(([^()\[\]]+?)(?:\[(.*?)\])?\)|E|An\(\[([^\[\]]+)\]\)|An\(([^()\[\]]+?)(?:\[(.*?)\])?\)|An|Lexp\(\[([^\[\]]+)\]\)|Lexp\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lexp|D\(([^()\[\]]+)\)|D|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(\[([^\[\]]+)\]\)|Lmc\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lmc|Lmn\(\[([^\[\]]+)\]\)|Lmn\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
     
         var incrementValues = {}; // Ensure this is declared if not already
     
@@ -1984,7 +2008,7 @@ function buildUI(thisObj) {
             customAr,
             parentIndex,
             dateFormat,
-            customMaskCountMode,
+            lmcSeparatorOnly, lmcFilters, lmcSeparator,
             lmnSeparatorOnly, lmnFilters, lmnSeparator,
             customI
         ) {
@@ -2045,6 +2069,15 @@ function buildUI(thisObj) {
             } else if (match === 'Lmn') {
                 // Пользователь ввёл просто "Lmn"
                 value = getMaskNames(layer, settings);
+            } else if (lmcSeparatorOnly !== undefined) {
+                // Пользователь ввёл "Lmc([separator])" (для подсчёта масок разделитель не нужен, но поддерживаем синтаксис)
+                value = getMaskCount(layer, settings, null, lmcSeparatorOnly);
+            } else if (lmcFilters !== undefined) {
+                // Пользователь ввёл "Lmc(filter1,filter2)" или "Lmc(filter1,filter2[separator])"
+                value = getMaskCount(layer, settings, lmcFilters, lmcSeparator);
+            } else if (match === 'Lmc') {
+                // Пользователь ввёл просто "Lmc"
+                value = getMaskCount(layer, settings);
             } else if (customAr !== undefined) {
                 // Handle Ar(format)
                 value = getAspectRatio(layer, settings, true);
@@ -2099,12 +2132,6 @@ function buildUI(thisObj) {
             } else if (match === 'Cd') {
                 // Handle Cd
                 value = getCurrentDate();
-            } else if (customMaskCountMode !== undefined) {
-                // Handle Lmc(mode)
-                value = getMaskCount(layer, settings, customMaskCountMode);
-            } else if (match === 'Lmc') {
-                // Handle Lmc
-                value = getMaskCount(layer, settings);
             } else if (/[A-Z]/.test(match)) {
                 // Handle other single uppercase letter variables
                 value = variables[match];
