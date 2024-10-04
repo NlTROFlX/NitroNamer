@@ -37,7 +37,7 @@
     "Lmc": {
         "defaultValue": "NoMasks",
         "customValue": "Custom{Lmc}",
-        "active": false
+        "active": true
     },
     "Lmn": {
         "defaultValue": "NoMaskNames",
