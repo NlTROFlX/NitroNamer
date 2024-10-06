@@ -1,6 +1,12 @@
 {
     "userPresets": {
-        
+        "preset_1": {
+            "allLayers": true,
+            "template": "Lmc",
+            "briefly": false,
+            "brieflyType": 0,
+            "creationDate": "2024-10-06T10:49:31.898Z"
+        }
     },
     "currentSettings": {
         "UICompact": false,

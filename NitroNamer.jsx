@@ -760,6 +760,26 @@ function buildUI(thisObj) {
         // Force layout update to adjust the positions of the remaining elements
         win.layout.layout(true);
         win.layout.resize();
+    }
+    
+    function getISOString(date) {
+        function pad(number) {
+            return (number < 10) ? '0' + number : number;
+        }
+        function padMilliseconds(number) {
+            if (number < 10) return '00' + number;
+            if (number < 100) return '0' + number;
+            return number;
+        }
+    
+        return date.getUTCFullYear()
+            + '-' + pad(date.getUTCMonth() + 1)
+            + '-' + pad(date.getUTCDate())
+            + 'T' + pad(date.getUTCHours())
+            + ':' + pad(date.getUTCMinutes())
+            + ':' + pad(date.getUTCSeconds())
+            + '.' + padMilliseconds(date.getUTCMilliseconds())
+            + 'Z';
     }    
 
     // Save settings to a JSON file
@@ -786,6 +806,9 @@ function buildUI(thisObj) {
                 }
             }
         } else {
+            // Add the "creationDate" key to settings using the custom getISOString function
+            settings.creationDate = getISOString(new Date());
+    
             // Count number of keys in userPresets
             var nextPresetNumber = 1;
             for (var key in userPresets) {
