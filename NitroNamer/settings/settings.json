@@ -1,37 +1,37 @@
 {
     "userPresets": {
         "preset_3": {
-            "allLayers": true,
-            "template": "1111",
-            "briefly": false,
-            "brieflyType": 0,
-            "creationDate": "2024-10-06T11:29:53.177Z",
+            "allLayers": false,
+            "template": "5555",
+            "briefly": true,
+            "brieflyType": 1,
             "usageFrequency": 1
         },
         "preset_2": {
             "allLayers": true,
-            "template": "0000",
+            "template": "4444",
             "briefly": false,
             "brieflyType": 0,
-            "creationDate": "2024-10-06T11:29:50.629Z",
-            "usageFrequency": 2
+            "creationDate": "2024-10-06T12:57:15.452Z",
+            "usageFrequency": 7,
+            "favoritesTemplate": true
         },
         "preset_1": {
             "allLayers": true,
-            "template": "1234",
+            "template": "3333",
             "briefly": false,
             "brieflyType": 0,
-            "creationDate": "2024-10-06T11:29:44.701Z",
-            "usageFrequency": 2
+            "creationDate": "2024-10-06T12:57:01.276Z",
+            "usageFrequency": 0
         }
     },
     "currentSettings": {
-        "UICompact": true,
+        "UICompact": false,
         "allLayers": true,
-        "template": "1234",
+        "template": "4444",
         "briefly": false,
         "brieflyType": 0,
-        "selectedPresetIndex": 2
+        "selectedPresetIndex": 1
     },
     "selectedLanguage": "English"
 }

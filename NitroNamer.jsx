@@ -1,6 +1,6 @@
 function buildUI(thisObj) {
     // Create a window or panel for the UI
-    var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "NitroNamer", undefined, {resizeable: true});
+    var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "NitroNamer 2024.4 - dev", undefined, {resizeable: true});
     var globalWidthSizeElements = 310; // Set global width for UI elements
     var globalWidthSizeElementsCorrect = 14;
     var globalHeightSizeElementsMax = 376;
@@ -12,7 +12,7 @@ function buildUI(thisObj) {
     win.margins = [4,4,4,4];
     win.layout.layout(true);
 
-    var scriptMessageHead_1 = "NitroNamer 2024.3";
+    var scriptMessageHead_1 = "NitroNamer 2024.4 - dev";
 
     // Create group for layer selection options
     var grpLayerSelection = win.add("group", undefined);
@@ -46,6 +46,12 @@ function buildUI(thisObj) {
     btnCopy.size = [24, 24];
     btnCopy.imageSize = [24, 24];
     btnCopy.alignment = ["right", "center"];
+
+    // Add Favorites button with icon and hover effect
+    var btnFavorites = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/favorites.png"), {style: "toolbutton"});
+    btnFavorites.size = [24, 24];
+    btnFavorites.imageSize = [24, 24];
+    btnFavorites.alignment = ["right", "center"];
 
     // Add Save button with icon and hover effect
     var btnSave = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/save.png"), {style: "toolbutton"});
@@ -423,6 +429,7 @@ function buildUI(thisObj) {
     }
 
     addHoverEffect(btnCopy, scriptFolderPath + "/NitroNamer/img/copy");
+    addHoverEffect(btnFavorites, scriptFolderPath + "/NitroNamer/img/favorites");
     addHoverEffect(btnSave, scriptFolderPath + "/NitroNamer/img/save");
     addHoverEffect(btnCircleMinus, scriptFolderPath + "/NitroNamer/img/delete");
     addHoverEffect(btnMinimize, scriptFolderPath + "/NitroNamer/img/minimize");
@@ -502,6 +509,67 @@ function buildUI(thisObj) {
             alert("Please select a valid composition.", scriptMessageHead_1);
         }
     };
+
+    btnFavorites.onClick = function() {
+        var selectedPreset = ddLayerMode.selection;
+        if (selectedPreset) {
+            var presetTemplate = selectedPreset.text;
+            var settings = loadSettings();
+            var userPresets = settings.userPresets || {};
+    
+            for (var key in userPresets) {
+                if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
+                    var preset = userPresets[key];
+    
+                    // Toggle favoritesTemplate
+                    preset.favoritesTemplate = !preset.favoritesTemplate;
+    
+                    // Save the updated preset back to userPresets
+                    userPresets[key] = preset;
+    
+                    // Save the updated settings
+                    settings.userPresets = userPresets;
+                    var scriptFile = new File($.fileName);
+                    var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
+                    var settingsFile = scriptFolderPath + "/settings.json";
+    
+                    writeJSONFile(settingsFile, settings);
+    
+                    // Update the favorites button icon based on the new value
+                    updateFavoritesButtonIcon(preset.favoritesTemplate);
+    
+                    break;
+                }
+            }
+        }
+    };    
+    
+    btnFavorites.addEventListener("mouseover", function() {
+        var isFavorite = btnFavorites.isFavorite;
+    
+        if (isFavorite) {
+            btnFavorites.image = File(scriptFolderPath + "/NitroNamer/img/favoritesHover.png");
+        } else {
+            btnFavorites.image = File(scriptFolderPath + "/NitroNamer/img/favoritesHover.png");
+        }
+        btnFavorites.imageSize = [24, 24];
+    });
+    
+    btnFavorites.addEventListener("mouseout", function() {
+        var isFavorite = btnFavorites.isFavorite;
+        updateFavoritesButtonIcon(isFavorite);
+    });
+
+    function updateFavoritesButtonIcon(isFavorite) {
+        btnFavorites.isFavorite = isFavorite; // Сохраняем состояние
+    
+        if (isFavorite) {
+            btnFavorites.image = File(scriptFolderPath + "/NitroNamer/img/favoritesHover.png");
+        } else {
+            btnFavorites.image = File(scriptFolderPath + "/NitroNamer/img/favorites.png");
+        }
+        btnFavorites.imageSize = [24, 24];
+    }    
     
     // Save settings when Save button is clicked
     btnSave.onClick = function() {
@@ -570,6 +638,12 @@ function buildUI(thisObj) {
     
             // Ensure the template field remains the same
             txtTemplate.text = settings.template;
+
+            // После обновления списка пресетов и установки выбора
+            if (newPresetKey && updatedSettings.userPresets[newPresetKey]) {
+                var newPreset = updatedSettings.userPresets[newPresetKey];
+                updateFavoritesButtonIcon(newPreset.favoritesTemplate);
+            }
         }
     };
 
@@ -638,6 +712,27 @@ function buildUI(thisObj) {
                 brieflyType: ddBrieflyType.selection.index
             };
             saveSettings(currentSettings, true);
+
+            // Update the favorites button icon
+            var selectedPreset = ddLayerMode.selection;
+            if (selectedPreset) {
+                var presetTemplate = selectedPreset.text;
+                var settings = loadSettings();
+                var userPresets = settings.userPresets || {};
+
+                var isFavorite = false; // Default to false
+                for (var key in userPresets) {
+                    if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
+                        var preset = userPresets[key];
+                        isFavorite = preset.favoritesTemplate || false;
+                        break;
+                    }
+                }
+                updateFavoritesButtonIcon(isFavorite);
+            } else {
+                // No preset selected, set favorites icon to default (not favorite)
+                updateFavoritesButtonIcon(false);
+            }
         } else {
             updatePresetsDropdown(loadSettings());
         }
@@ -850,6 +945,9 @@ function buildUI(thisObj) {
 
             // Initialize usageFrequency to 0
             settings.usageFrequency = 0;
+
+            // Initialize favoritesTemplate to false
+            settings.favoritesTemplate = false;
     
             // Count number of keys in userPresets
             var nextPresetNumber = 1;
@@ -1188,6 +1286,23 @@ function buildUI(thisObj) {
 
         // Re-enable the dropdown change handler
         ddLayerMode.onChange = dropdownChangeHandler;
+
+        if (settings && settings.userPresets && ddLayerMode.selection) {
+            var selectedPresetTemplate = ddLayerMode.selection.text;
+            var userPresets = settings.userPresets;
+        
+            var isFavorite = false;
+            for (var key in userPresets) {
+                if (userPresets.hasOwnProperty(key) && userPresets[key].template === selectedPresetTemplate) {
+                    var preset = userPresets[key];
+                    isFavorite = preset.favoritesTemplate || false;
+                    break;
+                }
+            }
+            updateFavoritesButtonIcon(isFavorite);
+        } else {
+            updateFavoritesButtonIcon(false);
+        }
     }
 
     // Event handler for dropdown change
@@ -1240,6 +1355,10 @@ function buildUI(thisObj) {
                         selectedPresetIndex: ddLayerMode.selection.index
                     };
                     saveSettings(currentSettings, true);
+
+                    // Update the favorites button icon
+                    updateFavoritesButtonIcon(preset.favoritesTemplate);
+
                     break;
                 }
             }
