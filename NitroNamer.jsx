@@ -113,21 +113,41 @@ function buildUI(thisObj) {
             var presetTemplate = selectedPreset.text;
             var settings = loadSettings();
             var userPresets = settings.userPresets || {};
-
+    
             for (var key in userPresets) {
                 if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
                     var preset = userPresets[key];
+    
+                    // Increment usageFrequency
+                    if (preset.hasOwnProperty('usageFrequency')) {
+                        preset.usageFrequency += 1;
+                    } else {
+                        preset.usageFrequency = 1;
+                    }
+    
+                    // Save the updated preset back to userPresets
+                    userPresets[key] = preset;
+    
+                    // Save the updated settings
+                    settings.userPresets = userPresets;
+                    var scriptFile = new File($.fileName);
+                    var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
+                    var settingsFile = scriptFolderPath + "/settings.json";
+    
+                    writeJSONFile(settingsFile, settings);
+    
+                    // Then proceed to apply the preset to UI elements
                     rdoAllLayers.value = preset.allLayers;
                     rdoOnlySelected.value = !preset.allLayers;
                     txtTemplate.text = preset.template;
                     chkBriefly.value = preset.briefly;
                     ddBrieflyType.selection = preset.brieflyType || 0;
-
+    
                     updateLayerCounts();
                     updatePreview();
                     resetRenameButtonIcon();
                     updateRenameButtonIcon(); // Ensure the button is updated
-
+    
                     var currentSettings = {
                         allLayers: rdoAllLayers.value,
                         template: txtTemplate.text,
@@ -140,7 +160,7 @@ function buildUI(thisObj) {
                 }
             }
         }
-    };
+    };    
 
     // Определение функции saveCurrentSettings
     function saveCurrentSettings() {
@@ -235,21 +255,40 @@ function buildUI(thisObj) {
                 var presetTemplate = selectedPreset.text;
                 var settings = loadSettings();
                 var userPresets = settings.userPresets || {};
-
+    
                 for (var key in userPresets) {
                     if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
                         var preset = userPresets[key];
+    
+                        // Increment usageFrequency
+                        if (preset.hasOwnProperty('usageFrequency')) {
+                            preset.usageFrequency += 1;
+                        } else {
+                            preset.usageFrequency = 1;
+                        }
+    
+                        // Save the updated preset back to userPresets
+                        userPresets[key] = preset;
+    
+                        // Save the updated settings
+                        settings.userPresets = userPresets;
+                        var scriptFile = new File($.fileName);
+                        var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
+                        var settingsFile = scriptFolderPath + "/settings.json";
+    
+                        writeJSONFile(settingsFile, settings);
+    
                         rdoAllLayers.value = preset.allLayers;
                         rdoOnlySelected.value = !preset.allLayers;
                         txtTemplate.text = preset.template;
                         chkBriefly.value = preset.briefly;
                         ddBrieflyType.selection = preset.brieflyType || 0;
-
+    
                         updateLayerCounts();
                         updatePreview();
                         resetRenameButtonIcon();
                         updateRenameButtonIcon(); // Ensure the button is updated
-
+    
                         var currentSettings = {
                             allLayers: rdoAllLayers.value,
                             template: txtTemplate.text,
@@ -263,7 +302,7 @@ function buildUI(thisObj) {
                 }
             }
         }
-    });
+    });    
 
     // Set dropdown width after creating template text field
     win.onShow = function() {
@@ -808,6 +847,9 @@ function buildUI(thisObj) {
         } else {
             // Add the "creationDate" key to settings using the custom getISOString function
             settings.creationDate = getISOString(new Date());
+
+            // Initialize usageFrequency to 0
+            settings.usageFrequency = 0;
     
             // Count number of keys in userPresets
             var nextPresetNumber = 1;
@@ -818,7 +860,7 @@ function buildUI(thisObj) {
             }
             newPresetKey = "preset_" + nextPresetNumber;
             userPresets[newPresetKey] = settings;
-    
+
             // Move the new preset to the beginning
             var newUserPresets = {};
             newUserPresets[newPresetKey] = settings;
@@ -1159,6 +1201,26 @@ function buildUI(thisObj) {
             for (var key in userPresets) {
                 if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
                     var preset = userPresets[key];
+
+                    // Increment usageFrequency
+                    if (preset.hasOwnProperty('usageFrequency')) {
+                        preset.usageFrequency += 1;
+                    } else {
+                        preset.usageFrequency = 1;
+                    }
+
+                    // Save the updated preset back to userPresets
+                    userPresets[key] = preset;
+
+                    // Save the updated settings
+                    settings.userPresets = userPresets;
+                    var scriptFile = new File($.fileName);
+                    var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
+                    var settingsFile = scriptFolderPath + "/settings.json";
+
+                    writeJSONFile(settingsFile, settings);
+
+                    // Then proceed to apply the preset to UI elements
                     rdoAllLayers.value = preset.allLayers;
                     rdoOnlySelected.value = !preset.allLayers;
                     txtTemplate.text = preset.template;
@@ -1168,6 +1230,7 @@ function buildUI(thisObj) {
                     updateLayerCounts();
                     updatePreview();
                     resetRenameButtonIcon();
+                    updateRenameButtonIcon(); // Ensure the button is updated
 
                     var currentSettings = {
                         allLayers: rdoAllLayers.value,
