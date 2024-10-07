@@ -5,7 +5,8 @@
             "template": "5555",
             "briefly": true,
             "brieflyType": 1,
-            "usageFrequency": 1
+            "usageFrequency": 2,
+            "favoritesTemplate": false
         },
         "preset_2": {
             "allLayers": true,
@@ -28,10 +29,12 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "4444",
-        "briefly": false,
-        "brieflyType": 0,
-        "selectedPresetIndex": 1
+        "template": "5555",
+        "briefly": true,
+        "brieflyType": 1,
+        "selectedPresetIndex": 0,
+        "modeIndex": 2,
+        "modeActive": false
     },
     "selectedLanguage": "English"
 }

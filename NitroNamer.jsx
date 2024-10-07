@@ -113,14 +113,20 @@ function buildUI(thisObj) {
     grpDropdownAndButtons.margins = [0, -10, 0, 0];
     grpDropdownAndButtons.spacing = globalSpacingElements;
 
-    var btnModeSwitch = grpDropdownAndButtons.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/" + modes[currentModeIndex] + ".png"), {style: "toolbutton"});
+    // Add the mode switch button to grpDropdownAndButtons
+    var btnModeSwitch = grpDropdownAndButtons.add(
+        "iconbutton",
+        undefined,
+        File(scriptFolderPath + "/NitroNamer/img/" + modes[0] + ".png"), // Use default mode for initial image
+        { style: "toolbutton" }
+    );
     btnModeSwitch.size = [24, 24];
     btnModeSwitch.imageSize = [24, 24];
     btnModeSwitch.alignment = ["left", "center"];
 
     // Add dropdown list for layer mode presets
     var ddLayerMode = grpDropdownAndButtons.add("dropdownlist", undefined, presetTemplates);
-    ddLayerMode.minimumSize.width = globalWidthSizeElements - 12;
+    ddLayerMode.maximumSize.width = globalWidthSizeElements - 36;
     ddLayerMode.selection = 0;
 
     // Update presets dropdown change handler
@@ -179,9 +185,6 @@ function buildUI(thisObj) {
         }
     };
 
-    // Initialize the button icon
-    updateModeButtonIcon();
-
     // Add event handlers
     btnModeSwitch.onClick = function() {
         var isAltPressed = ScriptUI.environment.keyboardState.altKey;
@@ -198,6 +201,8 @@ function buildUI(thisObj) {
         }
         // Update the icon
         updateModeButtonIcon();
+        // Save the current settings
+        saveCurrentSettings();
     };
 
     btnModeSwitch.addEventListener("mouseover", function() {
@@ -224,13 +229,15 @@ function buildUI(thisObj) {
         btnModeSwitch.imageSize = [24, 24];
     }
 
-    // Определение функции saveCurrentSettings
+    // Update the saveCurrentSettings function
     function saveCurrentSettings() {
         var currentSettings = {
             allLayers: rdoAllLayers.value,
             template: txtTemplate.text,
             briefly: chkBriefly.value,
-            brieflyType: ddBrieflyType.selection.index
+            brieflyType: ddBrieflyType.selection.index,
+            modeIndex: currentModeIndex,
+            modeActive: isActive
         };
         saveSettings(currentSettings, true);
     }
@@ -900,9 +907,6 @@ function buildUI(thisObj) {
             updatePreview();
             win.minimumSize.height = globalHeightSizeElementsMin;
             win.maximumSize.height = globalHeightSizeElementsMin;
-            /*
-            win.minimumSize.width = globalWidthSizeElements;
-            win.maximumSize.width = globalWidthSizeElements;*/
         } else {
             btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimize.png");
             btnMinimize.addEventListener("mouseover", handleMouseOverMinimize);
@@ -1306,6 +1310,10 @@ function buildUI(thisObj) {
             chkBriefly.value = settings.currentSettings.briefly;
             ddBrieflyType.selection = settings.currentSettings.brieflyType || 0;
 
+            // Load mode settings
+            currentModeIndex = settings.currentSettings.modeIndex !== undefined ? settings.currentSettings.modeIndex : 0;
+            isActive = settings.currentSettings.modeActive !== undefined ? settings.currentSettings.modeActive : false;
+
             updateLayerCounts();
             updatePreview();
             resetRenameButtonIcon();
@@ -1319,6 +1327,9 @@ function buildUI(thisObj) {
             chkBriefly.value = lastPreset.briefly;
             ddBrieflyType.selection = lastPreset.brieflyType || 0;
 
+            currentModeIndex = 0;
+            isActive = false;
+
             updateLayerCounts();
             updatePreview();
             resetRenameButtonIcon();
@@ -1330,6 +1341,9 @@ function buildUI(thisObj) {
 
         // Update presets dropdown
         updatePresetsDropdown(settings);
+
+        // Update the button icon after setting the mode variables
+        updateModeButtonIcon();
 
         if (settings.currentSettings && typeof settings.currentSettings.selectedPresetIndex !== 'undefined') {
             ddLayerMode.selection = settings.currentSettings.selectedPresetIndex;
@@ -2750,6 +2764,7 @@ function buildUI(thisObj) {
     // Call the function to apply tooltips
     applyTooltips(tooltipsData);
 
+    // Load settings initially
     var settings = loadSettings();
     applySettings(settings);
 
