@@ -100,12 +100,23 @@ function buildUI(thisObj) {
         }
     }
 
+    // Define modes
+    var modes = ["chart", "date", "longArrowDown", "longArrowUp"];
+    var currentModeIndex = 0; // index into modes array
+    var isActive = false;
+    var isMouseOverButton = false;
+
     // Create group for dropdown and buttons
     var grpDropdownAndButtons = win.add("group", undefined);
     grpDropdownAndButtons.orientation = "row";
     grpDropdownAndButtons.alignment = ["fill", "top"];
     grpDropdownAndButtons.margins = [0, -10, 0, 0];
     grpDropdownAndButtons.spacing = globalSpacingElements;
+
+    var btnModeSwitch = grpDropdownAndButtons.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/" + modes[currentModeIndex] + ".png"), {style: "toolbutton"});
+    btnModeSwitch.size = [24, 24];
+    btnModeSwitch.imageSize = [24, 24];
+    btnModeSwitch.alignment = ["left", "center"];
 
     // Add dropdown list for layer mode presets
     var ddLayerMode = grpDropdownAndButtons.add("dropdownlist", undefined, presetTemplates);
@@ -166,7 +177,52 @@ function buildUI(thisObj) {
                 }
             }
         }
-    };    
+    };
+
+    // Initialize the button icon
+    updateModeButtonIcon();
+
+    // Add event handlers
+    btnModeSwitch.onClick = function() {
+        var isAltPressed = ScriptUI.environment.keyboardState.altKey;
+        if (isAltPressed) {
+            // Toggle the active state when Alt is held down
+            isActive = !isActive;
+        } else {
+            // Change the mode
+            currentModeIndex = (currentModeIndex + 1) % modes.length;
+            // If any mode was active, deactivate it
+            if (isActive) {
+                isActive = false;
+            }
+        }
+        // Update the icon
+        updateModeButtonIcon();
+    };
+
+    btnModeSwitch.addEventListener("mouseover", function() {
+        isMouseOverButton = true;
+        updateModeButtonIcon();
+    });
+
+    btnModeSwitch.addEventListener("mouseout", function() {
+        isMouseOverButton = false;
+        updateModeButtonIcon();
+    });
+
+    function updateModeButtonIcon() {
+        var mode = modes[currentModeIndex];
+        var iconFilename;
+        if (isActive) {
+            iconFilename = mode + "Hover.png";
+        } else if (isMouseOverButton) {
+            iconFilename = mode + "ModeHover.png";
+        } else {
+            iconFilename = mode + ".png";
+        }
+        btnModeSwitch.image = File(scriptFolderPath + "/NitroNamer/img/" + iconFilename);
+        btnModeSwitch.imageSize = [24, 24];
+    }
 
     // Определение функции saveCurrentSettings
     function saveCurrentSettings() {
