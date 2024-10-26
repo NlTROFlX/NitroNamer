@@ -29,7 +29,7 @@
     - The `NitroNamer` folder containing:
         - `img` - folder with icons and images
         - `settings` - folder with settings files (`settings.json`)
-        - `scripts` - folder with auxiliary scripts (`NNNLayerInfo.jsx`, `NNNHelp.jsx`, `NNNSettings.jsx`, etc.).
+        - `scripts` - folder with auxiliary scripts (`NNLayerInfo.jsx`, `NNHelp.jsx`, `NNSettings.jsx`, etc.).
 3. **Move the files** and the `NitroNamer` folder to the Adobe After Effects scripts folder:
     - Open Explorer and navigate to the location where the Adobe After Effects program is installed. This is usually: `C:\Program Files\Adobe\Adobe After Effects <version>\Support Files\Script\Script\ScriptUI Panels`.
     - Unzip the archive to the specified location or drag and drop the unzipped files and folders to the above path
