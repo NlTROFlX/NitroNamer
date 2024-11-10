@@ -101,7 +101,7 @@ function buildUI(thisObj) {
     }
 
     // Define modes
-    var modes = ["chart", "date", "longArrowDown", "longArrowUp"];
+    var modes = ["chart", "date", "longArrowDown", "longArrowUp", "favoritesTemplate"];
     var currentModeIndex = 0; // index into modes array
     var isActive = false;
     var isMouseOverButton = false;
@@ -227,7 +227,7 @@ function buildUI(thisObj) {
         }
         btnModeSwitch.image = File(scriptFolderPath + "/NitroNamer/img/" + iconFilename);
         btnModeSwitch.imageSize = [24, 24];
-    }
+    }    
 
     // Update the saveCurrentSettings function
     function saveCurrentSettings() {
