@@ -124,6 +124,15 @@ function buildUI(thisObj) {
     btnModeSwitch.imageSize = [24, 24];
     btnModeSwitch.alignment = ["left", "center"];
 
+    function updateModeSwitchTooltip() {
+        var currentMode = modes[currentModeIndex];
+        var tooltip = getTooltip("btnModeSwitch", currentMode);
+        btnModeSwitch.helpTip = tooltip;
+    }
+
+    // Initial tooltip setup
+    updateModeSwitchTooltip();
+
     // Add dropdown list for layer mode presets
     var ddLayerMode = grpDropdownAndButtons.add("dropdownlist", undefined, presetTemplates);
     ddLayerMode.maximumSize.width = globalWidthSizeElements - 36;
@@ -201,6 +210,8 @@ function buildUI(thisObj) {
         }
         // Update the icon
         updateModeButtonIcon();
+        // Update the tooltip
+        updateModeSwitchTooltip();
         // Save the current settings
         saveCurrentSettings();
     };
@@ -208,11 +219,13 @@ function buildUI(thisObj) {
     btnModeSwitch.addEventListener("mouseover", function() {
         isMouseOverButton = true;
         updateModeButtonIcon();
+        updateModeSwitchTooltip();
     });
 
     btnModeSwitch.addEventListener("mouseout", function() {
         isMouseOverButton = false;
         updateModeButtonIcon();
+        updateModeSwitchTooltip();
     });
 
     function updateModeButtonIcon() {
@@ -2683,6 +2696,15 @@ function buildUI(thisObj) {
         }
     }
 
+    // Function to get tooltip for a specific button and mode
+    function getTooltip(buttonName, mode) {
+        if (tooltipsData && tooltipsData.NitroNamer && tooltipsData.NitroNamer.tooltips && tooltipsData.NitroNamer.tooltips.buttons) {
+            var key = mode ? buttonName + "_" + mode : buttonName;
+            return tooltipsData.NitroNamer.tooltips.buttons[key] || tooltipsData.NitroNamer.tooltips.buttons[buttonName];
+        }
+        return "";
+    }
+
     // Call the function to check and create the tooltips file
     checkAndCreateTooltipsFile();
 
@@ -2693,7 +2715,7 @@ function buildUI(thisObj) {
     function applyTooltips(tooltipsData) {
         if (tooltipsData && tooltipsData.NitroNamer && tooltipsData.NitroNamer.tooltips) {
             var tooltips = tooltipsData.NitroNamer.tooltips;
-    
+
             // Buttons
             if (tooltips.buttons) {
                 if (tooltips.buttons.btnCopy) {
@@ -2723,8 +2745,9 @@ function buildUI(thisObj) {
                 if (tooltips.buttons.btnSettings) {
                     btnSettings.helpTip = tooltips.buttons.btnSettings;
                 }
+                // Подсказки для btnModeSwitch будут установлены динамически
             }
-    
+
             // Radio Buttons
             if (tooltips.radioButtons) {
                 if (tooltips.radioButtons.rdoAllLayers) {
@@ -2734,21 +2757,21 @@ function buildUI(thisObj) {
                     rdoOnlySelected.helpTip = tooltips.radioButtons.rdoOnlySelected;
                 }
             }
-    
+
             // Text Fields
             if (tooltips.textFields) {
                 if (tooltips.textFields.txtTemplate) {
                     txtTemplate.helpTip = tooltips.textFields.txtTemplate;
                 }
             }
-    
+
             // Checkboxes
             if (tooltips.checkboxes) {
                 if (tooltips.checkboxes.chkBriefly) {
                     chkBriefly.helpTip = tooltips.checkboxes.chkBriefly;
                 }
             }
-    
+
             // Dropdowns
             if (tooltips.dropdowns) {
                 if (tooltips.dropdowns.ddLayerMode) {
@@ -2759,7 +2782,7 @@ function buildUI(thisObj) {
                 }
             }
         }
-    }    
+    }
 
     // Call the function to apply tooltips
     applyTooltips(tooltipsData);

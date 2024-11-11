@@ -3,7 +3,7 @@
     var scriptFile = new File($.fileName);
     var scriptFolderPath = scriptFile.path;
 
-    // Your existing tooltipsRU and tooltipsEU objects
+    // Your existing tooltipsRU and tooltipsEU objects with added mode descriptions
     var tooltipsRU = {
         "NitroNamer": {
             "tooltips": {
@@ -16,7 +16,14 @@
                     "btnVariables": "Открыть панель значений переменных для слоя.",
                     "btnHelp": "Открыть библиотеку всех переменных и их режимов.",
                     "btnReset": "Сбросить все значения.\n(Не удаляет пресеты и настройки переменных)",
-                    "btnSettings": "Открыть панель настроек переменных."
+                    "btnSettings": "Открыть панель настроек переменных.",
+                    // Добавленные подсказки для каждого режима btnModeSwitch
+                    "btnModeSwitch_chart": "Режим сортировки: Диаграмма. Сортирует слои по типу или категориям.",
+                    "btnModeSwitch_date": "Режим сортировки: Дата. Сортирует слои по дате создания или изменения.",
+                    "btnModeSwitch_longArrowDown": "Режим сортировки: Стрелка вниз. Сортирует слои в обратном порядке.",
+                    "btnModeSwitch_longArrowUp": "Режим сортировки: Стрелка вверх. Сортирует слои в прямом порядке.",
+                    "btnModeSwitch_favorites": "Режим сортировки: Избранное. Сортирует слои по избранным настройкам.",
+                    "btnModeSwitch_search": "Режим сортировки: Поиск. Сортирует слои на основе критериев поиска."
                 },
                 "radioButtons": {
                     "rdoAllLayers": "Будут задействованы все доступные слои в этой композиции.",
@@ -48,7 +55,14 @@
                     "btnVariables": "Open the variable values panel for the layer.",
                     "btnHelp": "Open the library of all variables and their modes.",
                     "btnReset": "Reset all values.\n(Does not delete presets and variable settings)",
-                    "btnSettings": "Open the variable settings panel."
+                    "btnSettings": "Open the variable settings panel.",
+                    // Добавленные подсказки для каждого режима btnModeSwitch
+                    "btnModeSwitch_chart": "Sorting mode: Chart. Sorts layers by type or categories.",
+                    "btnModeSwitch_date": "Sorting mode: Date. Sorts layers by creation or modification date.",
+                    "btnModeSwitch_longArrowDown": "Sorting mode: Down Arrow. Sorts layers in reverse order.",
+                    "btnModeSwitch_longArrowUp": "Sorting mode: Up Arrow. Sorts layers in normal order.",
+                    "btnModeSwitch_favorites": "Sorting mode: Favorites. Sorts layers based on favorite settings.",
+                    "btnModeSwitch_search": "Sorting mode: Search. Sorts layers based on search criteria."
                 },
                 "radioButtons": {
                     "rdoAllLayers": "All available layers in this composition will be used.",

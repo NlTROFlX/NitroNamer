@@ -2,29 +2,35 @@
     "NitroNamer": {
         "tooltips": {
             "buttons": {
-                "btnCopy": "Copies the name of the selected layer, if no layer is selected,\nthe value of the first available one is copied",
-                "btnSave": "Saves the value from the name template input field to the presets.\nShift + Click - Updates the values of the selected preset",
-                "btnCircleMinus": "Delete the currently selected template in the preset list.",
-                "btnMinimize": "Switching UI operating modes.",
-                "btnRename": "Click - Apply template.\nShift + Click - Add template value to the beginning of layer name.\nCtrl + Click - Add value to the end of layer name.\nAlt+Click - Invert all variables mode \"I\"",
-                "btnVariables": "Open the variable values panel for the layer.",
-                "btnHelp": "Open the library of all variables and their modes.",
-                "btnReset": "Reset all values.\n(Does not delete presets and variable settings)",
-                "btnSettings": "Open the variable settings panel."
+                "btnCopy": "Копирует имя выбранного слоя, если слой не выбран,\nкопируется значение первого доступного",
+                "btnSave": "Сохранение значения из поля для ввода шаблона имени в пресеты.\nShift + Click - Обновляет значения выбранного пресета",
+                "btnCircleMinus": "Удаление текущего выбранного шаблона в списке пресетов.",
+                "btnMinimize": "Переключение режимов работы UI.",
+                "btnRename": "Click - Применить шаблон.\nShift + Click - добавление значения шаблона к началу имени слоя.\nCtrl + Click - добавление значения к концу имени слоя\nAlt+Click - режим инвертирования всех переменных `I`",
+                "btnVariables": "Открыть панель значений переменных для слоя.",
+                "btnHelp": "Открыть библиотеку всех переменных и их режимов.",
+                "btnReset": "Сбросить все значения.\n(Не удаляет пресеты и настройки переменных)",
+                "btnSettings": "Открыть панель настроек переменных.",
+                "btnModeSwitch_chart": "Режим сортировки: Диаграмма. Сортирует слои по типу или категориям.",
+                "btnModeSwitch_date": "Режим сортировки: Дата. Сортирует слои по дате создания или изменения.",
+                "btnModeSwitch_longArrowDown": "Режим сортировки: Стрелка вниз. Сортирует слои в обратном порядке.",
+                "btnModeSwitch_longArrowUp": "Режим сортировки: Стрелка вверх. Сортирует слои в прямом порядке.",
+                "btnModeSwitch_favorites": "Режим сортировки: Избранное. Сортирует слои по избранным настройкам.",
+                "btnModeSwitch_search": "Режим сортировки: Поиск. Сортирует слои на основе критериев поиска."
             },
             "radioButtons": {
-                "rdoAllLayers": "All available layers in this composition will be used.",
-                "rdoOnlySelected": "Only the layers you select will be affected."
+                "rdoAllLayers": "Будут задействованы все доступные слои в этой композиции.",
+                "rdoOnlySelected": "Будут задействованы только выбранные вами слои."
             },
             "textFields": {
-                "txtTemplate": "Template input field."
+                "txtTemplate": "Поле для ввода шаблона."
             },
             "checkboxes": {
-                "chkBriefly": "Enable/Disable text formatting mode."
+                "chkBriefly": "Включить/Выключить режим форматирования текста."
             },
             "dropdowns": {
-                "ddLayerMode": "Select a name template from saved presets.",
-                "ddBrieflyType": "Text formatting modes."
+                "ddLayerMode": "Выбор шаблона имени из сохраненных пресетов.",
+                "ddBrieflyType": "Режимы форматирования текста."
             }
         }
     }
