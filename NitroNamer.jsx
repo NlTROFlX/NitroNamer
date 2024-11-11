@@ -101,7 +101,7 @@ function buildUI(thisObj) {
     }
 
     // Define modes
-    var modes = ["chart", "date", "longArrowDown", "longArrowUp", "favoritesTemplate"];
+    var modes = ["chart", "date", "longArrowDown", "longArrowUp", "favorites", "search"];
     var currentModeIndex = 0; // index into modes array
     var isActive = false;
     var isMouseOverButton = false;
