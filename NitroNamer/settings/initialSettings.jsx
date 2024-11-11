@@ -17,13 +17,12 @@
                     "btnHelp": "Открыть библиотеку всех переменных и их режимов.",
                     "btnReset": "Сбросить все значения.\n(Не удаляет пресеты и настройки переменных)",
                     "btnSettings": "Открыть панель настроек переменных.",
-                    // Добавленные подсказки для каждого режима btnModeSwitch
-                    "btnModeSwitch_chart": "Режим сортировки: Диаграмма. Сортирует слои по типу или категориям.",
-                    "btnModeSwitch_date": "Режим сортировки: Дата. Сортирует слои по дате создания или изменения.",
-                    "btnModeSwitch_longArrowDown": "Режим сортировки: Стрелка вниз. Сортирует слои в обратном порядке.",
-                    "btnModeSwitch_longArrowUp": "Режим сортировки: Стрелка вверх. Сортирует слои в прямом порядке.",
-                    "btnModeSwitch_favorites": "Режим сортировки: Избранное. Сортирует слои по избранным настройкам.",
-                    "btnModeSwitch_search": "Режим сортировки: Поиск. Сортирует слои на основе критериев поиска."
+                    "btnModeSwitch_chart": "По частоте использования (по убыванию)",
+                    "btnModeSwitch_date": "По дате добавления (по возрастанию)",
+                    "btnModeSwitch_longArrowDown": "По количеству символов (по убыванию)",
+                    "btnModeSwitch_longArrowUp": "По количеству символов (по возрастанию)",
+                    "btnModeSwitch_favorites": "Только избранное",
+                    "btnModeSwitch_search": "Поиск подходящего значения"
                 },
                 "radioButtons": {
                     "rdoAllLayers": "Будут задействованы все доступные слои в этой композиции.",
@@ -56,13 +55,12 @@
                     "btnHelp": "Open the library of all variables and their modes.",
                     "btnReset": "Reset all values.\n(Does not delete presets and variable settings)",
                     "btnSettings": "Open the variable settings panel.",
-                    // Добавленные подсказки для каждого режима btnModeSwitch
-                    "btnModeSwitch_chart": "Sorting mode: Chart. Sorts layers by type or categories.",
-                    "btnModeSwitch_date": "Sorting mode: Date. Sorts layers by creation or modification date.",
-                    "btnModeSwitch_longArrowDown": "Sorting mode: Down Arrow. Sorts layers in reverse order.",
-                    "btnModeSwitch_longArrowUp": "Sorting mode: Up Arrow. Sorts layers in normal order.",
-                    "btnModeSwitch_favorites": "Sorting mode: Favorites. Sorts layers based on favorite settings.",
-                    "btnModeSwitch_search": "Sorting mode: Search. Sorts layers based on search criteria."
+                    "btnModeSwitch_chart": "By frequency of use (descending).",
+                    "btnModeSwitch_date": "By date of addition (ascending).",
+                    "btnModeSwitch_longArrowDown": "By number of characters (descending).",
+                    "btnModeSwitch_longArrowUp": "By number of characters (ascending).",
+                    "btnModeSwitch_favorites": "Favorites only.",
+                    "btnModeSwitch_search": "Finding the right value."
                 },
                 "radioButtons": {
                     "rdoAllLayers": "All available layers in this composition will be used.",
