@@ -150,25 +150,20 @@ function buildUI(thisObj) {
                 if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
                     var preset = userPresets[key];
     
-                    // Increment usageFrequency
+                    // Увеличиваем usageFrequency
                     if (preset.hasOwnProperty('usageFrequency')) {
                         preset.usageFrequency += 1;
                     } else {
                         preset.usageFrequency = 1;
                     }
     
-                    // Save the updated preset back to userPresets
+                    // Сохраняем обновленный пресет
                     userPresets[key] = preset;
-    
-                    // Save the updated settings
                     settings.userPresets = userPresets;
-                    var scriptFile = new File($.fileName);
-                    var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
-                    var settingsFile = scriptFolderPath + "/settings.json";
-    
+                    var settingsFile = scriptFolderPath + "/NitroNamer/settings/settings.json";
                     writeJSONFile(settingsFile, settings);
     
-                    // Then proceed to apply the preset to UI elements
+                    // Применяем пресет к UI
                     rdoAllLayers.value = preset.allLayers;
                     rdoOnlySelected.value = !preset.allLayers;
                     txtTemplate.text = preset.template;
@@ -178,43 +173,47 @@ function buildUI(thisObj) {
                     updateLayerCounts();
                     updatePreview();
                     resetRenameButtonIcon();
-                    updateRenameButtonIcon(); // Ensure the button is updated
+                    updateRenameButtonIcon();
     
                     var currentSettings = {
                         allLayers: rdoAllLayers.value,
                         template: txtTemplate.text,
                         briefly: chkBriefly.value,
                         brieflyType: ddBrieflyType.selection.index,
-                        selectedPresetIndex: ddLayerMode.selection.index
+                        selectedPresetTemplate: preset.template
                     };
                     saveSettings(currentSettings, true);
+    
+                    // Обновляем иконку избранного
+                    updateFavoritesButtonIcon(preset.favoritesTemplate);
+    
+                    // Обновляем выпадающий список пресетов
+                    updatePresetsDropdown(settings);
+    
                     break;
                 }
             }
         }
-    };
+    };    
 
     // Add event handlers
     btnModeSwitch.onClick = function() {
         var isAltPressed = ScriptUI.environment.keyboardState.altKey;
         if (isAltPressed) {
-            // Toggle the active state when Alt is held down
             isActive = !isActive;
         } else {
-            // Change the mode
             currentModeIndex = (currentModeIndex + 1) % modes.length;
-            // If any mode was active, deactivate it
             if (isActive) {
                 isActive = false;
             }
         }
-        // Update the icon
         updateModeButtonIcon();
-        // Update the tooltip
         updateModeSwitchTooltip();
-        // Save the current settings
         saveCurrentSettings();
-    };
+    
+        // Обновляем выпадающий список пресетов
+        updatePresetsDropdown(loadSettings());
+    };    
 
     btnModeSwitch.addEventListener("mouseover", function() {
         isMouseOverButton = true;
@@ -250,10 +249,11 @@ function buildUI(thisObj) {
             briefly: chkBriefly.value,
             brieflyType: ddBrieflyType.selection.index,
             modeIndex: currentModeIndex,
-            modeActive: isActive
+            modeActive: isActive,
+            selectedPresetTemplate: ddLayerMode.selection ? ddLayerMode.selection.text : ""
         };
         saveSettings(currentSettings, true);
-    }
+    }    
 
     // Исправленный обработчик для переключателей
     function handleRadioButtonClick() {
@@ -1355,6 +1355,20 @@ function buildUI(thisObj) {
         // Update presets dropdown
         updatePresetsDropdown(settings);
 
+        // Устанавливаем выбранный пресет по шаблону
+        var selectedPresetTemplate = settings.currentSettings.selectedPresetTemplate;
+
+        if (selectedPresetTemplate) {
+            for (var i = 0; i < ddLayerMode.items.length; i++) {
+                if (ddLayerMode.items[i].text === selectedPresetTemplate) {
+                    ddLayerMode.selection = i;
+                    break;
+                }
+            }
+        } else {
+            ddLayerMode.selection = 0;
+        }
+
         // Update the button icon after setting the mode variables
         updateModeButtonIcon();
 
@@ -1450,36 +1464,58 @@ function buildUI(thisObj) {
 
     // Update presets dropdown with current settings
     function updatePresetsDropdown(settings) {
-        // Temporarily disable the dropdown change handler
+        // Временное отключение обработчика изменений
         ddLayerMode.onChange = null;
-
+    
         ddLayerMode.removeAll();
         var userPresets = settings.userPresets || {};
-        var presetTemplates = [];
-
+    
+        // Создаем массив пресетов
+        var presetsArray = [];
+    
         for (var key in userPresets) {
             if (userPresets.hasOwnProperty(key)) {
-                presetTemplates.push(userPresets[key].template);
+                var preset = userPresets[key];
+                presetsArray.push(preset);
             }
         }
-
-        if (presetTemplates.length === 0) {
+    
+        // Проверяем, активирован ли режим "chart"
+        if (modes[currentModeIndex] === "chart" && isActive) {
+            // Сортируем пресеты по usageFrequency в порядке убывания
+            presetsArray.sort(function(a, b) {
+                return (b.usageFrequency || 0) - (a.usageFrequency || 0);
+            });
+        }
+    
+        if (presetsArray.length === 0) {
             ddLayerMode.add("item", "All presets have been deleted");
         } else {
-            for (var i = 0; i < presetTemplates.length; i++) {
-                ddLayerMode.add("item", presetTemplates[i]);
+            for (var i = 0; i < presetsArray.length; i++) {
+                ddLayerMode.add("item", presetsArray[i].template);
             }
         }
-
-        if (settings.currentSettings && typeof settings.currentSettings.selectedPresetIndex !== 'undefined') {
-            ddLayerMode.selection = settings.currentSettings.selectedPresetIndex;
-        } else {
-            ddLayerMode.selection = 0; // Select first item if no saved selection
+    
+        // Определяем выбранный пресет по шаблону
+        var selectedPresetTemplate = settings.currentSettings ? settings.currentSettings.selectedPresetTemplate : null;
+        var selectedIndex = -1;
+    
+        for (var i = 0; i < presetsArray.length; i++) {
+            if (presetsArray[i].template === selectedPresetTemplate) {
+                selectedIndex = i;
+                break;
+            }
         }
-
-        // Re-enable the dropdown change handler
+    
+        if (selectedIndex !== -1) {
+            ddLayerMode.selection = selectedIndex;
+        } else {
+            ddLayerMode.selection = 0;
+        }
+    
+        // Включение обработчика изменений
         ddLayerMode.onChange = dropdownChangeHandler;
-    }
+    }    
 
     function updateLayerCounts() {
         var proj = app.project;

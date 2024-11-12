@@ -33,8 +33,9 @@
         "briefly": true,
         "brieflyType": 1,
         "selectedPresetIndex": 0,
-        "modeIndex": 5,
-        "modeActive": false
+        "modeIndex": 0,
+        "modeActive": false,
+        "selectedPresetTemplate": "5555"
     },
     "selectedLanguage": "Russian"
 }
