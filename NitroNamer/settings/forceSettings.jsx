@@ -15,7 +15,13 @@
                     "btnVariables": "Open the variable values panel for the layer.",
                     "btnHelp": "Open the library of all variables and their modes.",
                     "btnReset": "Reset all values.\n(Does not delete presets and variable settings)",
-                    "btnSettings": "Open the variable settings panel."
+                    "btnSettings": "Open the variable settings panel.",
+                    "btnModeSwitch_chart": "By frequency of use (descending).",
+                    "btnModeSwitch_date": "By date of addition (ascending).",
+                    "btnModeSwitch_longArrowDown": "By number of characters (descending).",
+                    "btnModeSwitch_longArrowUp": "By number of characters (ascending).",
+                    "btnModeSwitch_favorites": "Favorites only.",
+                    "btnModeSwitch_search": "Finding the right value."
                 },
                 "radioButtons": {
                     "rdoAllLayers": "All available layers in this composition will be used.",
