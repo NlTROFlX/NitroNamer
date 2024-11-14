@@ -15,7 +15,7 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1731588855979,
-            "usageFrequency": 4,
+            "usageFrequency": 5,
             "favoritesTemplate": true
         },
         "preset_1": {
@@ -24,18 +24,18 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1731588837777,
-            "usageFrequency": 4,
+            "usageFrequency": 5,
             "favoritesTemplate": false
         }
     },
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "(LayerShape).i",
+        "template": "(LayerName).i",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,
-        "modeIndex": 4,
+        "modeIndex": 3,
         "modeActive": false,
         "selectedPresetTemplate": "(LayerPreComp).i"
     },

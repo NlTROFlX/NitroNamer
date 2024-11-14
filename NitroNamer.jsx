@@ -119,7 +119,7 @@ function buildUI(thisObj) {
     updateModeSwitchTooltip();
 
     var ddLayerMode = grpDropdownAndButtons.add("dropdownlist", undefined, presetTemplates);
-    ddLayerMode.maximumSize.width = globalWidthSizeElements - 36;
+    ddLayerMode.maximumSize.width = globalWidthSizeElements - 42;
     ddLayerMode.selection = 0;
 
     ddLayerMode.onChange = function() {
@@ -277,6 +277,7 @@ function buildUI(thisObj) {
     var txtTemplate = grpTemplate.add("edittext", undefined, "(LayerName).i", {multiline: false, scrolling: false});
     txtTemplate.alignment = ["fill", "top"];
     txtTemplate.margins = [0,-10,0,0];
+    txtTemplate.maximumSize.width = globalWidthSizeElements;
 
     txtTemplate.addEventListener("click", function() {
         checkAndUpdateSettings(); 
@@ -895,27 +896,7 @@ function buildUI(thisObj) {
         win.layout.layout(true);
         win.layout.resize();
     }
-
-    function getISOString(date) {
-        function pad(number) {
-            return (number < 10) ? '0' + number : number;
-        }
-        function padMilliseconds(number) {
-            if (number < 10) return '00' + number;
-            if (number < 100) return '0' + number;
-            return number;
-        }
-
-        return date.getUTCFullYear()
-            + '-' + pad(date.getUTCMonth() + 1)
-            + '-' + pad(date.getUTCDate())
-            + 'T' + pad(date.getUTCHours())
-            + ':' + pad(date.getUTCMinutes())
-            + ':' + pad(date.getUTCSeconds())
-            + '.' + padMilliseconds(date.getUTCMilliseconds())
-            + 'Z';
-    }    
-
+    
     function saveSettings(settings, isCurrent) {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
@@ -973,10 +954,6 @@ function buildUI(thisObj) {
 
         return newPresetKey; 
     }    
-
-    function isArray(value) {
-        return Object.prototype.toString.call(value) === '[object Array]';
-    }
 
     function readJSONFile(filePath) {
         var file = new File(filePath);
