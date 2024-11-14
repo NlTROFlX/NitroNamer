@@ -15,7 +15,7 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1731588855979,
-            "usageFrequency": 2,
+            "usageFrequency": 3,
             "favoritesTemplate": true
         },
         "preset_1": {
@@ -24,12 +24,12 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1731588837777,
-            "usageFrequency": 3,
+            "usageFrequency": 4,
             "favoritesTemplate": false
         }
     },
     "currentSettings": {
-        "UICompact": false,
+        "UICompact": true,
         "allLayers": true,
         "template": "(LayerName).i",
         "briefly": false,

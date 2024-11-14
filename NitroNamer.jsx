@@ -1210,6 +1210,7 @@ function buildUI(thisObj) {
     variableSettings = loadVariableSettings();
 
     function applySettings(settings) {
+        isInitializing = true;
 
         ddLayerMode.onChange = null;
 
@@ -1290,9 +1291,15 @@ function buildUI(thisObj) {
         } else {
             updateFavoritesButtonIcon(false);
         }
+
+        isInitializing = false;
     }
 
     function dropdownChangeHandler() {
+        if (isInitializing) {
+            return;
+        }
+        
         var selectedItem = ddLayerMode.selection;
         if (selectedItem && selectedItem.preset) {
             var preset = selectedItem.preset;
