@@ -1369,64 +1369,75 @@ function buildUI(thisObj) {
     function updatePresetsDropdown(settings) {
 
         ddLayerMode.onChange = null;
-
+    
         ddLayerMode.removeAll();
         var userPresets = settings.userPresets || {};
-
+    
         var presetsArray = [];
-
+    
         for (var key in userPresets) {
             if (userPresets.hasOwnProperty(key)) {
                 var preset = userPresets[key];
-                presetsArray.push(preset);
+    
+                // Если активен режим "favorites" и isActive == true
+                if (isActive && modes[currentModeIndex] === "favorites") {
+                    if (preset.favoritesTemplate) {
+                        presetsArray.push(preset);
+                    }
+                } else {
+                    // Если режим "favorites" не активен, добавляем все пресеты
+                    presetsArray.push(preset);
+                }
             }
         }
-
+    
+        // Сортировка пресетов
         if (isActive) {
             if (modes[currentModeIndex] === "chart") {
-
+                // Сортировка по частоте использования
                 presetsArray.sort(function(a, b) {
                     return (b.usageFrequency || 0) - (a.usageFrequency || 0);
                 });
             } else if (modes[currentModeIndex] === "date") {
-
+                // Сортировка по дате создания
                 presetsArray.sort(function(a, b) {
                     var dateA = new Date(a.creationDate);
                     var dateB = new Date(b.creationDate);
-
+    
                     if (isNaN(dateA.getTime())) {
-                        dateA = new Date(0); 
+                        dateA = new Date(0);
                     }
                     if (isNaN(dateB.getTime())) {
                         dateB = new Date(0);
                     }
-
-                    return dateA.getTime() - dateB.getTime(); 
+    
+                    return dateA.getTime() - dateB.getTime();
                 });
             } else if (modes[currentModeIndex] === "longArrowDown") {
-
+                // Сортировка по длине шаблона (убывающая)
                 presetsArray.sort(function(a, b) {
                     return b.template.length - a.template.length;
                 });
             } else if (modes[currentModeIndex] === "longArrowUp") {
-
+                // Сортировка по длине шаблона (возрастающая)
                 presetsArray.sort(function(a, b) {
                     return a.template.length - b.template.length;
                 });
             }
+            // Добавляем проверку на режим "favorites" (уже обработано выше)
         }
-
+    
+        // Заполнение выпадающего списка
         if (presetsArray.length === 0) {
-            ddLayerMode.add("item", "All presets have been deleted");
+            ddLayerMode.add("item", "Нет избранных пресетов");
         } else {
             for (var i = 0; i < presetsArray.length; i++) {
                 var displayText = presetsArray[i].template;
-
+    
                 if (isActive) {
                     if (modes[currentModeIndex] === "chart") {
                         displayText += " {" + (presetsArray[i].usageFrequency || 0) + "}";
                     } else if (modes[currentModeIndex] === "date") {
-
                         if (presetsArray[i].creationDate) {
                             var creationDate = new Date(presetsArray[i].creationDate);
                             if (!isNaN(creationDate.getTime())) {
@@ -1435,26 +1446,26 @@ function buildUI(thisObj) {
                                                     ("0" + creationDate.getDate()).slice(-2);
                                 displayText += " {" + formattedDate + "}";
                             } else {
-                                displayText += " {Unknown Date}";
+                                displayText += " {Неизвестная дата}";
                             }
                         } else {
-                            displayText += " {Unknown Date}";
+                            displayText += " {Неизвестная дата}";
                         }
                     } else if (modes[currentModeIndex] === "longArrowDown" || modes[currentModeIndex] === "longArrowUp") {
-
                         displayText += " {" + presetsArray[i].template.length + "}";
                     }
+                    // В режиме "favorites" дополнительной информации не добавляем
                 }
-
+    
                 var item = ddLayerMode.add("item", displayText);
-
                 item.preset = presetsArray[i];
             }
         }
-
+    
+        // Выбор текущего пресета
         var selectedPresetTemplate = settings.currentSettings ? settings.currentSettings.selectedPresetTemplate : null;
         var selectedIndex = -1;
-
+    
         for (var i = 0; i < ddLayerMode.items.length; i++) {
             var itemPresetTemplate = ddLayerMode.items[i].preset ? ddLayerMode.items[i].preset.template : null;
             if (itemPresetTemplate === selectedPresetTemplate) {
@@ -1462,13 +1473,13 @@ function buildUI(thisObj) {
                 break;
             }
         }
-
+    
         if (selectedIndex !== -1) {
             ddLayerMode.selection = selectedIndex;
         } else {
             ddLayerMode.selection = 0;
         }
-
+    
         ddLayerMode.onChange = dropdownChangeHandler;
     }    
 

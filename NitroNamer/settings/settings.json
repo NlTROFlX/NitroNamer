@@ -15,7 +15,7 @@
             "briefly": true,
             "brieflyType": 1,
             "creationDate": 1731579055598,
-            "usageFrequency": 1,
+            "usageFrequency": 2,
             "favoritesTemplate": false
         },
         "preset_2": {
@@ -33,7 +33,7 @@
             "briefly": true,
             "brieflyType": 1,
             "creationDate": 1731579043219,
-            "usageFrequency": 1,
+            "usageFrequency": 2,
             "favoritesTemplate": false
         },
         "preset_4": {
@@ -49,12 +49,12 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": false,
-        "template": "55555",
+        "template": "333",
         "briefly": true,
         "brieflyType": 1,
         "selectedPresetIndex": 0,
-        "modeIndex": 3,
-        "modeActive": true,
+        "modeIndex": 5,
+        "modeActive": false,
         "selectedPresetTemplate": "55555"
     },
     "selectedLanguage": "Russian"
