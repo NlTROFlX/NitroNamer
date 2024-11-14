@@ -1507,11 +1507,11 @@ function buildUI(thisObj) {
                     return (b.usageFrequency || 0) - (a.usageFrequency || 0);
                 });
             } else if (modes[currentModeIndex] === "date") {
-                // Сортировка по creationDate в порядке убывания (от новых к старым)
+                // Сортировка по creationDate в порядке возрастания (от старых к новым)
                 presetsArray.sort(function(a, b) {
                     var dateA = new Date(a.creationDate);
                     var dateB = new Date(b.creationDate);
-                
+    
                     // Проверяем, являются ли даты корректными
                     if (isNaN(dateA.getTime())) {
                         dateA = new Date(0); // Если дата некорректна, устанавливаем минимальную дату
@@ -1519,9 +1519,14 @@ function buildUI(thisObj) {
                     if (isNaN(dateB.getTime())) {
                         dateB = new Date(0); // Если дата некорректна, устанавливаем минимальную дату
                     }
-                
+    
                     return dateA.getTime() - dateB.getTime(); // Сортировка в порядке возрастания
-                });                  
+                });
+            } else if (modes[currentModeIndex] === "longArrowDown") {
+                // Сортировка по длине шаблона в порядке убывания
+                presetsArray.sort(function(a, b) {
+                    return b.template.length - a.template.length;
+                });
             }
         }
     
@@ -1536,16 +1541,23 @@ function buildUI(thisObj) {
                     if (modes[currentModeIndex] === "chart") {
                         displayText += " {" + (presetsArray[i].usageFrequency || 0) + "}";
                     } else if (modes[currentModeIndex] === "date") {
-                        // Форматируем дату
-                        var creationDate = new Date(presetsArray[i].creationDate);
-                        if (!isNaN(creationDate.getTime())) {
-                            var formattedDate = creationDate.getFullYear() + "-" +
-                                                ("0" + (creationDate.getMonth() + 1)).slice(-2) + "-" +
-                                                ("0" + creationDate.getDate()).slice(-2);
-                            displayText += " {" + formattedDate + "}";
+                        // Форматируем дату в удобочитаемый формат, например, YYYY-MM-DD
+                        if (presetsArray[i].creationDate) {
+                            var creationDate = new Date(presetsArray[i].creationDate);
+                            if (!isNaN(creationDate.getTime())) {
+                                var formattedDate = creationDate.getFullYear() + "-" +
+                                                    ("0" + (creationDate.getMonth() + 1)).slice(-2) + "-" +
+                                                    ("0" + creationDate.getDate()).slice(-2);
+                                displayText += " {" + formattedDate + "}";
+                            } else {
+                                displayText += " {Unknown Date}";
+                            }
                         } else {
                             displayText += " {Unknown Date}";
                         }
+                    } else if (modes[currentModeIndex] === "longArrowDown") {
+                        // Добавляем количество символов в фигурных скобках
+                        displayText += " {" + presetsArray[i].template.length + "}";
                     }
                 }
     
