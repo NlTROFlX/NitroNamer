@@ -1,7 +1,7 @@
 function buildUI(thisObj) {
-    // Create a window or panel for the UI
+
     var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "NitroNamer 2024.4 - dev", undefined, {resizeable: true});
-    var globalWidthSizeElements = 310; // Set global width for UI elements
+    var globalWidthSizeElements = 310; 
     var globalWidthSizeElementsCorrect = 14;
     var globalHeightSizeElementsMax = 376;
     var globalHeightSizeElementsMin = 146;
@@ -14,16 +14,14 @@ function buildUI(thisObj) {
 
     var scriptMessageHead_1 = "NitroNamer 2024.4 - dev";
 
-    // Create group for layer selection options
     var grpLayerSelection = win.add("group", undefined);
-    grpLayerSelection.orientation = "row"; // Set orientation to horizontal
+    grpLayerSelection.orientation = "row"; 
     grpLayerSelection.maximumSize.width = globalWidthSizeElements;
     grpLayerSelection.alignChildren = ["fill", "left"];
     grpLayerSelection.spacing = globalSpacingElements;
 
-    // Add radio buttons for layer selection mode
     var rdoAllLayers = grpLayerSelection.add("radiobutton", undefined, "Total: ");
-    rdoAllLayers.value = true; // Default to selecting all layers
+    rdoAllLayers.value = true; 
     rdoAllLayers.alignment = ["left", "center"];
     var txtAllLayersCount = grpLayerSelection.add("statictext", undefined, "");
     txtAllLayersCount.alignment = ["left", "center"];
@@ -37,41 +35,34 @@ function buildUI(thisObj) {
     txtSelectedLayersCount.minimumSize = [20, txtSelectedLayersCount.minimumSize.height];
     txtSelectedLayersCount.maximumSize = [50, txtSelectedLayersCount.maximumSize.height];
 
-    // Get the script's file and folder path
     var scriptFile = new File($.fileName);
     var scriptFolderPath = scriptFile.path;
 
-    // Add Copy button with icon and hover effect
     var btnCopy = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/copy.png"), {style: "toolbutton"}, 0);
     btnCopy.size = [24, 24];
     btnCopy.imageSize = [24, 24];
     btnCopy.alignment = ["right", "center"];
 
-    // Add Favorites button with icon and hover effect
     var btnFavorites = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/favorites.png"), {style: "toolbutton"});
     btnFavorites.size = [24, 24];
     btnFavorites.imageSize = [24, 24];
     btnFavorites.alignment = ["right", "center"];
 
-    // Add Save button with icon and hover effect
     var btnSave = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/save.png"), {style: "toolbutton"});
     btnSave.size = [24, 24];
     btnSave.imageSize = [24, 24];
     btnSave.alignment = ["right", "center"];
 
-    // Add Delete button with icon and hover effect
     var btnCircleMinus = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/delete.png"), {style: "toolbutton"});
     btnCircleMinus.size = [24, 24];
     btnCircleMinus.imageSize = [24, 24];
     btnCircleMinus.alignment = ["right", "center"];
 
-    // Add Minimize button with icon and hover effect
     var btnMinimize = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/minimize.png"), {style: "toolbutton"});
     btnMinimize.size = [24, 24];
     btnMinimize.imageSize = [24, 24];
     btnMinimize.alignment = ["right", "center"];
 
-    // Mouse over and out event handlers for Minimize button
     function handleMouseOverMaximize() {
         btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/maximizeHover.png");
     }
@@ -88,36 +79,31 @@ function buildUI(thisObj) {
         btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimize.png");
     }
 
-    // Load settings and populate dropdown with presets
     var settings = loadSettings();
     var userPresets = settings.userPresets || {};
     var presetTemplates = [];
 
-    // Populate preset templates from user settings
     for (var key in userPresets) {
         if (userPresets.hasOwnProperty(key)) {
             presetTemplates.push(userPresets[key].template);
         }
     }
 
-    // Define modes
     var modes = ["chart", "date", "longArrowDown", "longArrowUp", "favorites", "search"];
-    var currentModeIndex = 0; // index into modes array
+    var currentModeIndex = 0; 
     var isActive = false;
     var isMouseOverButton = false;
 
-    // Create group for dropdown and buttons
     var grpDropdownAndButtons = win.add("group", undefined);
     grpDropdownAndButtons.orientation = "row";
     grpDropdownAndButtons.alignment = ["fill", "top"];
     grpDropdownAndButtons.margins = [0, -10, 0, 0];
     grpDropdownAndButtons.spacing = globalSpacingElements;
 
-    // Add the mode switch button to grpDropdownAndButtons
     var btnModeSwitch = grpDropdownAndButtons.add(
         "iconbutton",
         undefined,
-        File(scriptFolderPath + "/NitroNamer/img/" + modes[0] + ".png"), // Use default mode for initial image
+        File(scriptFolderPath + "/NitroNamer/img/" + modes[0] + ".png"), 
         { style: "toolbutton" }
     );
     btnModeSwitch.size = [24, 24];
@@ -130,51 +116,45 @@ function buildUI(thisObj) {
         btnModeSwitch.helpTip = tooltip;
     }
 
-    // Initial tooltip setup
     updateModeSwitchTooltip();
 
-    // Add dropdown list for layer mode presets
     var ddLayerMode = grpDropdownAndButtons.add("dropdownlist", undefined, presetTemplates);
     ddLayerMode.maximumSize.width = globalWidthSizeElements - 36;
     ddLayerMode.selection = 0;
 
-    // Update presets dropdown change handler
     ddLayerMode.onChange = function() {
         var selectedPreset = ddLayerMode.selection;
         if (selectedPreset) {
             var presetTemplate = selectedPreset.text;
             var settings = loadSettings();
             var userPresets = settings.userPresets || {};
-    
+
             for (var key in userPresets) {
                 if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
                     var preset = userPresets[key];
-    
-                    // Увеличиваем usageFrequency
+
                     if (preset.hasOwnProperty('usageFrequency')) {
                         preset.usageFrequency += 1;
                     } else {
                         preset.usageFrequency = 1;
                     }
-    
-                    // Сохраняем обновленный пресет
+
                     userPresets[key] = preset;
                     settings.userPresets = userPresets;
                     var settingsFile = scriptFolderPath + "/NitroNamer/settings/settings.json";
                     writeJSONFile(settingsFile, settings);
-    
-                    // Применяем пресет к UI
+
                     rdoAllLayers.value = preset.allLayers;
                     rdoOnlySelected.value = !preset.allLayers;
                     txtTemplate.text = preset.template;
                     chkBriefly.value = preset.briefly;
                     ddBrieflyType.selection = preset.brieflyType || 0;
-    
+
                     updateLayerCounts();
                     updatePreview();
                     resetRenameButtonIcon();
                     updateRenameButtonIcon();
-    
+
                     var currentSettings = {
                         allLayers: rdoAllLayers.value,
                         template: txtTemplate.text,
@@ -183,20 +163,17 @@ function buildUI(thisObj) {
                         selectedPresetTemplate: preset.template
                     };
                     saveSettings(currentSettings, true);
-    
-                    // Обновляем иконку избранного
+
                     updateFavoritesButtonIcon(preset.favoritesTemplate);
-    
-                    // Обновляем выпадающий список пресетов
+
                     updatePresetsDropdown(settings);
-    
+
                     break;
                 }
             }
         }
     };    
 
-    // Add event handlers
     btnModeSwitch.onClick = function() {
         var isAltPressed = ScriptUI.environment.keyboardState.altKey;
         if (isAltPressed) {
@@ -210,8 +187,7 @@ function buildUI(thisObj) {
         updateModeButtonIcon();
         updateModeSwitchTooltip();
         saveCurrentSettings();
-    
-        // Обновляем выпадающий список пресетов
+
         updatePresetsDropdown(loadSettings());
     };    
 
@@ -241,7 +217,6 @@ function buildUI(thisObj) {
         btnModeSwitch.imageSize = [24, 24];
     }    
 
-    // Update the saveCurrentSettings function
     function saveCurrentSettings() {
         var currentSettings = {
             allLayers: rdoAllLayers.value,
@@ -255,7 +230,6 @@ function buildUI(thisObj) {
         saveSettings(currentSettings, true);
     }    
 
-    // Исправленный обработчик для переключателей
     function handleRadioButtonClick() {
         if (this === rdoAllLayers) {
             rdoAllLayers.value = true;
@@ -273,13 +247,10 @@ function buildUI(thisObj) {
     rdoAllLayers.onClick = handleRadioButtonClick;
     rdoOnlySelected.onClick = handleRadioButtonClick;
 
-
-    // Custom trim function
     function trim(str) {
         return str.replace(/^\s+|\s+$/g, '');
     }
 
-    // Function to check template field and update button icon and state
     function updateRenameButtonIcon() {
         var templateText = txtTemplate.text;
         if (trim(templateText) === "") {
@@ -292,7 +263,6 @@ function buildUI(thisObj) {
         }
     }
 
-    // Create group for template text field
     var grpTemplate = win.add("group", undefined);
     grpTemplate.orientation = "column";
     grpTemplate.margins = [0,-10,0,0];
@@ -302,19 +272,18 @@ function buildUI(thisObj) {
     txtTemplate.margins = [0,-10,0,0];
 
     txtTemplate.addEventListener("click", function() {
-        checkAndUpdateSettings(); // Check and update settings when the input field is clicked
+        checkAndUpdateSettings(); 
     });
 
     txtTemplate.onChanging = function() {
-        checkAndUpdateSettings(); // Check and update settings when the input field value is changing
+        checkAndUpdateSettings(); 
         updatePreview();
         updateLayerCounts();
-        updateRenameButtonIcon(); // Update button icon based on input value
+        updateRenameButtonIcon(); 
     };
 
-    // Save settings when template text field changes
     txtTemplate.onChange = function() {
-        checkAndUpdateSettings(); // Check and update settings when the input field value changes
+        checkAndUpdateSettings(); 
         var currentSettings = {
             allLayers: rdoAllLayers.value,
             template: txtTemplate.text,
@@ -328,49 +297,45 @@ function buildUI(thisObj) {
         updateRenameButtonIcon();
     };
 
-    // Event listener for Enter key in template text field
     txtTemplate.addEventListener("keydown", function(event) {
-        checkAndUpdateSettings(); // Check and update settings when Enter key is pressed
+        checkAndUpdateSettings(); 
         if (event.keyName === "Enter") {
             var selectedPreset = ddLayerMode.selection;
             if (selectedPreset) {
                 var presetTemplate = selectedPreset.text;
                 var settings = loadSettings();
                 var userPresets = settings.userPresets || {};
-    
+
                 for (var key in userPresets) {
                     if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
                         var preset = userPresets[key];
-    
-                        // Increment usageFrequency
+
                         if (preset.hasOwnProperty('usageFrequency')) {
                             preset.usageFrequency += 1;
                         } else {
                             preset.usageFrequency = 1;
                         }
-    
-                        // Save the updated preset back to userPresets
+
                         userPresets[key] = preset;
-    
-                        // Save the updated settings
+
                         settings.userPresets = userPresets;
                         var scriptFile = new File($.fileName);
                         var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
                         var settingsFile = scriptFolderPath + "/settings.json";
-    
+
                         writeJSONFile(settingsFile, settings);
-    
+
                         rdoAllLayers.value = preset.allLayers;
                         rdoOnlySelected.value = !preset.allLayers;
                         txtTemplate.text = preset.template;
                         chkBriefly.value = preset.briefly;
                         ddBrieflyType.selection = preset.brieflyType || 0;
-    
+
                         updateLayerCounts();
                         updatePreview();
                         resetRenameButtonIcon();
-                        updateRenameButtonIcon(); // Ensure the button is updated
-    
+                        updateRenameButtonIcon(); 
+
                         var currentSettings = {
                             allLayers: rdoAllLayers.value,
                             template: txtTemplate.text,
@@ -386,12 +351,10 @@ function buildUI(thisObj) {
         }
     });    
 
-    // Set dropdown width after creating template text field
     win.onShow = function() {
         ddLayerMode.size = [txtTemplate.size[0], ddLayerMode.size[1]];
     };
 
-    // Create group for text fields
     var grpTextFields = win.add("group", undefined);
     grpTextFields.orientation = "column";
     grpTextFields.alignChildren = ["left", "top"];
@@ -400,7 +363,6 @@ function buildUI(thisObj) {
     grpTextFields.spacing = globalSpacingElements;
     grpTextFields.margins = [0, -10, 0, 0];
 
-    // Add text fields for original and renamed layer names
     var txtOriginalLabel = grpTextFields.add("statictext", undefined, "The original name of the layer: ");
     txtOriginalLabel.maximumSize.height = 14;
     txtOriginalLabel.margins = [0, -10, 0, 0];
@@ -417,40 +379,37 @@ function buildUI(thisObj) {
 
     var txtRenamedCompact;
 
-    // Create group for "Briefly" checkbox and dropdown
     var grpBriefly = win.add("group", undefined);
     grpBriefly.orientation = "row";
     grpBriefly.alignChildren = [ "right", "center"];
     grpBriefly.spacing = grpTextFields;
     grpBriefly.margins = [0, 0, 0, 0];
 
-    // Move buttons to the grpBriefly group
     var btnRename = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/renameIcon.png"), { style: "toolbutton" });
     var warningIcon = File(scriptFolderPath + "/NitroNamer/img/warning.png");
     var warningIconHover = File(scriptFolderPath + "/NitroNamer/img/warningHover.png");
-    btnRename.size = [24, 24]; // Set button size
-    btnRename.imageSize = [24, 24]; // Set image size
+    btnRename.size = [24, 24]; 
+    btnRename.imageSize = [24, 24]; 
     btnRename.alignment = ["left", "center"];
 
     var btnVariables = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/variablesIcon.png"), { style: "toolbutton" });
-    btnVariables.size = [24, 24]; // Set button size
-    btnVariables.imageSize = [24, 24]; // Set image size
+    btnVariables.size = [24, 24]; 
+    btnVariables.imageSize = [24, 24]; 
     btnVariables.alignment = ["left", "center"];
 
     var btnHelp = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/helpIcon.png"), { style: "toolbutton" });
-    btnHelp.size = [24, 24]; // Set button size
-    btnHelp.imageSize = [24, 24]; // Set image size
+    btnHelp.size = [24, 24]; 
+    btnHelp.imageSize = [24, 24]; 
     btnHelp.alignment = ["left", "center"];
 
     var btnReset = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/resetIcon.png"), { style: "toolbutton" });
-    btnReset.size = [24, 24]; // Set button size
-    btnReset.imageSize = [24, 24]; // Set image size
+    btnReset.size = [24, 24]; 
+    btnReset.imageSize = [24, 24]; 
     btnReset.alignment = ["left", "center"];
 
-    // Add Settings button with icon and hover effect
     var btnSettings = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/settings.png"), {style: "toolbutton"});
-    btnSettings.size = [24, 24]; // Set button size
-    btnSettings.imageSize = [24, 24]; // Set image size
+    btnSettings.size = [24, 24]; 
+    btnSettings.imageSize = [24, 24]; 
     btnSettings.alignment = ["left", "center"];
 
     var chkBriefly = grpBriefly.add("checkbox", undefined);
@@ -458,7 +417,6 @@ function buildUI(thisObj) {
     ddBrieflyType.maximumSize.width = 150;
     ddBrieflyType.selection = 0;
 
-    // Event handler for "Briefly" checkbox
     chkBriefly.onClick = function() {
         var currentSettings = {
             allLayers: rdoAllLayers.value,
@@ -472,7 +430,6 @@ function buildUI(thisObj) {
         resetRenameButtonIcon();
     };
 
-    // Event handler for "Briefly" dropdown
     ddBrieflyType.onChange = function() {
         var currentSettings = {
             allLayers: rdoAllLayers.value,
@@ -487,7 +444,6 @@ function buildUI(thisObj) {
     };
     grpBriefly.margins = [0,-10,0,0];
 
-    // Function to reset Rename button icon
     function resetRenameButtonIcon() {
         btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIcon.png");
         btnRename.imageSize = [24, 24];
@@ -514,8 +470,6 @@ function buildUI(thisObj) {
     addHoverEffect(btnReset, scriptFolderPath + "/NitroNamer/img/resetIcon");
     addHoverEffect(btnSettings, scriptFolderPath + "/NitroNamer/img/settings");
 
-
-    // Event handlers for Rename button hover effect
     btnRename.addEventListener("mouseover", function() {
         checkAndUpdateSettings();
         updatePreview();
@@ -523,11 +477,11 @@ function buildUI(thisObj) {
 
         var isCtrlPressed = ScriptUI.environment.keyboardState.ctrlKey;
         var isShiftPressed = ScriptUI.environment.keyboardState.shiftKey;
-        var isAltPressed = ScriptUI.environment.keyboardState.altKey; // Проверка нажатия клавиши Alt
+        var isAltPressed = ScriptUI.environment.keyboardState.altKey; 
 
         if (trim(txtTemplate.text) === "") {
             btnRename.image = warningIconHover;
-        } else if (isAltPressed) { // Изменяем иконку на renameIconHoverRevese.png при зажатой клавише Alt
+        } else if (isAltPressed) { 
             btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHoverReverse.png");
         } else if (isCtrlPressed) {
             btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHoverAfter.png");
@@ -540,10 +494,9 @@ function buildUI(thisObj) {
     });
 
     btnRename.addEventListener("mouseout", function() {
-        updateRenameButtonIcon(); // Re-check the field value when mouse out
+        updateRenameButtonIcon(); 
     });
 
-    // Show variables when Variables button is clicked
     btnVariables.onClick = function() {
         var scriptFilePath = File(scriptFolderPath + "/NitroNamer/scripts/NNLayerInfo.jsx");
         if (scriptFilePath.exists) {
@@ -553,7 +506,6 @@ function buildUI(thisObj) {
         }
     };
 
-    // Copy layer name to template input field
     btnCopy.onClick = function() {
         var proj = app.project;
         if (proj && proj.activeItem instanceof CompItem) {
@@ -592,37 +544,33 @@ function buildUI(thisObj) {
             var presetTemplate = selectedPreset.text;
             var settings = loadSettings();
             var userPresets = settings.userPresets || {};
-    
+
             for (var key in userPresets) {
                 if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
                     var preset = userPresets[key];
-    
-                    // Toggle favoritesTemplate
+
                     preset.favoritesTemplate = !preset.favoritesTemplate;
-    
-                    // Save the updated preset back to userPresets
+
                     userPresets[key] = preset;
-    
-                    // Save the updated settings
+
                     settings.userPresets = userPresets;
                     var scriptFile = new File($.fileName);
                     var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
                     var settingsFile = scriptFolderPath + "/settings.json";
-    
+
                     writeJSONFile(settingsFile, settings);
-    
-                    // Update the favorites button icon based on the new value
+
                     updateFavoritesButtonIcon(preset.favoritesTemplate);
-    
+
                     break;
                 }
             }
         }
     };    
-    
+
     btnFavorites.addEventListener("mouseover", function() {
         var isFavorite = btnFavorites.isFavorite;
-    
+
         if (isFavorite) {
             btnFavorites.image = File(scriptFolderPath + "/NitroNamer/img/favoritesHover.png");
         } else {
@@ -630,15 +578,15 @@ function buildUI(thisObj) {
         }
         btnFavorites.imageSize = [24, 24];
     });
-    
+
     btnFavorites.addEventListener("mouseout", function() {
         var isFavorite = btnFavorites.isFavorite;
         updateFavoritesButtonIcon(isFavorite);
     });
 
     function updateFavoritesButtonIcon(isFavorite) {
-        btnFavorites.isFavorite = isFavorite; // Сохраняем состояние
-    
+        btnFavorites.isFavorite = isFavorite; 
+
         if (isFavorite) {
             btnFavorites.image = File(scriptFolderPath + "/NitroNamer/img/favoritesHover.png");
         } else {
@@ -646,8 +594,7 @@ function buildUI(thisObj) {
         }
         btnFavorites.imageSize = [24, 24];
     }    
-    
-    // Save settings when Save button is clicked
+
     btnSave.onClick = function() {
         var settings = {
             allLayers: rdoAllLayers.value,
@@ -655,24 +602,20 @@ function buildUI(thisObj) {
             briefly: chkBriefly.value,
             brieflyType: ddBrieflyType.selection.index
         };
-    
-        // Проверяем пустой шаблон
+
         if (!trim(settings.template)) {
             alert("Template cannot be empty.", scriptMessageHead_1);
             return;
         }
-    
-        // Load current settings
+
         var existingSettings = loadSettings();
         var userPresets = existingSettings.userPresets || {};
-    
-        // If the Shift key is pressed, rescan the current selected preset
+
         if (ScriptUI.environment.keyboardState.shiftKey) {
             var selectedPreset = ddLayerMode.selection;
             if (selectedPreset && selectedPreset.text !== "Save your new preset" && selectedPreset.text !== "Please select a preset to delete") {
                 var presetTemplate = selectedPreset.text;
-    
-                // Protect current press
+
                 for (var key in userPresets) {
                     if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
                         userPresets[key] = settings;
@@ -684,38 +627,33 @@ function buildUI(thisObj) {
                 }
             }
         } else {
-            // Check for unique template
+
             for (var key in userPresets) {
                 if (userPresets.hasOwnProperty(key) && userPresets[key].template === settings.template) {
                     alert("A preset with this template already exists.", scriptMessageHead_1);
                     return;
                 }
             }
-    
-            // Save the new preset
+
             var newPresetKey = saveSettings(settings, false);
-    
-            // Load updated settings
+
             var updatedSettings = loadSettings();
             updatePresetsDropdown(updatedSettings);
-    
-            // Set the selection to the newly saved preset
+
             var presetKeys = [];
             for (var key in updatedSettings.userPresets) {
                 if (updatedSettings.userPresets.hasOwnProperty(key)) {
                     presetKeys.push(key);
                 }
             }
-    
+
             var newPresetIndex = presetKeys.indexOf(newPresetKey);
             if (newPresetIndex !== -1) {
                 ddLayerMode.selection = newPresetIndex;
             }
-    
-            // Ensure the template field remains the same
+
             txtTemplate.text = settings.template;
 
-            // После обновления списка пресетов и установки выбора
             if (newPresetKey && updatedSettings.userPresets[newPresetKey]) {
                 var newPreset = updatedSettings.userPresets[newPresetKey];
                 updateFavoritesButtonIcon(newPreset.favoritesTemplate);
@@ -723,7 +661,6 @@ function buildUI(thisObj) {
         }
     };
 
-    // Обработчики для смены иконок при наведении и убирании курсора
     btnSave.addEventListener("mouseover", function() {
         if (ScriptUI.environment.keyboardState.shiftKey) {
             btnSave.image = File(scriptFolderPath + "/NitroNamer/img/refreshHover.png");
@@ -736,21 +673,17 @@ function buildUI(thisObj) {
         btnSave.image = File(scriptFolderPath + "/NitroNamer/img/save.png");
     });
 
-    // Delete preset when Delete button is clicked
     btnCircleMinus.onClick = function() {
         var selectedItem = ddLayerMode.selection;
         var selectedPreset = ddLayerMode.selection;
         if (selectedItem && selectedPreset && selectedPreset.text !== "Save your new preset" && selectedPreset.text !== "Please select a preset to delete") {
             var presetTemplate = selectedItem.preset.template;
 
-            // Save the current value of the template field
             var currentTemplateText = txtTemplate.text;
 
-            // Load current settings
             var settings = loadSettings();
             var userPresets = settings.userPresets || {};
 
-            // Find the key of the preset with the matching template and delete it
             var newUserPresets = {};
             var newPresetNumber = 1;
             for (var key in userPresets) {
@@ -762,26 +695,21 @@ function buildUI(thisObj) {
                 }
             }
 
-            // Update settings
             settings.userPresets = newUserPresets;
 
-            // Save updated settings
             var scriptFile = new File($.fileName);
             var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
             var settingsFile = new File(scriptFolderPath + "/settings.json");
 
-            settingsFile.encoding = "UTF-8"; // Set encoding to UTF-8
+            settingsFile.encoding = "UTF-8"; 
             settingsFile.open("w");
             settingsFile.write(JSON.stringify(settings, null, 4));
             settingsFile.close();
 
-            // Update preset list
             updatePresetsDropdown(settings);
 
-            // Restore the template field value
             txtTemplate.text = currentTemplateText;
 
-            // Update the current settings with the restored template value
             var currentSettings = {
                 allLayers: rdoAllLayers.value,
                 template: txtTemplate.text,
@@ -790,14 +718,13 @@ function buildUI(thisObj) {
             };
             saveSettings(currentSettings, true);
 
-            // Update the favorites button icon
             var selectedPreset = ddLayerMode.selection;
             if (selectedPreset) {
                 var presetTemplate = selectedPreset.text;
                 var settings = loadSettings();
                 var userPresets = settings.userPresets || {};
 
-                var isFavorite = false; // Default to false
+                var isFavorite = false; 
                 for (var key in userPresets) {
                     if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
                         var preset = userPresets[key];
@@ -807,7 +734,7 @@ function buildUI(thisObj) {
                 }
                 updateFavoritesButtonIcon(isFavorite);
             } else {
-                // No preset selected, set favorites icon to default (not favorite)
+
                 updateFavoritesButtonIcon(false);
             }
         } else {
@@ -815,39 +742,32 @@ function buildUI(thisObj) {
         }
     };
 
-    // Minimize or maximize the UI when Minimize button is clicked
     btnMinimize.onClick = function() {
         var settings = loadSettings();
         var currentSettings = settings.currentSettings || {};
-        var isCompact = !currentSettings.UICompact; // Toggle value
+        var isCompact = !currentSettings.UICompact; 
 
-        // Update the "UICompact" key in currentSettings
         currentSettings.UICompact = isCompact;
         settings.currentSettings = currentSettings;
 
-        // Save the updated settings
         saveSettings(currentSettings, true);
 
-        // Set the minimize button icon based on the new value
         setMinimizeButtonIcon(isCompact);
     };
 
-    // Button click handler with Alt key functionality
     btnRename.onClick = function() {
-        if (!btnRename.enabled) return; // Prevent renaming if the button is disabled
+        if (!btnRename.enabled) return; 
 
         var allLayers = rdoAllLayers.value;
         var template = txtTemplate.text;
         var briefly = chkBriefly.value;
         var brieflyType = ddBrieflyType.selection.text;
 
-        // Check if the Alt key, Ctrl key, or Ctrl+Shift keys are held down
         var isAltPressed = ScriptUI.environment.keyboardState.altKey;
         var isCtrlPressed = ScriptUI.environment.keyboardState.ctrlKey;
         var isShiftPressed = ScriptUI.environment.keyboardState.shiftKey;
         var isCtrlShiftPressed = isCtrlPressed && isShiftPressed;
 
-        // Initialize includeShyLayers and reverseOrder
         var includeShyLayers = isCtrlShiftPressed;
         var reverseOrder = isAltPressed;
 
@@ -859,14 +779,12 @@ function buildUI(thisObj) {
         btnRename.imageSize = [24, 24];
     };               
 
-    // Show help when Help button is clicked
     btnHelp.onClick = function() {
         updateLayerCounts();
         var helpScriptPath = scriptFolderPath + "/NitroNamer/scripts/NNHelp.jsx";
         $.evalFile(helpScriptPath);
     };
 
-    // Reset settings when Reset button is clicked
     btnReset.onClick = function() {
         rdoAllLayers.value = true;
         rdoOnlySelected.value = false;
@@ -875,22 +793,20 @@ function buildUI(thisObj) {
         ddBrieflyType.selection = 0;
         updateLayerCounts();
         updatePreview();
-        resetRenameButtonIcon(); // Reset button icon to "Rename"
+        resetRenameButtonIcon(); 
     };
 
-    // Run NNSettings.jsx script when Settings button is clicked
     btnSettings.onClick = function() {
         var settingsScriptPath = scriptFolderPath + "/NitroNamer/scripts/NNSettings.jsx";
         $.evalFile(settingsScriptPath);
     };
 
-    // Set the minimize button icon based on the UI state
     function setMinimizeButtonIcon(isCompact) {
         btnMinimize.removeEventListener("mouseover", handleMouseOverMaximize);
         btnMinimize.removeEventListener("mouseout", handleMouseOutMaximize);
         btnMinimize.removeEventListener("mouseover", handleMouseOverMinimize);
         btnMinimize.removeEventListener("mouseout", handleMouseOutMinimize);
-    
+
         if (isCompact) {
             btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/maximize.png");
             btnMinimize.addEventListener("mouseover", handleMouseOverMaximize);
@@ -900,24 +816,21 @@ function buildUI(thisObj) {
             txtOriginal.margins = [0,0,0,0];
             txtRenamed.minimumSize.width = globalWidthSizeElements;
             txtRenamed.margins = [0,0,0,0];
-    
-            // Remove original name elements
+
             grpTextFields.remove(txtOriginalLabel);
             grpTextFields.remove(txtOriginal);
             grpTextFields.remove(txtRenamedLabel);
-    
-            // Set references to null to avoid duplicates
+
             txtOriginalLabel = null;
             txtOriginal = null;
             txtRenamedLabel = null;
 
             grpTextFields.margins = [0, -10, 0, -10];
-    
-            // Show compact preview if it exists
+
             if (txtRenamedCompact) {
                 txtRenamedCompact.visible = true;
             }
-            
+
             updatePreview();
             win.minimumSize.height = globalHeightSizeElementsMin;
             win.maximumSize.height = globalHeightSizeElementsMin;
@@ -925,34 +838,31 @@ function buildUI(thisObj) {
             btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimize.png");
             btnMinimize.addEventListener("mouseover", handleMouseOverMinimize);
             btnMinimize.addEventListener("mouseout", handleMouseOutMinimize);
-    
-            // Remove all elements from the group
+
             while (grpTextFields.children.length > 0) {
                 grpTextFields.remove(grpTextFields.children[0]);
             }
-    
-            // Re-create and add elements in the correct order
+
             txtOriginalLabel = grpTextFields.add("statictext", undefined, "The original name of the layer: ");
             txtOriginalLabel.maximumSize.height = 14;
             txtOriginalLabel.alignment = ["left", "top"];
             txtOriginalLabel.margins = [0, -100, 0, -100];
-    
+
             txtOriginal = grpTextFields.add("edittext", undefined, "", { readonly: true });
             txtOriginal.alignment = ["left", "top"];
             txtOriginal.minimumSize.width = globalWidthSizeElements;
             txtOriginal.margins = [0, -100, 0, -100];
-    
+
             txtRenamedLabel = grpTextFields.add("statictext", undefined, "Template result for layer(s): ");
             txtRenamedLabel.maximumSize.height = 14;
             txtRenamedLabel.alignment = ["left", "top"];
             txtRenamedLabel.margins = [0, -100, 0, -100];
-    
+
             txtRenamed = grpTextFields.add("edittext", undefined, "", { readonly: true });
             txtRenamed.alignment = ["left", "top"];
             txtRenamed.minimumSize.width = globalWidthSizeElements;
             txtRenamed.margins = [0, -100, 0, -100];
-    
-            // Hide compact preview if it exists
+
             if (txtRenamedCompact) {
                 txtRenamedCompact.visible = false;
             }
@@ -964,12 +874,11 @@ function buildUI(thisObj) {
             win.minimumSize.width = globalWidthSizeElements  - globalWidthSizeElementsCorrect;
             win.maximumSize.width = globalWidthSizeElements;
         }
-    
-        // Force layout update to adjust the positions of the remaining elements
+
         win.layout.layout(true);
         win.layout.resize();
     }
-    
+
     function getISOString(date) {
         function pad(number) {
             return (number < 10) ? '0' + number : number;
@@ -979,7 +888,7 @@ function buildUI(thisObj) {
             if (number < 100) return '0' + number;
             return number;
         }
-    
+
         return date.getUTCFullYear()
             + '-' + pad(date.getUTCMonth() + 1)
             + '-' + pad(date.getUTCDate())
@@ -990,42 +899,37 @@ function buildUI(thisObj) {
             + 'Z';
     }    
 
-    // Save settings to a JSON file
     function saveSettings(settings, isCurrent) {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
         var settingsFile = new File(scriptFolderPath + "/settings.json");
-    
+
         if (!Folder(scriptFolderPath).exists) {
             Folder(scriptFolderPath).create();
         }
-    
+
         var existingSettings = loadSettings() || {};
         var userPresets = existingSettings.userPresets || {};
         var currentSettings = existingSettings.currentSettings || {};
-    
-        var newPresetKey = null; // Initialize new preset key
-    
+
+        var newPresetKey = null; 
+
         if (isCurrent) {
-            // Only update properties in currentSettings without replacing the entire object
+
             for (var key in settings) {
                 if (settings.hasOwnProperty(key)) {
                     currentSettings[key] = settings[key];
                 }
             }
         } else {
-            var presetSettings = settings; // Use a separate variable for the preset
-    
-            // Save creationDate as a timestamp (Number)
+            var presetSettings = settings; 
+
             presetSettings.creationDate = new Date().getTime();
-    
-            // Initialize usageFrequency to 0
+
             presetSettings.usageFrequency = 0;
-    
-            // Initialize favoritesTemplate to false
+
             presetSettings.favoritesTemplate = false;
-    
-            // Count number of keys in userPresets
+
             var nextPresetNumber = 1;
             for (var key in userPresets) {
                 if (userPresets.hasOwnProperty(key)) {
@@ -1034,8 +938,7 @@ function buildUI(thisObj) {
             }
             newPresetKey = "preset_" + nextPresetNumber;
             userPresets[newPresetKey] = presetSettings;
-    
-            // Move the new preset to the beginning
+
             var newUserPresets = {};
             newUserPresets[newPresetKey] = presetSettings;
             for (var key in userPresets) {
@@ -1045,13 +948,13 @@ function buildUI(thisObj) {
             }
             userPresets = newUserPresets;
         }
-    
+
         existingSettings.userPresets = userPresets;
         existingSettings.currentSettings = currentSettings;
-    
+
         writeJSONFile(settingsFile, existingSettings);
-    
-        return newPresetKey; // Return the key of the newly saved preset
+
+        return newPresetKey; 
     }    
 
     function isArray(value) {
@@ -1075,7 +978,7 @@ function buildUI(thisObj) {
 
     function writeJSONFile(filePath, data) {
         var file = new File(filePath);
-        file.encoding = "UTF-8"; // Set encoding to UTF-8
+        file.encoding = "UTF-8"; 
         file.open("w");
         file.write(JSON.stringify(data, null, 4));
         file.close();
@@ -1085,17 +988,17 @@ function buildUI(thisObj) {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
         var settingsFile = new File(scriptFolderPath + "/settings.json");
-    
+
         if (!settingsFile.exists) {
-            // Create the settings.json file and write initial settings
+
             var initialData = {
                 "userPresets": {},
                 "currentSettings": {
                     "UICompact": false
                 }
             };
-    
-            settingsFile.encoding = "UTF-8"; // Set encoding to UTF-8
+
+            settingsFile.encoding = "UTF-8"; 
             if (settingsFile.open("w")) {
                 settingsFile.write(JSON.stringify(initialData, null, 4));
                 settingsFile.close();
@@ -1109,9 +1012,9 @@ function buildUI(thisObj) {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/scripts";
         var variablesFile = new File(scriptFolderPath + "/variables.json");
-    
+
         if (!variablesFile.exists) {
-            // Create the variables.json file and write initial settings
+
             var initialData = {
                 "An": { "defaultValue": "NoAnimations", "customValue": "Custom{An}", "active": false },
                 "Ar": { "defaultValue": "NoAspectRatio", "customValue": "Custom{Ar}", "active": false },
@@ -1126,8 +1029,8 @@ function buildUI(thisObj) {
                 "Tm": { "defaultValue": "NoTrackMate", "customValue": "Custom{Tm}", "active": false },
                 "W": { "defaultValue": "NoWidth", "customValue": "Custom{W}", "active": false }
             };
-    
-            variablesFile.encoding = "UTF-8"; // Set encoding to UTF-8
+
+            variablesFile.encoding = "UTF-8"; 
             if (variablesFile.open("w")) {
                 variablesFile.write(JSON.stringify(initialData, null, 4));
                 variablesFile.close();
@@ -1141,17 +1044,17 @@ function buildUI(thisObj) {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
         var settingsFile = scriptFolderPath + "/settings.json";
-    
+
         var settings = readJSONFile(settingsFile);
-    
+
         if (!settings.currentSettings) {
             settings.currentSettings = {};
         }
-    
+
         if (settings.currentSettings.UICompact === undefined) {
             settings.currentSettings.UICompact = false;
         }
-    
+
         return settings;
     }    
 
@@ -1162,7 +1065,7 @@ function buildUI(thisObj) {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/scripts";
         var variablesFile = scriptFolderPath + "/variables.json";
-        
+
         return readJSONFile(variablesFile);
     }    
 
@@ -1176,7 +1079,7 @@ function buildUI(thisObj) {
 
     function getMaskCount(layer, settings, maskFilter, customSeparator) {
         var maskCount = 0;
-    
+
         var maskModes = {
             "none": MaskMode.NONE,
             "add": MaskMode.ADD,
@@ -1186,32 +1089,32 @@ function buildUI(thisObj) {
             "darken": MaskMode.DARKEN,
             "difference": MaskMode.DIFFERENCE
         };
-    
+
         var filterList = null;
-    
+
         if (maskFilter) {
-            // Разделяем фильтры по запятым и удаляем лишние пробелы
+
             filterList = maskFilter.split(',').map(function(item) {
                 return item.trim();
             });
         }
-    
+
         if (layer.mask && layer.mask.numProperties > 0) {
             for (var i = 1; i <= layer.mask.numProperties; i++) {
                 var mask = layer.mask.property(i);
-    
+
                 var includeMask = false;
-    
+
                 if (filterList) {
-                    // Проверяем, соответствует ли имя маски или режим маски любому из фильтров
+
                     for (var j = 0; j < filterList.length; j++) {
                         var filterItem = filterList[j];
-                        // Проверяем имя маски (без учета регистра и пробелов)
+
                         if (mask.name.trim().toLowerCase() === filterItem.trim().toLowerCase()) {
                             includeMask = true;
                             break;
                         }
-                        // Проверяем режим маски (без учета регистра)
+
                         var lowerFilterItem = filterItem.trim().toLowerCase();
                         if (maskModes.hasOwnProperty(lowerFilterItem)) {
                             if (mask.maskMode === maskModes[lowerFilterItem]) {
@@ -1221,18 +1124,18 @@ function buildUI(thisObj) {
                         }
                     }
                 } else {
-                    // Если фильтры не заданы, включаем все маски
+
                     includeMask = true;
                 }
-    
+
                 if (includeMask) {
                     maskCount++;
                 }
             }
-    
+
             return maskCount.toString();
         } else {
-            // Если масок нет, возвращаем значение из настроек или значение по умолчанию
+
             if (settings && settings.Lmc) {
                 return settings.Lmc.active ? settings.Lmc.customValue : settings.Lmc.defaultValue;
             } else {
@@ -1243,8 +1146,8 @@ function buildUI(thisObj) {
 
     function getMaskNames(layer, settings, maskFilter, customSeparator) {
         var maskNames = [];
-        var separator = customSeparator || ", "; // Разделитель по умолчанию
-    
+        var separator = customSeparator || ", "; 
+
         var maskModes = {
             "none": MaskMode.NONE,
             "add": MaskMode.ADD,
@@ -1254,32 +1157,32 @@ function buildUI(thisObj) {
             "darken": MaskMode.DARKEN,
             "difference": MaskMode.DIFFERENCE
         };
-    
+
         var filterList = null;
-    
+
         if (maskFilter) {
-            // Разделяем фильтры по запятым и удаляем лишние пробелы
+
             filterList = maskFilter.split(',').map(function(item) {
                 return item.trim();
             });
         }
-    
+
         if (layer.mask && layer.mask.numProperties > 0) {
             for (var i = 1; i <= layer.mask.numProperties; i++) {
                 var mask = layer.mask.property(i);
-    
+
                 var includeMask = false;
-    
+
                 if (filterList) {
-                    // Проверяем, соответствует ли имя маски или режим маски любому из фильтров
+
                     for (var j = 0; j < filterList.length; j++) {
                         var filterItem = filterList[j];
-                        // Проверяем имя маски (без учета регистра и пробелов)
+
                         if (mask.name.trim().toLowerCase() === filterItem.trim().toLowerCase()) {
                             includeMask = true;
                             break;
                         }
-                        // Проверяем режим маски (без учета регистра)
+
                         var lowerFilterItem = filterItem.trim().toLowerCase();
                         if (maskModes.hasOwnProperty(lowerFilterItem)) {
                             if (mask.maskMode === maskModes[lowerFilterItem]) {
@@ -1289,34 +1192,31 @@ function buildUI(thisObj) {
                         }
                     }
                 } else {
-                    // Если фильтры не заданы, включаем все маски
+
                     includeMask = true;
                 }
-    
+
                 if (includeMask) {
                     maskNames.push(mask.name);
                 }
             }
-    
+
             if (maskNames.length > 0) {
                 return maskNames.join(separator);
             }
         } 
-    
-        // Если маски не найдены, возвращаем значение из настроек или значение по умолчанию
+
         if (settings && settings.Lmn) {
             return settings.Lmn.active ? settings.Lmn.customValue : settings.Lmn.defaultValue;
         } else {
             return "NoMaskNames";
         }
     }    
-    
-    // Load settings initially
+
     variableSettings = loadVariableSettings();
 
-    // Apply settings to the UI
     function applySettings(settings) {
-        // Temporarily disable the dropdown change handler
+
         ddLayerMode.onChange = null;
 
         if (settings && settings.currentSettings) {
@@ -1326,7 +1226,6 @@ function buildUI(thisObj) {
             chkBriefly.value = settings.currentSettings.briefly;
             ddBrieflyType.selection = settings.currentSettings.brieflyType || 0;
 
-            // Load mode settings
             currentModeIndex = settings.currentSettings.modeIndex !== undefined ? settings.currentSettings.modeIndex : 0;
             isActive = settings.currentSettings.modeActive !== undefined ? settings.currentSettings.modeActive : false;
 
@@ -1351,14 +1250,11 @@ function buildUI(thisObj) {
             resetRenameButtonIcon();
         }
 
-        // Check for UICompact key and set the initial icon for btnMinimize
         var isCompact = settings.currentSettings && settings.currentSettings.UICompact;
         setMinimizeButtonIcon(isCompact);
 
-        // Update presets dropdown
         updatePresetsDropdown(settings);
 
-        // Устанавливаем выбранный пресет по шаблону
         var selectedPresetTemplate = settings.currentSettings.selectedPresetTemplate;
 
         if (selectedPresetTemplate) {
@@ -1372,25 +1268,22 @@ function buildUI(thisObj) {
             ddLayerMode.selection = 0;
         }
 
-        // Update the button icon after setting the mode variables
         updateModeButtonIcon();
 
         if (settings.currentSettings && typeof settings.currentSettings.selectedPresetIndex !== 'undefined') {
             ddLayerMode.selection = settings.currentSettings.selectedPresetIndex;
         } else {
-            ddLayerMode.selection = 0; // Select first item if no saved selection
+            ddLayerMode.selection = 0; 
         }
 
-        // Explicitly set txtTemplate.text after updating the dropdown
         txtTemplate.text = settings.currentSettings.template || "(LayerName).i";
 
-        // Re-enable the dropdown change handler
         ddLayerMode.onChange = dropdownChangeHandler;
 
         if (settings && settings.userPresets && ddLayerMode.selection) {
             var selectedPresetTemplate = ddLayerMode.selection.text;
             var userPresets = settings.userPresets;
-        
+
             var isFavorite = false;
             for (var key in userPresets) {
                 if (userPresets.hasOwnProperty(key) && userPresets[key].template === selectedPresetTemplate) {
@@ -1405,17 +1298,15 @@ function buildUI(thisObj) {
         }
     }
 
-    // Event handler for dropdown change
     function dropdownChangeHandler() {
         var selectedItem = ddLayerMode.selection;
         if (selectedItem && selectedItem.preset) {
             var preset = selectedItem.preset;
-            var selectedTemplate = preset.template; // Сохраняем шаблон выбранного пресета
-    
+            var selectedTemplate = preset.template; 
+
             var settings = loadSettings();
             var userPresets = settings.userPresets || {};
-    
-            // Увеличиваем usageFrequency только в режиме "chart"
+
             if (isActive && modes[currentModeIndex] === "chart") {
                 if (preset.hasOwnProperty('usageFrequency')) {
                     preset.usageFrequency += 1;
@@ -1423,32 +1314,29 @@ function buildUI(thisObj) {
                     preset.usageFrequency = 1;
                 }
             }
-    
-            // Сохраняем обновленный пресет в userPresets
+
             for (var key in userPresets) {
                 if (userPresets.hasOwnProperty(key) && userPresets[key].template === preset.template) {
                     userPresets[key] = preset;
                     break;
                 }
             }
-    
-            // Сохраняем обновленные настройки
+
             settings.userPresets = userPresets;
             var settingsFile = scriptFolderPath + "/NitroNamer/settings/settings.json";
             writeJSONFile(settingsFile, settings);
-    
-            // Применяем пресет к UI
+
             rdoAllLayers.value = preset.allLayers;
             rdoOnlySelected.value = !preset.allLayers;
             txtTemplate.text = preset.template;
             chkBriefly.value = preset.briefly;
             ddBrieflyType.selection = preset.brieflyType || 0;
-    
+
             updateLayerCounts();
             updatePreview();
             resetRenameButtonIcon();
             updateRenameButtonIcon();
-    
+
             var currentSettings = {
                 allLayers: rdoAllLayers.value,
                 template: txtTemplate.text,
@@ -1457,17 +1345,13 @@ function buildUI(thisObj) {
                 selectedPresetTemplate: preset.template
             };
             saveSettings(currentSettings, true);
-    
-            // Обновляем иконку избранного
+
             updateFavoritesButtonIcon(preset.favoritesTemplate);
-    
-            // Обновляем выпадающий список пресетов
+
             updatePresetsDropdown(settings);
-    
-            // Временно отключаем обработчик onChange перед изменением выбора
+
             ddLayerMode.onChange = null;
-    
-            // После обновления выпадающего списка повторно устанавливаем выбор на тот же пресет
+
             for (var i = 0; i < ddLayerMode.items.length; i++) {
                 var item = ddLayerMode.items[i];
                 if (item.preset && item.preset.template === selectedTemplate) {
@@ -1475,78 +1359,72 @@ function buildUI(thisObj) {
                     break;
                 }
             }
-    
-            // Включаем обработчик onChange после изменения выбора
+
             ddLayerMode.onChange = dropdownChangeHandler;
         }
     }    
 
-    // Update presets dropdown with current settings
     function updatePresetsDropdown(settings) {
-        // Временное отключение обработчика изменений
+
         ddLayerMode.onChange = null;
-    
+
         ddLayerMode.removeAll();
         var userPresets = settings.userPresets || {};
-    
-        // Создаем массив пресетов
+
         var presetsArray = [];
-    
+
         for (var key in userPresets) {
             if (userPresets.hasOwnProperty(key)) {
                 var preset = userPresets[key];
                 presetsArray.push(preset);
             }
         }
-    
-        // Проверяем активный режим и выполняем соответствующую сортировку
+
         if (isActive) {
             if (modes[currentModeIndex] === "chart") {
-                // Сортировка по usageFrequency в порядке убывания
+
                 presetsArray.sort(function(a, b) {
                     return (b.usageFrequency || 0) - (a.usageFrequency || 0);
                 });
             } else if (modes[currentModeIndex] === "date") {
-                // Сортировка по creationDate в порядке возрастания (от старых к новым)
+
                 presetsArray.sort(function(a, b) {
                     var dateA = new Date(a.creationDate);
                     var dateB = new Date(b.creationDate);
-    
-                    // Проверяем, являются ли даты корректными
+
                     if (isNaN(dateA.getTime())) {
-                        dateA = new Date(0); // Если дата некорректна, устанавливаем минимальную дату
+                        dateA = new Date(0); 
                     }
                     if (isNaN(dateB.getTime())) {
                         dateB = new Date(0);
                     }
-    
-                    return dateA.getTime() - dateB.getTime(); // Сортировка в порядке возрастания
+
+                    return dateA.getTime() - dateB.getTime(); 
                 });
             } else if (modes[currentModeIndex] === "longArrowDown") {
-                // Сортировка по длине шаблона в порядке убывания
+
                 presetsArray.sort(function(a, b) {
                     return b.template.length - a.template.length;
                 });
             } else if (modes[currentModeIndex] === "longArrowUp") {
-                // Сортировка по длине шаблона в порядке возрастания
+
                 presetsArray.sort(function(a, b) {
                     return a.template.length - b.template.length;
                 });
             }
         }
-    
+
         if (presetsArray.length === 0) {
             ddLayerMode.add("item", "All presets have been deleted");
         } else {
             for (var i = 0; i < presetsArray.length; i++) {
                 var displayText = presetsArray[i].template;
-    
-                // Добавляем дополнительную информацию в зависимости от активного режима
+
                 if (isActive) {
                     if (modes[currentModeIndex] === "chart") {
                         displayText += " {" + (presetsArray[i].usageFrequency || 0) + "}";
                     } else if (modes[currentModeIndex] === "date") {
-                        // Форматируем дату
+
                         if (presetsArray[i].creationDate) {
                             var creationDate = new Date(presetsArray[i].creationDate);
                             if (!isNaN(creationDate.getTime())) {
@@ -1561,21 +1439,20 @@ function buildUI(thisObj) {
                             displayText += " {Unknown Date}";
                         }
                     } else if (modes[currentModeIndex] === "longArrowDown" || modes[currentModeIndex] === "longArrowUp") {
-                        // Добавляем количество символов в фигурных скобках
+
                         displayText += " {" + presetsArray[i].template.length + "}";
                     }
                 }
-    
+
                 var item = ddLayerMode.add("item", displayText);
-                // Сохраняем фактический пресет в свойстве item.preset
+
                 item.preset = presetsArray[i];
             }
         }
-    
-        // Определяем выбранный пресет по шаблону
+
         var selectedPresetTemplate = settings.currentSettings ? settings.currentSettings.selectedPresetTemplate : null;
         var selectedIndex = -1;
-    
+
         for (var i = 0; i < ddLayerMode.items.length; i++) {
             var itemPresetTemplate = ddLayerMode.items[i].preset ? ddLayerMode.items[i].preset.template : null;
             if (itemPresetTemplate === selectedPresetTemplate) {
@@ -1583,14 +1460,13 @@ function buildUI(thisObj) {
                 break;
             }
         }
-    
+
         if (selectedIndex !== -1) {
             ddLayerMode.selection = selectedIndex;
         } else {
             ddLayerMode.selection = 0;
         }
-    
-        // Включение обработчика изменений
+
         ddLayerMode.onChange = dropdownChangeHandler;
     }    
 
@@ -1603,7 +1479,7 @@ function buildUI(thisObj) {
                 var selectedLayerCount = 0;
                 for (var i = 1; i <= comp.numLayers; i++) {
                     var layer = comp.layer(i);
-                    // Учитываем только слои, которые не заблокированы и не имеют режим shy
+
                     if (!layer.locked && !layer.shy) {
                         totalLayerCount++;
                         if (layer.selected) {
@@ -1625,14 +1501,13 @@ function buildUI(thisObj) {
         }
     }    
 
-    // Update preview of the new layer name
     function updatePreview() {
         var settings = loadSettings();
         var isCompact = settings.currentSettings && settings.currentSettings.UICompact;
-    
+
         resetLocalIndex();
-        checkAndUpdateSettings(); // Check and update settings before updating the preview
-    
+        checkAndUpdateSettings(); 
+
         var proj = app.project;
         if (proj) {
             var comp = proj.activeItem;
@@ -1649,13 +1524,13 @@ function buildUI(thisObj) {
                     var briefly = chkBriefly.value;
                     var brieflyType = ddBrieflyType.selection.text;
                     var newName = generateNewName(layer, template, briefly, brieflyType, variableSettings);
-    
+
                     if (!isCompact) {
                         txtOriginal.text = originalName;
                         txtRenamed.text = newName;
                     }
                     if (txtRenamed) {
-                        txtRenamed.text = newName; // Update the compact preview field
+                        txtRenamed.text = newName; 
                     }
                 } else {
                     if (!isCompact) {
@@ -1690,7 +1565,7 @@ function buildUI(thisObj) {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/scripts";
         var variablesFile = scriptFolderPath + "/variables.json";
-        
+
         var currentModifiedTime = getFileModifiedTime(variablesFile);
         if (currentModifiedTime && (!lastModifiedTime || currentModifiedTime.getTime() !== lastModifiedTime.getTime())) {
             variableSettings = loadVariableSettings();
@@ -1698,12 +1573,11 @@ function buildUI(thisObj) {
         }
     }    
 
-    // Generate new name for a layer based on the template
     function generateNewName(layer, template, briefly, brieflyType, settings) {
         resetLocalIndex();
-        checkAndUpdateSettings(); // Check and update settings before generating the new name
-        incrementValues = {}; // Сброс значений для каждой новой итерации генерации имени
-    
+        checkAndUpdateSettings(); 
+        incrementValues = {}; 
+
         var variables = {
             "T": getLayerType(layer),
             "i": layer.index,
@@ -1737,20 +1611,20 @@ function buildUI(thisObj) {
             "Lmc": getMaskCount(layer, settings),
             "Lmn": getMaskNames(layer, settings)
         };
-    
+
         if (briefly && !isNaN(parseFloat(variables.F))) {
             variables.F = parseFloat(variables.F).toFixed(2);
         }        
-    
+
         var newName = replaceVariables(template, variables, layer.name, layer, settings);
-    
+
         if (briefly) {
             newName = toBrieflyCase(newName, brieflyType);
         }
-    
+
         return newName;
     }
-    
+
     function toBrieflyCase(str, caseType) {
         switch (caseType) {
             case "Camel Case":
@@ -1768,25 +1642,24 @@ function buildUI(thisObj) {
         }
     }
 
-    // Get the list of properties controlled by expressions
     function getExpressionControlledProperties(layer, settings, propertiesFilter, customSeparator) {
         var expressionProps = [];
         var propertyNames = null;
-        var separator = customSeparator || ", "; // Разделитель по умолчанию
-    
+        var separator = customSeparator || ", "; 
+
         if (propertiesFilter) {
-            // Разделяем propertiesFilter по запятым и преобразуем названия свойств в нижний регистр
+
             propertyNames = propertiesFilter.split(',').map(function(name) {
                 return name.trim().toLowerCase();
             });
         }
-    
+
         function checkPropertyGroup(propertyGroup) {
             for (var i = 1; i <= propertyGroup.numProperties; i++) {
                 var prop = propertyGroup.property(i);
                 if (prop.expression && prop.expressionEnabled) {
                     if (propertyNames) {
-                        // Сравниваем названия свойств без учёта регистра
+
                         if (propertyNames.indexOf(prop.name.toLowerCase()) !== -1) {
                             expressionProps.push(prop.name);
                         }
@@ -1799,13 +1672,13 @@ function buildUI(thisObj) {
                 }
             }
         }
-    
+
         checkPropertyGroup(layer);
-    
+
         if (expressionProps.length > 0) {
             return expressionProps.join(separator);
         } else {
-            // Если указанные свойства не управляются выражениями, возвращаем значение из настроек
+
             if (settings && settings.Lexp) {
                 return settings.Lexp.active ? settings.Lexp.customValue : settings.Lexp.defaultValue;
             } else {
@@ -1814,7 +1687,6 @@ function buildUI(thisObj) {
         }
     }    
 
-    // Get the track matte type of a layer
     function getTrackMatteType(layer, settings) {
         if (layer instanceof CameraLayer || layer instanceof LightLayer) {
             return settings && settings.Tm ? (settings.Tm.active ? settings.Tm.customValue : settings.Tm.defaultValue) : "NoTrackMate";
@@ -1844,7 +1716,6 @@ function buildUI(thisObj) {
         }
     }    
 
-    // Convert string to camel case
     function toCamelCase(str) {
         var result = "";
         var capitalizeNext = false;
@@ -1853,9 +1724,9 @@ function buildUI(thisObj) {
             var currentChar = str.charAt(i);
             var charCode = str.charCodeAt(i);
 
-            if ((charCode >= 48 && charCode <= 57) || // цифры
-                (charCode >= 65 && charCode <= 90) || // заглавные буквы
-                (charCode >= 97 && charCode <= 122)) { // строчные буквы
+            if ((charCode >= 48 && charCode <= 57) || 
+                (charCode >= 65 && charCode <= 90) || 
+                (charCode >= 97 && charCode <= 122)) { 
                 if (capitalizeNext) {
                     result += currentChar.toUpperCase();
                     capitalizeNext = false;
@@ -1863,7 +1734,7 @@ function buildUI(thisObj) {
                     result += currentChar.toLowerCase();
                 }
             } else {
-                result += currentChar; // Сохраняем символ, который не является буквой или цифрой
+                result += currentChar; 
                 capitalizeNext = true;
             }
         }
@@ -1871,29 +1742,24 @@ function buildUI(thisObj) {
         return result;
     }
 
-    // Convert string to pascal case
     function toPascalCase(str) {
         return str.replace(/\w\S*/g, function(txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         });
     }
 
-    // Convert string to snake case
     function toSnakeCase(str) {
         return str.replace(/\s+/g, '_').toLowerCase();
     }
 
-    // Convert string to kebab case
     function toKebabCase(str) {
         return str.replace(/\s+/g, '-').toLowerCase();
     }
 
-    // Convert string to screaming snake case
     function toScreamingSnakeCase(str) {
         return str.replace(/\s+/g, '_').toUpperCase();
     }
 
-    // Get the type of a layer
     function getLayerType(layer) {
         if (layer.nullLayer) return "Null";
         if (layer.adjustmentLayer) return "Adjustment";
@@ -1913,7 +1779,6 @@ function buildUI(thisObj) {
         return "Unknown";
     }
 
-    // Get the frame rate of a layer
     function getFrameRate(layer, settings) {
         if (layer.nullLayer || layer.adjustmentLayer || layer instanceof LightLayer || layer instanceof CameraLayer || layer instanceof TextLayer || layer instanceof ShapeLayer || layer.hasAudio) {
             return settings && settings.F ? (settings.F.active ? settings.F.customValue : settings.F.defaultValue) : "NoFrameRate";
@@ -1927,7 +1792,6 @@ function buildUI(thisObj) {
         return settings && settings.F ? (settings.F.active ? settings.F.customValue : settings.F.defaultValue) : "NoFrameRate";
     }    
 
-    // Get the resolution of a layer
     function getResolution(layer, settings) {
         if (layer.nullLayer || layer.adjustmentLayer) {
             return settings && settings.R ? (settings.R.active ? settings.R.customValue : settings.R.defaultValue) : "NoResolution";
@@ -1938,7 +1802,6 @@ function buildUI(thisObj) {
         return settings && settings.R ? (settings.R.active ? settings.R.customValue : settings.R.defaultValue) : "NoResolution";
     }    
 
-    // Get the duration of a layer in HH:MM:SS format
     function getDuration(layer) {
         var duration;
         if (layer.source && layer.source.duration) {
@@ -1970,15 +1833,13 @@ function buildUI(thisObj) {
         };
     }   
 
-    // Get the source name of a layer
     function getSourceName(layer) {
         if (layer.source) {
             return layer.source.name;
         }
-        return layer.name; // Use the original name if there is no source name
+        return layer.name; 
     }
 
-    // Get the width of a layer
     function getWidth(layer, settings) {
         if (layer.nullLayer || layer.adjustmentLayer) {
             return settings && settings.W ? (settings.W.active ? settings.W.customValue : settings.W.defaultValue) : "NoWidth";
@@ -1989,7 +1850,6 @@ function buildUI(thisObj) {
         return settings && settings.W ? (settings.W.active ? settings.W.customValue : settings.W.defaultValue) : "NoWidth";
     }    
 
-    // Get the height of a layer
     function getHeight(layer, settings) {
         if (layer.nullLayer || layer.adjustmentLayer) {
             return settings && settings.H ? (settings.H.active ? settings.H.customValue : settings.H.defaultValue) : "NoHeight";
@@ -2000,16 +1860,14 @@ function buildUI(thisObj) {
         return settings && settings.H ? (settings.H.active ? settings.H.customValue : settings.H.defaultValue) : "NoHeight";
     }    
 
-    // Get the position of a layer
     function getLayerPosition(layer) {
         if (layer instanceof AVLayer && layer.hasAudio && !layer.hasVideo) {
-            return ""; // Return an empty string for Audio type layers
+            return ""; 
         }
 
         if (layer.transform && layer.transform.position) {
             var pos = layer.transform.position.value;
 
-            // Ensure pos is an array
             if (typeof pos === 'number') {
                 pos = [pos];
             } else if (Object.prototype.toString.call(pos) !== '[object Array]') {
@@ -2017,15 +1875,15 @@ function buildUI(thisObj) {
             }
 
             if (layer instanceof CameraLayer || layer instanceof LightLayer || layer.threeDLayer) {
-                // Ensure position is returned as X, Y, Z for Camera, Light, and 3D layers
-                var roundedPos = [0, 0, 0]; // Default to [0, 0, 0] for safety
+
+                var roundedPos = [0, 0, 0]; 
                 for (var i = 0; i < 3; i++) {
                     roundedPos[i] = pos[i] !== undefined ? Math.round(pos[i] * 10) / 10 : 0;
                 }
                 return roundedPos.join(", ");
             } else {
-                // Return X, Y for 2D layers
-                var roundedPos2D = [0, 0]; // Default to [0, 0] for safety
+
+                var roundedPos2D = [0, 0]; 
                 for (var j = 0; j < 2; j++) {
                     roundedPos2D[j] = pos[j] !== undefined ? Math.round(pos[j] * 10) / 10 : 0;
                 }
@@ -2035,7 +1893,6 @@ function buildUI(thisObj) {
         return "NoPosition";
     }
 
-    // Add new "Ar(px)" mode to get the aspect ratio in pixels
     function getAspectRatio(layer, settings, inPixels) {
         if (layer.nullLayer || layer.adjustmentLayer) {
             return settings && settings.Ar ? (settings.Ar.active ? settings.Ar.customValue : settings.Ar.defaultValue) : "NoAspectRatio";
@@ -2057,21 +1914,20 @@ function buildUI(thisObj) {
         return settings && settings.Ar ? (settings.Ar.active ? settings.Ar.customValue : settings.Ar.defaultValue) : "NoAspectRatio";
     }
 
-    // Get the number of effects applied to a layer
     function getEffectsCount(layer, settings, effectsFilter) {
         var effectsCount = 0;
         var effectsNamesFilter = null;
-    
+
         if (effectsFilter) {
             effectsNamesFilter = effectsFilter.split(',').map(function(name) {
                 return name.trim().toLowerCase();
             });
         }
-    
+
         if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
             for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
                 var effect = layer.property("ADBE Effect Parade").property(j);
-    
+
                 if (effectsNamesFilter) {
                     if (effectsNamesFilter.indexOf(effect.name.trim().toLowerCase()) !== -1) {
                         effectsCount++;
@@ -2080,7 +1936,7 @@ function buildUI(thisObj) {
                     effectsCount++;
                 }
             }
-    
+
             return effectsCount.toString();
         } else {
             if (settings && settings.Ec) {
@@ -2091,7 +1947,6 @@ function buildUI(thisObj) {
         }
     }    
 
-    // Get the project name
     function getProjectName() {
         var projectName = "Untitled Project";
         if (app.project.file) {
@@ -2103,31 +1958,30 @@ function buildUI(thisObj) {
                 projectName = projectFileName;
             }
         }
-        return decodeURIComponent(projectName); // Decode any URL-encoded characters
+        return decodeURIComponent(projectName); 
     }
 
-    // Получение анимированных свойств слоя с поддержкой фильтра и пользовательского разделителя
     function getAnimatedProperties(layer, settings, propertiesFilter, customSeparator) {
         var animatedProps = [];
         var propertyNames = null;
-        var separator = customSeparator || ", "; // Разделитель по умолчанию
-    
+        var separator = customSeparator || ", "; 
+
         if (propertiesFilter) {
-            // Разделяем propertiesFilter по запятым и преобразуем названия свойств в нижний регистр
+
             propertyNames = propertiesFilter.split(',').map(function(name) {
                 return name.trim().toLowerCase();
             });
         }
-    
+
         var hasAnyAnimatedProperty = false;
-    
+
         function checkPropertyGroup(propertyGroup) {
             for (var i = 1; i <= propertyGroup.numProperties; i++) {
                 var prop = propertyGroup.property(i);
                 if (prop.numKeys > 0) {
                     hasAnyAnimatedProperty = true;
                     if (propertyNames) {
-                        // Сравниваем названия свойств без учёта регистра
+
                         if (propertyNames.indexOf(prop.name.toLowerCase()) !== -1) {
                             animatedProps.push(prop.name);
                         }
@@ -2140,13 +1994,13 @@ function buildUI(thisObj) {
                 }
             }
         }
-    
+
         checkPropertyGroup(layer);
-    
+
         if (animatedProps.length > 0) {
             return animatedProps.join(separator);
         } else {
-            // Если указанные свойства не анимированы, возвращаем значение из настроек
+
             if (settings && settings.An) {
                 return settings.An.active ? settings.An.customValue : settings.An.defaultValue;
             } else {
@@ -2155,16 +2009,14 @@ function buildUI(thisObj) {
         }
     }    
 
-    // Get the scale of a layer
     function getLayerScale(layer) {
         if (layer instanceof AVLayer && layer.hasAudio && !layer.hasVideo) {
-            return ""; // Return an empty string for Audio type layers
+            return ""; 
         }
 
         if (layer.transform && layer.transform.scale) {
             var sc = layer.transform.scale.value;
 
-            // Ensure sc is an array
             if (typeof sc === 'number') {
                 sc = [sc];
             } else if (Object.prototype.toString.call(sc) !== '[object Array]') {
@@ -2172,15 +2024,15 @@ function buildUI(thisObj) {
             }
 
             if (layer instanceof CameraLayer || layer instanceof LightLayer || layer.threeDLayer) {
-                // Ensure scale is returned as X, Y, Z for Camera, Light, and 3D layers
-                var roundedSc = [0, 0, 0]; // Default to [0, 0, 0] for safety
+
+                var roundedSc = [0, 0, 0]; 
                 for (var i = 0; i < 3; i++) {
                     roundedSc[i] = sc[i] !== undefined ? Math.round(sc[i] * 10) / 10 : 0;
                 }
                 return roundedSc.join(", ");
             } else {
-                // Return X, Y for 2D layers
-                var roundedSc2D = [0, 0]; // Default to [0, 0] for safety
+
+                var roundedSc2D = [0, 0]; 
                 for (var j = 0; j < 2; j++) {
                     roundedSc2D[j] = sc[j] !== undefined ? Math.round(sc[j] * 10) / 10 : 0;
                 }
@@ -2190,43 +2042,39 @@ function buildUI(thisObj) {
         return "NoScale";
     }
 
-    // Get the rotation of a layer
     function getLayerRotation(layer) {
         if (layer instanceof AVLayer && layer.hasAudio && !layer.hasVideo) {
-            return ""; // Return an empty string for Audio type layers
+            return ""; 
         }
 
         if (layer.transform) {
             var rotation;
 
-            // Handle 3D layers
             if (layer.threeDLayer) {
                 var rotationX = layer.transform.xRotation ? layer.transform.xRotation.value : 0;
                 var rotationY = layer.transform.yRotation ? layer.transform.yRotation.value : 0;
                 var rotationZ = layer.transform.zRotation ? layer.transform.zRotation.value : 0;
                 rotation = [rotationX, rotationY, rotationZ];
             } else {
-                // Handle 2D layers and layers without xRotation, yRotation, zRotation properties
+
                 rotation = layer.transform.rotation ? [layer.transform.rotation.value] : [0];
             }
 
-            // Ensure rotation is an array
             if (typeof rotation === 'number') {
                 rotation = [rotation];
             } else if (Object.prototype.toString.call(rotation) !== '[object Array]') {
                 rotation = [].slice.call(rotation);
             }
 
-            // Ensure position is returned as X, Y, Z for Camera, Light, and 3D layers
             if (layer instanceof CameraLayer || layer instanceof LightLayer || layer.threeDLayer) {
-                var roundedRot = [0, 0, 0]; // Default to [0, 0, 0] for safety
+                var roundedRot = [0, 0, 0]; 
                 for (var i = 0; i < 3; i++) {
                     roundedRot[i] = rotation[i] !== undefined ? Math.round(rotation[i] * 10) / 10 : 0;
                 }
                 return roundedRot.join(", ");
             } else {
-                // Return X for 2D layers
-                var roundedRot2D = [0]; // Default to [0] for safety
+
+                var roundedRot2D = [0]; 
                 roundedRot2D[0] = rotation[0] !== undefined ? Math.round(rotation[0] * 10) / 10 : 0;
                 return roundedRot2D.join(", ");
             }
@@ -2234,7 +2082,6 @@ function buildUI(thisObj) {
         return "NoRotation";
     }
 
-    // Get the file extension of a layer's source file
     function getFileExtension(layer, settings, customExtension) {
         if (layer.source && layer.source.file && layer.source.file.name) {
             var fileName = layer.source.file.name;
@@ -2247,10 +2094,9 @@ function buildUI(thisObj) {
         return settings && settings.Fext ? (settings.Fext.active ? settings.Fext.customValue : settings.Fext.defaultValue) : "NoExtension";
     }
 
-    // Get the opacity of a layer
     function getLayerOpacity(layer) {
         if (layer instanceof AVLayer && layer.hasAudio && !layer.hasVideo) {
-            return ""; // Return an empty string for Audio type layers
+            return ""; 
         }
 
         if (layer.transform && layer.transform.opacity) {
@@ -2260,7 +2106,6 @@ function buildUI(thisObj) {
         return "NoOpacity";
     }
 
-    // Get the duration of a layer in frames based on the in and out points
     function getDurationInFrames(layer) {
         if (layer && layer.containingComp) {
             var frameRate = layer.containingComp.frameRate;
@@ -2270,19 +2115,16 @@ function buildUI(thisObj) {
         return "NoDuration";
     }
 
-    // Get the parent name of a layer, keeping the original name for top-level parents
     function getImmediateParentName(layer) {
         var currentLayer = layer;
-    
-        // Go up the hierarchy to the top parent layer
+
         while (currentLayer.parent) {
             currentLayer = currentLayer.parent;
         }
-        
-        return currentLayer.name; // Return the name of the top parent layer
+
+        return currentLayer.name; 
     }
 
-    // Check if the layer is a parent layer
     function isParentLayer(layer) {
         if (!layer || !layer.containingComp) {
             return false;
@@ -2296,47 +2138,39 @@ function buildUI(thisObj) {
         return false;
     }
 
-    // Check if the layer is bound to another layer
     function isBoundLayer(layer) {
         return layer.parent !== null;
     }
 
-    // Get the index of the layer relative to other layers with the same parent
     function getLayerParentIndex(layer) {
         var comp = layer.containingComp;
-    
-        // If the layer has no parent and is not a parent layer, return its original name
+
         if (!layer.parent && !isParentLayer(layer)) {
             return layer.name;
         }
-    
-        // If the layer is a parent but has no parent, return its original name
+
         if (isParentLayer(layer) && !layer.parent) {
             return layer.name;
         }
-    
-        // If a layer has a parent, find all child layers of this parent
+
         if (layer.parent) {
             var parentLayer = layer.parent;
             var childLayers = [];
-    
-            // Find all layers that are children of the parent layer
+
             for (var i = 1; i <= comp.numLayers; i++) {
                 var currentLayer = comp.layer(i);
                 if (currentLayer.parent === parentLayer) {
                     childLayers.push(currentLayer);
                 }
             }
-    
-            // Sort child layers by their index in the composition in ascending order
+
             childLayers.sort(function(a, b) {
                 return a.index - b.index;
             });
-    
-            // Check where the child layers are located relative to the parent layer
+
             var allAbove = true;
             var allBelow = true;
-    
+
             for (var i = 0; i < childLayers.length; i++) {
                 if (childLayers[i].index > parentLayer.index) {
                     allAbove = false;
@@ -2345,34 +2179,33 @@ function buildUI(thisObj) {
                     allBelow = false;
                 }
             }
-    
+
             var relativeIndex;
-            // If all child layers are above the parent, index in ascending order
+
             if (allAbove) {
                 relativeIndex = childLayers.length - childLayers.indexOf(layer);
             } 
-            // If all child layers are below the parent, indexing is descending
+
             else if (allBelow) {
                 relativeIndex = childLayers.indexOf(layer) + 1;
             } 
-            // If layers are both above and below the parent, indexing remains in the original order
+
             else {
                 relativeIndex = childLayers.indexOf(layer) + 1;
             }
-    
+
             return relativeIndex.toString();
         }
-    
-        // If a layer falls into some other category, return its name
+
         return layer.name;
     }
-    
+
     function getCurrentDate(format) {
         var date = new Date();
         var day = ("0" + date.getDate()).slice(-2);
         var month = ("0" + (date.getMonth() + 1)).slice(-2);
         var year = date.getFullYear().toString();
-        
+
         switch (format) {
             case '1':
                 return day;
@@ -2384,8 +2217,7 @@ function buildUI(thisObj) {
                 return day + "." + month + "." + year;
         }
     }
-    
-    // Get the layer order based on the mode and reverse flag
+
     function getLayerOrder(comp, allLayers, reverseOrder) {
         var layers = [];
         if (allLayers) {
@@ -2397,8 +2229,7 @@ function buildUI(thisObj) {
                 layers.push(comp.selectedLayers[j]);
             }
         }
-    
-        // Reverse order if reverseOrder flag is true
+
         if (reverseOrder) {
             layers.reverse();
         }
@@ -2411,20 +2242,18 @@ function buildUI(thisObj) {
 
     var incrementValues = {};
 
-    // Replace variables in the template with actual values
     function replaceVariables(template, variables, originalName, layer, settings) {
         var usedVariables = [];
         var result = template;
-    
-        // Pre-check for any parentheses that don't contain variables
+
         if (template.match(/^\(([^()]+)\)$/)) {
             return template.match(/^\(([^()]+)\)$/)[1];
         }
-    
+
         var regex = /\(([^()]+)\)|Df|Ec\(([^()\[\]]+?)\)|Ec|E\(\[([^\[\]]+)\]\)|E\(([^()\[\]]+?)(?:\[(.*?)\])?\)|E|An\(\[([^\[\]]+)\]\)|An\(([^()\[\]]+?)(?:\[(.*?)\])?\)|An|Lexp\(\[([^\[\]]+)\]\)|Lexp\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lexp|D\(([^()\[\]]+)\)|D|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(\[([^\[\]]+)\]\)|Lmc\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lmc|Lmn\(\[([^\[\]]+)\]\)|Lmn\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
-    
-        var incrementValues = {}; // Ensure this is declared if not already
-    
+
+        var incrementValues = {}; 
+
         result = result.replace(regex, function(match,
             group,
             ecFilters,
@@ -2441,148 +2270,148 @@ function buildUI(thisObj) {
             customI
         ) {
             var value;
-    
+
             if (group !== undefined) {
-                // Return the content inside parentheses without changes
+
                 return group;
             } else if (eSeparatorOnly !== undefined) {
-                // Пользователь ввёл "E([separator])"
+
                 value = getEffectNames(layer, settings, null, eSeparatorOnly);
             } else if (eEffects !== undefined) {
-                // Пользователь ввёл "E(effect1,effect2)" или "E(effect1,effect2[separator])"
+
                 value = getEffectNames(layer, settings, eEffects, eSeparator);
             } else if (match === 'E') {
-                // Пользователь ввёл просто "E"
+
                 value = getEffectNames(layer, settings);
             } else if (customI !== undefined) {
-                // Handle I(initial value)
+
                 var uniqueKey = "I(" + customI + ")_" + usedVariables.length;
                 var initialValue = parseInt(customI, 10);
                 if (!incrementValues[uniqueKey]) {
-                    incrementValues[uniqueKey] = initialValue; // Initialization
+                    incrementValues[uniqueKey] = initialValue; 
                 }
                 value = incrementValues[uniqueKey]++;
                 usedVariables.push(uniqueKey);
                 return value;
             } else if (match === 'I') {
-                // Handle I
-                value = localIndex++; // Use the current value and then increment
+
+                value = localIndex++; 
             } else if (anSeparatorOnly !== undefined) {
-                // Пользователь ввёл "An([separator])"
+
                 value = getAnimatedProperties(layer, settings, null, anSeparatorOnly);
             } else if (anProps !== undefined) {
-                // Пользователь ввёл "An(prop1,prop2)" или "An(prop1,prop2[separator])"
+
                 value = getAnimatedProperties(layer, settings, anProps, anSeparator);
             } else if (match === 'An') {
-                // Пользователь ввёл просто "An"
+
                 value = getAnimatedProperties(layer, settings);
             } else if (lexpSeparatorOnly !== undefined) {
-                // Пользователь ввёл "Lexp([separator])"
+
                 value = getExpressionControlledProperties(layer, settings, null, lexpSeparatorOnly);
             } else if (lexpProps !== undefined) {
-                // Пользователь ввёл "Lexp(prop1,prop2)" или "Lexp(prop1,prop2[separator])"
+
                 value = getExpressionControlledProperties(layer, settings, lexpProps, lexpSeparator);
             } else if (match === 'Lexp') {
-                // Пользователь ввёл просто "Lexp"
+
                 value = getExpressionControlledProperties(layer, settings);
             } else if (match === 'Fext') {
-                // Handle Fext
+
                 value = variables['Fext'];
             } else if (lmnSeparatorOnly !== undefined) {
-                // Пользователь ввёл "Lmn([separator])"
+
                 value = getMaskNames(layer, settings, null, lmnSeparatorOnly);
             } else if (lmnFilters !== undefined) {
-                // Пользователь ввёл "Lmn(filter1,filter2)" или "Lmn(filter1,filter2[separator])"
+
                 value = getMaskNames(layer, settings, lmnFilters, lmnSeparator);
             } else if (match === 'Lmn') {
-                // Пользователь ввёл просто "Lmn"
+
                 value = getMaskNames(layer, settings);
             } else if (lmcSeparatorOnly !== undefined) {
-                // Пользователь ввёл "Lmc([separator])" (для подсчёта масок разделитель не нужен, но поддерживаем синтаксис)
+
                 value = getMaskCount(layer, settings, null, lmcSeparatorOnly);
             } else if (lmcFilters !== undefined) {
-                // Пользователь ввёл "Lmc(filter1,filter2)" или "Lmc(filter1,filter2[separator])"
+
                 value = getMaskCount(layer, settings, lmcFilters, lmcSeparator);
             } else if (match === 'Lmc') {
-                // Пользователь ввёл просто "Lmc"
+
                 value = getMaskCount(layer, settings);
             } else if (customAr !== undefined) {
-                // Handle Ar(format)
+
                 value = getAspectRatio(layer, settings, true);
             } else if (match === 'Ar') {
-                // Handle Ar
+
                 value = variables['Ar'];
             } else if (durationFormat !== undefined) {
-                // Handle D(format)
+
                 value = typeof variables['D'] === 'function' ? variables['D'](durationFormat) : variables['D'];
             } else if (match === 'D') {
-                // Handle D
+
                 value = typeof variables['D'] === 'function' ? variables['D']() : variables['D'];
             } else if (match === 'Df') {
-                // Handle Df
+
                 value = variables['Df'];
             } else if (ecFilters !== undefined) {
-                // Пользователь ввёл "Ec(effect1, effect2)"
+
                 value = getEffectsCount(layer, settings, ecFilters);
             } else if (match === 'Ec') {
-                // Пользователь ввёл просто "Ec"
+
                 value = getEffectsCount(layer, settings);
             } else if (match === 'Ip') {
-                // Handle Ip
+
                 value = variables['Ip'];
             } else if (match === 'Op') {
-                // Handle Op
+
                 value = variables['Op'];
             } else if (match === 'Tm') {
-                // Handle Tm
+
                 value = variables['Tm'];
             } else if (match === 'Pn') {
-                // Handle Pn
+
                 value = variables['Pn'];
             } else if (match === 'Lpos') {
-                // Handle Lpos
+
                 value = variables['Lpos'];
             } else if (match === 'Lsc') {
-                // Handle Lsc
+
                 value = variables['Lsc'];
             } else if (match === 'Lrot') {
-                // Handle Lrot
+
                 value = variables['Lrot'];
             } else if (match === 'Lops') {
-                // Handle Lops
+
                 value = variables['Lops'];
             } else if (match === 'Lpnt') {
-                // Handle Lpnt
+
                 value = variables['Lpnt'];
             } else if (parentIndex !== undefined) {
-                // Handle Lpnt(index)
+
                 value = variables['LpntIndex'];
             } else if (dateFormat !== undefined) {
-                // Handle Cd(format)
+
                 value = getCurrentDate(dateFormat);
             } else if (match === 'Cd') {
-                // Handle Cd
+
                 value = getCurrentDate();
             } else if (/[A-Z]/.test(match)) {
-                // Handle other single uppercase letter variables
+
                 value = variables[match];
             } else if (match === 'i') {
-                // Handle i
+
                 value = variables['i'];
             } else if (match === 'S') {
-                // Handle S
+
                 value = variables['S'];
             } else if (match === 'W') {
-                // Handle W
+
                 value = variables['W'];
             } else if (match === 'H') {
-                // Handle H
+
                 value = variables['H'];
             } else {
-                // Unknown variable
+
                 value = '';
             }
-    
+
             if (value !== undefined && value !== "") {
                 usedVariables.push(match);
                 return value;
@@ -2590,45 +2419,41 @@ function buildUI(thisObj) {
                 return "";
             }
         });
-        
-        // If the result matches the original name or is empty, return the original name
+
         if (result === originalName || result === "") {
             return originalName;
         }
-    
+
         return result;
     }    
 
-    var localIndex = 0; // Global local index
+    var localIndex = 0; 
 
-    // Rename layers based on the template
     function renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed, isShiftPressed, isAltPressed) {
-        checkAndUpdateSettings(); // Проверка и обновление настроек перед переименованием слоев
+        checkAndUpdateSettings(); 
         incrementValues = {};
         localIndex = 1;
-        
+
         var proj = app.project;
         if (proj && proj.activeItem instanceof CompItem) {
             var comp = proj.activeItem;
             if (comp.numLayers > 0) {
                 app.beginUndoGroup("Rename Layers by Template");
-                
-                // Если зажат Alt, инвертируем порядок слоев
+
                 var layers = getLayerOrder(comp, allLayers, isAltPressed);
-    
-                var newNames = []; // Массив для хранения новых имен слоев
-                
-                // Первый проход: определение новых имен
+
+                var newNames = []; 
+
                 for (var i = 0; i < layers.length; i++) {
                     var layer = layers[i];
                     if (layer.shy && !includeShyLayers) continue;
-                    if (layer.locked) continue; // Пропуск заблокированных слоев
+                    if (layer.locked) continue; 
                     if (!allLayers && !layer.selected) continue;
-    
+
                     var variables = {
                         "T": getLayerType(layer),
                         "i": layer.index,
-                        "I": localIndex,  // Локальный индекс
+                        "I": localIndex,  
                         "O": layer.name,
                         "E": getEffectNames(layer, variableSettings),
                         "An": getAnimatedProperties(layer, variableSettings),
@@ -2653,13 +2478,13 @@ function buildUI(thisObj) {
                         "Lexp": getExpressionControlledProperties(layer, variableSettings),
                         "Fext": getFileExtension(layer, variableSettings),
                         "LpntIndex": getLayerParentIndex(layer),
-                        "Lpnt": getImmediateParentName(layer), // Используем непосредственного родителя
+                        "Lpnt": getImmediateParentName(layer), 
                         "Lmc": getMaskCount(layer, variableSettings),
                         "Lmn": getMaskNames(layer, variableSettings)
                     };
-                    
+
                     var newName = replaceVariables(template, variables, layer.name, layer, variableSettings);
-                    
+
                     if (briefly) {
                         switch (brieflyType) {
                             case "Camel Case":
@@ -2679,20 +2504,18 @@ function buildUI(thisObj) {
                                 break;
                         }
                     }
-    
-                    // Сохраняем новое имя в массив
+
                     newNames.push({
                         layer: layer,
                         newName: newName
                     });
                 }
-    
-                // Второй проход: применение новых имен
+
                 for (var j = 0; j < newNames.length; j++) {
                     var layerData = newNames[j];
                     var layer = layerData.layer;
                     var newName = layerData.newName;
-                    
+
                     if (isCtrlPressed) {
                         layer.name = layer.name + newName;
                     } else if (isShiftPressed) {
@@ -2701,7 +2524,7 @@ function buildUI(thisObj) {
                         layer.name = newName;
                     }
                 }
-    
+
                 app.endUndoGroup();
             } else {
                 alert("No layers in the active composition.", scriptMessageHead_1);
@@ -2711,25 +2534,24 @@ function buildUI(thisObj) {
         }
     }
 
-    // Get the effect names applied to a layer with optional filtering and custom separator
     function getEffectNames(layer, settings, effectsFilter, customSeparator) {
         var effectNames = [];
         var effectNamesFilter = null;
-        var separator = customSeparator || ", "; // Разделитель по умолчанию
-    
+        var separator = customSeparator || ", "; 
+
         if (effectsFilter) {
-            // Разделяем effectsFilter по запятым и преобразуем названия эффектов в нижний регистр
+
             effectNamesFilter = effectsFilter.split(',').map(function(name) {
                 return name.trim().toLowerCase();
             });
         }
-    
+
         if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties > 0) {
             function checkEffects() {
                 for (var j = 1; j <= layer.property("ADBE Effect Parade").numProperties; j++) {
                     var effect = layer.property("ADBE Effect Parade").property(j);
                     if (effectNamesFilter) {
-                        // Сравниваем названия эффектов без учёта регистра
+
                         if (effectNamesFilter.indexOf(effect.name.toLowerCase()) !== -1) {
                             effectNames.push(effect.name);
                         }
@@ -2738,13 +2560,13 @@ function buildUI(thisObj) {
                     }
                 }
             }
-    
+
             checkEffects();
-    
+
             if (effectNames.length > 0) {
                 return effectNames.join(separator);
             } else {
-                // Если указанные эффекты не применены, возвращаем значение из настроек
+
                 if (settings && settings.E) {
                     return settings.E.active ? settings.E.customValue : settings.E.defaultValue;
                 } else {
@@ -2752,7 +2574,7 @@ function buildUI(thisObj) {
                 }
             }
         } else {
-            // Слой не имеет эффектов
+
             if (settings && settings.E) {
                 return settings.E.active ? settings.E.customValue : settings.E.defaultValue;
             } else {
@@ -2764,32 +2586,29 @@ function buildUI(thisObj) {
     checkAndCreateSettingsFile();
     checkAndCreateVariablesFile();
 
-    // Define the path to the tooltips file
     var tooltipsFilePath = scriptFolderPath + "/NitroNamer/settings/tooltips.json";
 
-    // Function to check if the tooltips file exists
     function checkAndCreateTooltipsFile() {
         var tooltipsFile = new File(tooltipsFilePath);
         if (!tooltipsFile.exists) {
-            // Tooltips file doesn't exist, run initialSettings.jsx
+
             var initialSettingsScriptPath = scriptFolderPath + "/NitroNamer/settings/initialSettings.jsx";
             var initialSettingsScriptFile = new File(initialSettingsScriptPath);
 
             if (initialSettingsScriptFile.exists) {
-                // Run the initialSettings.jsx script
+
                 $.evalFile(initialSettingsScriptFile);
             } else {
                 alert("Error: initialSettings.jsx not found at " + initialSettingsScriptPath, scriptMessageHead_1);
             }
 
-            // After running initialSettings.jsx, check if the tooltips file was created
             if (!tooltipsFile.exists) {
-                // User did not select a language or closed the panel, run forceSettings.jsx
+
                 var forceSettingsScriptPath = scriptFolderPath + "/NitroNamer/settings/forceSettings.jsx";
                 var forceSettingsScriptFile = new File(forceSettingsScriptPath);
 
                 if (forceSettingsScriptFile.exists) {
-                    // Run the forceSettings.jsx script to create the tooltips file in English
+
                     $.evalFile(forceSettingsScriptFile);
                 } else {
                     alert("Error: forceSettings.jsx not found at " + forceSettingsScriptPath, scriptMessageHead_1);
@@ -2798,7 +2617,6 @@ function buildUI(thisObj) {
         }
     }
 
-    // Function to load tooltips from JSON file
     function loadTooltips() {
         var tooltipsFile = new File(tooltipsFilePath);
         if (tooltipsFile.exists) {
@@ -2809,7 +2627,6 @@ function buildUI(thisObj) {
         }
     }
 
-    // Function to get tooltip for a specific button and mode
     function getTooltip(buttonName, mode) {
         if (tooltipsData && tooltipsData.NitroNamer && tooltipsData.NitroNamer.tooltips && tooltipsData.NitroNamer.tooltips.buttons) {
             var key = mode ? buttonName + "_" + mode : buttonName;
@@ -2818,18 +2635,14 @@ function buildUI(thisObj) {
         return "";
     }
 
-    // Call the function to check and create the tooltips file
     checkAndCreateTooltipsFile();
 
-    // Load tooltips data
     var tooltipsData = loadTooltips();
 
-    // Apply tooltips to UI elements
     function applyTooltips(tooltipsData) {
         if (tooltipsData && tooltipsData.NitroNamer && tooltipsData.NitroNamer.tooltips) {
             var tooltips = tooltipsData.NitroNamer.tooltips;
 
-            // Buttons
             if (tooltips.buttons) {
                 if (tooltips.buttons.btnCopy) {
                     btnCopy.helpTip = tooltips.buttons.btnCopy;
@@ -2858,10 +2671,9 @@ function buildUI(thisObj) {
                 if (tooltips.buttons.btnSettings) {
                     btnSettings.helpTip = tooltips.buttons.btnSettings;
                 }
-                // Подсказки для btnModeSwitch будут установлены динамически
+
             }
 
-            // Radio Buttons
             if (tooltips.radioButtons) {
                 if (tooltips.radioButtons.rdoAllLayers) {
                     rdoAllLayers.helpTip = tooltips.radioButtons.rdoAllLayers;
@@ -2871,21 +2683,18 @@ function buildUI(thisObj) {
                 }
             }
 
-            // Text Fields
             if (tooltips.textFields) {
                 if (tooltips.textFields.txtTemplate) {
                     txtTemplate.helpTip = tooltips.textFields.txtTemplate;
                 }
             }
 
-            // Checkboxes
             if (tooltips.checkboxes) {
                 if (tooltips.checkboxes.chkBriefly) {
                     chkBriefly.helpTip = tooltips.checkboxes.chkBriefly;
                 }
             }
 
-            // Dropdowns
             if (tooltips.dropdowns) {
                 if (tooltips.dropdowns.ddLayerMode) {
                     ddLayerMode.helpTip = tooltips.dropdowns.ddLayerMode;
@@ -2897,10 +2706,8 @@ function buildUI(thisObj) {
         }
     }
 
-    // Call the function to apply tooltips
     applyTooltips(tooltipsData);
 
-    // Load settings initially
     var settings = loadSettings();
     applySettings(settings);
 
