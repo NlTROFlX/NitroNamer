@@ -17,12 +17,12 @@
                     "btnHelp": "Открыть библиотеку всех переменных и их режимов.",
                     "btnReset": "Сбросить все значения.\n(Не удаляет пресеты и настройки переменных)",
                     "btnSettings": "Открыть панель настроек переменных.",
-                    "btnModeSwitch_chart": "По частоте использования (по убыванию)",
-                    "btnModeSwitch_date": "По дате добавления (по возрастанию)",
-                    "btnModeSwitch_longArrowDown": "По количеству символов (по убыванию)",
-                    "btnModeSwitch_longArrowUp": "По количеству символов (по возрастанию)",
-                    "btnModeSwitch_favorites": "Только избранное",
-                    "btnModeSwitch_search": "Поиск подходящего значения"
+                    "btnModeSwitch_chart": "По частоте использования (по убыванию).\nClick - вперед.\nCtrl + Click - назад\nAlt + Click - активировать.",
+                    "btnModeSwitch_date": "По дате добавления (по возрастанию).\nClick - вперед\nCtrl + Click - назад.\nAlt + Click - активировать.",
+                    "btnModeSwitch_longArrowDown": "По количеству символов (по убыванию).\nClick - вперед.\nCtrl + Click - назад.\nAlt + Click - активировать.",
+                    "btnModeSwitch_longArrowUp": "По количеству символов (по возрастанию).\nClick - вперед.\nCtrl + Click - назад.\nAlt + Click - активировать.",
+                    "btnModeSwitch_favorites": "Только избранное.\nClick - вперед.\nCtrl + Click - назад.\nAlt + Click - активировать.",
+                    "btnModeSwitch_search": "Поиск подходящего значения.\nClick - вперед.\nCtrl + Click - назад.\nAlt + Click - активировать."
                 },
                 "radioButtons": {
                     "rdoAllLayers": "Будут задействованы все доступные слои в этой композиции.",
@@ -54,13 +54,13 @@
                     "btnVariables": "Open the variable values panel for the layer.",
                     "btnHelp": "Open the library of all variables and their modes.",
                     "btnReset": "Reset all values.\n(Does not delete presets and variable settings)",
-                    "btnSettings": "Open the variable settings panel.",
-                    "btnModeSwitch_chart": "By frequency of use (descending).",
-                    "btnModeSwitch_date": "By date of addition (ascending).",
-                    "btnModeSwitch_longArrowDown": "By number of characters (descending).",
-                    "btnModeSwitch_longArrowUp": "By number of characters (ascending).",
-                    "btnModeSwitch_favorites": "Favorites only.",
-                    "btnModeSwitch_search": "Finding the right value."
+                    "btnSettings": "Open the variable settings panel.\nClick - forward.\nCtrl + Click - back.\nAlt + Click - activate.",
+                    "btnModeSwitch_chart": "By frequency of use (descending).\nClick - forward.\nCtrl + Click - back.\nAlt + Click - activate.",
+                    "btnModeSwitch_date": "By date of addition (ascending).\nClick - forward.\nCtrl + Click - back.\nAlt + Click - activate.",
+                    "btnModeSwitch_longArrowDown": "By number of characters (descending).\nClick - forward.\nCtrl + Click - back.\nAlt + Click - activate.",
+                    "btnModeSwitch_longArrowUp": "By number of characters (ascending).\nClick - forward.\nCtrl + Click - back.\nAlt + Click - activate.",
+                    "btnModeSwitch_favorites": "Favorites only.\nClick - forward.\nCtrl + Click - back.\nAlt + Click - activate.",
+                    "btnModeSwitch_search": "Finding the right value.\nClick - forward.\nCtrl + Click - back.\nAlt + Click - activate."
                 },
                 "radioButtons": {
                     "rdoAllLayers": "All available layers in this composition will be used.",
