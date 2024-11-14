@@ -18,7 +18,7 @@ function buildUI(thisObj) {
     grpLayerSelection.orientation = "row"; 
     grpLayerSelection.maximumSize.width = globalWidthSizeElements;
     grpLayerSelection.alignChildren = ["fill", "left"];
-    grpLayerSelection.spacing = globalSpacingElements;
+    grpLayerSelection.spacing = 0;
 
     var rdoAllLayers = grpLayerSelection.add("radiobutton", undefined, "Total: ");
     rdoAllLayers.value = true; 
@@ -1448,7 +1448,7 @@ function buildUI(thisObj) {
     
         // Заполнение выпадающего списка
         if (presetsArray.length === 0) {
-            ddLayerMode.add("item", "Нет пресетов, соответствующих поиску");
+            ddLayerMode.add("item", "No presets saved or suitable presets.");
         } else {
             for (var i = 0; i < presetsArray.length; i++) {
                 var displayText = presetsArray[i].template;
@@ -1465,10 +1465,10 @@ function buildUI(thisObj) {
                                                     ("0" + creationDate.getDate()).slice(-2);
                                 displayText += " {" + formattedDate + "}";
                             } else {
-                                displayText += " {Неизвестная дата}";
+                                displayText += " {Unknown date}";
                             }
                         } else {
-                            displayText += " {Неизвестная дата}";
+                            displayText += " {Unknown date}";
                         }
                     } else if (modes[currentModeIndex] === "longArrowDown" || modes[currentModeIndex] === "longArrowUp") {
                         displayText += " {" + presetsArray[i].template.length + "}";
