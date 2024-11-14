@@ -6,7 +6,7 @@
             "briefly": true,
             "brieflyType": 1,
             "creationDate": 1731579066334,
-            "usageFrequency": 0,
+            "usageFrequency": 2,
             "favoritesTemplate": true
         },
         "preset_1": {
@@ -15,7 +15,7 @@
             "briefly": true,
             "brieflyType": 1,
             "creationDate": 1731579055598,
-            "usageFrequency": 0,
+            "usageFrequency": 1,
             "favoritesTemplate": false
         },
         "preset_2": {
@@ -24,7 +24,7 @@
             "briefly": true,
             "brieflyType": 1,
             "creationDate": 1731579050090,
-            "usageFrequency": 0,
+            "usageFrequency": 2,
             "favoritesTemplate": false
         },
         "preset_3": {
@@ -33,7 +33,7 @@
             "briefly": true,
             "brieflyType": 1,
             "creationDate": 1731579043219,
-            "usageFrequency": 0,
+            "usageFrequency": 1,
             "favoritesTemplate": false
         },
         "preset_4": {
@@ -42,20 +42,20 @@
             "briefly": true,
             "brieflyType": 1,
             "creationDate": 1731425372944,
-            "usageFrequency": 4,
+            "usageFrequency": 6,
             "favoritesTemplate": false
         }
     },
     "currentSettings": {
         "UICompact": false,
         "allLayers": false,
-        "template": "22",
+        "template": "55555",
         "briefly": true,
         "brieflyType": 1,
         "selectedPresetIndex": 0,
-        "modeIndex": 0,
+        "modeIndex": 3,
         "modeActive": true,
-        "selectedPresetTemplate": "22"
+        "selectedPresetTemplate": "55555"
     },
     "selectedLanguage": "Russian"
 }

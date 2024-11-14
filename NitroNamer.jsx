@@ -1303,40 +1303,42 @@ function buildUI(thisObj) {
         if (selectedItem && selectedItem.preset) {
             var preset = selectedItem.preset;
             var selectedTemplate = preset.template; 
-
+    
             var settings = loadSettings();
             var userPresets = settings.userPresets || {};
-
-            if (isActive && modes[currentModeIndex] === "chart") {
-                if (preset.hasOwnProperty('usageFrequency')) {
-                    preset.usageFrequency += 1;
-                } else {
-                    preset.usageFrequency = 1;
-                }
+    
+            // Увеличиваем usageFrequency при каждом выборе пресета
+            if (preset.hasOwnProperty('usageFrequency')) {
+                preset.usageFrequency += 1;
+            } else {
+                preset.usageFrequency = 1;
             }
-
+    
+            // Обновляем пресет в userPresets
             for (var key in userPresets) {
                 if (userPresets.hasOwnProperty(key) && userPresets[key].template === preset.template) {
                     userPresets[key] = preset;
                     break;
                 }
             }
-
+    
             settings.userPresets = userPresets;
             var settingsFile = scriptFolderPath + "/NitroNamer/settings/settings.json";
             writeJSONFile(settingsFile, settings);
-
+    
+            // Остальной код остается без изменений...
+    
             rdoAllLayers.value = preset.allLayers;
             rdoOnlySelected.value = !preset.allLayers;
             txtTemplate.text = preset.template;
             chkBriefly.value = preset.briefly;
             ddBrieflyType.selection = preset.brieflyType || 0;
-
+    
             updateLayerCounts();
             updatePreview();
             resetRenameButtonIcon();
             updateRenameButtonIcon();
-
+    
             var currentSettings = {
                 allLayers: rdoAllLayers.value,
                 template: txtTemplate.text,
@@ -1345,13 +1347,13 @@ function buildUI(thisObj) {
                 selectedPresetTemplate: preset.template
             };
             saveSettings(currentSettings, true);
-
+    
             updateFavoritesButtonIcon(preset.favoritesTemplate);
-
+    
             updatePresetsDropdown(settings);
-
+    
             ddLayerMode.onChange = null;
-
+    
             for (var i = 0; i < ddLayerMode.items.length; i++) {
                 var item = ddLayerMode.items[i];
                 if (item.preset && item.preset.template === selectedTemplate) {
@@ -1359,7 +1361,7 @@ function buildUI(thisObj) {
                     break;
                 }
             }
-
+    
             ddLayerMode.onChange = dropdownChangeHandler;
         }
     }    
