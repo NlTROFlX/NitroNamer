@@ -6,7 +6,7 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1731588916628,
-            "usageFrequency": 3,
+            "usageFrequency": 1,
             "favoritesTemplate": true
         },
         "preset_2": {
@@ -15,7 +15,7 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1731588855979,
-            "usageFrequency": 5,
+            "usageFrequency": 2,
             "favoritesTemplate": true
         },
         "preset_1": {
@@ -24,7 +24,7 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1731588837777,
-            "usageFrequency": 5,
+            "usageFrequency": 3,
             "favoritesTemplate": false
         }
     },
@@ -35,9 +35,9 @@
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,
-        "modeIndex": 3,
-        "modeActive": false,
-        "selectedPresetTemplate": "(LayerPreComp).i"
+        "modeIndex": 0,
+        "modeActive": true,
+        "selectedPresetTemplate": "(LayerName).i"
     },
     "selectedLanguage": "Russian"
 }

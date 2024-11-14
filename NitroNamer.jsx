@@ -830,9 +830,9 @@ function buildUI(thisObj) {
             btnMinimize.addEventListener("mouseover", handleMouseOverMaximize);
             btnMinimize.addEventListener("mouseout", handleMouseOutMaximize);
 
-            txtOriginal.minimumSize.width = globalWidthSizeElements;
+            txtOriginal.minimumSize.width = globalWidthSizeElements - 14;
             txtOriginal.margins = [0,0,0,0];
-            txtRenamed.minimumSize.width = globalWidthSizeElements;
+            txtRenamed.minimumSize.width = globalWidthSizeElements - 14;
             txtRenamed.margins = [0,0,0,0];
 
             grpTextFields.remove(txtOriginalLabel);
@@ -868,7 +868,7 @@ function buildUI(thisObj) {
 
             txtOriginal = grpTextFields.add("edittext", undefined, "", { readonly: true });
             txtOriginal.alignment = ["left", "top"];
-            txtOriginal.minimumSize.width = globalWidthSizeElements;
+            txtOriginal.minimumSize.width = globalWidthSizeElements - 14;
             txtOriginal.margins = [0, -100, 0, -100];
 
             txtRenamedLabel = grpTextFields.add("statictext", undefined, "Template result for layer(s): ");
@@ -878,7 +878,7 @@ function buildUI(thisObj) {
 
             txtRenamed = grpTextFields.add("edittext", undefined, "", { readonly: true });
             txtRenamed.alignment = ["left", "top"];
-            txtRenamed.minimumSize.width = globalWidthSizeElements;
+            txtRenamed.minimumSize.width = globalWidthSizeElements - 14;
             txtRenamed.margins = [0, -100, 0, -100];
 
             if (txtRenamedCompact) {
