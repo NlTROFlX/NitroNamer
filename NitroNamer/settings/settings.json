@@ -1,17 +1,34 @@
 {
     "userPresets": {
-        
+        "preset_1": {
+            "allLayers": false,
+            "template": "9999",
+            "briefly": true,
+            "brieflyType": 1,
+            "creationDate": 1731578056332,
+            "usageFrequency": 0,
+            "favoritesTemplate": false
+        },
+        "preset_2": {
+            "allLayers": false,
+            "template": "1111",
+            "briefly": true,
+            "brieflyType": 1,
+            "creationDate": 1731425372944,
+            "usageFrequency": 4,
+            "favoritesTemplate": false
+        }
     },
     "currentSettings": {
         "UICompact": false,
         "allLayers": false,
-        "template": "3333",
+        "template": "2222",
         "briefly": true,
         "brieflyType": 1,
         "selectedPresetIndex": 0,
         "modeIndex": 0,
-        "modeActive": false,
-        "selectedPresetTemplate": "3333 {2}"
+        "modeActive": true,
+        "selectedPresetTemplate": "2222"
     },
     "selectedLanguage": "Russian"
 }

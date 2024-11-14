@@ -250,7 +250,7 @@ function buildUI(thisObj) {
             brieflyType: ddBrieflyType.selection.index,
             modeIndex: currentModeIndex,
             modeActive: isActive,
-            selectedPresetTemplate: ddLayerMode.selection ? ddLayerMode.selection.text : ""
+            selectedPresetTemplate: ddLayerMode.selection && ddLayerMode.selection.preset ? ddLayerMode.selection.preset.template : ""
         };
         saveSettings(currentSettings, true);
     }    
@@ -1014,14 +1014,16 @@ function buildUI(thisObj) {
                 }
             }
         } else {
-            // Add the "creationDate" key to settings using the custom getISOString function
-            settings.creationDate = getISOString(new Date());
-
+            var presetSettings = settings; // Use a separate variable for the preset
+    
+            // Save creationDate as a timestamp (Number)
+            presetSettings.creationDate = new Date().getTime();
+    
             // Initialize usageFrequency to 0
-            settings.usageFrequency = 0;
-
+            presetSettings.usageFrequency = 0;
+    
             // Initialize favoritesTemplate to false
-            settings.favoritesTemplate = false;
+            presetSettings.favoritesTemplate = false;
     
             // Count number of keys in userPresets
             var nextPresetNumber = 1;
@@ -1031,11 +1033,11 @@ function buildUI(thisObj) {
                 }
             }
             newPresetKey = "preset_" + nextPresetNumber;
-            userPresets[newPresetKey] = settings;
-
+            userPresets[newPresetKey] = presetSettings;
+    
             // Move the new preset to the beginning
             var newUserPresets = {};
-            newUserPresets[newPresetKey] = settings;
+            newUserPresets[newPresetKey] = presetSettings;
             for (var key in userPresets) {
                 if (key !== newPresetKey) {
                     newUserPresets[key] = userPresets[key];
@@ -1050,7 +1052,7 @@ function buildUI(thisObj) {
         writeJSONFile(settingsFile, existingSettings);
     
         return newPresetKey; // Return the key of the newly saved preset
-    }
+    }    
 
     function isArray(value) {
         return Object.prototype.toString.call(value) === '[object Array]';
@@ -1408,17 +1410,21 @@ function buildUI(thisObj) {
         var selectedItem = ddLayerMode.selection;
         if (selectedItem && selectedItem.preset) {
             var preset = selectedItem.preset;
+            var selectedTemplate = preset.template; // Сохраняем шаблон выбранного пресета
+    
             var settings = loadSettings();
             var userPresets = settings.userPresets || {};
     
-            // Увеличиваем usageFrequency
-            if (preset.hasOwnProperty('usageFrequency')) {
-                preset.usageFrequency += 1;
-            } else {
-                preset.usageFrequency = 1;
+            // Увеличиваем usageFrequency только в режиме "chart"
+            if (isActive && modes[currentModeIndex] === "chart") {
+                if (preset.hasOwnProperty('usageFrequency')) {
+                    preset.usageFrequency += 1;
+                } else {
+                    preset.usageFrequency = 1;
+                }
             }
     
-            // Обновляем пресет в userPresets
+            // Сохраняем обновленный пресет в userPresets
             for (var key in userPresets) {
                 if (userPresets.hasOwnProperty(key) && userPresets[key].template === preset.template) {
                     userPresets[key] = preset;
@@ -1457,6 +1463,21 @@ function buildUI(thisObj) {
     
             // Обновляем выпадающий список пресетов
             updatePresetsDropdown(settings);
+    
+            // Временно отключаем обработчик onChange перед изменением выбора
+            ddLayerMode.onChange = null;
+    
+            // После обновления выпадающего списка повторно устанавливаем выбор на тот же пресет
+            for (var i = 0; i < ddLayerMode.items.length; i++) {
+                var item = ddLayerMode.items[i];
+                if (item.preset && item.preset.template === selectedTemplate) {
+                    ddLayerMode.selection = i;
+                    break;
+                }
+            }
+    
+            // Включаем обработчик onChange после изменения выбора
+            ddLayerMode.onChange = dropdownChangeHandler;
         }
     }    
 
@@ -1478,12 +1499,30 @@ function buildUI(thisObj) {
             }
         }
     
-        // Проверяем, активирован ли режим "chart"
-        if (modes[currentModeIndex] === "chart" && isActive) {
-            // Сортируем пресеты по usageFrequency в порядке убывания
-            presetsArray.sort(function(a, b) {
-                return (b.usageFrequency || 0) - (a.usageFrequency || 0);
-            });
+        // Проверяем активный режим и выполняем соответствующую сортировку
+        if (isActive) {
+            if (modes[currentModeIndex] === "chart") {
+                // Сортировка по usageFrequency в порядке убывания
+                presetsArray.sort(function(a, b) {
+                    return (b.usageFrequency || 0) - (a.usageFrequency || 0);
+                });
+            } else if (modes[currentModeIndex] === "date") {
+                // Сортировка по creationDate в порядке убывания (от новых к старым)
+                presetsArray.sort(function(a, b) {
+                    var dateA = new Date(a.creationDate);
+                    var dateB = new Date(b.creationDate);
+                
+                    // Проверяем, являются ли даты корректными
+                    if (isNaN(dateA.getTime())) {
+                        dateA = new Date(0); // Если дата некорректна, устанавливаем минимальную дату
+                    }
+                    if (isNaN(dateB.getTime())) {
+                        dateB = new Date(0); // Если дата некорректна, устанавливаем минимальную дату
+                    }
+                
+                    return dateA.getTime() - dateB.getTime(); // Сортировка в порядке возрастания
+                });                  
+            }
         }
     
         if (presetsArray.length === 0) {
@@ -1491,10 +1530,25 @@ function buildUI(thisObj) {
         } else {
             for (var i = 0; i < presetsArray.length; i++) {
                 var displayText = presetsArray[i].template;
-                // Если режим "chart" активен, добавляем usageFrequency
-                if (modes[currentModeIndex] === "chart" && isActive) {
-                    displayText += " {" + (presetsArray[i].usageFrequency || 0) + "}";
+    
+                // Добавляем дополнительную информацию в зависимости от активного режима
+                if (isActive) {
+                    if (modes[currentModeIndex] === "chart") {
+                        displayText += " {" + (presetsArray[i].usageFrequency || 0) + "}";
+                    } else if (modes[currentModeIndex] === "date") {
+                        // Форматируем дату
+                        var creationDate = new Date(presetsArray[i].creationDate);
+                        if (!isNaN(creationDate.getTime())) {
+                            var formattedDate = creationDate.getFullYear() + "-" +
+                                                ("0" + (creationDate.getMonth() + 1)).slice(-2) + "-" +
+                                                ("0" + creationDate.getDate()).slice(-2);
+                            displayText += " {" + formattedDate + "}";
+                        } else {
+                            displayText += " {Unknown Date}";
+                        }
+                    }
                 }
+    
                 var item = ddLayerMode.add("item", displayText);
                 // Сохраняем фактический пресет в свойстве item.preset
                 item.preset = presetsArray[i];
@@ -2519,7 +2573,7 @@ function buildUI(thisObj) {
                 return "";
             }
         });
-    
+        
         // If the result matches the original name or is empty, return the original name
         if (result === originalName || result === "") {
             return originalName;
