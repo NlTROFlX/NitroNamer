@@ -280,6 +280,11 @@ function buildUI(thisObj) {
         updatePreview();
         updateLayerCounts();
         updateRenameButtonIcon(); 
+    
+        // Если активен режим "search", обновляем выпадающий список
+        if (isActive && modes[currentModeIndex] === "search") {
+            updatePresetsDropdown(loadSettings());
+        }
     };
 
     txtTemplate.onChange = function() {
@@ -295,6 +300,11 @@ function buildUI(thisObj) {
         updateLayerCounts();
         resetRenameButtonIcon();
         updateRenameButtonIcon();
+    
+        // Если активен режим "search", обновляем выпадающий список
+        if (isActive && modes[currentModeIndex] === "search") {
+            updatePresetsDropdown(loadSettings());
+        }
     };
 
     txtTemplate.addEventListener("keydown", function(event) {
@@ -1375,17 +1385,26 @@ function buildUI(thisObj) {
     
         var presetsArray = [];
     
+        var searchTerm = txtTemplate.text.toLowerCase();
+    
         for (var key in userPresets) {
             if (userPresets.hasOwnProperty(key)) {
                 var preset = userPresets[key];
     
-                // Если активен режим "favorites" и isActive == true
-                if (isActive && modes[currentModeIndex] === "favorites") {
-                    if (preset.favoritesTemplate) {
+                // Если активен режим "search" и isActive == true
+                if (isActive && modes[currentModeIndex] === "search") {
+                    if (searchTerm === "") {
+                        // Если поисковый запрос пуст, можно показать все пресеты или ничего
+                        // В данном случае будем показывать все пресеты
                         presetsArray.push(preset);
+                    } else {
+                        // Проверяем, содержит ли шаблон пресета поисковый запрос
+                        if (preset.template.toLowerCase().indexOf(searchTerm) !== -1) {
+                            presetsArray.push(preset);
+                        }
                     }
                 } else {
-                    // Если режим "favorites" не активен, добавляем все пресеты
+                    // Если режим "search" не активен, добавляем все пресеты
                     presetsArray.push(preset);
                 }
             }
@@ -1414,22 +1433,22 @@ function buildUI(thisObj) {
                     return dateA.getTime() - dateB.getTime();
                 });
             } else if (modes[currentModeIndex] === "longArrowDown") {
-                // Сортировка по длине шаблона (убывающая)
+                // Сортировка по длине шаблона (убывание)
                 presetsArray.sort(function(a, b) {
                     return b.template.length - a.template.length;
                 });
             } else if (modes[currentModeIndex] === "longArrowUp") {
-                // Сортировка по длине шаблона (возрастающая)
+                // Сортировка по длине шаблона (возрастание)
                 presetsArray.sort(function(a, b) {
                     return a.template.length - b.template.length;
                 });
             }
-            // Добавляем проверку на режим "favorites" (уже обработано выше)
+            // Режим "search" не требует дополнительной сортировки
         }
     
         // Заполнение выпадающего списка
         if (presetsArray.length === 0) {
-            ddLayerMode.add("item", "Нет избранных пресетов");
+            ddLayerMode.add("item", "Нет пресетов, соответствующих поиску");
         } else {
             for (var i = 0; i < presetsArray.length; i++) {
                 var displayText = presetsArray[i].template;
@@ -1454,7 +1473,7 @@ function buildUI(thisObj) {
                     } else if (modes[currentModeIndex] === "longArrowDown" || modes[currentModeIndex] === "longArrowUp") {
                         displayText += " {" + presetsArray[i].template.length + "}";
                     }
-                    // В режиме "favorites" дополнительной информации не добавляем
+                    // В режиме "search" дополнительную информацию не добавляем
                 }
     
                 var item = ddLayerMode.add("item", displayText);
