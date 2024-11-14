@@ -1,52 +1,43 @@
 {
     "userPresets": {
-        "preset_4": {
-            "allLayers": true,
-            "template": "T.i",
-            "briefly": false,
-            "brieflyType": 0,
-            "creationDate": 1731586933458,
-            "usageFrequency": 0,
-            "favoritesTemplate": false
-        },
         "preset_3": {
             "allLayers": true,
-            "template": "(LayerPrecomp).i",
+            "template": "(LayerPreComp).i",
             "briefly": false,
             "brieflyType": 0,
-            "creationDate": 1731586904409,
-            "usageFrequency": 0,
-            "favoritesTemplate": false
+            "creationDate": 1731588916628,
+            "usageFrequency": 2,
+            "favoritesTemplate": true
         },
         "preset_2": {
             "allLayers": true,
             "template": "(LayerShape).i",
             "briefly": false,
             "brieflyType": 0,
-            "creationDate": 1731586895551,
-            "usageFrequency": 0,
-            "favoritesTemplate": false
+            "creationDate": 1731588855979,
+            "usageFrequency": 4,
+            "favoritesTemplate": true
         },
         "preset_1": {
             "allLayers": true,
             "template": "(LayerName).i",
             "briefly": false,
             "brieflyType": 0,
-            "creationDate": 1731586860788,
-            "usageFrequency": 0,
-            "favoritesTemplate": true
+            "creationDate": 1731588837777,
+            "usageFrequency": 4,
+            "favoritesTemplate": false
         }
     },
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "(Shape",
+        "template": "(LayerShape).i",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,
-        "modeIndex": 5,
-        "modeActive": true,
-        "selectedPresetTemplate": "T.i"
+        "modeIndex": 0,
+        "modeActive": false,
+        "selectedPresetTemplate": "(LayerShape).i"
     },
     "selectedLanguage": "Russian"
 }

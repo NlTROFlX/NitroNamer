@@ -1377,25 +1377,29 @@ function buildUI(thisObj) {
     }    
 
     function updatePresetsDropdown(settings) {
-
         ddLayerMode.onChange = null;
-    
+        
         ddLayerMode.removeAll();
         var userPresets = settings.userPresets || {};
-    
+        
         var presetsArray = [];
-    
+        
         var searchTerm = txtTemplate.text.toLowerCase();
-    
+        
         for (var key in userPresets) {
             if (userPresets.hasOwnProperty(key)) {
                 var preset = userPresets[key];
-    
-                // Если активен режим "search" и isActive == true
-                if (isActive && modes[currentModeIndex] === "search") {
+        
+                // Обработка режима "favorites"
+                if (isActive && modes[currentModeIndex] === "favorites") {
+                    if (preset.favoritesTemplate) {
+                        presetsArray.push(preset);
+                    }
+                }
+                // Обработка режима "search"
+                else if (isActive && modes[currentModeIndex] === "search") {
                     if (searchTerm === "") {
-                        // Если поисковый запрос пуст, можно показать все пресеты или ничего
-                        // В данном случае будем показывать все пресеты
+                        // Если поисковый запрос пуст, показываем все пресеты
                         presetsArray.push(preset);
                     } else {
                         // Проверяем, содержит ли шаблон пресета поисковый запрос
@@ -1404,12 +1408,12 @@ function buildUI(thisObj) {
                         }
                     }
                 } else {
-                    // Если режим "search" не активен, добавляем все пресеты
+                    // Для остальных режимов или когда режим не активен, добавляем все пресеты
                     presetsArray.push(preset);
                 }
             }
         }
-    
+        
         // Сортировка пресетов
         if (isActive) {
             if (modes[currentModeIndex] === "chart") {
@@ -1422,14 +1426,14 @@ function buildUI(thisObj) {
                 presetsArray.sort(function(a, b) {
                     var dateA = new Date(a.creationDate);
                     var dateB = new Date(b.creationDate);
-    
+        
                     if (isNaN(dateA.getTime())) {
                         dateA = new Date(0);
                     }
                     if (isNaN(dateB.getTime())) {
                         dateB = new Date(0);
                     }
-    
+        
                     return dateA.getTime() - dateB.getTime();
                 });
             } else if (modes[currentModeIndex] === "longArrowDown") {
@@ -1443,16 +1447,16 @@ function buildUI(thisObj) {
                     return a.template.length - b.template.length;
                 });
             }
-            // Режим "search" не требует дополнительной сортировки
+            // Для режимов "favorites" и "search" дополнительная сортировка не требуется
         }
-    
+        
         // Заполнение выпадающего списка
         if (presetsArray.length === 0) {
             ddLayerMode.add("item", "No presets saved or suitable presets.");
         } else {
             for (var i = 0; i < presetsArray.length; i++) {
                 var displayText = presetsArray[i].template;
-    
+        
                 if (isActive) {
                     if (modes[currentModeIndex] === "chart") {
                         displayText += " {" + (presetsArray[i].usageFrequency || 0) + "}";
@@ -1473,18 +1477,18 @@ function buildUI(thisObj) {
                     } else if (modes[currentModeIndex] === "longArrowDown" || modes[currentModeIndex] === "longArrowUp") {
                         displayText += " {" + presetsArray[i].template.length + "}";
                     }
-                    // В режиме "search" дополнительную информацию не добавляем
+                    // В режимах "favorites" и "search" дополнительную информацию не добавляем
                 }
-    
+        
                 var item = ddLayerMode.add("item", displayText);
                 item.preset = presetsArray[i];
             }
         }
-    
+        
         // Выбор текущего пресета
         var selectedPresetTemplate = settings.currentSettings ? settings.currentSettings.selectedPresetTemplate : null;
         var selectedIndex = -1;
-    
+        
         for (var i = 0; i < ddLayerMode.items.length; i++) {
             var itemPresetTemplate = ddLayerMode.items[i].preset ? ddLayerMode.items[i].preset.template : null;
             if (itemPresetTemplate === selectedPresetTemplate) {
@@ -1492,13 +1496,13 @@ function buildUI(thisObj) {
                 break;
             }
         }
-    
+        
         if (selectedIndex !== -1) {
             ddLayerMode.selection = selectedIndex;
         } else {
             ddLayerMode.selection = 0;
         }
-    
+        
         ddLayerMode.onChange = dropdownChangeHandler;
     }    
 
