@@ -176,8 +176,15 @@ function buildUI(thisObj) {
 
     btnModeSwitch.onClick = function() {
         var isAltPressed = ScriptUI.environment.keyboardState.altKey;
+        var isCtrlPressed = ScriptUI.environment.keyboardState.ctrlKey;
+    
         if (isAltPressed) {
             isActive = !isActive;
+        } else if (isCtrlPressed) {
+            currentModeIndex = (currentModeIndex - 1 + modes.length) % modes.length;
+            if (isActive) {
+                isActive = false;
+            }
         } else {
             currentModeIndex = (currentModeIndex + 1) % modes.length;
             if (isActive) {
@@ -187,7 +194,7 @@ function buildUI(thisObj) {
         updateModeButtonIcon();
         updateModeSwitchTooltip();
         saveCurrentSettings();
-
+    
         updatePresetsDropdown(loadSettings());
     };    
 

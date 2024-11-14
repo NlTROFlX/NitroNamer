@@ -6,7 +6,7 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1731588916628,
-            "usageFrequency": 2,
+            "usageFrequency": 3,
             "favoritesTemplate": true
         },
         "preset_2": {
@@ -35,9 +35,9 @@
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,
-        "modeIndex": 0,
+        "modeIndex": 4,
         "modeActive": false,
-        "selectedPresetTemplate": "(LayerShape).i"
+        "selectedPresetTemplate": "(LayerPreComp).i"
     },
     "selectedLanguage": "Russian"
 }
