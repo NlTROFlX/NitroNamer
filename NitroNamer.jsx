@@ -1517,7 +1517,7 @@ function buildUI(thisObj) {
                         dateA = new Date(0); // Если дата некорректна, устанавливаем минимальную дату
                     }
                     if (isNaN(dateB.getTime())) {
-                        dateB = new Date(0); // Если дата некорректна, устанавливаем минимальную дату
+                        dateB = new Date(0);
                     }
     
                     return dateA.getTime() - dateB.getTime(); // Сортировка в порядке возрастания
@@ -1526,6 +1526,11 @@ function buildUI(thisObj) {
                 // Сортировка по длине шаблона в порядке убывания
                 presetsArray.sort(function(a, b) {
                     return b.template.length - a.template.length;
+                });
+            } else if (modes[currentModeIndex] === "longArrowUp") {
+                // Сортировка по длине шаблона в порядке возрастания
+                presetsArray.sort(function(a, b) {
+                    return a.template.length - b.template.length;
                 });
             }
         }
@@ -1541,7 +1546,7 @@ function buildUI(thisObj) {
                     if (modes[currentModeIndex] === "chart") {
                         displayText += " {" + (presetsArray[i].usageFrequency || 0) + "}";
                     } else if (modes[currentModeIndex] === "date") {
-                        // Форматируем дату в удобочитаемый формат, например, YYYY-MM-DD
+                        // Форматируем дату
                         if (presetsArray[i].creationDate) {
                             var creationDate = new Date(presetsArray[i].creationDate);
                             if (!isNaN(creationDate.getTime())) {
@@ -1555,7 +1560,7 @@ function buildUI(thisObj) {
                         } else {
                             displayText += " {Unknown Date}";
                         }
-                    } else if (modes[currentModeIndex] === "longArrowDown") {
+                    } else if (modes[currentModeIndex] === "longArrowDown" || modes[currentModeIndex] === "longArrowUp") {
                         // Добавляем количество символов в фигурных скобках
                         displayText += " {" + presetsArray[i].template.length + "}";
                     }

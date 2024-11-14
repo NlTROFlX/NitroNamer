@@ -7,7 +7,7 @@
             "brieflyType": 1,
             "creationDate": 1731579066334,
             "usageFrequency": 0,
-            "favoritesTemplate": false
+            "favoritesTemplate": true
         },
         "preset_1": {
             "allLayers": false,
@@ -49,13 +49,13 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": false,
-        "template": "55555",
+        "template": "22",
         "briefly": true,
         "brieflyType": 1,
         "selectedPresetIndex": 0,
-        "modeIndex": 3,
-        "modeActive": false,
-        "selectedPresetTemplate": "55555"
+        "modeIndex": 0,
+        "modeActive": true,
+        "selectedPresetTemplate": "22"
     },
     "selectedLanguage": "Russian"
 }
