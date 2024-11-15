@@ -30,11 +30,11 @@
                 </Lifecycle>
                 <UI>
                     <Type>Panel</Type>
-                    <Menu>My First Panel</Menu>
+                    <Menu>NitroNamer Variablle Library 2024.4</Menu>
                     <Geometry>
                         <Size>
-                            <Height>500</Height>
-                            <Width>350</Width>
+                            <Height>468</Height>
+                            <Width>468</Width>
                         </Size>
                     </Geometry>
                     <Icons/>

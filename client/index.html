@@ -1,109 +1,215 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <title>My Panel</title>
     <style>
-        /* Подключение кастомных шрифтов */
+        /* Подключение шрифта FiraSans */
         @font-face {
             font-family: 'Fira Sans';
-            src: url('fonts/FiraSans-Regular.woff') format('woff'),
-                 url('fonts/FiraSans-Regular.ttf') format('truetype');
+            src: url('FiraSans-Regular.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
 
-        @font-face {
-            font-family: 'Fira Sans';
-            src: url('fonts/FiraSans-Bold.woff') format('woff'),
-                 url('fonts/FiraSans-Bold.ttf') format('truetype');
-            font-weight: bold;
-            font-style: normal;
-        }
-
-        /* Применение шрифта ко всем элементам на странице */
+        /* Установка глобального цвета фона и базовых стилей */
         body, html {
             margin: 0;
             padding: 0;
             width: 468px;
             height: 468px;
             overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             background-color: #232323;
-            font-family: 'Fira Sans', sans-serif; /* Применение шрифта */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Fira Sans', sans-serif;
+            color: #ffffff;
         }
 
-        /* Контейнер для разделения на два блока */
+        /* Верхний блок */
+        .top-bar {
+            width: 468px;
+            height: 40px;
+            background-color: #161616;
+            border-bottom: 1px solid #313131;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+        }
+
+        .title-thin-italic {
+            font-family: 'Fira Sans';
+            font-weight: 100;
+            font-style: italic;
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .title-semibold-italic {
+            font-family: 'Fira Sans';
+            font-weight: 600;
+            font-style: italic;
+            font-size: 24px;
+            margin: 0;
+        }
+
+        /* Контейнер для двух колонок */
         .split-container {
             display: flex;
             width: 100%;
-            height: 100%;
+            height: calc(100% - 80px); /* Учитывая верхний и нижний блок */
         }
 
         /* Левая и правая половины */
-        .left,
+        .left {
+            width: 50%;
+            height: 100%;
+            overflow-y: auto;
+            border-right: 1px solid #313131;
+        }
+
         .right {
             width: 50%;
             height: 100%;
+            padding: 10px;
+            overflow-y: auto;
             position: relative;
-            background-color: #232323;
         }
 
-        /* Центральная разделительная линия */
-        .split-border {
-            width: 1px;
-            background-color: #313131;
-            z-index: 999;
+        /* Стиль активного спойлера */
+        .spoiler.active {
+            background-color: #2a2a2a;
+            padding: 8px;
         }
 
-        /* Верхний блок в левом блоке */
-        .left-top-box {
-            width: 234px;
-            height: 40px;
-            border-bottom: 1px solid #313131;
-            position: absolute;
-            top: 0;
-            left: 0;
-            background-color: #232323;
-            color: #ffffff;
-            font-size: 16px;
-            text-align: center;
-            line-height: 40px;
-
+        .spoiler.active .spoiler-title {
+            color: #2d8ceb;
             font-family: 'Fira Sans', sans-serif;
-            font-weight: bold; /* для использования стиля Black */
-            font-style: italic; /* для использования стиля Italic */
-            font-size: 24px;
-            text-align: center;
+            font-size: 12px;
+            font-weight: normal;
         }
 
-        /* Нижний блок в правом блоке */
-        .right-bottom-box {
+        .spoiler.active .spoiler-icon {
+            filter: invert(48%) sepia(82%) saturate(2053%) hue-rotate(177deg) brightness(95%) contrast(102%);
+        }
+
+        .spoiler.active .spoiler-content {
+            display: block;
+            font-family: 'Fira Sans', sans-serif;
+            font-size: 8px;
+            color: #b9b9b9;
+        }
+
+        .spoiler.active .spoiler-content p {
+            padding: 2px 0;
+        }
+
+        /* Стиль неактивного спойлера */
+        .spoiler.inactive {
+            background-color: #1d1d1d;
+            padding: 8px;
+        }
+
+        .spoiler.inactive .spoiler-title {
+            color: #8a8a8a;
+            font-family: 'Fira Sans', sans-serif;
+            font-size: 12px;
+            font-weight: normal;
+        }
+
+        .spoiler.inactive .spoiler-icon {
+            filter: invert(20%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(80%) contrast(100%);
+        }
+
+        .spoiler.inactive .spoiler-content {
+            display: none;
+        }
+
+        /* Контейнер для иконки и заголовка */
+        .spoiler-title-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .spoiler-icon {
+            width: auto;
+            height: 8.9715px; /* Фиксированная высота */
+            margin-right: 8px; /* Расстояние между иконкой и заголовком */
+        }
+
+        /* Нижний блок внутри правой половины */
+        .bottom-bar {
             width: 234px;
             height: 40px;
             border-top: 1px solid #313131;
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background-color: #232323;
-            color: #ffffff;
-            font-size: 16px;
-            text-align: center;
-            line-height: 40px;
+            box-sizing: border-box;
+            margin-top: auto; /* Прижать к низу блока .right */
         }
     </style>
 </head>
 <body>
+    <!-- Верхний блок -->
+    <div class="top-bar">
+        <span class="title-thin-italic">NitroNamer</span>
+        <span class="title-semibold-italic">Variable Library</span>
+        <span class="title-thin-italic">2024.4</span>
+    </div>
+
+    <!-- Контейнер для двух колонок -->
     <div class="split-container">
+        <!-- Левая колонка со спойлерами -->
         <div class="left">
-            <div class="left-top-box">Variable library</div> <!-- Верхний блок в левом блоке -->
+            <div class="spoiler inactive" onclick="toggleSpoiler(this)">
+                <div class="spoiler-title-container">
+                    <img src="icons/icon1.svg" class="spoiler-icon" alt="Icon 1">
+                    <div class="spoiler-title">Composition information</div>
+                </div>
+                <div class="spoiler-content">
+                    <p onclick="showContent('Current composition name')">[1] C - Current composition name.</p>
+                    <p onclick="showContent('Current project name')">[1] Pn - Current project name.</p>
+                </div>
+            </div>
+            
+            <div class="spoiler inactive" onclick="toggleSpoiler(this)">
+                <div class="spoiler-title-container">
+                    <img src="icons/icon2.svg" class="spoiler-icon" alt="Icon 2">
+                    <div class="spoiler-title">Time and duration</div>
+                </div>
+                <div class="spoiler-content">
+                    <p onclick="showContent('Time properties')">Time properties information...</p>
+                </div>
+            </div>
         </div>
-        <div class="split-border"></div>
-        <div class="right">
-            <div class="right-bottom-box">LICENSE</div> <!-- Нижний блок в правом блоке -->
+
+        <!-- Правая колонка с информацией -->
+        <div class="right" id="info-display">
+            <p>Select an item from the left to see details here.</p>
         </div>
     </div>
+
+    <script>
+        // Функция для переключения спойлеров
+        function toggleSpoiler(spoiler) {
+            var allSpoilers = document.querySelectorAll('.spoiler');
+            allSpoilers.forEach(function (s) {
+                if (s !== spoiler) {
+                    s.classList.remove('active');
+                    s.classList.add('inactive');
+                }
+            });
+
+            spoiler.classList.toggle('active');
+            spoiler.classList.toggle('inactive');
+        }
+
+        // Функция для отображения информации в правом блоке
+        function showContent(content) {
+            var infoDisplay = document.getElementById('info-display');
+            infoDisplay.innerHTML = '<p>' + content + '</p>';
+        }
+    </script>
 </body>
 </html>
