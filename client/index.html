@@ -2,12 +2,108 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>My First Panel</title>
+    <title>My Panel</title>
+    <style>
+        /* Подключение кастомных шрифтов */
+        @font-face {
+            font-family: 'Fira Sans';
+            src: url('fonts/FiraSans-Regular.woff') format('woff'),
+                 url('fonts/FiraSans-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Fira Sans';
+            src: url('fonts/FiraSans-Bold.woff') format('woff'),
+                 url('fonts/FiraSans-Bold.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        /* Применение шрифта ко всем элементам на странице */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 468px;
+            height: 468px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #232323;
+            font-family: 'Fira Sans', sans-serif; /* Применение шрифта */
+        }
+
+        /* Контейнер для разделения на два блока */
+        .split-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Левая и правая половины */
+        .left,
+        .right {
+            width: 50%;
+            height: 100%;
+            position: relative;
+            background-color: #232323;
+        }
+
+        /* Центральная разделительная линия */
+        .split-border {
+            width: 1px;
+            background-color: #313131;
+            z-index: 999;
+        }
+
+        /* Верхний блок в левом блоке */
+        .left-top-box {
+            width: 234px;
+            height: 40px;
+            border-bottom: 1px solid #313131;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #232323;
+            color: #ffffff;
+            font-size: 16px;
+            text-align: center;
+            line-height: 40px;
+
+            font-family: 'Fira Sans', sans-serif;
+            font-weight: bold; /* для использования стиля Black */
+            font-style: italic; /* для использования стиля Italic */
+            font-size: 24px;
+            text-align: center;
+        }
+
+        /* Нижний блок в правом блоке */
+        .right-bottom-box {
+            width: 234px;
+            height: 40px;
+            border-top: 1px solid #313131;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: #232323;
+            color: #ffffff;
+            font-size: 16px;
+            text-align: center;
+            line-height: 40px;
+        }
+    </style>
 </head>
 <body>
-    <h1>My First Panel</h1>
-    <button id="hi-button">Hi</button>
-    <script type="text/javascript" src="CSInterface.js"></script>
-    <script type="text/javascript" src="index.js"></script>
+    <div class="split-container">
+        <div class="left">
+            <div class="left-top-box">VARIABLE LIBRARY</div> <!-- Верхний блок в левом блоке -->
+        </div>
+        <div class="split-border"></div>
+        <div class="right">
+            <div class="right-bottom-box">Bottom Block</div> <!-- Нижний блок в правом блоке -->
+        </div>
+    </div>
 </body>
 </html>
