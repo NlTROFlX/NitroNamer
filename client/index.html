@@ -25,6 +25,7 @@
             align-items: center;
             font-family: 'Fira Sans', sans-serif;
             color: #ffffff;
+            user-select: none; /* Запрет на выделение текста */
         }
 
         /* Верхний блок */
@@ -36,8 +37,9 @@
             box-sizing: border-box;
             display: flex;
             align-items: center;
-            justify-content: flex-end;
+            justify-content: flex-start;
             padding-right: 10px;
+            color: #b9b9b9;
         }
 
         .title-thin-italic {
@@ -83,6 +85,7 @@
         .spoiler.active {
             background-color: #2a2a2a;
             padding: 8px;
+            transition: background-color 0.125s ease; /* Плавная анимация для фона */
         }
 
         .spoiler.active .spoiler-title {
@@ -90,10 +93,12 @@
             font-family: 'Fira Sans', sans-serif;
             font-size: 12px;
             font-weight: normal;
+            transition: color 0.125s ease; /* Плавная анимация для цвета текста */
         }
 
         .spoiler.active .spoiler-icon {
             filter: invert(48%) sepia(82%) saturate(2053%) hue-rotate(177deg) brightness(95%) contrast(102%);
+            transition: filter 0.125s ease; /* Плавная анимация для фильтра */
         }
 
         .spoiler.active .spoiler-content {
@@ -101,16 +106,20 @@
             font-family: 'Fira Sans', sans-serif;
             font-size: 8px;
             color: #b9b9b9;
+            margin-top: 8px; /* Отступ сверху от заголовка до подпунктов */
+            transition: opacity 0.125s ease; /* Плавное появление контента */
         }
 
         .spoiler.active .spoiler-content p {
-            padding: 2px 0;
+            margin-top: 4px; /* Отступ сверху между подпунктами */
+            margin-left: 32px; /* Отступ слева */
         }
 
         /* Стиль неактивного спойлера */
         .spoiler.inactive {
             background-color: #1d1d1d;
             padding: 8px;
+            transition: background-color 0.125s ease; /* Плавная анимация для фона */
         }
 
         .spoiler.inactive .spoiler-title {
@@ -118,14 +127,17 @@
             font-family: 'Fira Sans', sans-serif;
             font-size: 12px;
             font-weight: normal;
+            transition: color 0.125s ease; /* Плавная анимация для цвета текста */
         }
 
         .spoiler.inactive .spoiler-icon {
             filter: invert(20%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(80%) contrast(100%);
+            transition: filter 0.125s ease; /* Плавная анимация для фильтра */
         }
 
         .spoiler.inactive .spoiler-content {
             display: none;
+            opacity: 0;
         }
 
         /* Контейнер для иконки и заголовка */
@@ -134,10 +146,25 @@
             align-items: center;
         }
 
+        /* Новый контейнер для иконки с фиксированной высотой */
+        .spoiler-icon-container {
+            width: 8.9715px;
+            height: 8.9715px; /* Фиксированная высота */
+            padding-right: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Центрируем иконку */
+        }
+
         .spoiler-icon {
             width: auto;
-            height: 8.9715px; /* Фиксированная высота */
-            margin-right: 8px; /* Расстояние между иконкой и заголовком */
+            height: 8.9715px; /* Иконка с фиксированной высотой */
+        }
+
+        /* Эффект при наведении на спойлер */
+        .spoiler:hover {
+            background-color: #2a2a2a; /* При наведении меняется фоновый цвет */
+            transition: background-color 0.125s ease; /* Плавная анимация для фона */
         }
 
         /* Нижний блок внутри правой половины */
@@ -154,8 +181,8 @@
     <!-- Верхний блок -->
     <div class="top-bar">
         <span class="title-thin-italic">NitroNamer</span>
-        <span class="title-semibold-italic">Variable Library</span>
-        <span class="title-thin-italic">2024.4</span>
+        <span class="title-semibold-italic"> Variable Library</span>
+        <span class="title-thin-italic"> 2024.4</span>
     </div>
 
     <!-- Контейнер для двух колонок -->
@@ -164,7 +191,9 @@
         <div class="left">
             <div class="spoiler inactive" onclick="toggleSpoiler(this)">
                 <div class="spoiler-title-container">
-                    <img src="icons/icon1.svg" class="spoiler-icon" alt="Icon 1">
+                    <div class="spoiler-icon-container">
+                        <img src="icons/icon1.svg" class="spoiler-icon" alt="Icon 1">
+                    </div>
                     <div class="spoiler-title">Composition information</div>
                 </div>
                 <div class="spoiler-content">
@@ -175,7 +204,9 @@
             
             <div class="spoiler inactive" onclick="toggleSpoiler(this)">
                 <div class="spoiler-title-container">
-                    <img src="icons/icon2.svg" class="spoiler-icon" alt="Icon 2">
+                    <div class="spoiler-icon-container">
+                        <img src="icons/icon2.svg" class="spoiler-icon" alt="Icon 2">
+                    </div>
                     <div class="spoiler-title">Time and duration</div>
                 </div>
                 <div class="spoiler-content">
