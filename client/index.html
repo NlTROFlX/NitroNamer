@@ -41,6 +41,7 @@
             padding-right: 8px;
             padding-left: 8px;
             color: #b9b9b9;
+            position: relative;
         }
 
         .title-thin-italic {
@@ -57,6 +58,17 @@
             font-style: italic;
             font-size: 24px;
             margin: 0;
+        }
+
+        /* Линия, соединяющая top-bar и кружок */
+        .indicator-line {
+            position: absolute;
+            top: 40px; /* Находится сразу под top-bar */
+            left: -1px;
+            width: 1px;
+            background-color: #2d8ceb;
+            transition: height 0.125s ease, left 0.125s ease;
+            z-index: 999;
         }
 
         /* Контейнер для двух колонок */
@@ -222,6 +234,9 @@
         <span class="title-thin-italic"> 2024.4</span>
     </div>
 
+    <!-- Линия, соединяющая top-bar и кружок -->
+    <div id="indicator-line" class="indicator-line"></div>
+
     <!-- Контейнер для двух колонок -->
     <div class="split-container">
         <!-- Левая колонка со спойлерами -->
@@ -238,7 +253,7 @@
                     <p onclick="selectSubItem(this); showContent('Current project name')">[1] Pn - Current project name.</p>
                 </div>
             </div>
-            
+
             <div class="spoiler inactive" onclick="toggleSpoiler(this)">
                 <div class="spoiler-title-container">
                     <div class="spoiler-icon-container">
@@ -257,7 +272,7 @@
             <p>Select an item from the left to see details here.</p>
             <div class="bottom-bar"></div>
         </div>
-        
+
         <!-- Синий кружок -->
         <div id="active-indicator" class="active-indicator"></div>
     </div>
@@ -294,7 +309,7 @@
         // Функция для отображения информации в правом блоке
         function showContent(content) {
             var infoDisplay = document.getElementById('info-display');
-            
+
             // Убедимся, что нижний блок остается
             var existingBottomBar = infoDisplay.querySelector('.bottom-bar');
             if (!existingBottomBar) {
@@ -311,21 +326,25 @@
                 contentElement.className = 'content-display';
                 infoDisplay.insertBefore(contentElement, existingBottomBar || bottomBar);
             }
-            
+
             contentElement.innerHTML = content;
         }
 
-        // Функция для обновления положения синего кружка
+        // Функция для обновления положения синего кружка и длины линии
         function updateActiveIndicator(activeSpoiler) {
             var indicator = document.getElementById('active-indicator');
+            var indicatorLine = document.getElementById('indicator-line');
             var spoilerTitle = activeSpoiler.querySelector('.spoiler-title-container');
             if (spoilerTitle) {
                 var offsetTop = activeSpoiler.offsetTop + spoilerTitle.offsetTop + (spoilerTitle.offsetHeight / 2) - (indicator.offsetHeight / 2);
+                var indicatorLeft = indicator.getBoundingClientRect().left - indicator.parentElement.getBoundingClientRect().left;
                 indicator.style.top = offsetTop + 'px';
+                indicatorLine.style.height = offsetTop + 'px';
+                indicatorLine.style.left = indicatorLeft + (indicator.offsetWidth / 2) + 'px';
             }
         }
 
-        // Устанавливаем начальное положение для активного кружка
+        // Устанавливаем начальное положение для активного кружка и линии
         document.addEventListener("DOMContentLoaded", function() {
             var activeSpoiler = document.querySelector('.spoiler.active');
             if (activeSpoiler) {
