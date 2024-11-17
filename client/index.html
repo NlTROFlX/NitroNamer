@@ -64,6 +64,7 @@
             display: flex;
             width: 100%;
             height: calc(100% - 80px); /* Учитывая верхний и нижний блок */
+            position: relative;
         }
 
         /* Левая и правая половины */
@@ -90,6 +91,7 @@
             padding: 8px;
             padding-bottom: 8px;
             transition: background-color 0.125s ease; /* Плавная анимация для фона */
+            position: relative;
         }
 
         .spoiler.active .spoiler-title {
@@ -128,6 +130,19 @@
         .spoiler.active .spoiler-content p:hover {
             color: #b9b9b9; /* Цвет при наведении на подпункт */
             transition: color 0.124s ease; /* Плавная анимация при наведении */
+        }
+
+        /* Синий кружок */
+        .active-indicator {
+            width: 9.8547px;
+            height: 9.8547px;
+            border: 1px solid #2d8ceb;
+            background-color: #232323;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            transition: top 0.125s ease;
         }
 
         /* Стиль неактивного спойлера */
@@ -242,6 +257,9 @@
             <p>Select an item from the left to see details here.</p>
             <div class="bottom-bar"></div>
         </div>
+        
+        <!-- Синий кружок -->
+        <div id="active-indicator" class="active-indicator"></div>
     </div>
 
     <script>
@@ -258,6 +276,9 @@
 
                 spoiler.classList.remove('inactive');
                 spoiler.classList.add('active');
+                updateActiveIndicator(spoiler);
+            } else {
+                updateActiveIndicator(spoiler);
             }
         }
 
@@ -293,6 +314,24 @@
             
             contentElement.innerHTML = content;
         }
+
+        // Функция для обновления положения синего кружка
+        function updateActiveIndicator(activeSpoiler) {
+            var indicator = document.getElementById('active-indicator');
+            var spoilerTitle = activeSpoiler.querySelector('.spoiler-title-container');
+            if (spoilerTitle) {
+                var offsetTop = activeSpoiler.offsetTop + spoilerTitle.offsetTop + (spoilerTitle.offsetHeight / 2) - (indicator.offsetHeight / 2);
+                indicator.style.top = offsetTop + 'px';
+            }
+        }
+
+        // Устанавливаем начальное положение для активного кружка
+        document.addEventListener("DOMContentLoaded", function() {
+            var activeSpoiler = document.querySelector('.spoiler.active');
+            if (activeSpoiler) {
+                updateActiveIndicator(activeSpoiler);
+            }
+        });
     </script>
 </body>
 </html>
