@@ -234,6 +234,25 @@
             box-sizing: border-box;
             margin-top: auto; /* Прижать к низу блока .right */
             align-self: flex-start;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fira Sans', sans-serif;
+            font-size: 12px;
+            color: #b9b9b9;
+        }
+
+        .license-by {
+            font-weight: normal;
+        }
+
+        .license-nitrofix {
+            font-weight: 100;
+            font-style: italic;
+        }
+
+        .icon {
+            margin-left: 8px;
         }
     </style>
 </head>
@@ -276,13 +295,18 @@
                     <p onclick="selectSubItem(this); showContent('Time properties information')">Time properties information...</p>
                 </div>
             </div>
-            
         </div>
 
         <!-- Правая колонка с информацией -->
         <div class="right" id="info-display">
             <p>Select an item from the left to see details here.</p>
-            <div class="bottom-bar"></div>
+            <div class="bottom-bar">
+                <span class="license-by">LICENSE BY</span> <span class="license-nitrofix">NITROFIX</span>
+                <img src="icons/icon_boosty.svg" class="icon" height="14px" alt="Boosty">
+                <img src="icons/icon_github.svg" class="icon" width="13.7667px" alt="GitHub">
+                <img src="icons/icon_reddit.svg" class="icon" height="14px" alt="Reddit">
+                <img src="icons/icon_telegram.svg" class="icon" height="14px" alt="Telegram">
+            </div>
         </div>
 
         <!-- Синий кружок с числом подпунктов -->
