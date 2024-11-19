@@ -30,12 +30,16 @@
                 </Lifecycle>
                 <UI>
                     <Type>Panel</Type>
-                    <Menu>NitroNamer Variablle Library 2024.4</Menu>
+                    <Menu>NitroNamer Variable Library 2024.4</Menu>
                     <Geometry>
                         <Size>
-                            <Height>468</Height>
                             <Width>468</Width>
+                            <Height>428</Height>
                         </Size>
+                        <MaxSize>
+                            <Width>468</Width>
+                            <Height>428</Height>
+                        </MaxSize>
                     </Geometry>
                     <Icons/>
                 </UI>
