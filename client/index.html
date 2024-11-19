@@ -7,16 +7,37 @@
         /* Подключение шрифта FiraSans */
         @font-face {
             font-family: 'Fira Sans';
-            src: url('FiraSans-Regular.ttf') format('truetype');
+            src: url('/fonts/FiraSans/FiraSans-Regular.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Fira Sans';
+            src: url('/fonts/FiraSans/FiraSans-Bold.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Fira Sans';
+            src: url('/fonts/FiraSans/FiraSans-Italic.ttf') format('truetype');
+            font-weight: normal;
+            font-style: italic;
+        }
+
+        @font-face {
+            font-family: 'Fira Sans';
+            src: url('/fonts/FiraSans/FiraSans-BoldItalic.ttf') format('truetype');
+            font-weight: bold;
+            font-style: italic;
         }
 
         /* Установка глобального цвета фона и базовых стилей */
         body, html {
             margin: 0;
             padding: 0;
-            width: 468px;
+            width: 585px;
             height: 468px;
             overflow: hidden;
             background-color: #232323;
@@ -30,7 +51,7 @@
 
         /* Верхний блок */
         .top-bar {
-            width: 468px;
+            width: 100%;
             height: 40px;
             background-color: #161616;
             border-bottom: 1px solid #313131;
@@ -45,7 +66,7 @@
         }
 
         .title-thin-italic {
-            font-family: 'Fira Sans';
+            font-family: 'Fira Sans', sans-serif;
             font-weight: 100;
             font-style: italic;
             font-size: 24px;
@@ -81,20 +102,94 @@
 
         /* Левая и правая половины */
         .left {
-            width: 50%;
+            width: 234px;
             height: 100%;
             overflow-y: auto;
             border-right: 1px solid #313131;
         }
 
         .right {
-            width: 50%;
+            width: 351px;
             height: 100%;
             padding: 0;
             overflow: hidden;
             position: relative;
             display: flex;
             flex-direction: column;
+        }
+
+        /* Стиль для текстового блока в content-1 */
+        .variable-name-block {
+            width: 100%;
+            border-radius: 1.5px;
+            border: 1px solid #313131;
+            background-color: #161616;
+            margin-top: 6px;
+            margin-left: 13px;
+            margin-right: 13px;
+            padding-top: 2px;
+            padding-left: 5.68px;
+            display: flex; /* Для центрирования текста по вертикали и горизонтали */
+            align-items: center;
+            justify-content: left;
+            font-family: 'Fira Sans', sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            color: #e7e7e7; /* Цвет текста */
+            box-sizing: border-box; /* Чтобы padding и border не увеличивали размер блока */
+        }
+
+        .variable-example-block {
+            width: 100%;
+            border-radius: 1.5px;
+            border: 1px solid #313131;
+            background-color: #161616;
+            margin-left: 13px;
+            margin-right: 13px;
+            margin-bottom: 4px;
+            padding-top: 2px;
+            padding-left: 5.68px;
+            display: flex; /* Для центрирования текста по вертикали и горизонтали */
+            align-items: center;
+            justify-content: left;
+            font-family: 'Fira Sans', sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            color: #e7e7e7; /* Цвет текста */
+            box-sizing: border-box; /* Чтобы padding и border не увеличивали размер блока */
+        }
+
+        .variable-header-block{
+            width: 100%;
+            margin-left: 18.65px;
+            margin-right: 13px;
+            margin-top: 24px;
+            margin-bottom: 8px;
+            font-family: 'Fira Sans', sans-serif;
+            font-size: 12px;
+            color: #e7e7e7;
+        }
+
+        .variable-text-block {
+            width: 332,35px;
+            padding-left: 18.65px;
+            padding-right: 18.65px;
+            font-family: 'Fira Sans', sans-serif;
+            font-size: 12px;
+            color: #e7e7e7;
+        }
+
+        .variable-text-block-span-1{
+            font-family: 'Fira Sans', sans-serif;
+            font-weight: 800;
+            font-style: italic;
+        }
+
+        .variable-text-block-span-2{
+            font-family: 'Fira Sans', sans-serif;
+            font-weight: 800;
+            font-style: italic;
+            color:#2d8ceb;
         }
 
         .left, .right{
@@ -144,8 +239,8 @@
         }
 
         .spoiler.active .spoiler-content p:hover {
-            color: #b9b9b9; /* Цвет при наведении на подпункт */
-            transition: color 0.124s ease; /* Плавная анимация при наведении */
+            color: #e7e7e7;
+            transition: color 0.125s ease; /* Плавная анимация при наведении */
         }
 
         #content-sections .content-section {
@@ -159,7 +254,7 @@
             border: 1px solid #2d8ceb;
             background-color: #232323;
             position: absolute;
-            left: 50%;
+            left: 234px;
             transform: translateX(-50%);
             border-radius: 50%;
             transition: top 0.125s ease;
@@ -231,7 +326,7 @@
 
         /* Нижний блок внутри правой половины */
         .bottom-bar {
-            width: 234px;
+            width: 100%;
             height: 40px;
             background-color: #161616;
             border-top: 1px solid #313131;
@@ -277,10 +372,11 @@
 
     <!-- Левая колонка со спойлерами -->
     <div class="left">
-            <div class="spoiler inactive" onclick="toggleSpoiler(this)">
+
+            <div class="spoiler active" onclick="toggleSpoiler(this)">
                 <div class="spoiler-title-container">
                     <div class="spoiler-icon-container">
-                        <img src="icons/icon1.svg" class="spoiler-icon" alt="Icon 1">
+                        <img src="icons/icon-panoram.svg" class="spoiler-icon" alt="Icon 1">
                     </div>
                     <div class="spoiler-title">Composition information</div>
                 </div>
@@ -293,12 +389,72 @@
             <div class="spoiler inactive" onclick="toggleSpoiler(this)">
                 <div class="spoiler-title-container">
                     <div class="spoiler-icon-container">
-                        <img src="icons/icon2.svg" class="spoiler-icon" alt="Icon 2">
+                        <img src="icons/icon-clock.svg" class="spoiler-icon" alt="Icon 2">
                     </div>
                     <div class="spoiler-title">Time and duration</div>
                 </div>
                 <div class="spoiler-content">
-                    <p data-content-id="timeProperties" onclick="selectSubItem(this); showContent(this.dataset.contentId)">Time properties information...</p>
+                    
+                </div>
+            </div>
+
+            <div class="spoiler inactive" onclick="toggleSpoiler(this)">
+                <div class="spoiler-title-container">
+                    <div class="spoiler-icon-container">
+                        <img src="icons/icon-magic.svg" class="spoiler-icon" alt="Icon 3">
+                    </div>
+                    <div class="spoiler-title">Effects</div>
+                </div>
+                <div class="spoiler-content">
+                    
+                </div>
+            </div>
+
+            <div class="spoiler inactive" onclick="toggleSpoiler(this)">
+                <div class="spoiler-title-container">
+                    <div class="spoiler-icon-container">
+                        <img src="icons/icon-image.svg" class="spoiler-icon" alt="Icon 4">
+                    </div>
+                    <div class="spoiler-title">Frame rate and resolution</div>
+                </div>
+                <div class="spoiler-content">
+                    
+                </div>
+            </div>
+
+            <div class="spoiler inactive" onclick="toggleSpoiler(this)">
+                <div class="spoiler-title-container">
+                    <div class="spoiler-icon-container">
+                        <img src="icons/icon-list.svg" class="spoiler-icon" alt="Icon 5">
+                    </div>
+                    <div class="spoiler-title">Indexes and indetifiers</div>
+                </div>
+                <div class="spoiler-content">
+                    
+                </div>
+            </div>
+
+            <div class="spoiler inactive" onclick="toggleSpoiler(this)">
+                <div class="spoiler-title-container">
+                    <div class="spoiler-icon-container">
+                        <img src="icons/icon-layer.svg" class="spoiler-icon" alt="Icon 6">
+                    </div>
+                    <div class="spoiler-title">Layer properties</div>
+                </div>
+                <div class="spoiler-content">
+                    
+                </div>
+            </div>
+
+            <div class="spoiler inactive" onclick="toggleSpoiler(this)">
+                <div class="spoiler-title-container">
+                    <div class="spoiler-icon-container">
+                        <img src="icons/icon-dots.svg" class="spoiler-icon" alt="Icon 7">
+                    </div>
+                    <div class="spoiler-title">Other</div>
+                </div>
+                <div class="spoiler-content">
+                    
                 </div>
             </div>
     </div>
@@ -310,8 +466,34 @@
 
             <div class="content-section" id="content-1">
 
-                <h2>Заголовок для Контента 1</h2>
-                <p>Детальная информация для подпункта 1.</p>
+                <div class="variable-name-block">
+                    <span class="variable-text-block-span-1">C</span> - variable
+                </div>
+
+                <div class="variable-header-block">
+                    Specifications:
+                </div>
+                <div class="variable-text-block">
+                    Number of available modes: <span class="variable-text-block-span-1">1</span><br>
+                    Customizing the return value: <span class="variable-text-block-span-1">No</span><br>
+                    Customizing the separator: <span class="variable-text-block-span-1">No</span><br>
+                    Source of data: <span class="variable-text-block-span-1">Pre-comp</span><br>
+                </div>
+                <div class="variable-header-block">
+                    Description:
+                </div>
+                <div class="variable-text-block">
+                    The variable <span class="variable-text-block-span-1">C</span> is the name of the current composition in which the layer being processed is located.
+                </div>
+                <div class="variable-header-block">
+                    Example with the result, mode 1:
+                </div>
+                <div class="variable-example-block">
+                    <span class="variable-text-block-span-2">C</span><span class="variable-text-block-span-3">(_renderDate_)_Cd</span>
+                </div>
+                <div class="variable-text-block">
+                    <span class="variable-text-block-span-2">FirstSequence</span>_renderDate_16.03.2025
+                </div>
 
             </div>
 
@@ -333,7 +515,7 @@
         </div>
     </div>
 
-    <div id="active-indicator" class="active-indicator"></div>
+    <div id="active-indicator" class="active-indicator">-</div>
 
     <script src="CSInterface.js"></script>
     <script src="index.js"></script>
