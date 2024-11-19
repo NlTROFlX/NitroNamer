@@ -22,7 +22,7 @@
             <DispatchInfo>
                 <Resources>
                     <MainPath>./client/index.html</MainPath>
-                    <ScriptPath>./host/index.jsx</ScriptPath>
+                    <ScriptPath>./client/index.js</ScriptPath>
                     <CEFCommandLine/>
                 </Resources>
                 <Lifecycle>

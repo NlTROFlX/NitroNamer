@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8">
     <title>My Panel</title>
+    <script src="CSInterface.js"></script>
+    <script src="index.js"></script>
     <style>
         /* Подключение шрифта FiraSans */
         @font-face {
@@ -253,6 +255,7 @@
 
         .icon {
             margin-left: 8px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -300,13 +303,15 @@
         <!-- Правая колонка с информацией -->
         <div class="right" id="info-display">
             <p>Select an item from the left to see details here.</p>
+            <!-- Нижний блок внутри правой половины -->
             <div class="bottom-bar">
-                <span class="license-by">LICENSE BY</span> <span class="license-nitrofix">NITROFIX</span>
-                <img src="icons/icon_boosty.svg" class="icon" height="14px" alt="Boosty">
+                <span class="license-by" id="license-by">LICENSE BY</span>
+                <span class="license-nitrofix" id="license-nitrofix">NITROFIX</span>
+                <img src="icons/icon_boosty.svg" class="icon" id="boosty-icon" height="14px" alt="Boosty">
                 <img src="icons/icon_github.svg" class="icon" width="13.7667px" alt="GitHub">
                 <img src="icons/icon_reddit.svg" class="icon" height="14px" alt="Reddit">
                 <img src="icons/icon_telegram.svg" class="icon" height="14px" alt="Telegram">
-            </div>
+            </div>        
         </div>
 
         <!-- Синий кружок с числом подпунктов -->
