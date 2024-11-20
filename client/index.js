@@ -116,4 +116,65 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error("Для иконки отсутствует атрибут 'data-url'.");
         }
     });
+
+    // Функция для копирования текста в буфер обмена с использованием document.execCommand('copy')
+    function copyToClipboard(text) {
+        // Создаем временный элемент textarea
+        var tempTextArea = document.createElement('textarea');
+        tempTextArea.value = text;
+        tempTextArea.style.position = 'fixed';  // Избегаем прокрутки страницы
+        tempTextArea.style.opacity = '0';
+        document.body.appendChild(tempTextArea);
+        tempTextArea.focus();
+        tempTextArea.select();
+
+        try {
+            var successful = document.execCommand('copy');
+            if (successful) {
+                console.log('Текст скопирован в буфер обмена:', text);
+            } else {
+                console.error('Не удалось скопировать текст');
+            }
+        } catch (err) {
+            console.error('Ошибка при попытке скопировать текст:', err);
+        }
+
+        // Удаляем временный элемент
+        document.body.removeChild(tempTextArea);
+    }
+
+    // Переменная для хранения текущего элемента под курсором
+    let currentHoveredElement = null;
+
+    // Отслеживаем перемещение мыши и обновляем текущий элемент
+    document.addEventListener('mousemove', function(event) {
+        let element = document.elementFromPoint(event.clientX, event.clientY);
+
+        if (element) {
+            if (element.classList.contains('variable-name-block') || element.classList.contains('variable-example-block')) {
+                currentHoveredElement = element;
+            } else {
+                let parent = element.closest('.variable-name-block, .variable-example-block');
+                if (parent) {
+                    currentHoveredElement = parent;
+                } else {
+                    currentHoveredElement = null;
+                }
+            }
+        }
+    });
+
+    // Отслеживаем нажатие клавиш
+    document.addEventListener('keydown', function(event) {
+        if (event.ctrlKey && (event.key === 'c' || event.key === 'C')) {
+            if (currentHoveredElement) {
+                let valueToCopy = currentHoveredElement.getAttribute('data-value');
+                if (valueToCopy) {
+                    copyToClipboard(valueToCopy);
+                    event.preventDefault();
+                }
+            }
+        }
+    });
+
 });
