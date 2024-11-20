@@ -240,6 +240,33 @@
             color:#2d8ceb;
         }
 
+        .variable-name-block:hover, .variable-example-block:hover{
+            border-color: #8a8a8a;
+            transition: border-color 0.125s ease;
+        }
+
+        /* Стили для текста "Copied" внутри блоков */
+        .variable-name-block .copied-text,
+        .variable-example-block .copied-text {
+            opacity: 0;
+            transition: opacity 0.125s ease;
+            margin-left: 5px; /* Отступ слева от основного текста */
+            color: #2d8ceb; /* Цвет текста "Copied" */
+        }
+
+        /* Состояние, когда текст "Copied" видим */
+        .variable-name-block.show-copied .copied-text,
+        .variable-example-block.show-copied .copied-text {
+            opacity: 1;
+        }
+
+        /* Дополнительно, если нужно изменить стиль самого блока при копировании */
+        .variable-name-block.show-copied,
+        .variable-example-block.show-copied {
+            /* Например, изменить цвет рамки */
+            border-color: #2d8ceb;
+        }
+
         .left, .right{
             background-color: #1d1d1d;
         }
@@ -549,6 +576,7 @@
 
                 <div class="variable-name-block" data-value="C - variable">
                     <span class="variable-text-block-span-1">C</span> - variable
+                    <span class="copied-text">- Copied</span>
                 </div>
 
                 <div class="variable-header-block">
@@ -571,12 +599,14 @@
                 </div>
                 <div class="variable-example-block" data-value="C(_renderDate_)_Cd">
                     <span class="variable-text-block-span-2">C</span><span class="variable-text-block-span-3">(_renderDate_)_Cd</span>
+                    <span class="copied-text">- Copied</span>
                 </div>
                 <div class="variable-example-block-text">
                     <span class="variable-text-block-span-2">FirstSequence</span>_renderDate_16.03.2025
                 </div>
                 <div class="variable-example-block" data-value="C_(Layer-)i">
                     Pn_<span class="variable-text-block-span-2">C</span>_(Layer-)i
+                    <span class="copied-text">- Copied</span>
                 </div>
                 <div class="variable-example-block-text">
                     VideoHiveTemplate_<span class="variable-text-block-span-2">preRenderLogo1</span>_Layer-1

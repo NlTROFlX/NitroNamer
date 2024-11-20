@@ -119,7 +119,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Функция для копирования текста в буфер обмена с использованием document.execCommand('copy')
     function copyToClipboard(text) {
-        // Создаем временный элемент textarea
         var tempTextArea = document.createElement('textarea');
         tempTextArea.value = text;
         tempTextArea.style.position = 'fixed';  // Избегаем прокрутки страницы
@@ -127,21 +126,42 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.appendChild(tempTextArea);
         tempTextArea.focus();
         tempTextArea.select();
-
+    
         try {
             var successful = document.execCommand('copy');
             if (successful) {
                 console.log('Текст скопирован в буфер обмена:', text);
+    
+                // Сохраняем ссылку на элемент в момент копирования
+                let element = currentHoveredElement;
+    
+                // Проверяем, что элемент существует
+                if (element) {
+                    // Сбрасываем предыдущий таймер для этого элемента, если он существует
+                    if (element.copyTimeout) {
+                        clearTimeout(element.copyTimeout);
+                    }
+    
+                    // Добавляем класс 'show-copied' к элементу
+                    element.classList.add('show-copied');
+    
+                    // Устанавливаем новый таймер для удаления класса
+                    element.copyTimeout = setTimeout(function() {
+                        element.classList.remove('show-copied');
+                        delete element.copyTimeout; // Удаляем свойство после использования
+                    }, 1125);
+                }
+    
             } else {
                 console.error('Не удалось скопировать текст');
             }
         } catch (err) {
             console.error('Ошибка при попытке скопировать текст:', err);
         }
-
+    
         // Удаляем временный элемент
         document.body.removeChild(tempTextArea);
-    }
+    }    
 
     // Переменная для хранения текущего элемента под курсором
     let currentHoveredElement = null;
