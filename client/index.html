@@ -108,14 +108,53 @@
             border-right: 1px solid #313131;
         }
 
+        /* Стилизация скроллбара для блока .right */
+        .left::-webkit-scrollbar {
+            width: 0px; /* Ширина скроллбара */
+            z-index: 9999;
+        }
+
+        .left::-webkit-scrollbar-track {
+            opacity: 0;
+        }
+
+        .left::-webkit-scrollbar-thumb {
+            opacity: 0;
+        }
+
+        .left::-webkit-scrollbar-button {
+            display: none; /* Убираем верхние и нижние кнопки */
+            height: 0;
+        }
+
         .right {
             width: 351px;
             height: 100%;
             padding: 0;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             position: relative;
             display: flex;
             flex-direction: column;
+        }
+        
+        /* Стилизация скроллбара для блока .right */
+        .right::-webkit-scrollbar {
+            width: 1px; /* Ширина скроллбара */
+            z-index: 9999;
+        }
+
+        .right::-webkit-scrollbar-track {
+            opacity: 0;
+        }
+
+        .right::-webkit-scrollbar-thumb {
+            background: #b9b9b9; /* Цвет ползунка */
+        }
+
+        .right::-webkit-scrollbar-button {
+            display: none; /* Убираем верхние и нижние кнопки */
+            height: 0;
         }
 
         /* Стиль для текстового блока в content-1 */
@@ -171,9 +210,19 @@
         }
 
         .variable-text-block {
-            width: 332,35px;
+            width: 332.35px;
             padding-left: 18.65px;
             padding-right: 18.65px;
+            font-family: 'Fira Sans', sans-serif;
+            font-size: 12px;
+            color: #e7e7e7;
+        }
+
+        .variable-example-block-text{
+            width: 332.35px;
+            padding-left: 18.65px;
+            padding-right: 18.65px;
+            margin-bottom: 4px;
             font-family: 'Fira Sans', sans-serif;
             font-size: 12px;
             color: #e7e7e7;
@@ -188,7 +237,6 @@
         .variable-text-block-span-2{
             font-family: 'Fira Sans', sans-serif;
             font-weight: 800;
-            font-style: italic;
             color:#2d8ceb;
         }
 
@@ -327,7 +375,9 @@
         /* Нижний блок внутри правой половины */
         .bottom-bar {
             width: 100%;
+            min-height: 40px;
             height: 40px;
+            max-height: 40px;
             background-color: #161616;
             border-top: 1px solid #313131;
             box-sizing: border-box;
@@ -373,6 +423,7 @@
     <!-- Левая колонка со спойлерами -->
     <div class="left">
 
+            <!-- Composition information -->
             <div class="spoiler active" onclick="toggleSpoiler(this)">
                 <div class="spoiler-title-container">
                     <div class="spoiler-icon-container">
@@ -386,6 +437,7 @@
                 </div>                
             </div>
 
+            <!-- Time and duration -->
             <div class="spoiler inactive" onclick="toggleSpoiler(this)">
                 <div class="spoiler-title-container">
                     <div class="spoiler-icon-container">
@@ -394,10 +446,16 @@
                     <div class="spoiler-title">Time and duration</div>
                 </div>
                 <div class="spoiler-content">
-                    
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Ip - Entry point of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Op - Exit point of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[4] D - Duration of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Df - Time duration of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] D - Duration in frames.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[4] Cd - Duration in frames.</p>
                 </div>
             </div>
 
+            <!-- Effects -->
             <div class="spoiler inactive" onclick="toggleSpoiler(this)">
                 <div class="spoiler-title-container">
                     <div class="spoiler-icon-container">
@@ -406,10 +464,12 @@
                     <div class="spoiler-title">Effects</div>
                 </div>
                 <div class="spoiler-content">
-                    
+                    <p onclick="selectSubItem(this); showContent('content-1')">[4] E - Names of the effects.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Ec - Number of effects per layer.</p>
                 </div>
             </div>
 
+            <!-- Frame rate and resolution -->
             <div class="spoiler inactive" onclick="toggleSpoiler(this)">
                 <div class="spoiler-title-container">
                     <div class="spoiler-icon-container">
@@ -418,10 +478,13 @@
                     <div class="spoiler-title">Frame rate and resolution</div>
                 </div>
                 <div class="spoiler-content">
-                    
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] F - Frame rate.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] R - Resolution of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[2] Ar - Aspect ratio.</p>
                 </div>
             </div>
 
+            <!-- Indexes and indetifiers -->
             <div class="spoiler inactive" onclick="toggleSpoiler(this)">
                 <div class="spoiler-title-container">
                     <div class="spoiler-icon-container">
@@ -430,10 +493,13 @@
                     <div class="spoiler-title">Indexes and indetifiers</div>
                 </div>
                 <div class="spoiler-content">
-                    
+                    <p onclick="selectSubItem(this); showContent('content-1')">[2] i - Global index of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[3] I - Local index of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Lpnt(i) - Local index of the layer.</p>
                 </div>
             </div>
 
+            <!-- Indexes and indetifiers -->
             <div class="spoiler inactive" onclick="toggleSpoiler(this)">
                 <div class="spoiler-title-container">
                     <div class="spoiler-icon-container">
@@ -442,10 +508,23 @@
                     <div class="spoiler-title">Layer properties</div>
                 </div>
                 <div class="spoiler-content">
-                    
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] T - Type of layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] S - Name of the source layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] W - Width of the layer in pixels.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] H - Height of the layer in pixels.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Lpos - Position of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Lsc - Scale of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Lrot - Rotate the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Lops - Opacity of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Tm - Type of track matte layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[4] An - Animated layer properties.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[4] Lexp - Layer properties with expressions.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[4] Lmn - List of layer masks.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[4] Lmс - Number of layer masks.</p>
                 </div>
             </div>
 
+            <!-- Other -->
             <div class="spoiler inactive" onclick="toggleSpoiler(this)">
                 <div class="spoiler-title-container">
                     <div class="spoiler-icon-container">
@@ -454,7 +533,9 @@
                     <div class="spoiler-title">Other</div>
                 </div>
                 <div class="spoiler-content">
-                    
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] O - Current layer name.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Lpnt - Parent layer name.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[2] Fext - Parent layer name.</p>
                 </div>
             </div>
     </div>
@@ -463,7 +544,7 @@
     <div class="right" id="info-display">
         <p id="default-message">Select an item from the left to see details here.</p>
         <div id="content-sections">
-
+            <div class="hover-region"></div>
             <div class="content-section" id="content-1">
 
                 <div class="variable-name-block">
@@ -486,13 +567,19 @@
                     The variable <span class="variable-text-block-span-1">C</span> is the name of the current composition in which the layer being processed is located.
                 </div>
                 <div class="variable-header-block">
-                    Example with the result, mode 1:
+                    Examples with results, mode 1
                 </div>
                 <div class="variable-example-block">
                     <span class="variable-text-block-span-2">C</span><span class="variable-text-block-span-3">(_renderDate_)_Cd</span>
                 </div>
-                <div class="variable-text-block">
+                <div class="variable-example-block-text">
                     <span class="variable-text-block-span-2">FirstSequence</span>_renderDate_16.03.2025
+                </div>
+                <div class="variable-example-block">
+                    Pn_<span class="variable-text-block-span-2">C</span>_(Layer-)i
+                </div>
+                <div class="variable-example-block-text">
+                    VideoHiveTemplate_<span class="variable-text-block-span-2">preRenderLogo1</span>_Layer-1
                 </div>
 
             </div>
