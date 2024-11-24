@@ -7,28 +7,28 @@
         /* Подключение шрифта FiraSans */
         @font-face {
             font-family: 'Fira Sans';
-            src: url('/fonts/FiraSans/FiraSans-Regular.ttf') format('truetype');
+            src: url('/fonts/FiraSans-Regular.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
 
         @font-face {
             font-family: 'Fira Sans';
-            src: url('/fonts/FiraSans/FiraSans-Bold.ttf') format('truetype');
+            src: url('/fonts/FiraSans-Bold.ttf') format('truetype');
             font-weight: bold;
             font-style: normal;
         }
 
         @font-face {
             font-family: 'Fira Sans';
-            src: url('/fonts/FiraSans/FiraSans-Italic.ttf') format('truetype');
+            src: url('/fonts/FiraSans-Italic.ttf') format('truetype');
             font-weight: normal;
             font-style: italic;
         }
 
         @font-face {
             font-family: 'Fira Sans';
-            src: url('/fonts/FiraSans/FiraSans-BoldItalic.ttf') format('truetype');
+            src: url('/fonts/FiraSans-BoldItalic.ttf') format('truetype');
             font-weight: bold;
             font-style: italic;
         }
@@ -108,11 +108,17 @@
             border-right: 1px solid #313131;
         }
 
+        .left::-webkit-scrollbar{
+            width: 0px;
+        }
+
         .left::-webkit-scrollbar-track {
+            display: none;
             opacity: 0;
         }
 
         .left::-webkit-scrollbar-thumb {
+            display: none;
             opacity: 0;
         }
 
@@ -478,6 +484,107 @@
             margin-right: 18.65px;
             font-weight: 400;
         }
+
+/* Стили для language-selector */
+.language-selector {
+    position: relative;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Контейнер для выбранного языка и иконки */
+.language-selector .selected-language-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Стиль для выбранного языка */
+.language-selector .selected-language {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    color: #b9b9b9;
+    display: inline-block;
+    text-align: center;
+    transition: color 0.125s ease; /* Переход для цвета */
+}
+
+/* Стиль для иконки стрелки */
+.language-selector .arrow-icon {
+    width: 8.9714px;
+    height: 4.4857px;
+    margin-top: 4px;
+    display: inline-block;
+    transition: filter 0.125s ease; /* Переход для фильтра */
+}
+
+/* Скрытый выпадающий список по умолчанию */
+.language-selector .language-dropdown {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-50%) translateY(-10px); /* Начальное смещение */
+    transition: opacity 0.125s ease, transform 0.125s ease, visibility 0.125s ease;
+    
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 50%;
+    background-color: #292929;
+    border: 1px solid #313131;
+    border-radius: 1.5px;
+    padding: 4px;
+    z-index: 1000;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Стиль для опций в списке */
+.language-selector .language-option {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 300; /* thin */
+    color: #b9b9b9;
+    padding: 4px;
+    cursor: pointer;
+    transition: color 0.125s ease, font-weight 0.125s ease;
+}
+
+/* Убираем подсветку фона при наведении и добавляем плавное изменение шрифта и цвета */
+.language-selector .language-option:hover {
+    background-color: transparent;
+    color: #e7e7e7;
+    font-weight: 600;
+}
+
+/* Отображение списка при активном состоянии */
+.language-selector.active .language-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0); /* Возвращаем в исходное положение */
+}
+
+/* Поворот стрелки при открытии */
+.language-selector.active .arrow-icon {
+    transform: rotate(180deg);
+    transition: transform 0.125s ease; /* Переход для поворота */
+}
+
+/* Изменение цвета шрифта и иконки при наведении на контейнер */
+.language-selector .selected-language-container:hover .selected-language {
+    color: #e7e7e7;
+}
+
+.language-selector .selected-language-container:hover .arrow-icon {
+    color: #e7e7e7;
+    /* Если иконка использует fill="currentColor", это изменит её цвет */
+}
+
+
+
     </style>
 </head>
 <body>
@@ -485,7 +592,19 @@
     <div class="top-bar">
         <span class="title-thin-italic">NitroNamer</span>
         <span class="title-semibold-italic"> Variable Library</span>
-    </div>
+        <!-- Обновлённый выпадающий список -->
+        <div class="language-selector">
+            <div class="selected-language-container">
+                <span class="selected-language">US</span>
+                <img src="icons/arrow.svg" class="arrow-icon" alt="Arrow">
+            </div>
+            <div class="language-dropdown">
+                <div class="language-option">US</div>
+                <div class="language-option">RU</div>
+                <div class="language-option">CN</div>
+            </div>
+        </div>
+    </div> 
 
     <!-- Линия, соединяющая top-bar и кружок -->
     <div id="indicator-line" class="indicator-line"></div>

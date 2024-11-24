@@ -71,7 +71,6 @@ function showContent(contentId) {
     }
 }
 
-
 // Функция для обновления положения индикатора
 function updateActiveIndicator(activeSpoiler) {
     var indicator = document.getElementById('active-indicator');
@@ -88,6 +87,46 @@ function updateActiveIndicator(activeSpoiler) {
     }
 }
 
+// Функция для инициализации выпадающего списка языка
+function initializeLanguageSelector() {
+    var languageSelector = document.querySelector('.language-selector');
+    var selectedLanguage = languageSelector.querySelector('.selected-language');
+    var languageDropdown = languageSelector.querySelector('.language-dropdown');
+    var languageOptions = languageDropdown.querySelectorAll('.language-option');
+
+    // Обработчик клика по селектору языка
+    languageSelector.addEventListener('click', function (event) {
+        event.stopPropagation();
+        var isActive = languageSelector.classList.toggle('active');
+        languageSelector.setAttribute('aria-expanded', isActive);
+    });
+
+    // Обработчик клика по опциям языка
+    languageOptions.forEach(function (option) {
+        option.addEventListener('click', function (event) {
+            event.stopPropagation();
+            var newLanguage = this.textContent;
+            selectedLanguage.textContent = newLanguage;
+            languageSelector.classList.remove('active');
+            languageSelector.setAttribute('aria-expanded', 'false');
+            // Здесь можно добавить функционал переключения языка интерфейса
+        });
+    });
+
+    // Закрываем выпадающий список при клике вне его
+    document.addEventListener('click', function () {
+        languageSelector.classList.remove('active');
+        languageSelector.setAttribute('aria-expanded', 'false');
+    });
+}
+
+// Вызываем функцию инициализации после загрузки страницы
+document.addEventListener('DOMContentLoaded', function () {
+    // Ваш существующий код...
+    initializeLanguageSelector();
+});
+
+
 // Инициализация после загрузки страницы
 document.addEventListener('DOMContentLoaded', function () {
     var csInterface = new CSInterface();
@@ -97,25 +136,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (activeSpoiler) {
         updateActiveIndicator(activeSpoiler);
     }
-
-    // Обработчики кликов для иконок
-    var clickableIcons = document.querySelectorAll('.clickable-icon');
-
-    clickableIcons.forEach(function(icon) {
-        var url = icon.getAttribute('data-url');
-        if (url) {
-            icon.style.cursor = 'pointer'; // Изменяем курсор при наведении
-            icon.addEventListener('click', function() {
-                try {
-                    csInterface.openURLInDefaultBrowser(url);
-                } catch (error) {
-                    console.error("Не удалось открыть URL:", error);
-                }
-            });
-        } else {
-            console.error("Для иконки отсутствует атрибут 'data-url'.");
-        }
-    });
 
     // Функция для копирования текста в буфер обмена с использованием document.execCommand('copy')
     function copyToClipboard(text) {
