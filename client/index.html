@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <title>My Panel</title>
@@ -34,7 +35,8 @@
         }
 
         /* Установка глобального цвета фона и базовых стилей */
-        body, html {
+        body,
+        html {
             margin: 0;
             padding: 0;
             width: 585px;
@@ -46,7 +48,8 @@
             align-items: center;
             font-family: 'Fira Sans', sans-serif;
             color: #ffffff;
-            user-select: none; /* Запрет на выделение текста */
+            user-select: none;
+            /* Запрет на выделение текста */
         }
 
         /* Верхний блок */
@@ -84,7 +87,8 @@
         /* Линия, соединяющая top-bar и кружок */
         .indicator-line {
             position: absolute;
-            top: 40px; /* Находится сразу под top-bar */
+            top: 40px;
+            /* Находится сразу под top-bar */
             left: -1px;
             width: 1px;
             background-color: #2d8ceb;
@@ -96,7 +100,8 @@
         .split-container {
             display: flex;
             width: 100%;
-            height: calc(100% - 80px); /* Учитывая верхний и нижний блок */
+            height: calc(100% - 80px);
+            /* Учитывая верхний и нижний блок */
             position: relative;
         }
 
@@ -108,7 +113,7 @@
             border-right: 1px solid #313131;
         }
 
-        .left::-webkit-scrollbar{
+        .left::-webkit-scrollbar {
             width: 0px;
         }
 
@@ -123,7 +128,8 @@
         }
 
         .left::-webkit-scrollbar-button {
-            display: none; /* Убираем верхние и нижние кнопки */
+            display: none;
+            /* Убираем верхние и нижние кнопки */
             height: 0;
         }
 
@@ -137,10 +143,11 @@
             display: flex;
             flex-direction: column;
         }
-        
+
         /* Стилизация скроллбара для блока .right */
         .right::-webkit-scrollbar {
-            width: 4px; /* Ширина скроллбара */
+            width: 4px;
+            /* Ширина скроллбара */
             z-index: 999;
         }
 
@@ -150,12 +157,14 @@
         }
 
         .right::-webkit-scrollbar-thumb {
-            background: #b9b9b9; /* Цвет ползунка */
+            background: #b9b9b9;
+            /* Цвет ползунка */
             z-index: 999;
         }
 
         .right::-webkit-scrollbar-button {
-            display: none; /* Убираем верхние и нижние кнопки */
+            display: none;
+            /* Убираем верхние и нижние кнопки */
             height: 0;
             z-index: 999;
         }
@@ -172,14 +181,17 @@
             margin-right: 13px;
             padding-top: 2px;
             padding-left: 5.68px;
-            display: flex; /* Для центрирования текста по вертикали и горизонтали */
+            display: flex;
+            /* Для центрирования текста по вертикали и горизонтали */
             align-items: center;
             justify-content: left;
             font-family: 'Fira Sans', sans-serif;
             font-weight: 400;
             font-size: 12px;
-            color: #e7e7e7; /* Цвет текста */
-            box-sizing: border-box; /* Чтобы padding и border не увеличивали размер блока */
+            color: #e7e7e7;
+            /* Цвет текста */
+            box-sizing: border-box;
+            /* Чтобы padding и border не увеличивали размер блока */
         }
 
         .variable-example-block {
@@ -193,19 +205,22 @@
             margin-bottom: 4px;
             padding-top: 2px;
             padding-left: 5.68px;
-            display: flex; /* Для центрирования текста по вертикали и горизонтали */
+            display: flex;
+            /* Для центрирования текста по вертикали и горизонтали */
             align-items: center;
             justify-content: left;
             font-family: 'Fira Sans', sans-serif;
             font-weight: 400;
             font-size: 12px;
-            color: #e7e7e7; /* Цвет текста */
-            box-sizing: border-box; /* Чтобы padding и border не увеличивали размер блока */
+            color: #e7e7e7;
+            /* Цвет текста */
+            box-sizing: border-box;
+            /* Чтобы padding и border не увеличивали размер блока */
         }
 
-        .variable-header-block{
-            padding-top: 22px!important;
-            padding-bottom: 8px!important;
+        .variable-header-block {
+            padding-top: 22px !important;
+            padding-bottom: 8px !important;
             margin-left: 18.65px;
             font-weight: 200;
             font-size: 18px;
@@ -223,7 +238,7 @@
             color: #e7e7e7;
         }
 
-        .variable-example-block-text{
+        .variable-example-block-text {
             width: 332.35px;
             padding-left: 18.65px;
             padding-right: 18.65px;
@@ -233,19 +248,20 @@
             color: #e7e7e7;
         }
 
-        .variable-text-block-span-1{
+        .variable-text-block-span-1 {
             font-family: 'Fira Sans', sans-serif;
             font-weight: 600;
             font-style: italic;
         }
 
-        .variable-text-block-span-2{
+        .variable-text-block-span-2 {
             font-family: 'Fira Sans', sans-serif;
             font-weight: 800;
-            color:#2d8ceb;
+            color: #2d8ceb;
         }
 
-        .variable-name-block:hover, .variable-example-block:hover{
+        .variable-name-block:hover,
+        .variable-example-block:hover {
             border-color: #8a8a8a;
             transition: border-color 0.125s ease;
         }
@@ -255,8 +271,10 @@
         .variable-example-block .copied-text {
             opacity: 0;
             transition: opacity 0.125s ease;
-            margin-left: 5px; /* Отступ слева от основного текста */
-            color: #2d8ceb; /* Цвет текста "Copied" */
+            margin-left: 5px;
+            /* Отступ слева от основного текста */
+            color: #2d8ceb;
+            /* Цвет текста "Copied" */
         }
 
         /* Состояние, когда текст "Copied" видим */
@@ -272,7 +290,8 @@
             border-color: #2d8ceb;
         }
 
-        .left, .right{
+        .left,
+        .right {
             background-color: #1d1d1d;
         }
 
@@ -281,7 +300,8 @@
             background-color: #2a2a2a;
             padding: 8px;
             padding-bottom: 8px;
-            transition: background-color 0.125s ease; /* Плавная анимация для фона */
+            transition: background-color 0.125s ease;
+            /* Плавная анимация для фона */
             position: relative;
         }
 
@@ -290,12 +310,14 @@
             font-family: 'Fira Sans', sans-serif;
             font-size: 14px;
             font-weight: normal;
-            transition: color 0.125s ease; /* Плавная анимация для цвета текста */
+            transition: color 0.125s ease;
+            /* Плавная анимация для цвета текста */
         }
 
         .spoiler.active .spoiler-icon {
             filter: invert(48%) sepia(82%) saturate(2053%) hue-rotate(177deg) brightness(95%) contrast(102%);
-            transition: filter 0.125s ease; /* Плавная анимация для фильтра */
+            transition: filter 0.125s ease;
+            /* Плавная анимация для фильтра */
         }
 
         .spoiler.active .spoiler-content {
@@ -303,24 +325,31 @@
             font-family: 'Fira Sans', sans-serif;
             font-size: 12px;
             color: #b9b9b9;
-            margin-top: 8px; /* Отступ сверху от заголовка до подпунктов */
-            transition: opacity 0.125s ease; /* Плавное появление контента */
+            margin-top: 8px;
+            /* Отступ сверху от заголовка до подпунктов */
+            transition: opacity 0.125s ease;
+            /* Плавное появление контента */
         }
 
         .spoiler.active .spoiler-content p {
-            margin-top: 4px; /* Отступ сверху между подпунктами */
-            margin-left: 24px; /* Отступ слева */
+            margin-top: 4px;
+            /* Отступ сверху между подпунктами */
+            margin-left: 24px;
+            /* Отступ слева */
             cursor: pointer;
-            transition: color 0.124s ease; /* Плавная анимация для цвета текста */
+            transition: color 0.124s ease;
+            /* Плавная анимация для цвета текста */
         }
 
         .spoiler.active .spoiler-content p.selected {
-            color: #b9b9b9; /* Цвет выделенного подпункта */
+            color: #b9b9b9;
+            /* Цвет выделенного подпункта */
         }
 
         .spoiler.active .spoiler-content p:hover {
             color: #e7e7e7;
-            transition: color 0.125s ease; /* Плавная анимация при наведении */
+            transition: color 0.125s ease;
+            /* Плавная анимация при наведении */
         }
 
         #content-sections .content-section {
@@ -351,7 +380,8 @@
         .spoiler.inactive {
             background-color: #1d1d1d;
             padding: 8px;
-            transition: background-color 0.125s ease; /* Плавная анимация для фона */
+            transition: background-color 0.125s ease;
+            /* Плавная анимация для фона */
         }
 
         .spoiler.inactive .spoiler-title {
@@ -359,12 +389,14 @@
             font-family: 'Fira Sans', sans-serif;
             font-size: 14px;
             font-weight: normal;
-            transition: color 0.125s ease; /* Плавная анимация для цвета текста */
+            transition: color 0.125s ease;
+            /* Плавная анимация для цвета текста */
         }
 
         .spoiler.inactive .spoiler-icon {
             filter: invert(20%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(80%) contrast(100%);
-            transition: filter 0.125s ease; /* Плавная анимация для фильтра */
+            transition: filter 0.125s ease;
+            /* Плавная анимация для фильтра */
         }
 
         .spoiler .spoiler-content p {
@@ -386,22 +418,27 @@
         /* Новый контейнер для иконки с фиксированной высотой */
         .spoiler-icon-container {
             width: 8.9715px;
-            height: 8.9715px; /* Фиксированная высота */
+            height: 8.9715px;
+            /* Фиксированная высота */
             padding-right: 4px;
             display: flex;
             align-items: center;
-            justify-content: center; /* Центрируем иконку */
+            justify-content: center;
+            /* Центрируем иконку */
         }
 
         .spoiler-icon {
             width: auto;
-            height: 8.9715px; /* Иконка с фиксированной высотой */
+            height: 8.9715px;
+            /* Иконка с фиксированной высотой */
         }
 
         /* Эффект при наведении на спойлер */
         .spoiler:hover {
-            background-color: #2a2a2a; /* При наведении меняется фоновый цвет */
-            transition: background-color 0.125s ease; /* Плавная анимация для фона */
+            background-color: #2a2a2a;
+            /* При наведении меняется фоновый цвет */
+            transition: background-color 0.125s ease;
+            /* Плавная анимация для фона */
         }
 
         /* Нижний блок внутри правой половины */
@@ -412,7 +449,8 @@
             background-color: #161616;
             border-top: 1px solid #313131;
             box-sizing: border-box;
-            margin-top: auto; /* Прижать к низу блока .right */
+            margin-top: auto;
+            /* Прижать к низу блока .right */
             align-self: flex-start;
             display: flex;
             align-items: center;
@@ -436,7 +474,7 @@
             cursor: pointer;
         }
 
-        .home-page-header-1{
+        .home-page-header-1 {
             position: relative;
             margin-top: 4px;
             margin-left: 18px;
@@ -446,11 +484,11 @@
             font-weight: 600;
             font-style: italic;
             font-size: 24px;
-            
+
             color: #b9b9b9;
         }
 
-        .home-page-text-block{
+        .home-page-text-block {
             width: 332.35px;
             padding-left: 18.65px;
             padding-right: 18.65px;
@@ -460,23 +498,25 @@
             color: #e7e7e7;
         }
 
-        .home-page-text-1{
-            padding-top: 22px!important;
-            padding-bottom: 8px!important;
+        .home-page-text-1 {
+            padding-top: 22px !important;
+            padding-bottom: 8px !important;
             margin: 0px;
             padding: 0px;
             font-weight: 200;
             font-size: 18px;
             font-style: italic;
         }
-        .home-page-text-2{
+
+        .home-page-text-2 {
             font-weight: 800;
             font-size: 14px;
             margin: 0px;
             margin-left: 12px;
             margin-bottom: 4px;
         }
-        .home-page-text-3{
+
+        .home-page-text-3 {
             margin: 0px;
             margin-top: 4px;
             margin-bottom: 4px;
@@ -485,108 +525,112 @@
             font-weight: 400;
         }
 
-/* Стили для language-selector */
-.language-selector {
-    position: relative;
-    display: inline-block;
-    margin-left: auto;
-    margin-right: 8px;
-    cursor: pointer;
-    user-select: none;
-}
+        /* Стили для language-selector */
+        .language-selector {
+            position: relative;
+            display: inline-block;
+            margin-left: auto;
+            margin-right: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
 
-/* Контейнер для выбранного языка и иконки */
-.language-selector .selected-language-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+        /* Контейнер для выбранного языка и иконки */
+        .language-selector .selected-language-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-/* Стиль для выбранного языка */
-.language-selector .selected-language {
-    font-family: 'Fira Sans', sans-serif;
-    font-size: 12px;
-    font-weight: bold;
-    color: #b9b9b9;
-    display: inline-block;
-    text-align: center;
-    transition: color 0.125s ease; /* Переход для цвета */
-}
+        /* Стиль для выбранного языка */
+        .language-selector .selected-language {
+            font-family: 'Fira Sans', sans-serif;
+            font-size: 12px;
+            font-weight: bold;
+            color: #b9b9b9;
+            display: inline-block;
+            text-align: center;
+            transition: color 0.125s ease;
+            /* Переход для цвета */
+        }
 
-/* Стиль для иконки стрелки */
-.language-selector .arrow-icon {
-    width: 8.9714px;
-    height: 4.4857px;
-    margin-top: 4px;
-    display: inline-block;
-    transition: filter 0.125s ease; /* Переход для фильтра */
-}
+        /* Стиль для иконки стрелки */
+        .language-selector .arrow-icon {
+            width: 8.9714px;
+            height: 4.4857px;
+            margin-top: 4px;
+            display: inline-block;
+            transition: filter 0.125s ease;
+            /* Переход для фильтра */
+        }
 
-/* Скрытый выпадающий список по умолчанию */
-.language-selector .language-dropdown {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateX(-50%) translateY(-10px); /* Начальное смещение */
-    transition: opacity 0.125s ease, transform 0.125s ease, visibility 0.125s ease;
-    
-    position: absolute;
-    top: calc(100% + 4px);
-    left: 50%;
-    background-color: #292929;
-    border: 1px solid #313131;
-    border-radius: 1.5px;
-    padding: 4px;
-    z-index: 1000;
-    box-sizing: border-box;
-    text-align: center;
-}
+        /* Скрытый выпадающий список по умолчанию */
+        .language-selector .language-dropdown {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-50%) translateY(-10px);
+            /* Начальное смещение */
+            transition: opacity 0.125s ease, transform 0.125s ease, visibility 0.125s ease;
 
-/* Стиль для опций в списке */
-.language-selector .language-option {
-    font-family: 'Fira Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 300; /* thin */
-    color: #b9b9b9;
-    padding: 4px;
-    cursor: pointer;
-    transition: color 0.125s ease, font-weight 0.125s ease;
-}
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 50%;
+            background-color: #292929;
+            border: 1px solid #313131;
+            border-radius: 1.5px;
+            padding: 4px;
+            z-index: 1000;
+            box-sizing: border-box;
+            text-align: center;
+        }
 
-/* Убираем подсветку фона при наведении и добавляем плавное изменение шрифта и цвета */
-.language-selector .language-option:hover {
-    background-color: transparent;
-    color: #e7e7e7;
-    font-weight: 600;
-}
+        /* Стиль для опций в списке */
+        .language-selector .language-option {
+            font-family: 'Fira Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 300;
+            /* thin */
+            color: #b9b9b9;
+            padding: 4px;
+            cursor: pointer;
+            transition: color 0.125s ease, font-weight 0.125s ease;
+        }
 
-/* Отображение списка при активном состоянии */
-.language-selector.active .language-dropdown {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(0); /* Возвращаем в исходное положение */
-}
+        /* Убираем подсветку фона при наведении и добавляем плавное изменение шрифта и цвета */
+        .language-selector .language-option:hover {
+            background-color: transparent;
+            color: #e7e7e7;
+            font-weight: 600;
+        }
 
-/* Поворот стрелки при открытии */
-.language-selector.active .arrow-icon {
-    transform: rotate(180deg);
-    transition: transform 0.125s ease; /* Переход для поворота */
-}
+        /* Отображение списка при активном состоянии */
+        .language-selector.active .language-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+            /* Возвращаем в исходное положение */
+        }
 
-/* Изменение цвета шрифта и иконки при наведении на контейнер */
-.language-selector .selected-language-container:hover .selected-language {
-    color: #e7e7e7;
-}
+        /* Поворот стрелки при открытии */
+        .language-selector.active .arrow-icon {
+            transform: rotate(180deg);
+            transition: transform 0.125s ease;
+            /* Переход для поворота */
+        }
 
-.language-selector .selected-language-container:hover .arrow-icon {
-    color: #e7e7e7;
-    /* Если иконка использует fill="currentColor", это изменит её цвет */
-}
+        /* Изменение цвета шрифта и иконки при наведении на контейнер */
+        .language-selector .selected-language-container:hover .selected-language {
+            color: #e7e7e7;
+        }
 
-
-
+        .language-selector .selected-language-container:hover .arrow-icon {
+            color: #e7e7e7;
+            /* Если иконка использует fill="currentColor", это изменит её цвет */
+        }
     </style>
 </head>
+
 <body>
     <!-- Верхний блок -->
     <div class="top-bar">
@@ -604,7 +648,7 @@
                 <div class="language-option">CN</div>
             </div>
         </div>
-    </div> 
+    </div>
 
     <!-- Линия, соединяющая top-bar и кружок -->
     <div id="indicator-line" class="indicator-line"></div>
@@ -612,8 +656,8 @@
     <!-- Контейнер для двух колонок -->
     <div class="split-container">
 
-    <!-- Левая колонка со спойлерами -->
-    <div class="left">
+        <!-- Левая колонка со спойлерами -->
+        <div class="left">
 
             <!-- Composition information -->
             <div class="spoiler active" onclick="toggleSpoiler(this)">
@@ -626,7 +670,7 @@
                 <div class="spoiler-content">
                     <p onclick="selectSubItem(this); showContent('content-1')">[1] C - Current composition name.</p>
                     <p onclick="selectSubItem(this); showContent('content-2')">[1] Pn - Current project name.</p>
-                </div>                
+                </div>
             </div>
 
             <!-- Time and duration -->
@@ -687,7 +731,8 @@
                 <div class="spoiler-content">
                     <p onclick="selectSubItem(this); showContent('content-1')">[2] i - Global index of the layer.</p>
                     <p onclick="selectSubItem(this); showContent('content-1')">[3] I - Local index of the layer.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Lpnt(i) - Local index of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Lpnt(i) - Local index of the layer.
+                    </p>
                 </div>
             </div>
 
@@ -703,14 +748,16 @@
                     <p onclick="selectSubItem(this); showContent('content-1')">[1] T - Type of layer.</p>
                     <p onclick="selectSubItem(this); showContent('content-1')">[1] S - Name of the source layer.</p>
                     <p onclick="selectSubItem(this); showContent('content-1')">[1] W - Width of the layer in pixels.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] H - Height of the layer in pixels.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[1] H - Height of the layer in pixels.
+                    </p>
                     <p onclick="selectSubItem(this); showContent('content-1')">[1] Lpos - Position of the layer.</p>
                     <p onclick="selectSubItem(this); showContent('content-1')">[1] Lsc - Scale of the layer.</p>
                     <p onclick="selectSubItem(this); showContent('content-1')">[1] Lrot - Rotate the layer.</p>
                     <p onclick="selectSubItem(this); showContent('content-1')">[1] Lops - Opacity of the layer.</p>
                     <p onclick="selectSubItem(this); showContent('content-1')">[1] Tm - Type of track matte layer.</p>
                     <p onclick="selectSubItem(this); showContent('content-1')">[4] An - Animated layer properties.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[4] Lexp - Layer properties with expressions.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')">[4] Lexp - Layer properties with
+                        expressions.</p>
                     <p onclick="selectSubItem(this); showContent('content-1')">[4] Lmn - List of layer masks.</p>
                     <p onclick="selectSubItem(this); showContent('content-1')">[4] Lmс - Number of layer masks.</p>
                 </div>
@@ -730,136 +777,172 @@
                     <p onclick="selectSubItem(this); showContent('content-1')">[2] Fext - Parent layer name.</p>
                 </div>
             </div>
-    </div>
+        </div>
 
-    <!-- Правая колонка с информацией -->
-    <div class="right" id="info-display">
+        <!-- Правая колонка с информацией -->
+        <div class="right" id="info-display">
 
-        <div id="default-message">
-            <div class="home-page-header-1">INTRODUCTION</div>
-            <div class="home-page-text-block">
-                <p class="home-page-text-1">Panel:</p>
-                <p class="home-page-text-2">Functions</p>
-                <p class="home-page-text-3">- Offline documentation with technical specifications and usage examples for each variable.</p>
-                <p class="home-page-text-3">- Review of the <span class="variable-text-block-span-1">Change Log</span> of the current version of <span class="variable-text-block-span-1">NitroNamer</span></p>
-                <p class="home-page-text-3">- License Overview</p>
+            <div id="default-message">
+                <div class="home-page-header-1">INTRODUCTION</div>
+                <div class="home-page-text-block">
+                    <p class="home-page-text-1">Panel:</p>
+                    <p class="home-page-text-2">Functions</p>
+                    <p class="home-page-text-3">- Offline documentation with technical specifications and usage examples
+                        for each variable.</p>
+                    <p class="home-page-text-3">- Review of the <span class="variable-text-block-span-1">Change
+                            Log</span> of the current version of <span
+                            class="variable-text-block-span-1">NitroNamer</span></p>
+                    <p class="home-page-text-3">- License Overview</p>
+                </div>
+                <div class="home-page-text-block">
+                    <p class="home-page-text-1">Navigation:</p>
+                    <p class="home-page-text-2">Left side</p>
+                    <p class="home-page-text-3">- On the left side of the panel there is a list in the form of spoilers,
+                        each spoiler is a separate category of variables. By clicking on the spoiler, you will open a
+                        list of all available variables of this category. Each sub-item is a separate variable.</p>
+                    <p class="home-page-text-3">- By clicking on any sub-item, you will see a detailed description of
+                        the variable you have opened.</p>
+                    <p class="home-page-text-3">- The circular blue indicator next to the spoiler displays the total
+                        number of available variables from the category you selected.</p>
+                    <p class="home-page-text-1">Description of variables:</p>
+                    <p class="home-page-text-2">Right side</p>
+                    <p class="home-page-text-3">- Each variable has 4 sections: technical specifications, description,
+                        features, examples.</p>
+                    <p class="home-page-text-3">- In the "Technical characteristics" section there are 4 items, each
+                        variable has these 4 items. Item 1 - the number of available operating modes, item 2 - setting
+                        the return value (yes/no), item 3 - setting the custom separator, item 4 - the source of the
+                        value.</p>
+                    <p class="home-page-text-3">- The Description section describes what this particular variable does
+                        and returns.</p>
+                    <p class="home-page-text-3">- The "Features" section describes any unusual or non-obvious properties
+                        or actions of the variable.</p>
+                    <p class="home-page-text-3">- The Examples section shows some uses of the variable.</p>
+                </div>
+                <div class="home-page-header-1">CHANGE LOG <span class="title-thin-italic">2024.4</span></div>
+                <div class="home-page-text-block">
+                    <p class="home-page-text-1">Features:</p>
+                    <p class="home-page-text-2">UI</p>
+                    <p class="home-page-text-3">- Tooltips for UI elements.</p>
+                    <p class="home-page-text-3">- System for searching and sorting saved presets (search by entered
+                        value, by date added, by usage statistics, by favorites, by template length).</p>
+                    <p class="home-page-text-3" style="margin-bottom: 8px;">- Completely new library of variables.</p>
+                    <p class="home-page-text-2">Variables:</p>
+                    <p class="home-page-text-3" style="margin-bottom: 8px;">- Improved syntax logic for variables <span
+                            class="variable-text-block-span-1">E</span>, <span
+                            class="variable-text-block-span-1">An</span>, <span
+                            class="variable-text-block-span-1">Lexp</span>, <span
+                            class="variable-text-block-span-1">Lmn</span>, <span
+                            class="variable-text-block-span-1">Lmc</span>, <span
+                            class="variable-text-block-span-1">Ec</span></p>
+                    <p class="home-page-text-2">Bug fixes</p>
+                    <p class="home-page-text-3">- When using the <span class="variable-text-block-span-1">F</span>
+                        variable, the preview field displays the value "NaN" with any Briefly mode active, but the
+                        result itself is applied correctly to the layers.</p>
+                    <p class="home-page-text-3">- When using any "Briefly" mode, the preview field displays the result
+                        not after applying "Briefly" but before it, i.e. not formatted. But the final result of renaming
+                        layers is correct, i.e. taking into account the selected "Briefly" mode.</p>
+                    <p class="home-page-text-3">- Variables <span class="variable-text-block-span-1">E</span>, <span
+                            class="variable-text-block-span-1">An</span>, <span
+                            class="variable-text-block-span-1">Lexp</span> with the filtering mode for a given
+                        effect/property now correctly handle situations when the composition contains layers with this
+                        effect/property or their absence (see the changes section, first point).</p>
+                    <p class="home-page-text-3">- Now the variables `Lmn`, `Lmc` correctly recognize the names of masks
+                        and their operating modes.</p>
+                    <br><br>
+                </div>
             </div>
-            <div class="home-page-text-block">
-                <p class="home-page-text-1">Navigation:</p>
-                <p class="home-page-text-2">Left side</p>
-                <p class="home-page-text-3">- On the left side of the panel there is a list in the form of spoilers, each spoiler is a separate category of variables. By clicking on the spoiler, you will open a list of all available variables of this category. Each sub-item is a separate variable.</p>
-                <p class="home-page-text-3">- By clicking on any sub-item, you will see a detailed description of the variable you have opened.</p>
-                <p class="home-page-text-3">- The circular blue indicator next to the spoiler displays the total number of available variables from the category you selected.</p>
-                <p class="home-page-text-1">Description of variables:</p>
-                <p class="home-page-text-2">Right side</p>
-                <p class="home-page-text-3">- Each variable has 4 sections: technical specifications, description, features, examples.</p>
-                <p class="home-page-text-3">- In the "Technical characteristics" section there are 4 items, each variable has these 4 items. Item 1 - the number of available operating modes, item 2 - setting the return value (yes/no), item 3 - setting the custom separator, item 4 - the source of the value.</p>
-                <p class="home-page-text-3">- The Description section describes what this particular variable does and returns.</p>
-                <p class="home-page-text-3">- The "Features" section describes any unusual or non-obvious properties or actions of the variable.</p>
-                <p class="home-page-text-3">- The Examples section shows some uses of the variable.</p>
+
+
+            <div id="content-sections">
+                <div class="hover-region"></div>
+
+                <div class="content-section" id="content-1">
+
+                    <div class="variable-name-block" data-value="C - variable">
+                        <span class="variable-text-block-span-1">C</span> - variable
+                        <span class="copied-text">- Copied</span>
+                    </div>
+
+                    <div class="variable-header-block">
+                        Specifications:
+                    </div>
+                    <div class="variable-text-block">
+                        Number of available modes: <span class="variable-text-block-span-1">1</span><br>
+                        Customizing the return value: <span class="variable-text-block-span-1">No</span><br>
+                        Customizing the separator: <span class="variable-text-block-span-1">No</span><br>
+                        Source of data: <span class="variable-text-block-span-1">Pre-comp</span><br>
+                    </div>
+                    <div class="variable-header-block">
+                        Description:
+                    </div>
+                    <div class="variable-text-block">
+                        The variable <span class="variable-text-block-span-1">C</span> is the name of the current
+                        composition in which the layer being processed is located.
+                    </div>
+                    <div class="variable-header-block">
+                        Features:
+                    </div>
+                    <div class="variable-text-block">
+                        Not available.
+                    </div>
+                    <div class="variable-header-block">
+                        Examples with results, mode 1
+                    </div>
+                    <div class="variable-example-block" data-value="C(_renderDate_)_Cd">
+                        <span class="variable-text-block-span-2">C</span><span
+                            class="variable-text-block-span-3">(_renderDate_)_Cd</span>
+                        <span class="copied-text">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-text">
+                        <span class="variable-text-block-span-2">FirstSequence</span>_renderDate_16.03.2025
+                    </div>
+                    <div class="variable-example-block" data-value="C_(Layer-)i">
+                        Pn_<span class="variable-text-block-span-2">C</span>_(Layer-)i
+                        <span class="copied-text">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-text">
+                        VideoHiveTemplate_<span class="variable-text-block-span-2">preRenderLogo1</span>_Layer-1
+                    </div>
+
+                </div>
+
+                <div class="content-section" id="content-2">
+
+                    <h2>Заголовок для Контента 2</h2>
+                    <p>Детальная информация для подпункта 2.</p>
+
+                </div>
+
             </div>
-            <div class="home-page-header-1">CHANGE LOG <span class="title-thin-italic">2024.4</span></div>
-            <div class="home-page-text-block">
-                <p class="home-page-text-1">Features:</p>
-                <p class="home-page-text-2">UI</p>
-                <p class="home-page-text-3">- Tooltips for UI elements.</p>
-                <p class="home-page-text-3">- System for searching and sorting saved presets (search by entered value, by date added, by usage statistics, by favorites, by template length).</p>
-                <p class="home-page-text-3" style="margin-bottom: 8px;">- Completely new library of variables.</p>
-                <p class="home-page-text-2">Variables:</p>
-                <p class="home-page-text-3" style="margin-bottom: 8px;">- Improved syntax logic for variables <span class="variable-text-block-span-1">E</span>, <span class="variable-text-block-span-1">An</span>, <span class="variable-text-block-span-1">Lexp</span>, <span class="variable-text-block-span-1">Lmn</span>, <span class="variable-text-block-span-1">Lmc</span>, <span class="variable-text-block-span-1">Ec</span></p>
-                <p class="home-page-text-2">Bug fixes</p>
-                <p class="home-page-text-3">- When using the <span class="variable-text-block-span-1">F</span> variable, the preview field displays the value "NaN" with any Briefly mode active, but the result itself is applied correctly to the layers.</p>
-                <p class="home-page-text-3">- When using any "Briefly" mode, the preview field displays the result not after applying "Briefly" but before it, i.e. not formatted. But the final result of renaming layers is correct, i.e. taking into account the selected "Briefly" mode.</p>
-                <p class="home-page-text-3">- Variables <span class="variable-text-block-span-1">E</span>, <span class="variable-text-block-span-1">An</span>, <span class="variable-text-block-span-1">Lexp</span> with the filtering mode for a given effect/property now correctly handle situations when the composition contains layers with this effect/property or their absence (see the changes section, first point).</p>
-                <p class="home-page-text-3">- Now the variables `Lmn`, `Lmc` correctly recognize the names of masks and their operating modes.</p>
-                <br><br>
+            <!-- Нижний блок -->
+            <div class="bottom-bar">
+                <span class="license-by">LICENSE BY </span> <span class="license-nitrofix">NITROFIX</span>
+                <img src="icons/icon_boosty.svg" class="icon clickable-icon" data-url="https://boosty.to/nitrofix"
+                    height="14px" alt="Boosty">
+                <img src="icons/icon_github.svg" class="icon clickable-icon"
+                    data-url="https://github.com/NlTROFlX/NitroNamer" width="13.7667px" alt="GitHub">
+                <img src="icons/icon_reddit.svg" class="icon clickable-icon"
+                    data-url="https://www.reddit.com/r/DoubleDTeam/" height="14px" alt="Reddit">
+                <img src="icons/icon_telegram.svg" class="icon clickable-icon" data-url="https://t.me/FixYourVFX"
+                    height="14px" alt="Telegram">
             </div>
         </div>
-        
 
-        <div id="content-sections">
-            <div class="hover-region"></div>
+        <div id="active-indicator" class="active-indicator">-</div>
 
-            <div class="content-section" id="content-1">
+        <script src="CSInterface.js"></script>
+        <script src="index.js"></script>
 
-                <div class="variable-name-block" data-value="C - variable">
-                    <span class="variable-text-block-span-1">C</span> - variable
-                    <span class="copied-text">- Copied</span>
-                </div>
+        <script>
+            // Инициализация после загрузки страницы
+            document.addEventListener('DOMContentLoaded', function () {
+                // Инициализируем обработчики событий для иконок
+                initializeIconClickHandlers();
 
-                <div class="variable-header-block">
-                    Specifications:
-                </div>
-                <div class="variable-text-block">
-                    Number of available modes: <span class="variable-text-block-span-1">1</span><br>
-                    Customizing the return value: <span class="variable-text-block-span-1">No</span><br>
-                    Customizing the separator: <span class="variable-text-block-span-1">No</span><br>
-                    Source of data: <span class="variable-text-block-span-1">Pre-comp</span><br>
-                </div>
-                <div class="variable-header-block">
-                    Description:
-                </div>
-                <div class="variable-text-block">
-                    The variable <span class="variable-text-block-span-1">C</span> is the name of the current composition in which the layer being processed is located.
-                </div>
-                <div class="variable-header-block">
-                    Features:
-                </div>
-                <div class="variable-text-block">
-                    Not available.
-                </div>
-                <div class="variable-header-block">
-                    Examples with results, mode 1
-                </div>
-                <div class="variable-example-block" data-value="C(_renderDate_)_Cd">
-                    <span class="variable-text-block-span-2">C</span><span class="variable-text-block-span-3">(_renderDate_)_Cd</span>
-                    <span class="copied-text">- Copied</span>
-                </div>
-                <div class="variable-example-block-text">
-                    <span class="variable-text-block-span-2">FirstSequence</span>_renderDate_16.03.2025
-                </div>
-                <div class="variable-example-block" data-value="C_(Layer-)i">
-                    Pn_<span class="variable-text-block-span-2">C</span>_(Layer-)i
-                    <span class="copied-text">- Copied</span>
-                </div>
-                <div class="variable-example-block-text">
-                    VideoHiveTemplate_<span class="variable-text-block-span-2">preRenderLogo1</span>_Layer-1
-                </div>
-
-            </div>
-
-            <div class="content-section" id="content-2">
-
-                <h2>Заголовок для Контента 2</h2>
-                <p>Детальная информация для подпункта 2.</p>
-
-            </div>
-
-        </div>
-        <!-- Нижний блок -->
-        <div class="bottom-bar">
-            <span class="license-by">LICENSE BY </span> <span class="license-nitrofix">NITROFIX</span>
-            <img src="icons/icon_boosty.svg" class="icon clickable-icon" data-url="https://boosty.to/nitrofix" height="14px" alt="Boosty">
-            <img src="icons/icon_github.svg" class="icon clickable-icon" data-url="https://github.com/NlTROFlX/NitroNamer" width="13.7667px" alt="GitHub">
-            <img src="icons/icon_reddit.svg" class="icon clickable-icon" data-url="https://www.reddit.com/r/DoubleDTeam/" height="14px" alt="Reddit">
-            <img src="icons/icon_telegram.svg" class="icon clickable-icon" data-url="https://t.me/FixYourVFX" height="14px" alt="Telegram">
-        </div>
-    </div>
-
-    <div id="active-indicator" class="active-indicator">-</div>
-
-    <script src="CSInterface.js"></script>
-    <script src="index.js"></script>
-
-    <script >
-        // Инициализация после загрузки страницы
-        document.addEventListener('DOMContentLoaded', function () {
-            // Инициализируем обработчики событий для иконок
-            initializeIconClickHandlers();
-
-            // Ваш остальной код (инициализация активного спойлера и т.д.)
-        });
-    </script>
+                // Ваш остальной код (инициализация активного спойлера и т.д.)
+            });
+        </script>
 
 </body>
+
 </html>

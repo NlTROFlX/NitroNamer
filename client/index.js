@@ -5,11 +5,11 @@ function initializeIconClickHandlers() {
     // Получаем все иконки с классом 'clickable-icon'
     var clickableIcons = document.querySelectorAll('.clickable-icon');
 
-    clickableIcons.forEach(function(icon) {
+    clickableIcons.forEach(function (icon) {
         var url = icon.getAttribute('data-url');
         if (url) {
             icon.style.cursor = 'pointer'; // Изменяем курсор при наведении
-            icon.addEventListener('click', function() {
+            icon.addEventListener('click', function () {
                 try {
                     csInterface.openURLInDefaultBrowser(url);
                 } catch (error) {
@@ -59,7 +59,7 @@ function showContent(contentId) {
     }
 
     var contentSections = document.querySelectorAll('#content-sections .content-section');
-    contentSections.forEach(function(section) {
+    contentSections.forEach(function (section) {
         section.style.display = 'none';
     });
 
@@ -141,53 +141,53 @@ document.addEventListener('DOMContentLoaded', function () {
     function copyToClipboard(text) {
         var tempTextArea = document.createElement('textarea');
         tempTextArea.value = text;
-        tempTextArea.style.position = 'fixed';  // Избегаем прокрутки страницы
+        tempTextArea.style.position = 'fixed'; // Избегаем прокрутки страницы
         tempTextArea.style.opacity = '0';
         document.body.appendChild(tempTextArea);
         tempTextArea.focus();
         tempTextArea.select();
-    
+
         try {
             var successful = document.execCommand('copy');
             if (successful) {
                 console.log('Текст скопирован в буфер обмена:', text);
-    
+
                 // Сохраняем ссылку на элемент в момент копирования
                 let element = currentHoveredElement;
-    
+
                 // Проверяем, что элемент существует
                 if (element) {
                     // Сбрасываем предыдущий таймер для этого элемента, если он существует
                     if (element.copyTimeout) {
                         clearTimeout(element.copyTimeout);
                     }
-    
+
                     // Добавляем класс 'show-copied' к элементу
                     element.classList.add('show-copied');
-    
+
                     // Устанавливаем новый таймер для удаления класса
-                    element.copyTimeout = setTimeout(function() {
+                    element.copyTimeout = setTimeout(function () {
                         element.classList.remove('show-copied');
                         delete element.copyTimeout; // Удаляем свойство после использования
                     }, 1125);
                 }
-    
+
             } else {
                 console.error('Не удалось скопировать текст');
             }
         } catch (err) {
             console.error('Ошибка при попытке скопировать текст:', err);
         }
-    
+
         // Удаляем временный элемент
         document.body.removeChild(tempTextArea);
-    }    
+    }
 
     // Переменная для хранения текущего элемента под курсором
     let currentHoveredElement = null;
 
     // Отслеживаем перемещение мыши и обновляем текущий элемент
-    document.addEventListener('mousemove', function(event) {
+    document.addEventListener('mousemove', function (event) {
         let element = document.elementFromPoint(event.clientX, event.clientY);
 
         if (element) {
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Отслеживаем нажатие клавиш
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
         if (event.ctrlKey && (event.key === 'c' || event.key === 'C')) {
             if (currentHoveredElement) {
                 let valueToCopy = currentHoveredElement.getAttribute('data-value');
