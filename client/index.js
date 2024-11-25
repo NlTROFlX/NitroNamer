@@ -103,14 +103,24 @@ function initializeLanguageSelector() {
 
     // Обработчик клика по опциям языка
     languageOptions.forEach(function (option) {
+        // Внутри initializeLanguageSelector()
         option.addEventListener('click', function (event) {
             event.stopPropagation();
             var newLanguage = this.textContent;
             selectedLanguage.textContent = newLanguage;
             languageSelector.classList.remove('active');
             languageSelector.setAttribute('aria-expanded', 'false');
+
+            // Получаем путь к расширению
+            var csInterface = new CSInterface();
+            var extensionPath = csInterface.getSystemPath(SystemPath.EXTENSION);
+
+            // Вызываем функцию ExtendScript для сохранения выбранного языка и пути к расширению
+            csInterface.evalScript('saveSelectedLanguage("' + newLanguage + '", "' + extensionPath + '")');
+
             // Здесь можно добавить функционал переключения языка интерфейса
         });
+
     });
 
     // Закрываем выпадающий список при клике вне его
@@ -208,9 +218,20 @@ document.addEventListener('keydown', function (event) {
 
 document.addEventListener('DOMContentLoaded', function () {
     initializeLanguageSelector();
-    initializeIconClickHandlers()
+    initializeIconClickHandlers();
 
-    var csInterface = new CSInterface();
-
-    csInterface.evalScript('runExtendScript()');
+    loadSettings();
 });
+
+function loadSettings() {
+    var csInterface = new CSInterface();
+    var extensionPath = csInterface.getSystemPath(SystemPath.EXTENSION);
+    csInterface.evalScript('loadSettings("' + extensionPath + '")', function (result) {
+        var settings = JSON.parse(result);
+        if (settings && settings.language) {
+            var selectedLanguage = document.querySelector('.selected-language');
+            selectedLanguage.textContent = settings.language;
+            // Здесь можно добавить функционал переключения языка интерфейса
+        }
+    });
+}

@@ -42,6 +42,9 @@
                     </Geometry>
                     <Icons/>
                 </UI>
+                <Security>
+                    <AccessFileSystem>true</AccessFileSystem>
+                </Security>
             </DispatchInfo>
         </Extension>
     </DispatchInfoList>
