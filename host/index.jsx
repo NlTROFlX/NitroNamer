@@ -75,3 +75,30 @@ function loadSettings(extensionPath) {
 
     return JSON.stringify(settings);
 }
+
+function readTranslationFile(language, extensionPath) {
+    // Заменяем обратные слэши на прямые для кроссплатформенной совместимости
+    extensionPath = extensionPath.replace(/\\/g, '/');
+
+    // Строим путь к файлу перевода
+    var translationFilePath = extensionPath + '/client/translations/' + language.toLowerCase() + '.json';
+    var translationFile = new File(translationFilePath);
+
+    var content = '';
+
+    if (translationFile.exists) {
+        if (translationFile.open('r')) {
+            content = translationFile.read();
+            translationFile.close();
+        } else {
+            // Не удалось открыть файл для чтения
+            content = '';
+        }
+    } else {
+        // Файл перевода не найден
+        content = '';
+    }
+
+    // Возвращаем содержимое файла
+    return content;
+}

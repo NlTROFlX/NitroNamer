@@ -1,3 +1,73 @@
+// Объект для хранения переводов
+var translations = {};
+var defaultTranslations = {};
+
+// Функция для загрузки перевода выбранного языка
+function loadTranslations(language) {
+    var csInterface = new CSInterface();
+    var extensionPath = csInterface.getSystemPath(SystemPath.EXTENSION);
+
+    csInterface.evalScript('readTranslationFile("' + language + '", "' + extensionPath + '")', function(result) {
+        if (result) {
+            try {
+                translations = JSON.parse(result);
+                applyTranslations();
+            } catch (e) {
+                console.error('Ошибка парсинга файла перевода:', e);
+                if (language !== 'EN') {
+                    loadTranslations('EN');
+                }
+            }
+        } else {
+            console.error('Файл перевода не найден или пустой.');
+            if (language !== 'EN') {
+                loadTranslations('EN');
+            }
+        }
+    });
+}
+
+
+// Функция для применения переводов к элементам интерфейса
+function applyTranslations() {
+    // Находим все элементы с атрибутом data-i18n
+    var elementsToTranslate = document.querySelectorAll('[data-i18n]');
+    elementsToTranslate.forEach(function (element) {
+        var key = element.getAttribute('data-i18n');
+        var translation = translations[key];
+
+        if (!translation) {
+            // Если перевод отсутствует, используем английский по умолчанию
+            translation = defaultTranslations[key] || element.textContent;
+        }
+
+        // Устанавливаем перевод в элемент
+        element.innerHTML = translation;
+    });
+}
+
+// Объект с английскими переводами по умолчанию
+var defaultTranslations = {};
+
+// Функция для загрузки английских переводов по умолчанию
+function loadDefaultTranslations(callback) {
+    var csInterface = new CSInterface();
+    var extensionPath = csInterface.getSystemPath(SystemPath.EXTENSION);
+
+    csInterface.evalScript('readTranslationFile("EN", "' + extensionPath + '")', function(result) {
+        if (result) {
+            try {
+                defaultTranslations = JSON.parse(result);
+                if (callback) callback();
+            } catch (e) {
+                console.error('Ошибка парсинга файла английского перевода:', e);
+            }
+        } else {
+            console.error('Файл английского перевода не найден или пустой.');
+        }
+    });
+}
+
 // Функция для инициализации обработчиков событий для иконок
 function initializeIconClickHandlers() {
     var csInterface = new CSInterface();
@@ -103,24 +173,21 @@ function initializeLanguageSelector() {
 
     // Обработчик клика по опциям языка
     languageOptions.forEach(function (option) {
-        // Внутри initializeLanguageSelector()
         option.addEventListener('click', function (event) {
             event.stopPropagation();
             var newLanguage = this.textContent;
             selectedLanguage.textContent = newLanguage;
             languageSelector.classList.remove('active');
             languageSelector.setAttribute('aria-expanded', 'false');
-
-            // Получаем путь к расширению
+        
+            // Вызываем функцию ExtendScript для сохранения выбранного языка
             var csInterface = new CSInterface();
             var extensionPath = csInterface.getSystemPath(SystemPath.EXTENSION);
-
-            // Вызываем функцию ExtendScript для сохранения выбранного языка и пути к расширению
             csInterface.evalScript('saveSelectedLanguage("' + newLanguage + '", "' + extensionPath + '")');
-
-            // Здесь можно добавить функционал переключения языка интерфейса
-        });
-
+        
+            // Загружаем переводы для нового языка
+            loadTranslations(newLanguage);
+        });        
     });
 
     // Закрываем выпадающий список при клике вне его
@@ -216,22 +283,34 @@ document.addEventListener('keydown', function (event) {
     }
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-    initializeLanguageSelector();
-    initializeIconClickHandlers();
-
-    loadSettings();
-});
-
+// Обновляем функцию загрузки настроек при запуске панели
 function loadSettings() {
     var csInterface = new CSInterface();
     var extensionPath = csInterface.getSystemPath(SystemPath.EXTENSION);
     csInterface.evalScript('loadSettings("' + extensionPath + '")', function (result) {
         var settings = JSON.parse(result);
+        var selectedLanguage = 'EN'; // Язык по умолчанию
         if (settings && settings.language) {
-            var selectedLanguage = document.querySelector('.selected-language');
-            selectedLanguage.textContent = settings.language;
-            // Здесь можно добавить функционал переключения языка интерфейса
+            selectedLanguage = settings.language.toUpperCase();
         }
+
+        var selectedLanguageElement = document.querySelector('.selected-language');
+        selectedLanguageElement.textContent = selectedLanguage;
+
+        // Загружаем английские переводы по умолчанию, затем выбранный язык
+        loadDefaultTranslations(function() {
+            loadTranslations(selectedLanguage);
+        });
     });
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    initializeLanguageSelector();
+    initializeIconClickHandlers();
+
+    // Загружаем английские переводы по умолчанию
+    loadDefaultTranslations();
+
+    // Загружаем настройки и применяем переводы
+    loadSettings();
+});
