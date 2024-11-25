@@ -1,6 +1,17 @@
 {
     "titleThinItalic": "NitroNamer",
-    "titleSemiboldItalic": " Библиотека Переменных",
+    "titleSemiboldItalic": " Библиотека Переменных",
     "introductionHeader": "ВВЕДЕНИЕ",
-    "panelFunctions": "Функции Панели"
+    "panelFunctions": "Функции Панели",
+    "homePage_listFunctions_1": "Возможности",
+    "homePage_listFunctions_2": "- Оффлайн документация с техническими характеристиками и примерами использования для каждой переменной.",
+    "homePage_listFunctions_3": "- Импорт сохраненных шаблонов.",
+    "homePage_listFunctions_4": "- Экспорт сохраненных шаблонов.",
+    "homePage_listFunctions_5": "- Обзор <span class=\"variable-text-block-span-1\">Change Log</span> текущей версии <span class=\"variable-text-block-span-1\">NitroNamer</span>.",
+    "homePage_listFunctions_6": "- Обзор Лицензии.",
+    "homePage_listNavigation_1": "Навигация:",
+    "homePage_listNavigation_2": "Левая часть",
+    "homePage_listNavigation_3": "- В левой части панели находится список в виде спойлеров, каждый спойлер представляет собой отдельную категорию переменных. Щелкнув по спойлеру, вам откроется список всех доступных переменных этой категории. Каждый подпункт является отдельной переменной.",
+    "homePage_listNavigation_4": "- Нажав на какой любо подпункт вам откроется подробное описание открытой вами переменной.",
+    "homePage_listNavigation_5": "- Круговой синий индикатор возле спойлера отображает общее количество доступных переменных из выбранной вами категории."
 }

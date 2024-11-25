@@ -88,6 +88,8 @@ function readTranslationFile(language, extensionPath) {
 
     if (translationFile.exists) {
         if (translationFile.open('r')) {
+            // Устанавливаем кодировку чтения в UTF-8
+            translationFile.encoding = 'UTF-8';
             content = translationFile.read();
             translationFile.close();
         } else {
