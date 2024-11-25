@@ -22,8 +22,7 @@
             <DispatchInfo>
                 <Resources>
                     <MainPath>./client/index.html</MainPath>
-                    <ScriptPath>./client/index.js</ScriptPath>
-                    <CEFCommandLine/>
+                    <ScriptPath>./host/index.jsx</ScriptPath>
                 </Resources>
                 <Lifecycle>
                     <AutoVisible>true</AutoVisible>
