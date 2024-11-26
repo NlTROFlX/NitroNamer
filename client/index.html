@@ -41,11 +41,14 @@
                     <div class="spoiler-icon-container">
                         <img src="icons/icon-panoram.svg" class="spoiler-icon" alt="Icon 1">
                     </div>
-                    <div class="spoiler-title">Composition information</div>
+                    <div class="spoiler-title" data-i18n="leftBlock_spoilerComposition_1">Composition</div>
                 </div>
                 <div class="spoiler-content">
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] C - Current composition name.</p>
-                    <p onclick="selectSubItem(this); showContent('content-2')">[1] Pn - Current project name.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerComposition_2">[1] C - Current composition name.</p>
+                    <p onclick="selectSubItem(this); showContent('content-2')" data-i18n="leftBlock_spoilerComposition_3">[1] Pn - Current project name.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerComposition_4">[1] F - Frame rate.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerComposition_5">[1] R - Resolution of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerComposition_6">[2] Ar - Aspect ratio.</p>
                 </div>
             </div>
 
@@ -55,15 +58,15 @@
                     <div class="spoiler-icon-container">
                         <img src="icons/icon-clock.svg" class="spoiler-icon" alt="Icon 2">
                     </div>
-                    <div class="spoiler-title">Time and duration</div>
+                    <div class="spoiler-title" data-i18n="leftBlock_spoilerTimeAndDuration_1">Time and duration</div>
                 </div>
                 <div class="spoiler-content">
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Ip - Entry point of the layer.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Op - Exit point of the layer.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[4] D - Duration of the layer.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Df - Time duration of the layer.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] D - Duration in frames.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[4] Cd - Duration in frames.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerTimeAndDuration_2">[1] Ip - Entry point of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerTimeAndDuration_3">[1] Op - Exit point of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerTimeAndDuration_3">[4] D - Duration of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerTimeAndDuration_4">[1] Df - Time duration of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerTimeAndDuration_5">[1] D - Duration in frames.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerTimeAndDuration_6">[4] Cd - Duration in frames.</p>
                 </div>
             </div>
 
@@ -73,26 +76,11 @@
                     <div class="spoiler-icon-container">
                         <img src="icons/icon-magic.svg" class="spoiler-icon" alt="Icon 3">
                     </div>
-                    <div class="spoiler-title">Effects</div>
+                    <div class="spoiler-title" data-i18n="leftBlock_spoilerEffects_1">Effects</div>
                 </div>
                 <div class="spoiler-content">
-                    <p onclick="selectSubItem(this); showContent('content-1')">[4] E - Names of the effects.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Ec - Number of effects per layer.</p>
-                </div>
-            </div>
-
-            <!-- Frame rate and resolution -->
-            <div class="spoiler inactive" onclick="toggleSpoiler(this)">
-                <div class="spoiler-title-container">
-                    <div class="spoiler-icon-container">
-                        <img src="icons/icon-image.svg" class="spoiler-icon" alt="Icon 4">
-                    </div>
-                    <div class="spoiler-title">Frame rate and resolution</div>
-                </div>
-                <div class="spoiler-content">
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] F - Frame rate.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] R - Resolution of the layer.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[2] Ar - Aspect ratio.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerEffects_2">[4] E - Names of the effects.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerEffects_3">[1] Ec - Number of effects per layer.</p>
                 </div>
             </div>
 
@@ -102,40 +90,38 @@
                     <div class="spoiler-icon-container">
                         <img src="icons/icon-list.svg" class="spoiler-icon" alt="Icon 5">
                     </div>
-                    <div class="spoiler-title">Indexes and indetifiers</div>
+                    <div class="spoiler-title" data-i18n="leftBlock_spoilerIndexesAndIndetifiers_1">Indexes and indetifiers</div>
                 </div>
                 <div class="spoiler-content">
-                    <p onclick="selectSubItem(this); showContent('content-1')">[2] i - Global index of the layer.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[3] I - Local index of the layer.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Lpnt(i) - Local index of the layer.
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerIndexesAndIndetifiers_2">[2] i - Global index of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerIndexesAndIndetifiers_3">[3] I - Local index of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerIndexesAndIndetifiers_4">[1] Lpnt(i) - Local index of the layer.
                     </p>
                 </div>
             </div>
 
-            <!-- Indexes and indetifiers -->
+            <!-- Layer properties -->
             <div class="spoiler inactive" onclick="toggleSpoiler(this)">
                 <div class="spoiler-title-container">
                     <div class="spoiler-icon-container">
                         <img src="icons/icon-layer.svg" class="spoiler-icon" alt="Icon 6">
                     </div>
-                    <div class="spoiler-title">Layer properties</div>
+                    <div class="spoiler-title" data-i18n="leftBlock_spoilerLayerProperties_1">Layer properties</div>
                 </div>
                 <div class="spoiler-content">
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] T - Type of layer.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] S - Name of the source layer.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] W - Width of the layer in pixels.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] H - Height of the layer in pixels.
-                    </p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Lpos - Position of the layer.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Lsc - Scale of the layer.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Lrot - Rotate the layer.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Lops - Opacity of the layer.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Tm - Type of track matte layer.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[4] An - Animated layer properties.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[4] Lexp - Layer properties with
-                        expressions.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[4] Lmn - List of layer masks.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[4] Lmс - Number of layer masks.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerLayerProperties_2">[1] T - Type of layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerLayerProperties_3">[1] S - Name of the source layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerLayerProperties_4">[1] W - Width of the layer in pixels.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerLayerProperties_5">[1] H - Height of the layer in pixels.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerLayerProperties_6">[1] Lpos - Position of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerLayerProperties_7">[1] Lsc - Scale of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerLayerProperties_8">[1] Lrot - Rotate the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerLayerProperties_9">[1] Lops - Opacity of the layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerLayerProperties_10">[1] Tm - Type of track matte layer.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerLayerProperties_11">[4] An - Animated layer properties.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerLayerProperties_12">[4] Lexp - Layer properties with expressions.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerLayerProperties_13">[4] Lmn - List of layer masks.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerLayerProperties_14">[4] Lmс - Number of layer masks.</p>
                 </div>
             </div>
 
@@ -145,12 +131,12 @@
                     <div class="spoiler-icon-container">
                         <img src="icons/icon-dots.svg" class="spoiler-icon" alt="Icon 7">
                     </div>
-                    <div class="spoiler-title">Other</div>
+                    <div class="spoiler-title" data-i18n="leftBlock_spoilerOther_1">Other</div>
                 </div>
                 <div class="spoiler-content">
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] O - Current layer name.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[1] Lpnt - Parent layer name.</p>
-                    <p onclick="selectSubItem(this); showContent('content-1')">[2] Fext - Parent layer name.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerOther_2">[1] O - Current layer name.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerOther_3">[1] Lpnt - Parent layer name.</p>
+                    <p onclick="selectSubItem(this); showContent('content-1')" data-i18n="leftBlock_spoilerOther_4">[2] Fext - Parent layer name.</p>
                 </div>
             </div>
         </div>
@@ -180,49 +166,50 @@
                         the variable you have opened.</p>
                     <p class="home-page-text-3" data-i18n="homePage_listNavigation_5">- The circular blue indicator next to the spoiler displays the total
                         number of available variables from the category you selected.</p>
-                    <p class="home-page-text-1">Description of variables:</p>
-                    <p class="home-page-text-2">Right side</p>
-                    <p class="home-page-text-3">- Each variable has 4 sections: technical specifications, description,
+                    <p class="home-page-text-1" data-i18n="homePage_listDescription_1">Description of variables:</p>
+                    <p class="home-page-text-2" data-i18n="homePage_listDescription_2">Right side</p>
+                    <p class="home-page-text-3" data-i18n="homePage_listDescription_3">- Each variable has 4 sections: technical specifications, description,
                         features, examples.</p>
-                    <p class="home-page-text-3">- In the "Technical characteristics" section there are 4 items, each
+                    <p class="home-page-text-3" data-i18n="homePage_listDescription_4">- In the "Technical characteristics" section there are 4 items, each
                         variable has these 4 items. Item 1 - the number of available operating modes, item 2 - setting
                         the return value (yes/no), item 3 - setting the custom separator, item 4 - the source of the
                         value.</p>
-                    <p class="home-page-text-3">- The Description section describes what this particular variable does
+                    <p class="home-page-text-3" data-i18n="homePage_listDescription_5">- The Description section describes what this particular variable does
                         and returns.</p>
-                    <p class="home-page-text-3">- The "Features" section describes any unusual or non-obvious properties
+                    <p class="home-page-text-3" data-i18n="homePage_listDescription_6">- The "Features" section describes any unusual or non-obvious properties
                         or actions of the variable.</p>
-                    <p class="home-page-text-3">- The Examples section shows some uses of the variable.</p>
+                    <p class="home-page-text-3" data-i18n="homePage_listDescription_7">- The Examples section shows some uses of the variable.</p>
                 </div>
-                <div class="home-page-header-1">CHANGE LOG <span class="title-thin-italic">2024.4</span></div>
+                <div class="end-page-text-spacing-1"></div>
+                <div class="home-page-header-1" data-i18n="homePage_listChangeLog_1">CHANGE LOG <span class="title-thin-italic">2024.4</span></div>
                 <div class="home-page-text-block">
-                    <p class="home-page-text-1">Features:</p>
-                    <p class="home-page-text-2">UI</p>
-                    <p class="home-page-text-3">- Tooltips for UI elements.</p>
-                    <p class="home-page-text-3">- System for searching and sorting saved presets (search by entered
+                    <p class="home-page-text-1" data-i18n="homePage_listChangeLog_2">Features:</p>
+                    <p class="home-page-text-2" data-i18n="homePage_listChangeLog_3">UI</p>
+                    <p class="home-page-text-3" data-i18n="homePage_listChangeLog_4">- Tooltips for UI elements.</p>
+                    <p class="home-page-text-3" data-i18n="homePage_listChangeLog_5">- System for searching and sorting saved presets (search by entered
                         value, by date added, by usage statistics, by favorites, by template length).</p>
-                    <p class="home-page-text-3" style="margin-bottom: 8px;">- Completely new library of variables.</p>
-                    <p class="home-page-text-2">Variables:</p>
-                    <p class="home-page-text-3" style="margin-bottom: 8px;">- Improved syntax logic for variables <span
+                    <p class="home-page-text-3" data-i18n="homePage_listChangeLog_6" style="margin-bottom: 8px;">- Completely new library of variables.</p>
+                    <p class="home-page-text-2" data-i18n="homePage_listChangeLog_7">Variables:</p>
+                    <p class="home-page-text-3" data-i18n="homePage_listChangeLog_8" style="margin-bottom: 8px;">- Improved syntax logic for variables <span
                             class="variable-text-block-span-1">E</span>, <span
                             class="variable-text-block-span-1">An</span>, <span
                             class="variable-text-block-span-1">Lexp</span>, <span
                             class="variable-text-block-span-1">Lmn</span>, <span
                             class="variable-text-block-span-1">Lmc</span>, <span
                             class="variable-text-block-span-1">Ec</span></p>
-                    <p class="home-page-text-2">Bug fixes</p>
-                    <p class="home-page-text-3">- When using the <span class="variable-text-block-span-1">F</span>
+                    <p class="home-page-text-2" data-i18n="homePage_listChangeLog_9">Bug fixes</p>
+                    <p class="home-page-text-3" data-i18n="homePage_listChangeLog_10">- When using the <span class="variable-text-block-span-1">F</span>
                         variable, the preview field displays the value "NaN" with any Briefly mode active, but the
                         result itself is applied correctly to the layers.</p>
-                    <p class="home-page-text-3">- When using any "Briefly" mode, the preview field displays the result
+                    <p class="home-page-text-3" data-i18n="homePage_listChangeLog_11">- When using any "Briefly" mode, the preview field displays the result
                         not after applying "Briefly" but before it, i.e. not formatted. But the final result of renaming
                         layers is correct, i.e. taking into account the selected "Briefly" mode.</p>
-                    <p class="home-page-text-3">- Variables <span class="variable-text-block-span-1">E</span>, <span
+                    <p class="home-page-text-3" data-i18n="homePage_listChangeLog_12">- Variables <span class="variable-text-block-span-1">E</span>, <span
                             class="variable-text-block-span-1">An</span>, <span
                             class="variable-text-block-span-1">Lexp</span> with the filtering mode for a given
                         effect/property now correctly handle situations when the composition contains layers with this
                         effect/property or their absence (see the changes section, first point).</p>
-                    <p class="home-page-text-3">- Now the variables `Lmn`, `Lmc` correctly recognize the names of masks
+                    <p class="home-page-text-3" data-i18n="homePage_listChangeLog_13">- Now the variables `Lmn`, `Lmc` correctly recognize the names of masks
                         and their operating modes.</p>
                     <br><br>
                 </div>

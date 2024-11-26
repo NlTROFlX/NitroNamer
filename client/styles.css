@@ -590,10 +590,10 @@ html {
 }
 
 .home-page-text-1 {
-    padding-top: 22px !important;
-    padding-bottom: 8px !important;
     margin: 0px;
-    padding: 0px;
+    padding-top: 16px;
+    padding-bottom: 8px;
+    margin-left: -1px;
     font-weight: 200;
     font-size: 18px;
     font-style: italic;
@@ -614,6 +614,13 @@ html {
     margin-left: 24px;
     margin-right: 18.65px;
     font-weight: 400;
+}
+
+.end-page-text-spacing-1{
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 4px;
 }
 
 /* Стили для language-selector */
