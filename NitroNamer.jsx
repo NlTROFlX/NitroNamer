@@ -1,7 +1,7 @@
 function buildUI(thisObj) {
 
-    var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "NitroNamer 2024.4 - dev", undefined, {resizeable: true});
-    var globalWidthSizeElements = 310; 
+    var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "NitroNamer 2024.4 - dev", undefined, { resizeable: true });
+    var globalWidthSizeElements = 310;
     var globalWidthSizeElementsCorrect = 14;
     var globalHeightSizeElementsMax = 376;
     var globalHeightSizeElementsMin = 146;
@@ -9,19 +9,19 @@ function buildUI(thisObj) {
     win.orientation = "column";
     win.alignChildren = ["fill", "top"];
     win.active = true;
-    win.margins = [4,4,4,4];
+    win.margins = [4, 4, 4, 4];
     win.layout.layout(true);
 
     var scriptMessageHead_1 = "NitroNamer 2024.4 - dev";
 
     var grpLayerSelection = win.add("group", undefined);
-    grpLayerSelection.orientation = "row"; 
+    grpLayerSelection.orientation = "row";
     grpLayerSelection.maximumSize.width = globalWidthSizeElements;
     grpLayerSelection.alignChildren = ["fill", "left"];
     grpLayerSelection.spacing = 0;
 
     var rdoAllLayers = grpLayerSelection.add("radiobutton", undefined, "Total: ");
-    rdoAllLayers.value = true; 
+    rdoAllLayers.value = true;
     rdoAllLayers.alignment = ["left", "center"];
     var txtAllLayersCount = grpLayerSelection.add("statictext", undefined, "");
     txtAllLayersCount.alignment = ["left", "center"];
@@ -38,27 +38,27 @@ function buildUI(thisObj) {
     var scriptFile = new File($.fileName);
     var scriptFolderPath = scriptFile.path;
 
-    var btnCopy = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/copy.png"), {style: "toolbutton"}, 0);
+    var btnCopy = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/copy.png"), { style: "toolbutton" }, 0);
     btnCopy.size = [24, 24];
     btnCopy.imageSize = [24, 24];
     btnCopy.alignment = ["right", "center"];
 
-    var btnFavorites = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/favorites.png"), {style: "toolbutton"});
+    var btnFavorites = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/favorites.png"), { style: "toolbutton" });
     btnFavorites.size = [24, 24];
     btnFavorites.imageSize = [24, 24];
     btnFavorites.alignment = ["right", "center"];
 
-    var btnSave = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/save.png"), {style: "toolbutton"});
+    var btnSave = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/save.png"), { style: "toolbutton" });
     btnSave.size = [24, 24];
     btnSave.imageSize = [24, 24];
     btnSave.alignment = ["right", "center"];
 
-    var btnCircleMinus = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/delete.png"), {style: "toolbutton"});
+    var btnCircleMinus = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/delete.png"), { style: "toolbutton" });
     btnCircleMinus.size = [24, 24];
     btnCircleMinus.imageSize = [24, 24];
     btnCircleMinus.alignment = ["right", "center"];
 
-    var btnMinimize = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/minimize.png"), {style: "toolbutton"});
+    var btnMinimize = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/minimize.png"), { style: "toolbutton" });
     btnMinimize.size = [24, 24];
     btnMinimize.imageSize = [24, 24];
     btnMinimize.alignment = ["right", "center"];
@@ -90,7 +90,7 @@ function buildUI(thisObj) {
     }
 
     var modes = ["chart", "date", "longArrowDown", "longArrowUp", "favorites", "search"];
-    var currentModeIndex = 0; 
+    var currentModeIndex = 0;
     var isActive = false;
     var isMouseOverButton = false;
 
@@ -103,7 +103,7 @@ function buildUI(thisObj) {
     var btnModeSwitch = grpDropdownAndButtons.add(
         "iconbutton",
         undefined,
-        File(scriptFolderPath + "/NitroNamer/img/" + modes[0] + ".png"), 
+        File(scriptFolderPath + "/NitroNamer/img/" + modes[0] + ".png"),
         { style: "toolbutton" }
     );
     btnModeSwitch.size = [24, 24];
@@ -122,7 +122,7 @@ function buildUI(thisObj) {
     ddLayerMode.maximumSize.width = globalWidthSizeElements - 42;
     ddLayerMode.selection = 0;
 
-    ddLayerMode.onChange = function() {
+    ddLayerMode.onChange = function () {
         var selectedPreset = ddLayerMode.selection;
         if (selectedPreset) {
             var presetTemplate = selectedPreset.text;
@@ -172,12 +172,12 @@ function buildUI(thisObj) {
                 }
             }
         }
-    };    
+    };
 
-    btnModeSwitch.onClick = function() {
+    btnModeSwitch.onClick = function () {
         var isAltPressed = ScriptUI.environment.keyboardState.altKey;
         var isCtrlPressed = ScriptUI.environment.keyboardState.ctrlKey;
-    
+
         if (isAltPressed) {
             isActive = !isActive;
         } else if (isCtrlPressed) {
@@ -194,17 +194,17 @@ function buildUI(thisObj) {
         updateModeButtonIcon();
         updateModeSwitchTooltip();
         saveCurrentSettings();
-    
-        updatePresetsDropdown(loadSettings());
-    };    
 
-    btnModeSwitch.addEventListener("mouseover", function() {
+        updatePresetsDropdown(loadSettings());
+    };
+
+    btnModeSwitch.addEventListener("mouseover", function () {
         isMouseOverButton = true;
         updateModeButtonIcon();
         updateModeSwitchTooltip();
     });
 
-    btnModeSwitch.addEventListener("mouseout", function() {
+    btnModeSwitch.addEventListener("mouseout", function () {
         isMouseOverButton = false;
         updateModeButtonIcon();
         updateModeSwitchTooltip();
@@ -222,7 +222,7 @@ function buildUI(thisObj) {
         }
         btnModeSwitch.image = File(scriptFolderPath + "/NitroNamer/img/" + iconFilename);
         btnModeSwitch.imageSize = [24, 24];
-    }    
+    }
 
     function saveCurrentSettings() {
         var currentSettings = {
@@ -235,7 +235,7 @@ function buildUI(thisObj) {
             selectedPresetTemplate: ddLayerMode.selection && ddLayerMode.selection.preset ? ddLayerMode.selection.preset.template : ""
         };
         saveSettings(currentSettings, true);
-    }    
+    }
 
     function handleRadioButtonClick() {
         if (this === rdoAllLayers) {
@@ -272,31 +272,31 @@ function buildUI(thisObj) {
 
     var grpTemplate = win.add("group", undefined);
     grpTemplate.orientation = "column";
-    grpTemplate.margins = [0,-10,0,0];
+    grpTemplate.margins = [0, -10, 0, 0];
     grpTemplate.spacing = globalSpacingElements;
-    var txtTemplate = grpTemplate.add("edittext", undefined, "(LayerName).i", {multiline: false, scrolling: false});
+    var txtTemplate = grpTemplate.add("edittext", undefined, "(LayerName).i", { multiline: false, scrolling: false });
     txtTemplate.alignment = ["fill", "top"];
-    txtTemplate.margins = [0,-10,0,0];
+    txtTemplate.margins = [0, -10, 0, 0];
     txtTemplate.maximumSize.width = globalWidthSizeElements;
 
-    txtTemplate.addEventListener("click", function() {
-        checkAndUpdateSettings(); 
+    txtTemplate.addEventListener("click", function () {
+        checkAndUpdateSettings();
     });
 
-    txtTemplate.onChanging = function() {
-        checkAndUpdateSettings(); 
+    txtTemplate.onChanging = function () {
+        checkAndUpdateSettings();
         updatePreview();
         updateLayerCounts();
-        updateRenameButtonIcon(); 
-    
+        updateRenameButtonIcon();
+
         // Если активен режим "search", обновляем выпадающий список
         if (isActive && modes[currentModeIndex] === "search") {
             updatePresetsDropdown(loadSettings());
         }
     };
 
-    txtTemplate.onChange = function() {
-        checkAndUpdateSettings(); 
+    txtTemplate.onChange = function () {
+        checkAndUpdateSettings();
         var currentSettings = {
             allLayers: rdoAllLayers.value,
             template: txtTemplate.text,
@@ -308,15 +308,15 @@ function buildUI(thisObj) {
         updateLayerCounts();
         resetRenameButtonIcon();
         updateRenameButtonIcon();
-    
+
         // Если активен режим "search", обновляем выпадающий список
         if (isActive && modes[currentModeIndex] === "search") {
             updatePresetsDropdown(loadSettings());
         }
     };
 
-    txtTemplate.addEventListener("keydown", function(event) {
-        checkAndUpdateSettings(); 
+    txtTemplate.addEventListener("keydown", function (event) {
+        checkAndUpdateSettings();
         if (event.keyName === "Enter") {
             var selectedPreset = ddLayerMode.selection;
             if (selectedPreset) {
@@ -352,7 +352,7 @@ function buildUI(thisObj) {
                         updateLayerCounts();
                         updatePreview();
                         resetRenameButtonIcon();
-                        updateRenameButtonIcon(); 
+                        updateRenameButtonIcon();
 
                         var currentSettings = {
                             allLayers: rdoAllLayers.value,
@@ -367,9 +367,9 @@ function buildUI(thisObj) {
                 }
             }
         }
-    });    
+    });
 
-    win.onShow = function() {
+    win.onShow = function () {
         ddLayerMode.size = [txtTemplate.size[0], ddLayerMode.size[1]];
     };
 
@@ -384,14 +384,14 @@ function buildUI(thisObj) {
     var txtOriginalLabel = grpTextFields.add("statictext", undefined, "The original name of the layer: ");
     txtOriginalLabel.maximumSize.height = 14;
     txtOriginalLabel.margins = [0, -10, 0, 0];
-    var txtOriginal = grpTextFields.add("edittext", undefined, "", {readonly: true});
+    var txtOriginal = grpTextFields.add("edittext", undefined, "", { readonly: true });
     txtOriginal.alignment = ["left", "top"];
     txtOriginal.margins = [0, -10, 0, 0];
 
     var txtRenamedLabel = grpTextFields.add("statictext", undefined, "Template result for layer(s): ");
     txtRenamedLabel.maximumSize.height = 14;
     txtRenamedLabel.margins = [0, -10, 0, 0];
-    var txtRenamed = grpTextFields.add("edittext", undefined, "", {readonly: true});
+    var txtRenamed = grpTextFields.add("edittext", undefined, "", { readonly: true });
     txtRenamed.alignment = ["left", "top"];
     txtRenamed.margins = [0, -10, 0, 0];
 
@@ -399,35 +399,35 @@ function buildUI(thisObj) {
 
     var grpBriefly = win.add("group", undefined);
     grpBriefly.orientation = "row";
-    grpBriefly.alignChildren = [ "right", "center"];
+    grpBriefly.alignChildren = ["right", "center"];
     grpBriefly.spacing = grpTextFields;
     grpBriefly.margins = [0, 0, 0, 0];
 
     var btnRename = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/renameIcon.png"), { style: "toolbutton" });
     var warningIcon = File(scriptFolderPath + "/NitroNamer/img/warning.png");
     var warningIconHover = File(scriptFolderPath + "/NitroNamer/img/warningHover.png");
-    btnRename.size = [24, 24]; 
-    btnRename.imageSize = [24, 24]; 
+    btnRename.size = [24, 24];
+    btnRename.imageSize = [24, 24];
     btnRename.alignment = ["left", "center"];
 
     var btnVariables = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/variablesIcon.png"), { style: "toolbutton" });
-    btnVariables.size = [24, 24]; 
-    btnVariables.imageSize = [24, 24]; 
+    btnVariables.size = [24, 24];
+    btnVariables.imageSize = [24, 24];
     btnVariables.alignment = ["left", "center"];
 
     var btnHelp = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/helpIcon.png"), { style: "toolbutton" });
-    btnHelp.size = [24, 24]; 
-    btnHelp.imageSize = [24, 24]; 
+    btnHelp.size = [24, 24];
+    btnHelp.imageSize = [24, 24];
     btnHelp.alignment = ["left", "center"];
 
     var btnReset = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/resetIcon.png"), { style: "toolbutton" });
-    btnReset.size = [24, 24]; 
-    btnReset.imageSize = [24, 24]; 
+    btnReset.size = [24, 24];
+    btnReset.imageSize = [24, 24];
     btnReset.alignment = ["left", "center"];
 
-    var btnSettings = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/settings.png"), {style: "toolbutton"});
-    btnSettings.size = [24, 24]; 
-    btnSettings.imageSize = [24, 24]; 
+    var btnSettings = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/settings.png"), { style: "toolbutton" });
+    btnSettings.size = [24, 24];
+    btnSettings.imageSize = [24, 24];
     btnSettings.alignment = ["left", "center"];
 
     var chkBriefly = grpBriefly.add("checkbox", undefined);
@@ -435,7 +435,7 @@ function buildUI(thisObj) {
     ddBrieflyType.maximumSize.width = 150;
     ddBrieflyType.selection = 0;
 
-    chkBriefly.onClick = function() {
+    chkBriefly.onClick = function () {
         var currentSettings = {
             allLayers: rdoAllLayers.value,
             template: txtTemplate.text,
@@ -448,7 +448,7 @@ function buildUI(thisObj) {
         resetRenameButtonIcon();
     };
 
-    ddBrieflyType.onChange = function() {
+    ddBrieflyType.onChange = function () {
         var currentSettings = {
             allLayers: rdoAllLayers.value,
             template: txtTemplate.text,
@@ -460,7 +460,7 @@ function buildUI(thisObj) {
         updateLayerCounts();
         resetRenameButtonIcon();
     };
-    grpBriefly.margins = [0,-10,0,0];
+    grpBriefly.margins = [0, -10, 0, 0];
 
     function resetRenameButtonIcon() {
         btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIcon.png");
@@ -468,11 +468,11 @@ function buildUI(thisObj) {
     }
 
     function addHoverEffect(button, iconPath) {
-        button.addEventListener("mouseover", function() {
+        button.addEventListener("mouseover", function () {
             button.image = File(iconPath + "Hover.png");
             button.imageSize = [24, 24];
         });
-        button.addEventListener("mouseout", function() {
+        button.addEventListener("mouseout", function () {
             button.image = File(iconPath + ".png");
             button.imageSize = [24, 24];
         });
@@ -488,18 +488,18 @@ function buildUI(thisObj) {
     addHoverEffect(btnReset, scriptFolderPath + "/NitroNamer/img/resetIcon");
     addHoverEffect(btnSettings, scriptFolderPath + "/NitroNamer/img/settings");
 
-    btnRename.addEventListener("mouseover", function() {
+    btnRename.addEventListener("mouseover", function () {
         checkAndUpdateSettings();
         updatePreview();
         updateLayerCounts();
 
         var isCtrlPressed = ScriptUI.environment.keyboardState.ctrlKey;
         var isShiftPressed = ScriptUI.environment.keyboardState.shiftKey;
-        var isAltPressed = ScriptUI.environment.keyboardState.altKey; 
+        var isAltPressed = ScriptUI.environment.keyboardState.altKey;
 
         if (trim(txtTemplate.text) === "") {
             btnRename.image = warningIconHover;
-        } else if (isAltPressed) { 
+        } else if (isAltPressed) {
             btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHoverReverse.png");
         } else if (isCtrlPressed) {
             btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHoverAfter.png");
@@ -511,11 +511,11 @@ function buildUI(thisObj) {
         btnRename.imageSize = [24, 24];
     });
 
-    btnRename.addEventListener("mouseout", function() {
-        updateRenameButtonIcon(); 
+    btnRename.addEventListener("mouseout", function () {
+        updateRenameButtonIcon();
     });
 
-    btnVariables.onClick = function() {
+    btnVariables.onClick = function () {
         var scriptFilePath = File(scriptFolderPath + "/NitroNamer/scripts/NNLayerInfo.jsx");
         if (scriptFilePath.exists) {
             $.evalFile(scriptFilePath);
@@ -524,7 +524,7 @@ function buildUI(thisObj) {
         }
     };
 
-    btnCopy.onClick = function() {
+    btnCopy.onClick = function () {
         var proj = app.project;
         if (proj && proj.activeItem instanceof CompItem) {
             var comp = proj.activeItem;
@@ -556,7 +556,7 @@ function buildUI(thisObj) {
         }
     };
 
-    btnFavorites.onClick = function() {
+    btnFavorites.onClick = function () {
         var selectedPreset = ddLayerMode.selection;
         if (selectedPreset) {
             var presetTemplate = selectedPreset.text;
@@ -584,9 +584,9 @@ function buildUI(thisObj) {
                 }
             }
         }
-    };    
+    };
 
-    btnFavorites.addEventListener("mouseover", function() {
+    btnFavorites.addEventListener("mouseover", function () {
         var isFavorite = btnFavorites.isFavorite;
 
         if (isFavorite) {
@@ -597,13 +597,13 @@ function buildUI(thisObj) {
         btnFavorites.imageSize = [24, 24];
     });
 
-    btnFavorites.addEventListener("mouseout", function() {
+    btnFavorites.addEventListener("mouseout", function () {
         var isFavorite = btnFavorites.isFavorite;
         updateFavoritesButtonIcon(isFavorite);
     });
 
     function updateFavoritesButtonIcon(isFavorite) {
-        btnFavorites.isFavorite = isFavorite; 
+        btnFavorites.isFavorite = isFavorite;
 
         if (isFavorite) {
             btnFavorites.image = File(scriptFolderPath + "/NitroNamer/img/favoritesHover.png");
@@ -611,9 +611,9 @@ function buildUI(thisObj) {
             btnFavorites.image = File(scriptFolderPath + "/NitroNamer/img/favorites.png");
         }
         btnFavorites.imageSize = [24, 24];
-    }    
+    }
 
-    btnSave.onClick = function() {
+    btnSave.onClick = function () {
         var settings = {
             allLayers: rdoAllLayers.value,
             template: txtTemplate.text,
@@ -679,7 +679,7 @@ function buildUI(thisObj) {
         }
     };
 
-    btnSave.addEventListener("mouseover", function() {
+    btnSave.addEventListener("mouseover", function () {
         if (ScriptUI.environment.keyboardState.shiftKey) {
             btnSave.image = File(scriptFolderPath + "/NitroNamer/img/refreshHover.png");
         } else {
@@ -687,11 +687,11 @@ function buildUI(thisObj) {
         }
     });
 
-    btnSave.addEventListener("mouseout", function() {
+    btnSave.addEventListener("mouseout", function () {
         btnSave.image = File(scriptFolderPath + "/NitroNamer/img/save.png");
     });
 
-    btnCircleMinus.onClick = function() {
+    btnCircleMinus.onClick = function () {
         var selectedItem = ddLayerMode.selection;
         var selectedPreset = ddLayerMode.selection;
         if (selectedItem && selectedPreset && selectedPreset.text !== "Save your new preset" && selectedPreset.text !== "Please select a preset to delete") {
@@ -719,7 +719,7 @@ function buildUI(thisObj) {
             var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
             var settingsFile = new File(scriptFolderPath + "/settings.json");
 
-            settingsFile.encoding = "UTF-8"; 
+            settingsFile.encoding = "UTF-8";
             settingsFile.open("w");
             settingsFile.write(JSON.stringify(settings, null, 4));
             settingsFile.close();
@@ -742,7 +742,7 @@ function buildUI(thisObj) {
                 var settings = loadSettings();
                 var userPresets = settings.userPresets || {};
 
-                var isFavorite = false; 
+                var isFavorite = false;
                 for (var key in userPresets) {
                     if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
                         var preset = userPresets[key];
@@ -760,10 +760,10 @@ function buildUI(thisObj) {
         }
     };
 
-    btnMinimize.onClick = function() {
+    btnMinimize.onClick = function () {
         var settings = loadSettings();
         var currentSettings = settings.currentSettings || {};
-        var isCompact = !currentSettings.UICompact; 
+        var isCompact = !currentSettings.UICompact;
 
         currentSettings.UICompact = isCompact;
         settings.currentSettings = currentSettings;
@@ -773,8 +773,8 @@ function buildUI(thisObj) {
         setMinimizeButtonIcon(isCompact);
     };
 
-    btnRename.onClick = function() {
-        if (!btnRename.enabled) return; 
+    btnRename.onClick = function () {
+        if (!btnRename.enabled) return;
 
         var allLayers = rdoAllLayers.value;
         var template = txtTemplate.text;
@@ -795,15 +795,15 @@ function buildUI(thisObj) {
         updatePreview();
         btnRename.image = File(scriptFolderPath + "/NitroNamer/img/doneIcon.png");
         btnRename.imageSize = [24, 24];
-    };               
+    };
 
-    btnHelp.onClick = function() {
+    btnHelp.onClick = function () {
         updateLayerCounts();
         var helpScriptPath = scriptFolderPath + "/NitroNamer/scripts/NNHelp.jsx";
         $.evalFile(helpScriptPath);
     };
 
-    btnReset.onClick = function() {
+    btnReset.onClick = function () {
         rdoAllLayers.value = true;
         rdoOnlySelected.value = false;
         txtTemplate.text = "(LayerName).i";
@@ -811,10 +811,10 @@ function buildUI(thisObj) {
         ddBrieflyType.selection = 0;
         updateLayerCounts();
         updatePreview();
-        resetRenameButtonIcon(); 
+        resetRenameButtonIcon();
     };
 
-    btnSettings.onClick = function() {
+    btnSettings.onClick = function () {
         var settingsScriptPath = scriptFolderPath + "/NitroNamer/scripts/NNSettings.jsx";
         $.evalFile(settingsScriptPath);
     };
@@ -831,9 +831,9 @@ function buildUI(thisObj) {
             btnMinimize.addEventListener("mouseout", handleMouseOutMaximize);
 
             txtOriginal.minimumSize.width = globalWidthSizeElements - 14;
-            txtOriginal.margins = [0,0,0,0];
+            txtOriginal.margins = [0, 0, 0, 0];
             txtRenamed.minimumSize.width = globalWidthSizeElements - 14;
-            txtRenamed.margins = [0,0,0,0];
+            txtRenamed.margins = [0, 0, 0, 0];
 
             grpTextFields.remove(txtOriginalLabel);
             grpTextFields.remove(txtOriginal);
@@ -889,14 +889,14 @@ function buildUI(thisObj) {
 
             win.minimumSize.height = globalHeightSizeElementsMin;
             win.maximumSize.height = globalHeightSizeElementsMax;
-            win.minimumSize.width = globalWidthSizeElements  - globalWidthSizeElementsCorrect;
+            win.minimumSize.width = globalWidthSizeElements - globalWidthSizeElementsCorrect;
             win.maximumSize.width = globalWidthSizeElements;
         }
 
         win.layout.layout(true);
         win.layout.resize();
     }
-    
+
     function saveSettings(settings, isCurrent) {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
@@ -910,7 +910,7 @@ function buildUI(thisObj) {
         var userPresets = existingSettings.userPresets || {};
         var currentSettings = existingSettings.currentSettings || {};
 
-        var newPresetKey = null; 
+        var newPresetKey = null;
 
         if (isCurrent) {
 
@@ -920,7 +920,7 @@ function buildUI(thisObj) {
                 }
             }
         } else {
-            var presetSettings = settings; 
+            var presetSettings = settings;
 
             presetSettings.creationDate = new Date().getTime();
 
@@ -952,8 +952,8 @@ function buildUI(thisObj) {
 
         writeJSONFile(settingsFile, existingSettings);
 
-        return newPresetKey; 
-    }    
+        return newPresetKey;
+    }
 
     function readJSONFile(filePath) {
         var file = new File(filePath);
@@ -972,7 +972,7 @@ function buildUI(thisObj) {
 
     function writeJSONFile(filePath, data) {
         var file = new File(filePath);
-        file.encoding = "UTF-8"; 
+        file.encoding = "UTF-8";
         file.open("w");
         file.write(JSON.stringify(data, null, 4));
         file.close();
@@ -992,7 +992,7 @@ function buildUI(thisObj) {
                 }
             };
 
-            settingsFile.encoding = "UTF-8"; 
+            settingsFile.encoding = "UTF-8";
             if (settingsFile.open("w")) {
                 settingsFile.write(JSON.stringify(initialData, null, 4));
                 settingsFile.close();
@@ -1024,7 +1024,7 @@ function buildUI(thisObj) {
                 "W": { "defaultValue": "NoWidth", "customValue": "Custom{W}", "active": false }
             };
 
-            variablesFile.encoding = "UTF-8"; 
+            variablesFile.encoding = "UTF-8";
             if (variablesFile.open("w")) {
                 variablesFile.write(JSON.stringify(initialData, null, 4));
                 variablesFile.close();
@@ -1050,7 +1050,7 @@ function buildUI(thisObj) {
         }
 
         return settings;
-    }    
+    }
 
     var variableSettings;
     var lastModifiedTime;
@@ -1061,7 +1061,7 @@ function buildUI(thisObj) {
         var variablesFile = scriptFolderPath + "/variables.json";
 
         return readJSONFile(variablesFile);
-    }    
+    }
 
     function getFileModifiedTime(filePath) {
         var file = new File(filePath);
@@ -1069,7 +1069,7 @@ function buildUI(thisObj) {
             return file.modified;
         }
         return null;
-    }    
+    }
 
     function getMaskCount(layer, settings, maskFilter, customSeparator) {
         var maskCount = 0;
@@ -1088,7 +1088,7 @@ function buildUI(thisObj) {
 
         if (maskFilter) {
 
-            filterList = maskFilter.split(',').map(function(item) {
+            filterList = maskFilter.split(',').map(function (item) {
                 return item.trim();
             });
         }
@@ -1136,11 +1136,11 @@ function buildUI(thisObj) {
                 return "NoMasks";
             }
         }
-    }    
+    }
 
     function getMaskNames(layer, settings, maskFilter, customSeparator) {
         var maskNames = [];
-        var separator = customSeparator || ", "; 
+        var separator = customSeparator || ", ";
 
         var maskModes = {
             "none": MaskMode.NONE,
@@ -1156,7 +1156,7 @@ function buildUI(thisObj) {
 
         if (maskFilter) {
 
-            filterList = maskFilter.split(',').map(function(item) {
+            filterList = maskFilter.split(',').map(function (item) {
                 return item.trim();
             });
         }
@@ -1198,14 +1198,14 @@ function buildUI(thisObj) {
             if (maskNames.length > 0) {
                 return maskNames.join(separator);
             }
-        } 
+        }
 
         if (settings && settings.Lmn) {
             return settings.Lmn.active ? settings.Lmn.customValue : settings.Lmn.defaultValue;
         } else {
             return "NoMaskNames";
         }
-    }    
+    }
 
     variableSettings = loadVariableSettings();
 
@@ -1268,7 +1268,7 @@ function buildUI(thisObj) {
         if (settings.currentSettings && typeof settings.currentSettings.selectedPresetIndex !== 'undefined') {
             ddLayerMode.selection = settings.currentSettings.selectedPresetIndex;
         } else {
-            ddLayerMode.selection = 0; 
+            ddLayerMode.selection = 0;
         }
 
         txtTemplate.text = settings.currentSettings.template || "(LayerName).i";
@@ -1299,22 +1299,22 @@ function buildUI(thisObj) {
         if (isInitializing) {
             return;
         }
-        
+
         var selectedItem = ddLayerMode.selection;
         if (selectedItem && selectedItem.preset) {
             var preset = selectedItem.preset;
-            var selectedTemplate = preset.template; 
-    
+            var selectedTemplate = preset.template;
+
             var settings = loadSettings();
             var userPresets = settings.userPresets || {};
-    
+
             // Увеличиваем usageFrequency при каждом выборе пресета
             if (preset.hasOwnProperty('usageFrequency')) {
                 preset.usageFrequency += 1;
             } else {
                 preset.usageFrequency = 1;
             }
-    
+
             // Обновляем пресет в userPresets
             for (var key in userPresets) {
                 if (userPresets.hasOwnProperty(key) && userPresets[key].template === preset.template) {
@@ -1322,24 +1322,24 @@ function buildUI(thisObj) {
                     break;
                 }
             }
-    
+
             settings.userPresets = userPresets;
             var settingsFile = scriptFolderPath + "/NitroNamer/settings/settings.json";
             writeJSONFile(settingsFile, settings);
-    
+
             // Остальной код остается без изменений...
-    
+
             rdoAllLayers.value = preset.allLayers;
             rdoOnlySelected.value = !preset.allLayers;
             txtTemplate.text = preset.template;
             chkBriefly.value = preset.briefly;
             ddBrieflyType.selection = preset.brieflyType || 0;
-    
+
             updateLayerCounts();
             updatePreview();
             resetRenameButtonIcon();
             updateRenameButtonIcon();
-    
+
             var currentSettings = {
                 allLayers: rdoAllLayers.value,
                 template: txtTemplate.text,
@@ -1348,13 +1348,13 @@ function buildUI(thisObj) {
                 selectedPresetTemplate: preset.template
             };
             saveSettings(currentSettings, true);
-    
+
             updateFavoritesButtonIcon(preset.favoritesTemplate);
-    
+
             updatePresetsDropdown(settings);
-    
+
             ddLayerMode.onChange = null;
-    
+
             for (var i = 0; i < ddLayerMode.items.length; i++) {
                 var item = ddLayerMode.items[i];
                 if (item.preset && item.preset.template === selectedTemplate) {
@@ -1362,25 +1362,25 @@ function buildUI(thisObj) {
                     break;
                 }
             }
-    
+
             ddLayerMode.onChange = dropdownChangeHandler;
         }
-    }    
+    }
 
     function updatePresetsDropdown(settings) {
         ddLayerMode.onChange = null;
-        
+
         ddLayerMode.removeAll();
         var userPresets = settings.userPresets || {};
-        
+
         var presetsArray = [];
-        
+
         var searchTerm = txtTemplate.text.toLowerCase();
-        
+
         for (var key in userPresets) {
             if (userPresets.hasOwnProperty(key)) {
                 var preset = userPresets[key];
-        
+
                 // Обработка режима "favorites"
                 if (isActive && modes[currentModeIndex] === "favorites") {
                     if (preset.favoritesTemplate) {
@@ -1404,50 +1404,50 @@ function buildUI(thisObj) {
                 }
             }
         }
-        
+
         // Сортировка пресетов
         if (isActive) {
             if (modes[currentModeIndex] === "chart") {
                 // Сортировка по частоте использования
-                presetsArray.sort(function(a, b) {
+                presetsArray.sort(function (a, b) {
                     return (b.usageFrequency || 0) - (a.usageFrequency || 0);
                 });
             } else if (modes[currentModeIndex] === "date") {
                 // Сортировка по дате создания
-                presetsArray.sort(function(a, b) {
+                presetsArray.sort(function (a, b) {
                     var dateA = new Date(a.creationDate);
                     var dateB = new Date(b.creationDate);
-        
+
                     if (isNaN(dateA.getTime())) {
                         dateA = new Date(0);
                     }
                     if (isNaN(dateB.getTime())) {
                         dateB = new Date(0);
                     }
-        
+
                     return dateA.getTime() - dateB.getTime();
                 });
             } else if (modes[currentModeIndex] === "longArrowDown") {
                 // Сортировка по длине шаблона (убывание)
-                presetsArray.sort(function(a, b) {
+                presetsArray.sort(function (a, b) {
                     return b.template.length - a.template.length;
                 });
             } else if (modes[currentModeIndex] === "longArrowUp") {
                 // Сортировка по длине шаблона (возрастание)
-                presetsArray.sort(function(a, b) {
+                presetsArray.sort(function (a, b) {
                     return a.template.length - b.template.length;
                 });
             }
             // Для режимов "favorites" и "search" дополнительная сортировка не требуется
         }
-        
+
         // Заполнение выпадающего списка
         if (presetsArray.length === 0) {
             ddLayerMode.add("item", "No presets saved or suitable presets.");
         } else {
             for (var i = 0; i < presetsArray.length; i++) {
                 var displayText = presetsArray[i].template;
-        
+
                 if (isActive) {
                     if (modes[currentModeIndex] === "chart") {
                         displayText += " {" + (presetsArray[i].usageFrequency || 0) + "}";
@@ -1456,8 +1456,8 @@ function buildUI(thisObj) {
                             var creationDate = new Date(presetsArray[i].creationDate);
                             if (!isNaN(creationDate.getTime())) {
                                 var formattedDate = creationDate.getFullYear() + "-" +
-                                                    ("0" + (creationDate.getMonth() + 1)).slice(-2) + "-" +
-                                                    ("0" + creationDate.getDate()).slice(-2);
+                                    ("0" + (creationDate.getMonth() + 1)).slice(-2) + "-" +
+                                    ("0" + creationDate.getDate()).slice(-2);
                                 displayText += " {" + formattedDate + "}";
                             } else {
                                 displayText += " {Unknown date}";
@@ -1470,16 +1470,16 @@ function buildUI(thisObj) {
                     }
                     // В режимах "favorites" и "search" дополнительную информацию не добавляем
                 }
-        
+
                 var item = ddLayerMode.add("item", displayText);
                 item.preset = presetsArray[i];
             }
         }
-        
+
         // Выбор текущего пресета
         var selectedPresetTemplate = settings.currentSettings ? settings.currentSettings.selectedPresetTemplate : null;
         var selectedIndex = -1;
-        
+
         for (var i = 0; i < ddLayerMode.items.length; i++) {
             var itemPresetTemplate = ddLayerMode.items[i].preset ? ddLayerMode.items[i].preset.template : null;
             if (itemPresetTemplate === selectedPresetTemplate) {
@@ -1487,15 +1487,15 @@ function buildUI(thisObj) {
                 break;
             }
         }
-        
+
         if (selectedIndex !== -1) {
             ddLayerMode.selection = selectedIndex;
         } else {
             ddLayerMode.selection = 0;
         }
-        
+
         ddLayerMode.onChange = dropdownChangeHandler;
-    }    
+    }
 
     function updateLayerCounts() {
         var proj = app.project;
@@ -1526,14 +1526,14 @@ function buildUI(thisObj) {
             txtAllLayersCount.text = "0";
             txtSelectedLayersCount.text = "0";
         }
-    }    
+    }
 
     function updatePreview() {
         var settings = loadSettings();
         var isCompact = settings.currentSettings && settings.currentSettings.UICompact;
 
         resetLocalIndex();
-        checkAndUpdateSettings(); 
+        checkAndUpdateSettings();
 
         var proj = app.project;
         if (proj) {
@@ -1557,7 +1557,7 @@ function buildUI(thisObj) {
                         txtRenamed.text = newName;
                     }
                     if (txtRenamed) {
-                        txtRenamed.text = newName; 
+                        txtRenamed.text = newName;
                     }
                 } else {
                     if (!isCompact) {
@@ -1586,7 +1586,7 @@ function buildUI(thisObj) {
                 txtRenamed.text = "No project open.";
             }
         }
-    }    
+    }
 
     function checkAndUpdateSettings() {
         var scriptFile = new File($.fileName);
@@ -1598,12 +1598,12 @@ function buildUI(thisObj) {
             variableSettings = loadVariableSettings();
             lastModifiedTime = currentModifiedTime;
         }
-    }    
+    }
 
     function generateNewName(layer, template, briefly, brieflyType, settings) {
         resetLocalIndex();
-        checkAndUpdateSettings(); 
-        incrementValues = {}; 
+        checkAndUpdateSettings();
+        incrementValues = {};
 
         var variables = {
             "T": getLayerType(layer),
@@ -1641,7 +1641,7 @@ function buildUI(thisObj) {
 
         if (briefly && !isNaN(parseFloat(variables.F))) {
             variables.F = parseFloat(variables.F).toFixed(2);
-        }        
+        }
 
         var newName = replaceVariables(template, variables, layer.name, layer, settings);
 
@@ -1672,11 +1672,11 @@ function buildUI(thisObj) {
     function getExpressionControlledProperties(layer, settings, propertiesFilter, customSeparator) {
         var expressionProps = [];
         var propertyNames = null;
-        var separator = customSeparator || ", "; 
+        var separator = customSeparator || ", ";
 
         if (propertiesFilter) {
 
-            propertyNames = propertiesFilter.split(',').map(function(name) {
+            propertyNames = propertiesFilter.split(',').map(function (name) {
                 return name.trim().toLowerCase();
             });
         }
@@ -1712,7 +1712,7 @@ function buildUI(thisObj) {
                 return "NoExpressions";
             }
         }
-    }    
+    }
 
     function getTrackMatteType(layer, settings) {
         if (layer instanceof CameraLayer || layer instanceof LightLayer) {
@@ -1741,7 +1741,7 @@ function buildUI(thisObj) {
         } else {
             return settings && settings.Tm ? (settings.Tm.active ? settings.Tm.customValue : settings.Tm.defaultValue) : "NoTrackMate";
         }
-    }    
+    }
 
     function toCamelCase(str) {
         var result = "";
@@ -1751,9 +1751,9 @@ function buildUI(thisObj) {
             var currentChar = str.charAt(i);
             var charCode = str.charCodeAt(i);
 
-            if ((charCode >= 48 && charCode <= 57) || 
-                (charCode >= 65 && charCode <= 90) || 
-                (charCode >= 97 && charCode <= 122)) { 
+            if ((charCode >= 48 && charCode <= 57) ||
+                (charCode >= 65 && charCode <= 90) ||
+                (charCode >= 97 && charCode <= 122)) {
                 if (capitalizeNext) {
                     result += currentChar.toUpperCase();
                     capitalizeNext = false;
@@ -1761,7 +1761,7 @@ function buildUI(thisObj) {
                     result += currentChar.toLowerCase();
                 }
             } else {
-                result += currentChar; 
+                result += currentChar;
                 capitalizeNext = true;
             }
         }
@@ -1770,7 +1770,7 @@ function buildUI(thisObj) {
     }
 
     function toPascalCase(str) {
-        return str.replace(/\w\S*/g, function(txt) {
+        return str.replace(/\w\S*/g, function (txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         });
     }
@@ -1817,7 +1817,7 @@ function buildUI(thisObj) {
             return layer.source.frameRate.toFixed(2);
         }
         return settings && settings.F ? (settings.F.active ? settings.F.customValue : settings.F.defaultValue) : "NoFrameRate";
-    }    
+    }
 
     function getResolution(layer, settings) {
         if (layer.nullLayer || layer.adjustmentLayer) {
@@ -1827,7 +1827,7 @@ function buildUI(thisObj) {
             return layer.source.width + "*" + layer.source.height;
         }
         return settings && settings.R ? (settings.R.active ? settings.R.customValue : settings.R.defaultValue) : "NoResolution";
-    }    
+    }
 
     function getDuration(layer) {
         var duration;
@@ -1842,7 +1842,7 @@ function buildUI(thisObj) {
         var seconds = Math.floor(duration % 60);
         var milliseconds = Math.floor((duration * 1000) % 1000);
 
-        return function(format) {
+        return function (format) {
             switch (format) {
                 case '1':
                     return (hours < 10 ? "0" + hours : hours);
@@ -1858,13 +1858,13 @@ function buildUI(thisObj) {
                         (seconds < 10 ? "0" + seconds : seconds);
             }
         };
-    }   
+    }
 
     function getSourceName(layer) {
         if (layer.source) {
             return layer.source.name;
         }
-        return layer.name; 
+        return layer.name;
     }
 
     function getWidth(layer, settings) {
@@ -1875,7 +1875,7 @@ function buildUI(thisObj) {
             return layer.source.width.toString();
         }
         return settings && settings.W ? (settings.W.active ? settings.W.customValue : settings.W.defaultValue) : "NoWidth";
-    }    
+    }
 
     function getHeight(layer, settings) {
         if (layer.nullLayer || layer.adjustmentLayer) {
@@ -1885,11 +1885,11 @@ function buildUI(thisObj) {
             return layer.source.height.toString();
         }
         return settings && settings.H ? (settings.H.active ? settings.H.customValue : settings.H.defaultValue) : "NoHeight";
-    }    
+    }
 
     function getLayerPosition(layer) {
         if (layer instanceof AVLayer && layer.hasAudio && !layer.hasVideo) {
-            return ""; 
+            return "";
         }
 
         if (layer.transform && layer.transform.position) {
@@ -1903,14 +1903,14 @@ function buildUI(thisObj) {
 
             if (layer instanceof CameraLayer || layer instanceof LightLayer || layer.threeDLayer) {
 
-                var roundedPos = [0, 0, 0]; 
+                var roundedPos = [0, 0, 0];
                 for (var i = 0; i < 3; i++) {
                     roundedPos[i] = pos[i] !== undefined ? Math.round(pos[i] * 10) / 10 : 0;
                 }
                 return roundedPos.join(", ");
             } else {
 
-                var roundedPos2D = [0, 0]; 
+                var roundedPos2D = [0, 0];
                 for (var j = 0; j < 2; j++) {
                     roundedPos2D[j] = pos[j] !== undefined ? Math.round(pos[j] * 10) / 10 : 0;
                 }
@@ -1932,7 +1932,7 @@ function buildUI(thisObj) {
                 return width + "px:" + height + "px";
             }
 
-            var gcd = function(a, b) {
+            var gcd = function (a, b) {
                 return b == 0 ? a : gcd(b, a % b);
             };
             var divisor = gcd(width, height);
@@ -1946,7 +1946,7 @@ function buildUI(thisObj) {
         var effectsNamesFilter = null;
 
         if (effectsFilter) {
-            effectsNamesFilter = effectsFilter.split(',').map(function(name) {
+            effectsNamesFilter = effectsFilter.split(',').map(function (name) {
                 return name.trim().toLowerCase();
             });
         }
@@ -1972,7 +1972,7 @@ function buildUI(thisObj) {
                 return "NoEffects";
             }
         }
-    }    
+    }
 
     function getProjectName() {
         var projectName = "Untitled Project";
@@ -1985,17 +1985,17 @@ function buildUI(thisObj) {
                 projectName = projectFileName;
             }
         }
-        return decodeURIComponent(projectName); 
+        return decodeURIComponent(projectName);
     }
 
     function getAnimatedProperties(layer, settings, propertiesFilter, customSeparator) {
         var animatedProps = [];
         var propertyNames = null;
-        var separator = customSeparator || ", "; 
+        var separator = customSeparator || ", ";
 
         if (propertiesFilter) {
 
-            propertyNames = propertiesFilter.split(',').map(function(name) {
+            propertyNames = propertiesFilter.split(',').map(function (name) {
                 return name.trim().toLowerCase();
             });
         }
@@ -2034,11 +2034,11 @@ function buildUI(thisObj) {
                 return "NoAnimations";
             }
         }
-    }    
+    }
 
     function getLayerScale(layer) {
         if (layer instanceof AVLayer && layer.hasAudio && !layer.hasVideo) {
-            return ""; 
+            return "";
         }
 
         if (layer.transform && layer.transform.scale) {
@@ -2052,14 +2052,14 @@ function buildUI(thisObj) {
 
             if (layer instanceof CameraLayer || layer instanceof LightLayer || layer.threeDLayer) {
 
-                var roundedSc = [0, 0, 0]; 
+                var roundedSc = [0, 0, 0];
                 for (var i = 0; i < 3; i++) {
                     roundedSc[i] = sc[i] !== undefined ? Math.round(sc[i] * 10) / 10 : 0;
                 }
                 return roundedSc.join(", ");
             } else {
 
-                var roundedSc2D = [0, 0]; 
+                var roundedSc2D = [0, 0];
                 for (var j = 0; j < 2; j++) {
                     roundedSc2D[j] = sc[j] !== undefined ? Math.round(sc[j] * 10) / 10 : 0;
                 }
@@ -2071,7 +2071,7 @@ function buildUI(thisObj) {
 
     function getLayerRotation(layer) {
         if (layer instanceof AVLayer && layer.hasAudio && !layer.hasVideo) {
-            return ""; 
+            return "";
         }
 
         if (layer.transform) {
@@ -2094,14 +2094,14 @@ function buildUI(thisObj) {
             }
 
             if (layer instanceof CameraLayer || layer instanceof LightLayer || layer.threeDLayer) {
-                var roundedRot = [0, 0, 0]; 
+                var roundedRot = [0, 0, 0];
                 for (var i = 0; i < 3; i++) {
                     roundedRot[i] = rotation[i] !== undefined ? Math.round(rotation[i] * 10) / 10 : 0;
                 }
                 return roundedRot.join(", ");
             } else {
 
-                var roundedRot2D = [0]; 
+                var roundedRot2D = [0];
                 roundedRot2D[0] = rotation[0] !== undefined ? Math.round(rotation[0] * 10) / 10 : 0;
                 return roundedRot2D.join(", ");
             }
@@ -2123,7 +2123,7 @@ function buildUI(thisObj) {
 
     function getLayerOpacity(layer) {
         if (layer instanceof AVLayer && layer.hasAudio && !layer.hasVideo) {
-            return ""; 
+            return "";
         }
 
         if (layer.transform && layer.transform.opacity) {
@@ -2149,7 +2149,7 @@ function buildUI(thisObj) {
             currentLayer = currentLayer.parent;
         }
 
-        return currentLayer.name; 
+        return currentLayer.name;
     }
 
     function isParentLayer(layer) {
@@ -2191,7 +2191,7 @@ function buildUI(thisObj) {
                 }
             }
 
-            childLayers.sort(function(a, b) {
+            childLayers.sort(function (a, b) {
                 return a.index - b.index;
             });
 
@@ -2211,11 +2211,11 @@ function buildUI(thisObj) {
 
             if (allAbove) {
                 relativeIndex = childLayers.length - childLayers.indexOf(layer);
-            } 
+            }
 
             else if (allBelow) {
                 relativeIndex = childLayers.indexOf(layer) + 1;
-            } 
+            }
 
             else {
                 relativeIndex = childLayers.indexOf(layer) + 1;
@@ -2279,9 +2279,9 @@ function buildUI(thisObj) {
 
         var regex = /\(([^()]+)\)|Df|Ec\(([^()\[\]]+?)\)|Ec|E\(\[([^\[\]]+)\]\)|E\(([^()\[\]]+?)(?:\[(.*?)\])?\)|E|An\(\[([^\[\]]+)\]\)|An\(([^()\[\]]+?)(?:\[(.*?)\])?\)|An|Lexp\(\[([^\[\]]+)\]\)|Lexp\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lexp|D\(([^()\[\]]+)\)|D|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(\[([^\[\]]+)\]\)|Lmc\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lmc|Lmn\(\[([^\[\]]+)\]\)|Lmn\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
 
-        var incrementValues = {}; 
+        var incrementValues = {};
 
-        result = result.replace(regex, function(match,
+        result = result.replace(regex, function (match,
             group,
             ecFilters,
             eSeparatorOnly, eEffects, eSeparator,
@@ -2315,14 +2315,14 @@ function buildUI(thisObj) {
                 var uniqueKey = "I(" + customI + ")_" + usedVariables.length;
                 var initialValue = parseInt(customI, 10);
                 if (!incrementValues[uniqueKey]) {
-                    incrementValues[uniqueKey] = initialValue; 
+                    incrementValues[uniqueKey] = initialValue;
                 }
                 value = incrementValues[uniqueKey]++;
                 usedVariables.push(uniqueKey);
                 return value;
             } else if (match === 'I') {
 
-                value = localIndex++; 
+                value = localIndex++;
             } else if (anSeparatorOnly !== undefined) {
 
                 value = getAnimatedProperties(layer, settings, null, anSeparatorOnly);
@@ -2452,12 +2452,12 @@ function buildUI(thisObj) {
         }
 
         return result;
-    }    
+    }
 
-    var localIndex = 0; 
+    var localIndex = 0;
 
     function renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed, isShiftPressed, isAltPressed) {
-        checkAndUpdateSettings(); 
+        checkAndUpdateSettings();
         incrementValues = {};
         localIndex = 1;
 
@@ -2469,18 +2469,18 @@ function buildUI(thisObj) {
 
                 var layers = getLayerOrder(comp, allLayers, isAltPressed);
 
-                var newNames = []; 
+                var newNames = [];
 
                 for (var i = 0; i < layers.length; i++) {
                     var layer = layers[i];
                     if (layer.shy && !includeShyLayers) continue;
-                    if (layer.locked) continue; 
+                    if (layer.locked) continue;
                     if (!allLayers && !layer.selected) continue;
 
                     var variables = {
                         "T": getLayerType(layer),
                         "i": layer.index,
-                        "I": localIndex,  
+                        "I": localIndex,
                         "O": layer.name,
                         "E": getEffectNames(layer, variableSettings),
                         "An": getAnimatedProperties(layer, variableSettings),
@@ -2505,7 +2505,7 @@ function buildUI(thisObj) {
                         "Lexp": getExpressionControlledProperties(layer, variableSettings),
                         "Fext": getFileExtension(layer, variableSettings),
                         "LpntIndex": getLayerParentIndex(layer),
-                        "Lpnt": getImmediateParentName(layer), 
+                        "Lpnt": getImmediateParentName(layer),
                         "Lmc": getMaskCount(layer, variableSettings),
                         "Lmn": getMaskNames(layer, variableSettings)
                     };
@@ -2564,11 +2564,11 @@ function buildUI(thisObj) {
     function getEffectNames(layer, settings, effectsFilter, customSeparator) {
         var effectNames = [];
         var effectNamesFilter = null;
-        var separator = customSeparator || ", "; 
+        var separator = customSeparator || ", ";
 
         if (effectsFilter) {
 
-            effectNamesFilter = effectsFilter.split(',').map(function(name) {
+            effectNamesFilter = effectsFilter.split(',').map(function (name) {
                 return name.trim().toLowerCase();
             });
         }
