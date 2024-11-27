@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+    /* Сброс стилей по умолчанию */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        border: none;
+    }
+
+    /* Основной контейнер */
+    #artboard {
+        position: absolute;
+        width: 1920px;
+        height: 1080px;
+        background-color: rgba(255,255,255,1);
+        overflow: hidden;
+    }
+
+    /* Контейнер видео плеера */
+    .video-container {
+        position: absolute;
+        overflow: visible;
+        width: 314.552px;
+        height: 176px;
+        left: 803.011px;
+        top: 437.064px;
+        background-color: rgba(0,0,0,1);
+        border: 1px solid rgba(49,49,49,1);
+        border-radius: 1.5px;
+        cursor: pointer;
+    }
+
+    /* Информационная панель видео */
+    .video-info {
+        position: absolute;
+        overflow: visible;
+        width: 314.552px;
+        height: 31px;
+        left: 803.011px;
+        top: 612px;
+        background-color: rgba(22,22,22,1);
+        border: 1px solid rgba(49,49,49,1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom-right-radius: 1.5px;
+        border-bottom-left-radius: 1.5px;
+    }
+
+    /* Контейнер прогресс-бара для области наведения */
+    #progressBarContainer {
+        position: absolute;
+        width: 298.945px;
+        height: 21px; /* 1px видимый бар + 10px сверху и снизу */
+        left: 811.055px;
+        top: 601.5px; /* 611.5px (оригинальный top) - 10px */
+        cursor: pointer;
+        /* Убедитесь, что контейнер не влияет на расположение остальных элементов */
+        pointer-events: auto;
+    }
+
+    /* Фон прогресс-бара */
+    #progressBarBackground {
+        position: absolute;
+        width: 100%;
+        height: 1px;
+        top: 10px; /* Центрируем 1px бар внутри контейнера высотой 21px */
+        background-color: #8a8a8a; /* Цвет не проигранной части */
+        transition: height 0.3s ease, top 0.3s ease;
+    }
+
+    /* Заполнение прогресс-бара */
+    #progressBarFill {
+        width: 0%;
+        height: 100%;
+        background-color: #2d8ceb; /* Цвет проигранной части */
+        transition: height 0.3s ease, top 0.3s ease;
+    }
+
+    /* Кнопка перемотки */
+    #seekKnob {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        left: 1106px;
+        top: 612px;
+        background-color: rgba(45,140,235,1);
+        border-radius: 50%;
+        cursor: pointer;
+        transform: translate(-50%, -50%);
+    }
+
+    /* Иконки управления воспроизведением */
+    .control-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50px; /* Настройте размер иконок по необходимости */
+        height: 50px;
+        cursor: pointer;
+        display: none;
+    }
+
+    #playIcon {
+        display: block; /* Изначально показываем иконку play */
+    }
+
+    /* Изменение высоты прогресс-бара при наведении на контейнер */
+    #progressBarContainer:hover #progressBarBackground,
+    #progressBarContainer:hover #progressBarFill {
+        height: 5px;
+        top: 8px; /* Сдвигаем вверх, чтобы центрировать 5px бар */
+    }
+    </style>
+</head>
+<body>
+    <div id="artboard">
+        <!-- Видео плеер -->
+        <div class="video-container" id="videoContainer">
+            <!-- Видео элемент -->
+            <video id="video" width="100%" height="100%" src="video.webm" type="video/webm"></video>
+            <!-- Иконка Play -->
+            <img src="play.svg" id="playIcon" class="control-icon" alt="Play">
+            <!-- Иконка Pause -->
+            <img src="pause.svg" id="pauseIcon" class="control-icon" alt="Pause">
+        </div>
+
+        <!-- Информационная панель о видео -->
+        <div class="video-info" id="videoInfo">
+            <p style="color: white; padding: 5px;">Информация о видео здесь</p>
+        </div>
+
+        <!-- Прогресс Бар с контейнером для области наведения -->
+        <div id="progressBarContainer">
+            <div id="progressBarBackground">
+                <div id="progressBarFill"></div>
+            </div>
+        </div>
+
+        <!-- Кнопка перемотки -->
+        <div id="seekKnob"></div>
+    </div>
+
+    <script>
+    // Получаем элементы
+    var video = document.getElementById('video');
+    var playIcon = document.getElementById('playIcon');
+    var pauseIcon = document.getElementById('pauseIcon');
+    var progressBarFill = document.getElementById('progressBarFill');
+    var progressBarBackground = document.getElementById('progressBarBackground');
+    var seekKnob = document.getElementById('seekKnob');
+    var videoContainer = document.getElementById('videoContainer');
+    var progressBarContainer = document.getElementById('progressBarContainer');
+
+    // Функция для обновления иконок
+    function updateIcons() {
+        if (video.paused) {
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+        } else {
+            playIcon.style.display = 'none';
+            pauseIcon.style.display = 'none'; // Иконка паузы не отображается, когда видео играет
+        }
+    }
+
+    // Начальная иконка
+    updateIcons();
+
+    // Обработчик клика на видео плеер
+    videoContainer.addEventListener('click', function() {
+        if (video.paused) {
+            video.play();
+            // Коротко показываем иконку Play
+            playIcon.style.display = 'block';
+            setTimeout(function() {
+                playIcon.style.display = 'none';
+            }, 125); // 0.125 секунд
+        } else {
+            video.pause();
+            // Показываем иконку Pause
+            pauseIcon.style.display = 'block';
+        }
+    });
+
+    // Обновляем иконки при изменении состояния видео
+    video.addEventListener('play', function() {
+        updateIcons();
+    });
+
+    video.addEventListener('pause', function() {
+        updateIcons();
+    });
+
+    // Обновляем прогресс бар по мере воспроизведения видео
+    video.addEventListener('timeupdate', function() {
+        var progress = (video.currentTime / video.duration) * 100;
+        progressBarFill.style.width = progress + '%';
+        // Обновляем позицию кнопки перемотки
+        var progressBarRect = progressBarBackground.getBoundingClientRect();
+        var containerRect = document.getElementById('artboard').getBoundingClientRect();
+        var knobPosition = (progress / 100) * progressBarRect.width;
+        // Позиционируем knob относительно artboard
+        seekKnob.style.left = 811.055 + knobPosition + 'px';
+    });
+
+    // Обработка перетаскивания кнопки перемотки
+    var isDragging = false;
+
+    seekKnob.addEventListener('mousedown', function(event) {
+        isDragging = true;
+        event.preventDefault();
+    });
+
+    document.addEventListener('mousemove', function(event) {
+        if (isDragging) {
+            var progressBarRect = progressBarBackground.getBoundingClientRect();
+            var containerRect = document.getElementById('artboard').getBoundingClientRect();
+            var offsetX = event.clientX - progressBarRect.left;
+            var clampedX = Math.max(0, Math.min(offsetX, progressBarRect.width));
+            var newTime = (clampedX / progressBarRect.width) * video.duration;
+            video.currentTime = newTime;
+        }
+    });
+
+    document.addEventListener('mouseup', function(event) {
+        if (isDragging) {
+            isDragging = false;
+        }
+    });
+
+    // Позволяем кликать по прогресс бару для перемотки
+    progressBarContainer.addEventListener('click', function(event) {
+        var progressBarRect = progressBarBackground.getBoundingClientRect();
+        var offsetX = event.clientX - progressBarRect.left;
+        var clampedX = Math.max(0, Math.min(offsetX, progressBarRect.width));
+        var newTime = (clampedX / progressBarRect.width) * video.duration;
+        video.currentTime = newTime;
+    });
+    </script>
+</body>
+</html>
