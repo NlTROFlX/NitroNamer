@@ -69,7 +69,7 @@
         height: 1px;
         top: 10px; /* Центрируем 1px бар внутри контейнера высотой 21px */
         background-color: #8a8a8a; /* Цвет не проигранной части */
-        transition: height 0.3s ease, top 0.3s ease;
+        transition: height 0.125s ease, top 0.125s ease; /* Изменено с 0.3s на 0.125s */
     }
 
     /* Заполнение прогресс-бара */
@@ -77,7 +77,7 @@
         width: 0%;
         height: 100%;
         background-color: #2d8ceb; /* Цвет проигранной части */
-        transition: height 0.3s ease, top 0.3s ease;
+        transition: height 0.125s ease, top 0.125s ease; /* Изменено с 0.3s на 0.125s */
     }
 
     /* Кнопка перемотки */
@@ -235,6 +235,7 @@
     // Позволяем кликать по прогресс бару для перемотки
     progressBarContainer.addEventListener('click', function(event) {
         var progressBarRect = progressBarBackground.getBoundingClientRect();
+        var containerRect = document.getElementById('artboard').getBoundingClientRect();
         var offsetX = event.clientX - progressBarRect.left;
         var clampedX = Math.max(0, Math.min(offsetX, progressBarRect.width));
         var newTime = (clampedX / progressBarRect.width) * video.duration;
