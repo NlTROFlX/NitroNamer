@@ -85,12 +85,33 @@
         position: absolute;
         width: 8px;
         height: 8px;
-        left: 1106px;
-        top: 612px;
+        left: 0%; /* Начальная позиция */
+        top: 50%;
+        transform: translate(-50%, -50%);
         background-color: rgba(45,140,235,1);
         border-radius: 50%;
         cursor: pointer;
+        transition: width 0.125s ease, height 0.125s ease, border 0.125s ease, background-color 0.125s ease;
+    }
+
+    /* Псевдоэлемент для внутреннего круга при наведении */
+    #seekKnob::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 5px;
+        height: 5px;
+        background-color: #e7e7e7;
+        border-radius: 50%;
         transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: opacity 0.125s ease;
+    }
+
+    /* Показать внутренний круг при наведении на seekKnob */
+    #seekKnob:hover::before {
+        opacity: 1;
     }
 
     /* Иконки управления воспроизведением */
@@ -112,8 +133,16 @@
     /* Изменение высоты прогресс-бара при наведении на контейнер */
     #progressBarContainer:hover #progressBarBackground,
     #progressBarContainer:hover #progressBarFill {
-        height: 5px;
+        height: 3px;
         top: 8px; /* Сдвигаем вверх, чтобы центрировать 5px бар */
+    }
+
+    /* Изменение стилей seekKnob при наведении на прогресс-бар */
+    #progressBarContainer:hover #seekKnob {
+        width: 14px;
+        height: 14px;
+        border: 1px solid #2d8ceb;
+        background-color: #232323;
     }
     </style>
 </head>
@@ -138,11 +167,10 @@
         <div id="progressBarContainer">
             <div id="progressBarBackground">
                 <div id="progressBarFill"></div>
+                <!-- Кнопка перемотки перемещена внутрь progressBarBackground -->
+                <div id="seekKnob"></div>
             </div>
         </div>
-
-        <!-- Кнопка перемотки -->
-        <div id="seekKnob"></div>
     </div>
 
     <script>
@@ -201,10 +229,10 @@
         progressBarFill.style.width = progress + '%';
         // Обновляем позицию кнопки перемотки
         var progressBarRect = progressBarBackground.getBoundingClientRect();
-        var containerRect = document.getElementById('artboard').getBoundingClientRect();
+        var containerRect = progressBarContainer.getBoundingClientRect();
         var knobPosition = (progress / 100) * progressBarRect.width;
-        // Позиционируем knob относительно artboard
-        seekKnob.style.left = 811.055 + knobPosition + 'px';
+        // Позиционируем knob относительно progressBarBackground
+        seekKnob.style.left = knobPosition + 'px';
     });
 
     // Обработка перетаскивания кнопки перемотки
@@ -218,7 +246,6 @@
     document.addEventListener('mousemove', function(event) {
         if (isDragging) {
             var progressBarRect = progressBarBackground.getBoundingClientRect();
-            var containerRect = document.getElementById('artboard').getBoundingClientRect();
             var offsetX = event.clientX - progressBarRect.left;
             var clampedX = Math.max(0, Math.min(offsetX, progressBarRect.width));
             var newTime = (clampedX / progressBarRect.width) * video.duration;
@@ -235,7 +262,6 @@
     // Позволяем кликать по прогресс бару для перемотки
     progressBarContainer.addEventListener('click', function(event) {
         var progressBarRect = progressBarBackground.getBoundingClientRect();
-        var containerRect = document.getElementById('artboard').getBoundingClientRect();
         var offsetX = event.clientX - progressBarRect.left;
         var clampedX = Math.max(0, Math.min(offsetX, progressBarRect.width));
         var newTime = (clampedX / progressBarRect.width) * video.duration;
