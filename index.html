@@ -50,7 +50,7 @@
         border-bottom-left-radius: 1.5px;
     }
 
-    /* Контейнер прогресс-бара для области наведения */
+    /* Прогресс Бар с контейнером для области наведения */
     #progressBarContainer {
         position: absolute;
         width: 298.945px;
@@ -69,7 +69,7 @@
         height: 1px;
         top: 10px; /* Центрируем 1px бар внутри контейнера высотой 21px */
         background-color: #8a8a8a; /* Цвет не проигранной части */
-        transition: height 0.125s ease, top 0.125s ease; /* Изменено с 0.3s на 0.125s */
+        transition: height 0.125s ease, top 0.125s ease; /* Сохранены переходы */
     }
 
     /* Заполнение прогресс-бара */
@@ -77,7 +77,7 @@
         width: 0%;
         height: 100%;
         background-color: #2d8ceb; /* Цвет проигранной части */
-        transition: height 0.125s ease, top 0.125s ease; /* Изменено с 0.3s на 0.125s */
+        transition: width 0.125s ease, height 0.125s ease, top 0.125s ease; /* Сохранены переходы */
     }
 
     /* Кнопка перемотки */
@@ -91,7 +91,7 @@
         background-color: rgba(45,140,235,1);
         border-radius: 50%;
         cursor: pointer;
-        transition: width 0.125s ease, height 0.125s ease, border 0.125s ease, background-color 0.125s ease;
+        transition: width 0.125s ease, height 0.125s ease, border 0.125s ease, background-color 0.125s ease; /* Сохранены переходы */
     }
 
     /* Псевдоэлемент для внутреннего круга при наведении */
@@ -134,7 +134,7 @@
     #progressBarContainer:hover #progressBarBackground,
     #progressBarContainer:hover #progressBarFill {
         height: 3px;
-        top: 8px; /* Сдвигаем вверх, чтобы центрировать 5px бар */
+        top: 8px; /* Сдвигаем вверх, чтобы центрировать 3px бар */
     }
 
     /* Изменение стилей seekKnob при наведении на прогресс-бар */
@@ -143,6 +143,11 @@
         height: 14px;
         border: 1px solid #2d8ceb;
         background-color: #232323;
+    }
+
+    /* Класс для отключения переходов */
+    .no-transition {
+        transition: none !important;
     }
     </style>
 </head>
@@ -225,47 +230,63 @@
 
     // Обновляем прогресс бар по мере воспроизведения видео
     video.addEventListener('timeupdate', function() {
-        var progress = (video.currentTime / video.duration) * 100;
-        progressBarFill.style.width = progress + '%';
-        // Обновляем позицию кнопки перемотки
-        var progressBarRect = progressBarBackground.getBoundingClientRect();
-        var containerRect = progressBarContainer.getBoundingClientRect();
-        var knobPosition = (progress / 100) * progressBarRect.width;
-        // Позиционируем knob относительно progressBarBackground
-        seekKnob.style.left = knobPosition + 'px';
+        if (!isDragging) { // Обновляем только если не происходит перетаскивание
+            var progress = (video.currentTime / video.duration) * 100;
+            progressBarFill.style.width = progress + '%';
+            // Обновляем позицию кнопки перемотки
+            var progressBarRect = progressBarBackground.getBoundingClientRect();
+            var knobPosition = (progress / 100) * progressBarRect.width;
+            // Позиционируем knob относительно progressBarBackground
+            seekKnob.style.left = knobPosition + 'px';
+        }
     });
 
     // Обработка перетаскивания кнопки перемотки
     var isDragging = false;
 
+    // Функция для обновления позиции ползунка
+    function updateSeekKnob(clientX) {
+        var progressBarRect = progressBarBackground.getBoundingClientRect();
+        var clampedX = Math.max(0, Math.min(clientX - progressBarRect.left, progressBarRect.width));
+        var progress = (clampedX / progressBarRect.width) * 100;
+        progressBarFill.style.width = progress + '%';
+        seekKnob.style.left = clampedX + 'px';
+        video.currentTime = (clampedX / progressBarRect.width) * video.duration;
+    }
+
     seekKnob.addEventListener('mousedown', function(event) {
         isDragging = true;
+        // Отключаем переходы для мгновенного обновления
+        progressBarBackground.classList.add('no-transition');
+        progressBarFill.classList.add('no-transition');
+        seekKnob.classList.add('no-transition');
         event.preventDefault();
     });
 
     document.addEventListener('mousemove', function(event) {
         if (isDragging) {
-            var progressBarRect = progressBarBackground.getBoundingClientRect();
-            var offsetX = event.clientX - progressBarRect.left;
-            var clampedX = Math.max(0, Math.min(offsetX, progressBarRect.width));
-            var newTime = (clampedX / progressBarRect.width) * video.duration;
-            video.currentTime = newTime;
+            updateSeekKnob(event.clientX);
         }
     });
 
     document.addEventListener('mouseup', function(event) {
         if (isDragging) {
             isDragging = false;
+            // Восстанавливаем переходы
+            progressBarBackground.classList.remove('no-transition');
+            progressBarFill.classList.remove('no-transition');
+            seekKnob.classList.remove('no-transition');
         }
     });
 
     // Позволяем кликать по прогресс бару для перемотки
     progressBarContainer.addEventListener('click', function(event) {
         var progressBarRect = progressBarBackground.getBoundingClientRect();
-        var offsetX = event.clientX - progressBarRect.left;
-        var clampedX = Math.max(0, Math.min(offsetX, progressBarRect.width));
-        var newTime = (clampedX / progressBarRect.width) * video.duration;
-        video.currentTime = newTime;
+        var clampedX = Math.max(0, Math.min(event.clientX - progressBarRect.left, progressBarRect.width));
+        var progress = (clampedX / progressBarRect.width) * 100;
+        progressBarFill.style.width = progress + '%';
+        seekKnob.style.left = clampedX + 'px';
+        video.currentTime = (clampedX / progressBarRect.width) * video.duration;
     });
     </script>
 </body>
