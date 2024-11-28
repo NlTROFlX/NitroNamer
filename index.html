@@ -15,8 +15,7 @@
         :root {
             --tooltip-offset: 10px;
             /* Отступ для timeTooltip */
-            --circle-offset: 0px;
-            /* Отступ для hoverCircle */
+            /* --circle-offset: 0px; */ /* Удаляем, так как не нужен */
         }
 
         /* Основной контейнер видео блока */
@@ -216,10 +215,12 @@
             background-color: #e7e7e7;
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            opacity: 1;
+            opacity: 0;
             /* Изначально видим */
-            transition: opacity 0.125s ease;
+            transition: opacity 0.3s ease; /* Увеличили время для более плавного эффекта */
             pointer-events: none;
+            /* Устанавливаем вертикальную позицию на 50% */
+            top: 50%;
         }
     </style>
 </head>
@@ -372,6 +373,24 @@
 
                 // Обновляем lastTime
                 lastTime = video.currentTime;
+
+                // **Добавляем проверку расстояния при наведении**
+                if (isHovering) {
+                    var hoverLeft = parseFloat(hoverCircle.style.left) || 0;
+                    var hoverTop = parseFloat(hoverCircle.style.top) || 0;
+                    var knobLeft = knobPosition;
+                    var knobTop = progressBarBackground.clientHeight / 2;
+
+                    var dx = hoverLeft - knobLeft;
+                    var dy = hoverTop - knobTop;
+                    var distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance <= 12) { // Пороговое значение можно настроить
+                        hoverCircle.style.opacity = '0';
+                    } else {
+                        hoverCircle.style.opacity = '1';
+                    }
+                }
             }
             // Запрашиваем следующий кадр
             animationFrameId = requestAnimationFrame(updateProgress);
@@ -398,6 +417,20 @@
             }
             // Обновляем иконки при клике
             updateIconsOnStateChange();
+        });
+
+        var isHovering = false;
+
+        progressBarBackground.addEventListener('mouseenter', function (event) {
+            isHovering = true;
+            timeTooltip.style.opacity = '1';
+            hoverCircle.style.opacity = '1';
+        });
+
+        progressBarBackground.addEventListener('mouseleave', function (event) {
+            isHovering = false;
+            timeTooltip.style.opacity = '0';
+            hoverCircle.style.opacity = '0';
         });
 
         // Обновляем иконки при изменении состояния видео
@@ -549,25 +582,8 @@
             // Обновляем позицию hoverCircle
             hoverCircle.style.left = clampedX + 'px';
             hoverCircle.style.top = -circleOffset + 'px'; // Отступ сверху
-
-            // Вычисляем расстояние между hoverCircle и seekKnob
-            var hoverLeft = clampedX;
-            var hoverTop = -circleOffset;
-            var knobLeft = parseFloat(seekKnob.style.left) || 0;
-            var knobTop = parseFloat(seekKnob.style.top) || (progressBarBackground.clientHeight / 2);
-
-            var dx = hoverLeft - knobLeft;
-            var dy = hoverTop - knobTop;
-            var distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance <= 12) {
-                // Если расстояние меньше или равно 20px, скрываем hoverCircle плавно
-                hoverCircle.style.opacity = '0';
-            } else {
-                // Иначе показываем его
-                hoverCircle.style.opacity = '1';
-            }
         }
+
 
         // Обработчики событий для tooltip и hoverCircle
         progressBarBackground.addEventListener('mousemove', function (event) {
@@ -575,14 +591,17 @@
         });
 
         progressBarBackground.addEventListener('mouseenter', function (event) {
+            isHovering = true;
             timeTooltip.style.opacity = '1';
             hoverCircle.style.opacity = '1';
         });
 
         progressBarBackground.addEventListener('mouseleave', function (event) {
+            isHovering = false;
             timeTooltip.style.opacity = '0';
             hoverCircle.style.opacity = '0';
         });
+
     </script>
 </body>
 
