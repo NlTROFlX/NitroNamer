@@ -62,10 +62,21 @@
 
     /* Стили для отображения текущего времени */
     #currentTime {
-        color: white;
+        display: block;
+        position: relative;
+        color: #b9b9b9;
         font-family: Arial, sans-serif;
-        font-size: 14px;
-        padding: 5px;
+        font-size: 12px;
+        padding: 4px;
+    }
+
+    #titleVideo {
+        display: block;
+        position: relative;
+        color: #b9b9b9;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        padding: 4px;
     }
 
     /* Прогресс Бар с контейнером для области наведения */
@@ -219,6 +230,7 @@
         <!-- Информационная панель о видео -->
         <div class="video-info" id="videoInfo">
             <p id="currentTime">00:00:00</p>
+            <p id="titleVideo">video example #1</p>
         </div>
 
         <!-- Прогресс Бар с контейнером для области наведения -->
