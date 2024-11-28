@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>My Panel</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="videoBlock.css">
 </head>
 
 <body>
@@ -145,9 +146,40 @@
 
         <!-- Правая колонка с информацией -->
         <div class="right" id="info-display">
-
             <div id="default-message">
                 <div class="home-page-header-1" data-i18n="introductionHeader">INTRODUCTION</div>
+
+                <div class="videoblock">
+                    <!-- Видео плеер -->
+                    <div class="video-container" id="videoContainer">
+                        <!-- Видео элемент -->
+                        <video id="video" width="100%" height="100%" src="video.webm" type="video/webm"></video>
+                        <!-- Иконка Play -->
+                        <img src="play.svg" id="playIcon" class="control-icon" alt="Play">
+                        <!-- Иконка Pause -->
+                        <img src="pause.svg" id="pauseIcon" class="control-icon" alt="Pause">
+                    </div>
+            
+                    <!-- Информационная панель о видео -->
+                    <div class="video-info" id="videoInfo">
+                        <p id="currentTime">00:00:00</p>
+                        <p id="titleVideo">video example #1</p>
+                    </div>
+            
+                    <!-- Прогресс Бар с контейнером для области наведения -->
+                    <div id="progressBarContainer">
+                        <div id="progressBarBackground">
+                            <div id="progressBarFill"></div>
+                            <!-- Кнопка перемотки перемещена внутрь progressBarBackground -->
+                            <div id="seekKnob"></div>
+                            <!-- Временной блок -->
+                            <div id="timeTooltip">00:00:00</div>
+                            <!-- Белый кружок -->
+                            <div id="hoverCircle"></div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="home-page-text-block">
                     <p class="home-page-text-1" data-i18n="panelFunctions">Panel:</p>
                     <p class="home-page-text-2" data-i18n="homePage_listFunctions_1">Possibilities</p>
@@ -297,6 +329,7 @@
 
         <script src="CSInterface.js"></script>
         <script src="index.js"></script>
+        <script src="videoBlock.js"></script>
 
 </body>
 

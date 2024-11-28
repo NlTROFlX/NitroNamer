@@ -88,14 +88,15 @@
 
         /* Прогресс Бар с контейнером для области наведения */
         #progressBarContainer {
-            position: relative;
+            position: absolute;
             width: 100%;
-            top: -41px;
+            height: 21px;
+            bottom: 0;
             padding-left: 8px;
             padding-right: 8px;
-            height: 21px;
             cursor: pointer;
             pointer-events: auto;
+            transform: translateY(-20px);
         }
 
         /* Фон прогресс-бара */
