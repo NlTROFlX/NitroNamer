@@ -254,7 +254,7 @@
     background-color: rgba(45, 140, 235, 1);
     border-radius: 50%;
     cursor: pointer;
-    transition: left 0.25s linear, width 0.125s ease, height 0.125s ease, border 0.125s ease, background-color 0.125s ease;
+    transition: left 0.125s ease, width 0.125s ease, height 0.125s ease, border 0.125s ease, background-color 0.125s ease;
 }
 
 /* Псевдоэлемент для внутреннего круга при наведении */
