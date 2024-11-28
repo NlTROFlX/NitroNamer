@@ -55,6 +55,14 @@
         margin-top: -1px; /* Для наложения границы с видео контейнером */
     }
 
+    /* Стили для отображения текущего времени */
+    #currentTime {
+        color: white;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        padding: 5px;
+    }
+
     /* Прогресс Бар с контейнером для области наведения */
     #progressBarContainer {
         position: relative; /* Заменено с absolute на relative */
@@ -95,7 +103,7 @@
         background-color: rgba(45,140,235,1);
         border-radius: 50%;
         cursor: pointer;
-        transition: width 0.125s ease, height 0.125s ease, border 0.125s ease, background-color 0.125s ease; /* Сохранены переходы */
+        transition: left 0.25s linear, width 0.125s ease, height 0.125s ease, border 0.125s ease, background-color 0.125s ease; /* Добавлен переход для left */
     }
 
     /* Псевдоэлемент для внутреннего круга при наведении */
@@ -172,7 +180,7 @@
 
         <!-- Информационная панель о видео -->
         <div class="video-info" id="videoInfo">
-            <p style="color: white; padding: 5px;">Информация о видео здесь</p>
+            <p id="currentTime">00:00:00</p>
         </div>
 
         <!-- Прогресс Бар с контейнером для области наведения -->
@@ -195,9 +203,13 @@
     var seekKnob = document.getElementById('seekKnob');
     var videoContainer = document.getElementById('videoContainer');
     var progressBarContainer = document.getElementById('progressBarContainer');
+    var currentTimeElement = document.getElementById('currentTime'); // Новый элемент для времени
 
     // Флаг перетаскивания ползунка
     var isDragging = false;
+
+    // Переменная для анимации
+    var animationFrameId;
 
     // Функция для обновления иконок при изменении состояния видео
     function updateIconsOnStateChange() {
@@ -237,9 +249,41 @@
         }, 125); // 0.125 секунд
     }
 
+    // Функция для форматирования времени в чч:мм:сс
+    function formatTime(seconds) {
+        var hrs = Math.floor(seconds / 3600);
+        var mins = Math.floor((seconds % 3600) / 60);
+        var secs = Math.floor(seconds % 60);
+        return [
+            hrs.toString().padStart(2, '0'),
+            mins.toString().padStart(2, '0'),
+            secs.toString().padStart(2, '0')
+        ].join(':');
+    }
+
+    // Функция для обновления прогресса и текущего времени
+    function updateProgress() {
+        if (!isDragging) { // Обновляем только если не происходит перетаскивание
+            var progress = (video.currentTime / video.duration) * 100;
+            progressBarFill.style.width = progress + '%';
+            // Обновляем позицию кнопки перемотки
+            var progressBarRect = progressBarBackground.getBoundingClientRect();
+            var knobPosition = (progress / 100) * progressBarRect.width;
+            // Позиционируем knob относительно progressBarBackground
+            seekKnob.style.left = knobPosition + 'px';
+            // Обновляем текущее время
+            currentTimeElement.textContent = formatTime(video.currentTime);
+        }
+        // Запрашиваем следующий кадр
+        animationFrameId = requestAnimationFrame(updateProgress);
+    }
+
     // Начальная иконка (показываем Play, если видео на паузе)
     window.addEventListener('load', function() {
         updateIconsOnStateChange();
+        currentTimeElement.textContent = formatTime(0);
+        // Запускаем анимацию прогресса
+        animationFrameId = requestAnimationFrame(updateProgress);
     });
 
     // Обработчик клика на видео плеер
@@ -266,19 +310,6 @@
         updateIconsOnStateChange();
     });
 
-    // Обновляем прогресс бар по мере воспроизведения видео
-    video.addEventListener('timeupdate', function() {
-        if (!isDragging) { // Обновляем только если не происходит перетаскивание
-            var progress = (video.currentTime / video.duration) * 100;
-            progressBarFill.style.width = progress + '%';
-            // Обновляем позицию кнопки перемотки
-            var progressBarRect = progressBarBackground.getBoundingClientRect();
-            var knobPosition = (progress / 100) * progressBarRect.width;
-            // Позиционируем knob относительно progressBarBackground
-            seekKnob.style.left = knobPosition + 'px';
-        }
-    });
-
     // Обработка перетаскивания кнопки перемотки
     function updateSeekKnob(clientX) {
         var progressBarRect = progressBarBackground.getBoundingClientRect();
@@ -287,6 +318,8 @@
         progressBarFill.style.width = progress + '%';
         seekKnob.style.left = clampedX + 'px';
         video.currentTime = (clampedX / progressBarRect.width) * video.duration;
+        // Обновляем текущее время при перемотке
+        currentTimeElement.textContent = formatTime(video.currentTime);
     }
 
     seekKnob.addEventListener('mousedown', function(event) {
@@ -295,6 +328,8 @@
         progressBarBackground.classList.add('no-transition');
         progressBarFill.classList.add('no-transition');
         seekKnob.classList.add('no-transition');
+        // При начале перетаскивания останавливаем анимацию прогресса
+        cancelAnimationFrame(animationFrameId);
         event.preventDefault();
     });
 
@@ -311,6 +346,8 @@
             progressBarBackground.classList.remove('no-transition');
             progressBarFill.classList.remove('no-transition');
             seekKnob.classList.remove('no-transition');
+            // Возобновляем анимацию прогресса
+            animationFrameId = requestAnimationFrame(updateProgress);
         }
     });
 
@@ -322,6 +359,8 @@
         progressBarFill.style.width = progress + '%';
         seekKnob.style.left = clampedX + 'px';
         video.currentTime = (clampedX / progressBarRect.width) * video.duration;
+        // Обновляем текущее время при клике
+        currentTimeElement.textContent = formatTime(video.currentTime);
     });
 
     // Обработчики наведения на видео плеер
@@ -331,6 +370,16 @@
 
     videoContainer.addEventListener('mouseleave', function() {
         hideHoverIcons();
+    });
+
+    // Обработчик изменения размера окна для корректировки позиции ползунка
+    window.addEventListener('resize', function() {
+        if (!isDragging) {
+            var progress = (video.currentTime / video.duration) * 100;
+            var progressBarRect = progressBarBackground.getBoundingClientRect();
+            var knobPosition = (progress / 100) * progressBarRect.width;
+            seekKnob.style.left = knobPosition + 'px';
+        }
     });
     </script>
 </body>
