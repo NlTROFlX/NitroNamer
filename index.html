@@ -10,61 +10,65 @@
         border: none;
     }
 
-    /* Основной контейнер */
-    #artboard {
-        position: absolute;
-        width: 1920px;
-        height: 1080px;
+    /* Основной контейнер видео блока */
+    .videoblock {
+        /* Удалены фиксированные размеры и абсолютное позиционирование */
+        position: relative; /* Заменено с absolute на relative */
         background-color: rgba(255,255,255,1);
         overflow: hidden;
+        display: inline-block; /* Позволяет блоку подстраиваться под содержимое */
+        padding: 10px; /* Добавлен отступ для эстетики */
     }
 
     /* Контейнер видео плеера */
     .video-container {
-        position: absolute;
+        position: relative; /* Заменено с absolute на relative для лучшего управления */
         overflow: visible;
         width: 314.552px;
         height: 176px;
-        left: 803.011px;
-        top: 437.064px;
         background-color: rgba(0,0,0,1);
         border: 1px solid rgba(49,49,49,1);
         border-radius: 1.5px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+        border-bottom: none;
         cursor: pointer;
+    }
+
+    .video-container #video{
+        background-size: cover;
     }
 
     /* Информационная панель видео */
     .video-info {
-        position: absolute;
+        position: relative; /* Заменено с absolute на relative */
         overflow: visible;
         width: 314.552px;
         height: 31px;
-        left: 803.011px;
-        top: 612px;
         background-color: rgba(22,22,22,1);
         border: 1px solid rgba(49,49,49,1);
+        border-bottom-right-radius: 1.5px;
+        border-bottom-left-radius: 1.5px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-bottom-right-radius: 1.5px;
-        border-bottom-left-radius: 1.5px;
+        margin-top: -1px; /* Для наложения границы с видео контейнером */
     }
 
     /* Прогресс Бар с контейнером для области наведения */
     #progressBarContainer {
-        position: absolute;
+        position: relative; /* Заменено с absolute на relative */
         width: 298.945px;
+        top: -41px;
+        margin-left: 8px;
         height: 21px; /* 1px видимый бар + 10px сверху и снизу */
-        left: 811.055px;
-        top: 601.5px; /* 611.5px (оригинальный top) - 10px */
         cursor: pointer;
-        /* Убедитесь, что контейнер не влияет на расположение остальных элементов */
         pointer-events: auto;
     }
 
     /* Фон прогресс-бара */
     #progressBarBackground {
-        position: absolute;
+        position: relative; /* Заменено с absolute на relative */
         width: 100%;
         height: 1px;
         top: 10px; /* Центрируем 1px бар внутри контейнера высотой 21px */
@@ -120,8 +124,8 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 50px; /* Настройте размер иконок по необходимости */
-        height: 50px;
+        width: 16px; /* Размер иконок 16px */
+        height: 16px;
         cursor: pointer;
         opacity: 0;
         transition: opacity 0.125s ease;
@@ -155,7 +159,7 @@
     </style>
 </head>
 <body>
-    <div id="artboard">
+    <div class="videoblock">
         <!-- Видео плеер -->
         <div class="video-container" id="videoContainer">
             <!-- Видео элемент -->
@@ -198,14 +202,12 @@
     // Функция для обновления иконок при изменении состояния видео
     function updateIconsOnStateChange() {
         if (video.paused) {
-            // Когда видео на паузе, показываем иконку Pause
-            pauseIcon.classList.add('visible');
-            // Удаляем видимость иконки Play, если она была видимой
-            playIcon.classList.remove('visible');
-        } else {
-            // Когда видео играет, скрываем иконку Pause
+            // Когда видео на паузе, показываем иконку Play
+            playIcon.classList.add('visible');
             pauseIcon.classList.remove('visible');
-            // Удаляем видимость иконки Play, если она была видимой
+        } else {
+            // Когда видео играет, показываем иконку Pause
+            pauseIcon.classList.add('visible');
             playIcon.classList.remove('visible');
         }
     }
@@ -235,7 +237,7 @@
         }, 125); // 0.125 секунд
     }
 
-    // Начальная иконка (показываем Pause, если видео на паузе)
+    // Начальная иконка (показываем Play, если видео на паузе)
     window.addEventListener('load', function() {
         updateIconsOnStateChange();
     });
@@ -244,12 +246,12 @@
     videoContainer.addEventListener('click', function() {
         if (video.paused) {
             video.play();
-            // Показываем иконку Play на короткое время
-            flashIcon(playIcon);
-        } else {
-            video.pause();
             // Показываем иконку Pause на короткое время
             flashIcon(pauseIcon);
+        } else {
+            video.pause();
+            // Показываем иконку Play на короткое время
+            flashIcon(playIcon);
         }
         // Обновляем иконки при клике
         updateIconsOnStateChange();
