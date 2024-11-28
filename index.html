@@ -10,6 +10,11 @@
         border: none;
     }
 
+    /* Определение CSS-переменной для отступа */
+    :root {
+        --tooltip-offset: 10px; /* Вы можете изменить это значение для регулировки отступа */
+    }
+
     /* Основной контейнер видео блока */
     .videoblock {
         position: relative;
@@ -163,6 +168,25 @@
     .no-transition {
         transition: none !important;
     }
+
+    /* Стили для временного блока */
+    #timeTooltip {
+        position: absolute;
+        width: 53px;
+        height: 16px;
+        background-color: #161616; /* Обновленный цвет фона */
+        border: 1px solid #313131;
+        color: white;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        text-align: center;
+        line-height: 16px;
+        border-radius: 2px;
+        pointer-events: none;
+        opacity: 0; /* Изначально скрыт */
+        transition: opacity 0.125s ease; /* Плавная анимация появления и исчезновения */
+        transform: translateX(-50%); /* Центрирование относительно курсора */
+    }
     </style>
 </head>
 <body>
@@ -188,6 +212,8 @@
                 <div id="progressBarFill"></div>
                 <!-- Кнопка перемотки перемещена внутрь progressBarBackground -->
                 <div id="seekKnob"></div>
+                <!-- Временной блок -->
+                <div id="timeTooltip">00:00:00</div>
             </div>
         </div>
     </div>
@@ -203,6 +229,7 @@
     var videoContainer = document.getElementById('videoContainer');
     var progressBarContainer = document.getElementById('progressBarContainer');
     var currentTimeElement = document.getElementById('currentTime'); // Новый элемент для времени
+    var timeTooltip = document.getElementById('timeTooltip'); // Временной блок
 
     // Флаг перетаскивания ползунка
     var isDragging = false;
@@ -297,7 +324,7 @@
                 }, 50); // Ждём 50 мс
 
             } else {
-                // Позиционируем knob относительно progressBarBackground с переходом
+                // Позиционируем knob с переходом
                 seekKnob.style.left = knobPosition + 'px';
             }
 
@@ -367,11 +394,13 @@
     function updateSeekKnob(clientX) {
         var progressBarRect = progressBarBackground.getBoundingClientRect();
         var clampedX = Math.max(0, Math.min(clientX - progressBarRect.left, progressBarRect.width));
-        var progress = (clampedX / progressBarRect.width) * 100;
-        progressBarFill.style.width = progress + '%';
+        var progress = (clampedX / progressBarRect.width) * video.duration;
+        video.currentTime = progress;
+        // Обновляем прогресс-бары и ползунок
+        var progressPercent = (video.currentTime / video.duration) * 100;
+        progressBarFill.style.width = progressPercent + '%';
         seekKnob.style.left = clampedX + 'px';
-        video.currentTime = (clampedX / progressBarRect.width) * video.duration;
-        // Обновляем текущее время при перемотке
+        // Обновляем текущее время
         currentTimeElement.textContent = formatTime(video.currentTime);
     }
 
@@ -408,11 +437,13 @@
     progressBarContainer.addEventListener('click', function(event) {
         var progressBarRect = progressBarBackground.getBoundingClientRect();
         var clampedX = Math.max(0, Math.min(event.clientX - progressBarRect.left, progressBarRect.width));
-        var progress = (clampedX / progressBarRect.width) * 100;
-        progressBarFill.style.width = progress + '%';
+        var progress = (clampedX / progressBarRect.width) * video.duration;
+        video.currentTime = progress;
+        // Обновляем прогресс-бары и ползунок
+        var progressPercent = (video.currentTime / video.duration) * 100;
+        progressBarFill.style.width = progressPercent + '%';
         seekKnob.style.left = clampedX + 'px';
-        video.currentTime = (clampedX / progressBarRect.width) * video.duration;
-        // Обновляем текущее время при клике
+        // Обновляем текущее время
         currentTimeElement.textContent = formatTime(video.currentTime);
     });
 
@@ -428,11 +459,66 @@
     // Обработчик изменения размера окна для корректировки позиции ползунка
     window.addEventListener('resize', function() {
         if (!isDragging) {
-            var progress = (video.currentTime / video.duration) * 100;
+            var progressPercent = (video.currentTime / video.duration) * 100;
             var progressBarRect = progressBarBackground.getBoundingClientRect();
-            var knobPosition = (progress / 100) * progressBarRect.width;
+            var knobPosition = (progressPercent / 100) * progressBarRect.width;
             seekKnob.style.left = knobPosition + 'px';
         }
+    });
+
+    // Функция для обновления временного блока
+    function updateTooltip(event) {
+        if (video.duration <= 0) return; // Если длительность неизвестна
+
+        var progressBarRect = progressBarBackground.getBoundingClientRect();
+        var relativeX = event.clientX - progressBarRect.left;
+        var clampedX = Math.max(0, Math.min(relativeX, progressBarRect.width));
+        var progressPercent = clampedX / progressBarRect.width;
+        var tooltipTime = progressPercent * video.duration;
+
+        // Форматируем время
+        var formattedTime = formatTime(tooltipTime);
+
+        // Обновляем текст в tooltip
+        timeTooltip.textContent = formattedTime;
+
+        // Получаем значение CSS-переменной для отступа
+        var tooltipOffset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--tooltip-offset')) || 5;
+
+        // Вычисляем позицию tooltip
+        var tooltipWidth = timeTooltip.offsetWidth;
+        var tooltipHeight = timeTooltip.offsetHeight;
+
+        // Позиционирование относительно progressBarBackground
+        var tooltipX = clampedX;
+        var tooltipY = -tooltipHeight - tooltipOffset; // Отступ сверху
+
+        // Ограничиваем tooltip внутри прогресс-бара
+        if (tooltipX < tooltipWidth / 2) {
+            tooltipX = tooltipWidth / 2;
+        } else if (tooltipX > progressBarRect.width - tooltipWidth / 2) {
+            tooltipX = progressBarRect.width - tooltipWidth / 2;
+        }
+
+        // Устанавливаем позицию
+        timeTooltip.style.left = tooltipX + 'px';
+        timeTooltip.style.top = tooltipY + 'px';
+
+        // Показываем tooltip с анимацией
+        timeTooltip.style.opacity = '1';
+    }
+
+    // Обработчики событий для tooltip
+    progressBarBackground.addEventListener('mousemove', function(event) {
+        updateTooltip(event);
+    });
+
+    progressBarBackground.addEventListener('mouseenter', function(event) {
+        timeTooltip.style.opacity = '1';
+    });
+
+    progressBarBackground.addEventListener('mouseleave', function(event) {
+        timeTooltip.style.opacity = '0';
     });
     </script>
 </body>
