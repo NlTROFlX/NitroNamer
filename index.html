@@ -12,17 +12,16 @@
 
     /* Основной контейнер видео блока */
     .videoblock {
-        /* Удалены фиксированные размеры и абсолютное позиционирование */
-        position: relative; /* Заменено с absolute на relative */
+        position: relative;
         background-color: rgba(255,255,255,1);
         overflow: hidden;
-        display: inline-block; /* Позволяет блоку подстраиваться под содержимое */
-        padding: 10px; /* Добавлен отступ для эстетики */
+        display: inline-block;
+        padding: 10px;
     }
 
     /* Контейнер видео плеера */
     .video-container {
-        position: relative; /* Заменено с absolute на relative для лучшего управления */
+        position: relative;
         overflow: visible;
         width: 314.552px;
         height: 176px;
@@ -41,7 +40,7 @@
 
     /* Информационная панель видео */
     .video-info {
-        position: relative; /* Заменено с absolute на relative */
+        position: relative;
         overflow: visible;
         width: 314.552px;
         height: 31px;
@@ -52,7 +51,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-top: -1px; /* Для наложения границы с видео контейнером */
+        margin-top: -1px;
     }
 
     /* Стили для отображения текущего времени */
@@ -65,31 +64,31 @@
 
     /* Прогресс Бар с контейнером для области наведения */
     #progressBarContainer {
-        position: relative; /* Заменено с absolute на relative */
+        position: relative;
         width: 298.945px;
         top: -41px;
         margin-left: 8px;
-        height: 21px; /* 1px видимый бар + 10px сверху и снизу */
+        height: 21px;
         cursor: pointer;
         pointer-events: auto;
     }
 
     /* Фон прогресс-бара */
     #progressBarBackground {
-        position: relative; /* Заменено с absolute на relative */
+        position: relative;
         width: 100%;
         height: 1px;
-        top: 10px; /* Центрируем 1px бар внутри контейнера высотой 21px */
-        background-color: #8a8a8a; /* Цвет не проигранной части */
-        transition: height 0.125s ease, top 0.125s ease; /* Сохранены переходы */
+        top: 10px;
+        background-color: #8a8a8a;
+        transition: height 0.125s ease, top 0.125s ease;
     }
 
     /* Заполнение прогресс-бара */
     #progressBarFill {
         width: 0%;
         height: 100%;
-        background-color: #2d8ceb; /* Цвет проигранной части */
-        transition: width 0.125s ease, height 0.125s ease, top 0.125s ease; /* Сохранены переходы */
+        background-color: #2d8ceb;
+        transition: width 0.125s ease, height 0.125s ease, top 0.125s ease;
     }
 
     /* Кнопка перемотки */
@@ -97,13 +96,13 @@
         position: absolute;
         width: 8px;
         height: 8px;
-        left: 0%; /* Начальная позиция */
+        left: 0%;
         top: 50%;
         transform: translate(-50%, -50%);
         background-color: rgba(45,140,235,1);
         border-radius: 50%;
         cursor: pointer;
-        transition: left 0.25s linear, width 0.125s ease, height 0.125s ease, border 0.125s ease, background-color 0.125s ease; /* Добавлен переход для left */
+        transition: left 0.25s linear, width 0.125s ease, height 0.125s ease, border 0.125s ease, background-color 0.125s ease;
     }
 
     /* Псевдоэлемент для внутреннего круга при наведении */
@@ -132,12 +131,12 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 16px; /* Размер иконок 16px */
+        width: 16px;
         height: 16px;
         cursor: pointer;
         opacity: 0;
         transition: opacity 0.125s ease;
-        pointer-events: none; /* Чтобы иконки не блокировали клики */
+        pointer-events: none;
     }
 
     /* Класс для отображения иконки */
@@ -149,7 +148,7 @@
     #progressBarContainer:hover #progressBarBackground,
     #progressBarContainer:hover #progressBarFill {
         height: 3px;
-        top: 8px; /* Сдвигаем вверх, чтобы центрировать 3px бар */
+        top: 8px;
     }
 
     /* Изменение стилей seekKnob при наведении на прогресс-бар */
@@ -211,6 +210,9 @@
     // Переменная для анимации
     var animationFrameId;
 
+    // Переменная для отслеживания предыдущего времени
+    var lastTime = 0;
+
     // Функция для обновления иконок при изменении состояния видео
     function updateIconsOnStateChange() {
         if (video.paused) {
@@ -264,15 +266,46 @@
     // Функция для обновления прогресса и текущего времени
     function updateProgress() {
         if (!isDragging) { // Обновляем только если не происходит перетаскивание
-            var progress = (video.currentTime / video.duration) * 100;
+            var progress;
+            // Проверяем, что длительность видео известна
+            if (video.duration > 0) {
+                progress = (video.currentTime / video.duration) * 100;
+            } else {
+                progress = 0;
+            }
+
+            // Обновляем прогресс-бары
             progressBarFill.style.width = progress + '%';
+
             // Обновляем позицию кнопки перемотки
             var progressBarRect = progressBarBackground.getBoundingClientRect();
             var knobPosition = (progress / 100) * progressBarRect.width;
-            // Позиционируем knob относительно progressBarBackground
-            seekKnob.style.left = knobPosition + 'px';
+
+            // Если видео перезапущено (currentTime меньше предыдущего), сбрасываем ползунок без перехода
+            if (video.currentTime < lastTime) {
+                // Отключаем переходы
+                seekKnob.classList.add('no-transition');
+                progressBarFill.classList.add('no-transition');
+
+                // Сбрасываем положение ползунка
+                seekKnob.style.left = knobPosition + 'px';
+
+                // Через малое время снова включаем переходы
+                setTimeout(function() {
+                    seekKnob.classList.remove('no-transition');
+                    progressBarFill.classList.remove('no-transition');
+                }, 50); // Ждём 50 мс
+
+            } else {
+                // Позиционируем knob относительно progressBarBackground с переходом
+                seekKnob.style.left = knobPosition + 'px';
+            }
+
             // Обновляем текущее время
             currentTimeElement.textContent = formatTime(video.currentTime);
+
+            // Обновляем lastTime
+            lastTime = video.currentTime;
         }
         // Запрашиваем следующий кадр
         animationFrameId = requestAnimationFrame(updateProgress);
@@ -308,6 +341,26 @@
 
     video.addEventListener('pause', function() {
         updateIconsOnStateChange();
+    });
+
+    // Обработчик события окончания видео
+    video.addEventListener('ended', function() {
+        // Отключаем переходы
+        seekKnob.classList.add('no-transition');
+        progressBarFill.classList.add('no-transition');
+
+        // Сбрасываем прогресс-бары и ползунок
+        progressBarFill.style.width = '0%';
+        seekKnob.style.left = '0px';
+
+        // Обновляем текущее время
+        currentTimeElement.textContent = formatTime(0);
+
+        // Через малое время снова включаем переходы
+        setTimeout(function() {
+            seekKnob.classList.remove('no-transition');
+            progressBarFill.classList.remove('no-transition');
+        }, 50); // Ждём 50 мс
     });
 
     // Обработка перетаскивания кнопки перемотки
