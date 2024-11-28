@@ -159,8 +159,8 @@
 /* Изменение высоты прогресс-бара при наведении на контейнер */
 #progressBarContainer:hover #progressBarBackground,
 #progressBarContainer:hover #progressBarFill {
-    height: 3px;
-    top: 8px;
+    height: 5px;
+    top: 6px;
 }
 
 /* Изменение стилей seekKnob при наведении на прогресс-бар */
@@ -204,7 +204,7 @@
     position: absolute;
     width: 5px;
     height: 5px;
-    margin-top: 9.5px;
+    margin-top: 11px;
     background-color: #e7e7e7;
     border-radius: 50%;
     transform: translate(-50%, -50%);
