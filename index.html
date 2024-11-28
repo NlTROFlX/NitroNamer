@@ -123,11 +123,14 @@
         width: 50px; /* Настройте размер иконок по необходимости */
         height: 50px;
         cursor: pointer;
-        display: none;
+        opacity: 0;
+        transition: opacity 0.125s ease;
+        pointer-events: none; /* Чтобы иконки не блокировали клики */
     }
 
-    #playIcon {
-        display: block; /* Изначально показываем иконку play */
+    /* Класс для отображения иконки */
+    .visible {
+        opacity: 1;
     }
 
     /* Изменение высоты прогресс-бара при наведении на контейнер */
@@ -189,43 +192,76 @@
     var videoContainer = document.getElementById('videoContainer');
     var progressBarContainer = document.getElementById('progressBarContainer');
 
-    // Функция для обновления иконок
-    function updateIcons() {
+    // Флаг перетаскивания ползунка
+    var isDragging = false;
+
+    // Функция для обновления иконок при изменении состояния видео
+    function updateIconsOnStateChange() {
         if (video.paused) {
-            playIcon.style.display = 'block';
-            pauseIcon.style.display = 'none';
+            // Когда видео на паузе, показываем иконку Pause
+            pauseIcon.classList.add('visible');
+            // Удаляем видимость иконки Play, если она была видимой
+            playIcon.classList.remove('visible');
         } else {
-            playIcon.style.display = 'none';
-            pauseIcon.style.display = 'none'; // Иконка паузы не отображается, когда видео играет
+            // Когда видео играет, скрываем иконку Pause
+            pauseIcon.classList.remove('visible');
+            // Удаляем видимость иконки Play, если она была видимой
+            playIcon.classList.remove('visible');
         }
     }
 
-    // Начальная иконка
-    updateIcons();
+    // Функция для отображения соответствующей иконки при наведении
+    function showHoverIcon() {
+        if (video.paused) {
+            // Если видео на паузе, показываем иконку Play
+            playIcon.classList.add('visible');
+        } else {
+            // Если видео играет, показываем иконку Pause
+            pauseIcon.classList.add('visible');
+        }
+    }
+
+    // Функция для скрытия иконок при уходе курсора
+    function hideHoverIcons() {
+        playIcon.classList.remove('visible');
+        pauseIcon.classList.remove('visible');
+    }
+
+    // Функция для кратковременного отображения иконки при изменении состояния
+    function flashIcon(icon) {
+        icon.classList.add('visible');
+        setTimeout(function() {
+            icon.classList.remove('visible');
+        }, 125); // 0.125 секунд
+    }
+
+    // Начальная иконка (показываем Pause, если видео на паузе)
+    window.addEventListener('load', function() {
+        updateIconsOnStateChange();
+    });
 
     // Обработчик клика на видео плеер
     videoContainer.addEventListener('click', function() {
         if (video.paused) {
             video.play();
-            // Коротко показываем иконку Play
-            playIcon.style.display = 'block';
-            setTimeout(function() {
-                playIcon.style.display = 'none';
-            }, 125); // 0.125 секунд
+            // Показываем иконку Play на короткое время
+            flashIcon(playIcon);
         } else {
             video.pause();
-            // Показываем иконку Pause
-            pauseIcon.style.display = 'block';
+            // Показываем иконку Pause на короткое время
+            flashIcon(pauseIcon);
         }
+        // Обновляем иконки при клике
+        updateIconsOnStateChange();
     });
 
     // Обновляем иконки при изменении состояния видео
     video.addEventListener('play', function() {
-        updateIcons();
+        updateIconsOnStateChange();
     });
 
     video.addEventListener('pause', function() {
-        updateIcons();
+        updateIconsOnStateChange();
     });
 
     // Обновляем прогресс бар по мере воспроизведения видео
@@ -242,9 +278,6 @@
     });
 
     // Обработка перетаскивания кнопки перемотки
-    var isDragging = false;
-
-    // Функция для обновления позиции ползунка
     function updateSeekKnob(clientX) {
         var progressBarRect = progressBarBackground.getBoundingClientRect();
         var clampedX = Math.max(0, Math.min(clientX - progressBarRect.left, progressBarRect.width));
@@ -287,6 +320,15 @@
         progressBarFill.style.width = progress + '%';
         seekKnob.style.left = clampedX + 'px';
         video.currentTime = (clampedX / progressBarRect.width) * video.duration;
+    });
+
+    // Обработчики наведения на видео плеер
+    videoContainer.addEventListener('mouseenter', function() {
+        showHoverIcon();
+    });
+
+    videoContainer.addEventListener('mouseleave', function() {
+        hideHoverIcons();
     });
     </script>
 </body>
