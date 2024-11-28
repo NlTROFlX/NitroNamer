@@ -10,9 +10,10 @@
         border: none;
     }
 
-    /* Определение CSS-переменной для отступа */
+    /* Определение CSS-переменных для отступов */
     :root {
-        --tooltip-offset: 10px; /* Вы можете изменить это значение для регулировки отступа */
+        --tooltip-offset: 10px; /* Отступ для timeTooltip */
+        --circle-offset: 0px;  /* Отступ для hoverCircle */
     }
 
     /* Основной контейнер видео блока */
@@ -136,8 +137,8 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 16px;
-        height: 16px;
+        width: 24px;
+        height: 24px;
         cursor: pointer;
         opacity: 0;
         transition: opacity 0.125s ease;
@@ -187,6 +188,20 @@
         transition: opacity 0.125s ease; /* Плавная анимация появления и исчезновения */
         transform: translateX(-50%); /* Центрирование относительно курсора */
     }
+
+    /* Стили для белого кружка при наведении */
+    #hoverCircle {
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        margin-top:9.5px;
+        background-color: #e7e7e7;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 1; /* Изначально видим */
+        transition: opacity 0.125s ease;
+        pointer-events: none;
+    }
     </style>
 </head>
 <body>
@@ -214,6 +229,8 @@
                 <div id="seekKnob"></div>
                 <!-- Временной блок -->
                 <div id="timeTooltip">00:00:00</div>
+                <!-- Белый кружок -->
+                <div id="hoverCircle"></div>
             </div>
         </div>
     </div>
@@ -228,8 +245,9 @@
     var seekKnob = document.getElementById('seekKnob');
     var videoContainer = document.getElementById('videoContainer');
     var progressBarContainer = document.getElementById('progressBarContainer');
-    var currentTimeElement = document.getElementById('currentTime'); // Новый элемент для времени
+    var currentTimeElement = document.getElementById('currentTime'); // Текущее время
     var timeTooltip = document.getElementById('timeTooltip'); // Временной блок
+    var hoverCircle = document.getElementById('hoverCircle'); // Белый кружок
 
     // Флаг перетаскивания ползунка
     var isDragging = false;
@@ -466,7 +484,7 @@
         }
     });
 
-    // Функция для обновления временного блока
+    // Функция для обновления временного блока и белого кружка
     function updateTooltip(event) {
         if (video.duration <= 0) return; // Если длительность неизвестна
 
@@ -479,46 +497,70 @@
         // Форматируем время
         var formattedTime = formatTime(tooltipTime);
 
-        // Обновляем текст в tooltip
+        // Обновляем текст в timeTooltip
         timeTooltip.textContent = formattedTime;
 
-        // Получаем значение CSS-переменной для отступа
+        // Получаем значение CSS-переменных для отступов
         var tooltipOffset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--tooltip-offset')) || 5;
+        var circleOffset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--circle-offset')) || 8;
 
-        // Вычисляем позицию tooltip
+        // Вычисляем позицию timeTooltip
         var tooltipWidth = timeTooltip.offsetWidth;
         var tooltipHeight = timeTooltip.offsetHeight;
 
-        // Позиционирование относительно progressBarBackground
         var tooltipX = clampedX;
         var tooltipY = -tooltipHeight - tooltipOffset; // Отступ сверху
 
-        // Ограничиваем tooltip внутри прогресс-бара
+        // Ограничиваем timeTooltip внутри прогресс-бара
         if (tooltipX < tooltipWidth / 2) {
             tooltipX = tooltipWidth / 2;
         } else if (tooltipX > progressBarRect.width - tooltipWidth / 2) {
             tooltipX = progressBarRect.width - tooltipWidth / 2;
         }
 
-        // Устанавливаем позицию
+        // Устанавливаем позицию timeTooltip
         timeTooltip.style.left = tooltipX + 'px';
         timeTooltip.style.top = tooltipY + 'px';
 
-        // Показываем tooltip с анимацией
+        // Показываем timeTooltip с анимацией
         timeTooltip.style.opacity = '1';
+
+        // Обновляем позицию hoverCircle
+        hoverCircle.style.left = clampedX + 'px';
+        hoverCircle.style.top = -circleOffset + 'px'; // Отступ сверху
+
+        // Вычисляем расстояние между hoverCircle и seekKnob
+        var hoverLeft = clampedX;
+        var hoverTop = -circleOffset;
+        var knobLeft = parseFloat(seekKnob.style.left) || 0;
+        var knobTop = parseFloat(seekKnob.style.top) || (progressBarBackground.clientHeight / 2);
+
+        var dx = hoverLeft - knobLeft;
+        var dy = hoverTop - knobTop;
+        var distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance <= 12) {
+            // Если расстояние меньше или равно 20px, скрываем hoverCircle плавно
+            hoverCircle.style.opacity = '0';
+        } else {
+            // Иначе показываем его
+            hoverCircle.style.opacity = '1';
+        }
     }
 
-    // Обработчики событий для tooltip
+    // Обработчики событий для tooltip и hoverCircle
     progressBarBackground.addEventListener('mousemove', function(event) {
         updateTooltip(event);
     });
 
     progressBarBackground.addEventListener('mouseenter', function(event) {
         timeTooltip.style.opacity = '1';
+        hoverCircle.style.opacity = '1';
     });
 
     progressBarBackground.addEventListener('mouseleave', function(event) {
         timeTooltip.style.opacity = '0';
+        hoverCircle.style.opacity = '0';
     });
     </script>
 </body>
