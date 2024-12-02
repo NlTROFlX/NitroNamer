@@ -271,7 +271,7 @@ html {
     margin-left: 13px;
     margin-right: 13px;
     padding-top: 2px;
-    padding-left: 5.68px;
+    padding-left: 4.68px;
     display: flex;
     /* Для центрирования текста по вертикали и горизонтали */
     align-items: center;
@@ -295,7 +295,7 @@ html {
     margin-right: 13px;
     margin-bottom: 4px;
     padding-top: 2px;
-    padding-left: 5.68px;
+    padding-left: 4.68px;
     display: flex;
     /* Для центрирования текста по вертикали и горизонтали */
     align-items: center;
@@ -339,9 +339,15 @@ html {
     color: #e7e7e7;
 }
 
+.variable-text-block-span-0{
+    font-family: 'Fira Sans', sans-serif;
+    font-weight: 400;
+    color: #e7e7e7;
+}
+
 .variable-text-block-span-1 {
     font-family: 'Fira Sans', sans-serif;
-    font-weight: 600;
+    font-weight: 800;
     font-style: italic;
 }
 
