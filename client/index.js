@@ -324,9 +324,12 @@ document.addEventListener("mousemove", function (e) {
             t && (copyToClipboard(t), e.preventDefault());
         }
     }),
-    document.addEventListener("DOMContentLoaded", function () {
-        initializeLanguageSelector(),
-            initializeIconClickHandlers(),
-            loadDefaultTranslations(),
-            loadSettings();
+    document.addEventListener("DOMContentLoaded", function(){
+        initializeLanguageSelector();
+        initializeIconClickHandlers();
+        loadDefaultTranslations();
+        loadSettings();
+    
+        // Добавляем обработчик клика на .top-bar
+        document.querySelector('.top-bar').addEventListener('click', showHomePage);
     });
