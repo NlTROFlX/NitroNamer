@@ -21,13 +21,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function updateIconsOnStateChange() {
             if (video.paused) {
-                playIcon.classList.add("visible");
-                pauseIcon.classList.remove("visible");
-                videoblock.classList.add("paused"); // Add this line
+              playIcon.classList.add("visible");
+              pauseIcon.classList.remove("visible");
+              videoblock.classList.add("paused"); // Add the 'paused' class
             } else {
-                playIcon.classList.remove("visible");
-                pauseIcon.classList.remove("visible"); // pauseIcon visibility is managed by hover
-                videoblock.classList.remove("paused"); // Add this line
+              playIcon.classList.remove("visible");
+              pauseIcon.classList.remove("visible");
+              videoblock.classList.remove("paused"); // Remove the 'paused' class
             }
         }
 
