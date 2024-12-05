@@ -1,343 +1,233 @@
-// Получаем элементы
-var video = document.getElementById('video');
-var playIcon = document.getElementById('playIcon');
-var pauseIcon = document.getElementById('pauseIcon');
-var progressBarFill = document.getElementById('progressBarFill');
-var progressBarBackground = document.getElementById('progressBarBackground');
-var seekKnob = document.getElementById('seekKnob');
-var videoContainer = document.getElementById('videoContainer');
-var progressBarContainer = document.getElementById('progressBarContainer');
-var currentTimeElement = document.getElementById('currentTime'); // Текущее время
-var timeTooltip = document.getElementById('timeTooltip'); // Временной блок
-var hoverCircle = document.getElementById('hoverCircle'); // Белый кружок
+document.addEventListener("DOMContentLoaded", function () {
+    // Select all videoblock elements
+    var videoblocks = document.querySelectorAll(".videoblock");
 
-// Флаг перетаскивания ползунка
-var isDragging = false;
+    videoblocks.forEach(function (videoblock) {
+        var video = videoblock.querySelector("#video");
+        var playIcon = videoblock.querySelector("#playIcon");
+        var pauseIcon = videoblock.querySelector("#pauseIcon");
+        var progressBarFill = videoblock.querySelector("#progressBarFill");
+        var progressBarBackground = videoblock.querySelector("#progressBarBackground");
+        var seekKnob = videoblock.querySelector("#seekKnob");
+        var videoContainer = videoblock.querySelector("#videoContainer");
+        var progressBarContainer = videoblock.querySelector("#progressBarContainer");
+        var currentTimeElement = videoblock.querySelector("#currentTime");
+        var timeTooltip = videoblock.querySelector("#timeTooltip");
+        var hoverCircle = videoblock.querySelector("#hoverCircle");
+        var isDragging = false;
+        var lastTime = 0;
+        var isHovering = false;
+        var animationFrameId;
 
-// Переменная для анимации
-var animationFrameId;
-
-// Переменная для отслеживания предыдущего времени
-var lastTime = 0;
-
-// Функция для обновления иконок при изменении состояния видео
-function updateIconsOnStateChange() {
-    if (video.paused) {
-        // Когда видео на паузе, показываем иконку Play
-        playIcon.classList.add('visible');
-        pauseIcon.classList.remove('visible');
-    } else {
-        // Когда видео играет, показываем иконку Pause
-        pauseIcon.classList.add('visible');
-        playIcon.classList.remove('visible');
-    }
-}
-
-// Функция для отображения соответствующей иконки при наведении
-function showHoverIcon() {
-    if (video.paused) {
-        // Если видео на паузе, показываем иконку Play
-        playIcon.classList.add('visible');
-    } else {
-        // Если видео играет, показываем иконку Pause
-        pauseIcon.classList.add('visible');
-    }
-}
-
-// Функция для скрытия иконок при уходе курсора
-function hideHoverIcons() {
-    playIcon.classList.remove('visible');
-    pauseIcon.classList.remove('visible');
-}
-
-// Функция для кратковременного отображения иконки при изменении состояния
-function flashIcon(icon) {
-    icon.classList.add('visible');
-    setTimeout(function () {
-        icon.classList.remove('visible');
-    }, 125); // 0.125 секунд
-}
-
-// Функция для форматирования времени в чч:мм:сс
-function formatTime(seconds) {
-    var hrs = Math.floor(seconds / 3600);
-    var mins = Math.floor((seconds % 3600) / 60);
-    var secs = Math.floor(seconds % 60);
-    return [
-        hrs.toString().padStart(2, '0'),
-        mins.toString().padStart(2, '0'),
-        secs.toString().padStart(2, '0')
-    ].join(':');
-}
-
-// Функция для обновления прогресса и текущего времени
-function updateProgress() {
-    if (!isDragging) { // Обновляем только если не происходит перетаскивание
-        var progress;
-        // Проверяем, что длительность видео известна
-        if (video.duration > 0) {
-            progress = (video.currentTime / video.duration) * 100;
-        } else {
-            progress = 0;
-        }
-
-        // Обновляем прогресс-бары
-        progressBarFill.style.width = progress + '%';
-
-        // Обновляем позицию кнопки перемотки
-        var progressBarRect = progressBarBackground.getBoundingClientRect();
-        var knobPosition = (progress / 100) * progressBarRect.width;
-
-        // Если видео перезапущено (currentTime меньше предыдущего), сбрасываем ползунок без перехода
-        if (video.currentTime < lastTime) {
-            // Отключаем переходы
-            seekKnob.classList.add('no-transition');
-            progressBarFill.classList.add('no-transition');
-
-            // Сбрасываем положение ползунка
-            seekKnob.style.left = knobPosition + 'px';
-
-            // Через малое время снова включаем переходы
-            setTimeout(function () {
-                seekKnob.classList.remove('no-transition');
-                progressBarFill.classList.remove('no-transition');
-            }, 50); // Ждём 50 мс
-
-        } else {
-            // Позиционируем knob с переходом
-            seekKnob.style.left = knobPosition + 'px';
-        }
-
-        // Обновляем текущее время
-        currentTimeElement.textContent = formatTime(video.currentTime);
-
-        // Обновляем lastTime
-        lastTime = video.currentTime;
-
-        // **Добавляем проверку расстояния при наведении**
-        if (isHovering) {
-            var hoverLeft = parseFloat(hoverCircle.style.left) || 0;
-            var hoverTop = parseFloat(hoverCircle.style.top) || 0;
-            var knobLeft = knobPosition;
-            var knobTop = progressBarBackground.clientHeight / 2;
-
-            var dx = hoverLeft - knobLeft;
-            var dy = hoverTop - knobTop;
-            var distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance <= 12) { // Пороговое значение можно настроить
-                hoverCircle.style.opacity = '0';
+        function updateIconsOnStateChange() {
+            if (video.paused) {
+                playIcon.classList.add("visible");
+                pauseIcon.classList.remove("visible");
+                videoblock.classList.add("paused"); // Add this line
             } else {
-                hoverCircle.style.opacity = '1';
+                playIcon.classList.remove("visible");
+                pauseIcon.classList.remove("visible"); // pauseIcon visibility is managed by hover
+                videoblock.classList.remove("paused"); // Add this line
             }
         }
-    }
-    // Запрашиваем следующий кадр
-    animationFrameId = requestAnimationFrame(updateProgress);
-}
 
-// Начальная иконка (показываем Play, если видео на паузе)
-window.addEventListener('load', function () {
-    updateIconsOnStateChange();
-    currentTimeElement.textContent = formatTime(0);
-    // Запускаем анимацию прогресса
-    animationFrameId = requestAnimationFrame(updateProgress);
-});
+        function showHoverIcon() {
+            if (!video.paused) {
+                pauseIcon.classList.add("visible");
+            }
+        }
 
-// Обработчик клика на видео плеер
-videoContainer.addEventListener('click', function () {
-    if (video.paused) {
-        video.play();
-        // Показываем иконку Pause на короткое время
-        flashIcon(pauseIcon);
-    } else {
-        video.pause();
-        // Показываем иконку Play на короткое время
-        flashIcon(playIcon);
-    }
-    // Обновляем иконки при клике
-    updateIconsOnStateChange();
-});
+        function hideHoverIcons() {
+            if (!video.paused) {
+                pauseIcon.classList.remove("visible");
+            }
+        }
 
-var isHovering = false;
+        function flashIcon(icon) {
+            icon.classList.add("visible");
+            setTimeout(function () {
+                // Keep playIcon visible if video is paused
+                if (video.paused && icon === playIcon) {
+                    icon.classList.add("visible");
+                } else {
+                    icon.classList.remove("visible");
+                }
+            }, 125);
+        }
 
-progressBarBackground.addEventListener('mouseenter', function (event) {
-    isHovering = true;
-    timeTooltip.style.opacity = '1';
-    hoverCircle.style.opacity = '1';
-});
+        function formatTime(seconds) {
+            var hrs = Math.floor(seconds / 3600);
+            var mins = Math.floor((seconds % 3600) / 60);
+            var secs = Math.floor(seconds % 60);
+            return [hrs, mins, secs]
+                .map(function (v) {
+                    return v.toString().padStart(2, "0");
+                })
+                .join(":");
+        }
 
-progressBarBackground.addEventListener('mouseleave', function (event) {
-    isHovering = false;
-    timeTooltip.style.opacity = '0';
-    hoverCircle.style.opacity = '0';
-});
+        function updateProgress() {
+            if (!isDragging) {
+                var percent = video.duration > 0 ? (video.currentTime / video.duration) * 100 : 0;
+                progressBarFill.style.width = percent + "%";
+                var knobPosition = (percent / 100) * progressBarBackground.getBoundingClientRect().width;
 
-// Обновляем иконки при изменении состояния видео
-video.addEventListener('play', function () {
-    updateIconsOnStateChange();
-});
+                if (video.currentTime < lastTime) {
+                    seekKnob.classList.add("no-transition");
+                    progressBarFill.classList.add("no-transition");
+                    seekKnob.style.left = knobPosition + "px";
+                    setTimeout(function () {
+                        seekKnob.classList.remove("no-transition");
+                        progressBarFill.classList.remove("no-transition");
+                    }, 50);
+                } else {
+                    seekKnob.style.left = knobPosition + "px";
+                }
 
-video.addEventListener('pause', function () {
-    updateIconsOnStateChange();
-});
+                currentTimeElement.textContent = formatTime(video.currentTime);
+                lastTime = video.currentTime;
 
-// Обработчик события окончания видео
-video.addEventListener('ended', function () {
-    // Отключаем переходы
-    seekKnob.classList.add('no-transition');
-    progressBarFill.classList.add('no-transition');
+                if (isHovering) {
+                    var hoverPosition = parseFloat(hoverCircle.style.left) || 0;
+                    var delta = Math.abs(hoverPosition - knobPosition);
+                    hoverCircle.style.opacity = delta <= 12 ? "0" : "1";
+                }
+            }
 
-    // Сбрасываем прогресс-бары и ползунок
-    progressBarFill.style.width = '0%';
-    seekKnob.style.left = '0px';
+            animationFrameId = requestAnimationFrame(updateProgress);
+        }
 
-    // Обновляем текущее время
-    currentTimeElement.textContent = formatTime(0);
+        function updateSeekKnob(clientX) {
+            var rect = progressBarBackground.getBoundingClientRect();
+            var x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+            var newTime = (x / rect.width) * video.duration;
+            video.currentTime = newTime;
+            var percent = (video.currentTime / video.duration) * 100;
+            progressBarFill.style.width = percent + "%";
+            seekKnob.style.left = x + "px";
+            currentTimeElement.textContent = formatTime(video.currentTime);
+        }
 
-    // Через малое время снова включаем переходы
-    setTimeout(function () {
-        seekKnob.classList.remove('no-transition');
-        progressBarFill.classList.remove('no-transition');
-    }, 50); // Ждём 50 мс
-});
+        function updateTooltip(e) {
+            if (video.duration <= 0) return;
+            var rect = progressBarBackground.getBoundingClientRect();
+            var x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+            var hoverTime = (x / rect.width) * video.duration;
+            timeTooltip.textContent = formatTime(hoverTime);
 
-// Обработка перетаскивания кнопки перемотки
-function updateSeekKnob(clientX) {
-    var progressBarRect = progressBarBackground.getBoundingClientRect();
-    var clampedX = Math.max(0, Math.min(clientX - progressBarRect.left, progressBarRect.width));
-    var progress = (clampedX / progressBarRect.width) * video.duration;
-    video.currentTime = progress;
-    // Обновляем прогресс-бары и ползунок
-    var progressPercent = (video.currentTime / video.duration) * 100;
-    progressBarFill.style.width = progressPercent + '%';
-    seekKnob.style.left = clampedX + 'px';
-    // Обновляем текущее время
-    currentTimeElement.textContent = formatTime(video.currentTime);
-}
+            var tooltipOffset = 10;
+            var circleOffset = 8;
+            var tooltipWidth = timeTooltip.offsetWidth;
 
-seekKnob.addEventListener('mousedown', function (event) {
-    isDragging = true;
-    // Отключаем переходы для мгновенного обновления
-    progressBarBackground.classList.add('no-transition');
-    progressBarFill.classList.add('no-transition');
-    seekKnob.classList.add('no-transition');
-    // При начале перетаскивания останавливаем анимацию прогресса
-    cancelAnimationFrame(animationFrameId);
-    event.preventDefault();
-});
+            var tooltipX = x;
+            var tooltipY = -timeTooltip.offsetHeight - tooltipOffset;
 
-document.addEventListener('mousemove', function (event) {
-    if (isDragging) {
-        updateSeekKnob(event.clientX);
-    }
-});
+            if (tooltipX < tooltipWidth / 2) {
+                tooltipX = tooltipWidth / 2;
+            } else if (tooltipX > rect.width - tooltipWidth / 2) {
+                tooltipX = rect.width - tooltipWidth / 2;
+            }
 
-document.addEventListener('mouseup', function (event) {
-    if (isDragging) {
-        isDragging = false;
-        // Восстанавливаем переходы
-        progressBarBackground.classList.remove('no-transition');
-        progressBarFill.classList.remove('no-transition');
-        seekKnob.classList.remove('no-transition');
-        // Возобновляем анимацию прогресса
+            timeTooltip.style.left = tooltipX + "px";
+            timeTooltip.style.top = tooltipY + "px";
+            timeTooltip.style.opacity = "1";
+
+            hoverCircle.style.left = x + "px";
+            hoverCircle.style.top = -circleOffset + "px";
+        }
+
+        // Event Listeners
+        videoContainer.addEventListener("click", function () {
+            if (video.paused) {
+                video.play();
+                flashIcon(pauseIcon);
+            } else {
+                video.pause();
+                flashIcon(playIcon);
+            }
+            updateIconsOnStateChange();
+        });
+
+        video.addEventListener("play", updateIconsOnStateChange);
+        video.addEventListener("pause", updateIconsOnStateChange);
+
+        video.addEventListener("ended", function () {
+            seekKnob.classList.add("no-transition");
+            progressBarFill.classList.add("no-transition");
+            progressBarFill.style.width = "0%";
+            seekKnob.style.left = "0px";
+            currentTimeElement.textContent = formatTime(0);
+            setTimeout(function () {
+                seekKnob.classList.remove("no-transition");
+                progressBarFill.classList.remove("no-transition");
+            }, 50);
+            updateIconsOnStateChange();
+        });
+
+        seekKnob.addEventListener("mousedown", function (e) {
+            isDragging = true;
+            progressBarBackground.classList.add("no-transition");
+            progressBarFill.classList.add("no-transition");
+            seekKnob.classList.add("no-transition");
+            cancelAnimationFrame(animationFrameId);
+            e.preventDefault();
+        });
+
+        document.addEventListener("mousemove", function (e) {
+            if (isDragging) {
+                updateSeekKnob(e.clientX);
+            }
+        });
+
+        document.addEventListener("mouseup", function (e) {
+            if (isDragging) {
+                isDragging = false;
+                progressBarBackground.classList.remove("no-transition");
+                progressBarFill.classList.remove("no-transition");
+                seekKnob.classList.remove("no-transition");
+                animationFrameId = requestAnimationFrame(updateProgress);
+            }
+        });
+
+        progressBarContainer.addEventListener("click", function (e) {
+            var rect = progressBarBackground.getBoundingClientRect();
+            var x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+            var newTime = (x / rect.width) * video.duration;
+            video.currentTime = newTime;
+            var percent = (video.currentTime / video.duration) * 100;
+            progressBarFill.style.width = percent + "%";
+            seekKnob.style.left = x + "px";
+            currentTimeElement.textContent = formatTime(video.currentTime);
+        });
+
+        videoContainer.addEventListener("mouseenter", showHoverIcon);
+        videoContainer.addEventListener("mouseleave", hideHoverIcons);
+
+        window.addEventListener("resize", function () {
+            if (!isDragging) {
+                var percent = (video.currentTime / video.duration) * 100;
+                var knobPosition = (percent / 100) * progressBarBackground.getBoundingClientRect().width;
+                seekKnob.style.left = knobPosition + "px";
+            }
+        });
+
+        progressBarBackground.addEventListener("mousemove", updateTooltip);
+
+        progressBarBackground.addEventListener("mouseenter", function () {
+            isHovering = true;
+            timeTooltip.style.opacity = "1";
+            hoverCircle.style.opacity = "1";
+        });
+
+        progressBarBackground.addEventListener("mouseleave", function () {
+            isHovering = false;
+            timeTooltip.style.opacity = "0";
+            hoverCircle.style.opacity = "0";
+        });
+
+        // Initialize
+        updateIconsOnStateChange();
+        currentTimeElement.textContent = formatTime(0);
         animationFrameId = requestAnimationFrame(updateProgress);
-    }
-});
-
-// Позволяем кликать по прогресс бару для перемотки
-progressBarContainer.addEventListener('click', function (event) {
-    var progressBarRect = progressBarBackground.getBoundingClientRect();
-    var clampedX = Math.max(0, Math.min(event.clientX - progressBarRect.left, progressBarRect.width));
-    var progress = (clampedX / progressBarRect.width) * video.duration;
-    video.currentTime = progress;
-    // Обновляем прогресс-бары и ползунок
-    var progressPercent = (video.currentTime / video.duration) * 100;
-    progressBarFill.style.width = progressPercent + '%';
-    seekKnob.style.left = clampedX + 'px';
-    // Обновляем текущее время
-    currentTimeElement.textContent = formatTime(video.currentTime);
-});
-
-// Обработчики наведения на видео плеер
-videoContainer.addEventListener('mouseenter', function () {
-    showHoverIcon();
-});
-
-videoContainer.addEventListener('mouseleave', function () {
-    hideHoverIcons();
-});
-
-// Обработчик изменения размера окна для корректировки позиции ползунка
-window.addEventListener('resize', function () {
-    if (!isDragging) {
-        var progressPercent = (video.currentTime / video.duration) * 100;
-        var progressBarRect = progressBarBackground.getBoundingClientRect();
-        var knobPosition = (progressPercent / 100) * progressBarRect.width;
-        seekKnob.style.left = knobPosition + 'px';
-    }
-});
-
-// Функция для обновления временного блока и белого кружка
-function updateTooltip(event) {
-    if (video.duration <= 0) return; // Если длительность неизвестна
-
-    var progressBarRect = progressBarBackground.getBoundingClientRect();
-    var relativeX = event.clientX - progressBarRect.left;
-    var clampedX = Math.max(0, Math.min(relativeX, progressBarRect.width));
-    var progressPercent = clampedX / progressBarRect.width;
-    var tooltipTime = progressPercent * video.duration;
-
-    // Форматируем время
-    var formattedTime = formatTime(tooltipTime);
-
-    // Обновляем текст в timeTooltip
-    timeTooltip.textContent = formattedTime;
-
-    // Получаем значение CSS-переменных для отступов
-    var tooltipOffset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--tooltip-offset')) || 5;
-    var circleOffset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--circle-offset')) || 8;
-
-    // Вычисляем позицию timeTooltip
-    var tooltipWidth = timeTooltip.offsetWidth;
-    var tooltipHeight = timeTooltip.offsetHeight;
-
-    var tooltipX = clampedX;
-    var tooltipY = -tooltipHeight - tooltipOffset; // Отступ сверху
-
-    // Ограничиваем timeTooltip внутри прогресс-бара
-    if (tooltipX < tooltipWidth / 2) {
-        tooltipX = tooltipWidth / 2;
-    } else if (tooltipX > progressBarRect.width - tooltipWidth / 2) {
-        tooltipX = progressBarRect.width - tooltipWidth / 2;
-    }
-
-    // Устанавливаем позицию timeTooltip
-    timeTooltip.style.left = tooltipX + 'px';
-    timeTooltip.style.top = tooltipY + 'px';
-
-    // Показываем timeTooltip с анимацией
-    timeTooltip.style.opacity = '1';
-
-    // Обновляем позицию hoverCircle
-    hoverCircle.style.left = clampedX + 'px';
-    hoverCircle.style.top = -circleOffset + 'px'; // Отступ сверху
-}
-
-
-// Обработчики событий для tooltip и hoverCircle
-progressBarBackground.addEventListener('mousemove', function (event) {
-    updateTooltip(event);
-});
-
-progressBarBackground.addEventListener('mouseenter', function (event) {
-    isHovering = true;
-    timeTooltip.style.opacity = '1';
-    hoverCircle.style.opacity = '1';
-});
-
-progressBarBackground.addEventListener('mouseleave', function (event) {
-    isHovering = false;
-    timeTooltip.style.opacity = '0';
-    hoverCircle.style.opacity = '0';
+    });
 });
