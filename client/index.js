@@ -74,14 +74,33 @@ function initializeIconClickHandlers() {
 
 
 // Функция для переключения спойлеров
-function toggleSpoiler(e) {
-    e.classList.contains("inactive") &&
-        (document.querySelectorAll(".spoiler").forEach(function (t) {
-                t !== e && (t.classList.remove("active"), t.classList.add("inactive"));
-            }),
-            e.classList.remove("inactive"),
-            e.classList.add("active")),
-        updateActiveIndicator(e);
+function toggleSpoiler(e){
+    if(e.classList.contains("inactive")){
+        // Закрываем другие спойлеры
+        document.querySelectorAll(".spoiler").forEach(function(t){
+            if(t !== e){
+                t.classList.remove("active");
+                t.classList.add("inactive");
+            }
+        });
+        // Открываем текущий спойлер
+        e.classList.remove("inactive");
+        e.classList.add("active");
+
+        // Показываем круговой индикатор с переходом
+        var indicator = document.getElementById("active-indicator");
+        if(indicator){
+            indicator.style.opacity = "1";
+        }
+
+        // Показываем линию индикатора с переходом
+        var indicatorLine = document.getElementById("indicator-line");
+        if(indicatorLine){
+            indicatorLine.style.opacity = "1";
+        }
+    }
+
+    updateActiveIndicator(e);
 }
 
 function selectSubItem(e) {
@@ -171,6 +190,37 @@ function initializeLanguageSelector() {
             e.classList.remove("active"), e.setAttribute("aria-expanded", "false");
         });
 }
+
+document.querySelector('.top-bar').addEventListener('click', showHomePage);
+
+function showHomePage(){
+    // Показываем домашнюю страницу
+    showContent('default-message');
+
+    // Скрываем круговой индикатор с переходом
+    var indicator = document.getElementById("active-indicator");
+    if(indicator){
+        indicator.style.opacity = "0";
+    }
+
+    // Скрываем линию индикатора с переходом
+    var indicatorLine = document.getElementById("indicator-line");
+    if(indicatorLine){
+        indicatorLine.style.opacity = "0";
+    }
+
+    // Сбрасываем выделенные элементы (если необходимо)
+    document.querySelectorAll(".spoiler-content p").forEach(function(p){
+        p.classList.remove("selected");
+    });
+
+    // Деактивируем все активные спойлеры
+    document.querySelectorAll(".spoiler.active").forEach(function(spoiler){
+        spoiler.classList.remove("active");
+        spoiler.classList.add("inactive");
+    });
+}
+
 
 // Инициализация активного спойлера
 var activeSpoiler = document.querySelector('.spoiler.active');

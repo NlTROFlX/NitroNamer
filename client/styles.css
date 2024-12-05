@@ -732,3 +732,15 @@ html {
     color: #e7e7e7;
     /* Если иконка использует fill="currentColor", это изменит её цвет */
 }
+
+#active-indicator {
+    /* Существующие стили */
+    transition: opacity 0.125s, top 0.125s; /* Добавляем переход для opacity */
+    opacity: 1; /* По умолчанию индикатор видим */
+}
+
+#indicator-line {
+    /* Существующие стили */
+    transition: opacity 0.125s, height 0.125s, left 0.125s; /* Добавляем переход для opacity */
+    opacity: 1; /* По умолчанию линия видима */
+}
