@@ -311,28 +311,32 @@
                 playIcon.classList.add("visible");
                 pauseIcon.classList.remove("visible");
               } else {
-                pauseIcon.classList.add("visible");
                 playIcon.classList.remove("visible");
+                pauseIcon.classList.remove("visible"); // pauseIcon visibility is managed by hover
               }
             }
         
             function showHoverIcon() {
-              if (video.paused) {
-                playIcon.classList.add("visible");
-              } else {
+              if (!video.paused) {
                 pauseIcon.classList.add("visible");
               }
             }
         
             function hideHoverIcons() {
-              playIcon.classList.remove("visible");
-              pauseIcon.classList.remove("visible");
+              if (!video.paused) {
+                pauseIcon.classList.remove("visible");
+              }
             }
         
             function flashIcon(icon) {
               icon.classList.add("visible");
               setTimeout(function () {
-                icon.classList.remove("visible");
+                // Keep playIcon visible if video is paused
+                if (video.paused && icon === playIcon) {
+                  icon.classList.add("visible");
+                } else {
+                  icon.classList.remove("visible");
+                }
               }, 125);
             }
         
@@ -442,6 +446,7 @@
                 seekKnob.classList.remove("no-transition");
                 progressBarFill.classList.remove("no-transition");
               }, 50);
+              updateIconsOnStateChange();
             });
         
             seekKnob.addEventListener("mousedown", function (e) {
@@ -511,7 +516,7 @@
             animationFrameId = requestAnimationFrame(updateProgress);
           });
         });
-        </script>
+        </script>        
 </body>
 
 </html>
