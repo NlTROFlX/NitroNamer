@@ -1,48 +1,36 @@
 // Объект для хранения переводов
 var translations = {};
 var defaultTranslations = {};
+var currentContentSection = null;
 
 // Функция для загрузки перевода выбранного языка
-function loadTranslations(language) {
-    var csInterface = new CSInterface();
-    var extensionPath = csInterface.getSystemPath(SystemPath.EXTENSION);
-
-    csInterface.evalScript('readTranslationFile("' + language + '", "' + extensionPath + '")', function(result) {
-        if (result) {
-            try {
-                translations = JSON.parse(result);
-                applyTranslations();
-            } catch (e) {
-                console.error('Ошибка парсинга файла перевода:', e);
-                if (language !== 'EN') {
-                    loadTranslations('EN');
+function loadTranslations(e) {
+    var t = new CSInterface(),
+        a = t.getSystemPath(SystemPath.EXTENSION);
+    t.evalScript(
+        'readTranslationFile("' + e + '", "' + a + '")',
+        function (t) {
+            if (t)
+                try {
+                    (translations = JSON.parse(t)), applyTranslations();
+                } catch (a) {
+                    console.error("Ошибка парсинга файла перевода:", a),
+                        "EN" !== e && loadTranslations("EN");
                 }
-            }
-        } else {
-            console.error('Файл перевода не найден или пустой.');
-            if (language !== 'EN') {
-                loadTranslations('EN');
-            }
+            else
+                console.error("Файл перевода не найден или пустой."),
+                    "EN" !== e && loadTranslations("EN");
         }
-    });
+    );
 }
 
 
 // Функция для применения переводов к элементам интерфейса
 function applyTranslations() {
-    // Находим все элементы с атрибутом data-i18n
-    var elementsToTranslate = document.querySelectorAll('[data-i18n]');
-    elementsToTranslate.forEach(function (element) {
-        var key = element.getAttribute('data-i18n');
-        var translation = translations[key];
-
-        if (!translation) {
-            // Если перевод отсутствует, используем английский по умолчанию
-            translation = defaultTranslations[key] || element.textContent;
-        }
-
-        // Устанавливаем перевод в элемент
-        element.innerHTML = translation;
+    document.querySelectorAll("[data-i18n]").forEach(function (e) {
+        var t = e.getAttribute("data-i18n"),
+            a = translations[t];
+        a || (a = defaultTranslations[t] || e.textContent), (e.innerHTML = a);
     });
 }
 
@@ -50,151 +38,137 @@ function applyTranslations() {
 var defaultTranslations = {};
 
 // Функция для загрузки английских переводов по умолчанию
-function loadDefaultTranslations(callback) {
-    var csInterface = new CSInterface();
-    var extensionPath = csInterface.getSystemPath(SystemPath.EXTENSION);
-
-    csInterface.evalScript('readTranslationFile("EN", "' + extensionPath + '")', function(result) {
-        if (result) {
+function loadDefaultTranslations(e) {
+    var t = new CSInterface(),
+        a = t.getSystemPath(SystemPath.EXTENSION);
+    t.evalScript('readTranslationFile("EN", "' + a + '")', function (t) {
+        if (t)
             try {
-                defaultTranslations = JSON.parse(result);
-                if (callback) callback();
-            } catch (e) {
-                console.error('Ошибка парсинга файла английского перевода:', e);
+                (defaultTranslations = JSON.parse(t)), e && e();
+            } catch (a) {
+                console.error("Ошибка парсинга файла английского перевода:", a);
             }
-        } else {
-            console.error('Файл английского перевода не найден или пустой.');
-        }
+        else
+            console.error("Файл английского перевода не найден или пустой.");
     });
 }
 
 // Функция для инициализации обработчиков событий для иконок
 function initializeIconClickHandlers() {
-    var csInterface = new CSInterface();
-
-    // Получаем все иконки с классом 'clickable-icon'
-    var clickableIcons = document.querySelectorAll('.clickable-icon');
-
-    clickableIcons.forEach(function (icon) {
-        var url = icon.getAttribute('data-url');
-        if (url) {
-            icon.style.cursor = 'pointer'; // Изменяем курсор при наведении
-            icon.addEventListener('click', function () {
-                try {
-                    csInterface.openURLInDefaultBrowser(url);
-                } catch (error) {
-                    console.error("Не удалось открыть URL:", error);
-                }
-            });
-        } else {
-            console.error("Для иконки отсутствует атрибут 'data-url'.");
-        }
+    var e = new CSInterface();
+    document.querySelectorAll(".clickable-icon").forEach(function (t) {
+        var a = t.getAttribute("data-url");
+        a
+            ? ((t.style.cursor = "pointer"),
+                t.addEventListener("click", function () {
+                    try {
+                        e.openURLInDefaultBrowser(a);
+                    } catch (t) {
+                        console.error("Не удалось открыть URL:", t);
+                    }
+                }))
+            : console.error("Для иконки отсутствует атрибут 'data-url'.");
     });
 }
 
 
 // Функция для переключения спойлеров
-function toggleSpoiler(spoiler) {
-    if (spoiler.classList.contains('inactive')) {
-        var allSpoilers = document.querySelectorAll('.spoiler');
-        allSpoilers.forEach(function (s) {
-            if (s !== spoiler) {
-                s.classList.remove('active');
-                s.classList.add('inactive');
-            }
-        });
-
-        spoiler.classList.remove('inactive');
-        spoiler.classList.add('active');
-        updateActiveIndicator(spoiler);
-    } else {
-        updateActiveIndicator(spoiler);
-    }
+function toggleSpoiler(e) {
+    e.classList.contains("inactive") &&
+        (document.querySelectorAll(".spoiler").forEach(function (t) {
+            t !== e && (t.classList.remove("active"), t.classList.add("inactive"));
+        }),
+            e.classList.remove("inactive"),
+            e.classList.add("active")),
+        updateActiveIndicator(e);
 }
 
-// Функция для выбора подпункта
-function selectSubItem(subItem) {
-    var allSubItems = document.querySelectorAll('.spoiler-content p');
-    allSubItems.forEach(function (item) {
-        item.classList.remove('selected');
-    });
-    subItem.classList.add('selected');
+function selectSubItem(e) {
+    document.querySelectorAll(".spoiler-content p").forEach(function (e) {
+        e.classList.remove("selected");
+    }),
+        e.classList.add("selected");
 }
 
 // Функция для отображения контента
-function showContent(contentId) {
-    var defaultMessage = document.getElementById('default-message');
+function showContent(e) {
+    var defaultMessage = document.getElementById("default-message");
     if (defaultMessage) {
-        defaultMessage.style.display = 'none';
+        defaultMessage.style.display = "none";
     }
 
-    var contentSections = document.querySelectorAll('#content-sections .content-section');
+    // Пауза видео в текущем контентном разделе перед его скрытием
+    if (currentContentSection) {
+        var currentSectionElement = document.getElementById(currentContentSection);
+        if (currentSectionElement) {
+            var videos = currentSectionElement.getElementsByTagName("video");
+            for (var i = 0; i < videos.length; i++) {
+                videos[i].pause();
+            }
+        }
+    }
+
+    // Скрытие всех контентных разделов
+    var contentSections = document.querySelectorAll("#content-sections .content-section");
     contentSections.forEach(function (section) {
-        section.style.display = 'none';
+        section.style.display = "none";
     });
 
-    var contentToShow = document.getElementById(contentId);
-    if (contentToShow) {
-        contentToShow.style.display = 'block';
+    // Отображение выбранного контентного раздела
+    var newSection = document.getElementById(e);
+    if (newSection) {
+        newSection.style.display = "block";
+        currentContentSection = e; // Обновление текущего контентного раздела
     } else {
-        console.error('Контент с ID ' + contentId + ' не найден.');
+        console.error("Контент с ID " + e + " не найден.");
     }
 }
 
 // Функция для обновления положения индикатора
-function updateActiveIndicator(activeSpoiler) {
-    var indicator = document.getElementById('active-indicator');
-    var indicatorLine = document.getElementById('indicator-line');
-    var spoilerTitle = activeSpoiler.querySelector('.spoiler-title-container');
-    var subItems = activeSpoiler.querySelectorAll('.spoiler-content p');
-    if (spoilerTitle) {
-        var offsetTop = activeSpoiler.offsetTop + spoilerTitle.offsetTop + (spoilerTitle.offsetHeight / 2) - (indicator.offsetHeight / 2);
-        var indicatorLeft = indicator.getBoundingClientRect().left - indicator.parentElement.getBoundingClientRect().left;
-        indicator.style.top = offsetTop + 'px';
-        indicatorLine.style.height = offsetTop + 'px';
-        indicatorLine.style.left = indicatorLeft + (indicator.offsetWidth / 2) + 'px';
-        indicator.textContent = subItems.length; // Обновляем число подпунктов в кружке
+function updateActiveIndicator(e) {
+    var t = document.getElementById("active-indicator"),
+        a = document.getElementById("indicator-line"),
+        n = e.querySelector(".spoiler-title-container"),
+        o = e.querySelectorAll(".spoiler-content p");
+    if (n) {
+        var l =
+            e.offsetTop + n.offsetTop + n.offsetHeight / 2 - t.offsetHeight / 2,
+            i =
+                t.getBoundingClientRect().left -
+                t.parentElement.getBoundingClientRect().left;
+        (t.style.top = l + "px"),
+            (a.style.height = l + "px"),
+            (a.style.left = i + t.offsetWidth / 2 + "px"),
+            (t.textContent = o.length);
     }
 }
 
 // Функция для инициализации выпадающего списка языка
 function initializeLanguageSelector() {
-    var languageSelector = document.querySelector('.language-selector');
-    var selectedLanguage = languageSelector.querySelector('.selected-language');
-    var languageDropdown = languageSelector.querySelector('.language-dropdown');
-    var languageOptions = languageDropdown.querySelectorAll('.language-option');
-
-    // Обработчик клика по селектору языка
-    languageSelector.addEventListener('click', function (event) {
-        event.stopPropagation();
-        var isActive = languageSelector.classList.toggle('active');
-        languageSelector.setAttribute('aria-expanded', isActive);
-    });
-
-    // Обработчик клика по опциям языка
-    languageOptions.forEach(function (option) {
-        option.addEventListener('click', function (event) {
-            event.stopPropagation();
-            var newLanguage = this.textContent;
-            selectedLanguage.textContent = newLanguage;
-            languageSelector.classList.remove('active');
-            languageSelector.setAttribute('aria-expanded', 'false');
-        
-            // Вызываем функцию ExtendScript для сохранения выбранного языка
-            var csInterface = new CSInterface();
-            var extensionPath = csInterface.getSystemPath(SystemPath.EXTENSION);
-            csInterface.evalScript('saveSelectedLanguage("' + newLanguage + '", "' + extensionPath + '")');
-        
-            // Загружаем переводы для нового языка
-            loadTranslations(newLanguage);
-        });        
-    });
-
-    // Закрываем выпадающий список при клике вне его
-    document.addEventListener('click', function () {
-        languageSelector.classList.remove('active');
-        languageSelector.setAttribute('aria-expanded', 'false');
-    });
+    var e = document.querySelector(".language-selector"),
+        t = e.querySelector(".selected-language"),
+        a = e.querySelector(".language-dropdown").querySelectorAll(".language-option");
+    e.addEventListener("click", function (t) {
+        t.stopPropagation();
+        var a = e.classList.toggle("active");
+        e.setAttribute("aria-expanded", a);
+    }),
+        a.forEach(function (a) {
+            a.addEventListener("click", function (a) {
+                a.stopPropagation();
+                var n = this.textContent;
+                (t.textContent = n),
+                    e.classList.remove("active"),
+                    e.setAttribute("aria-expanded", "false");
+                var o = new CSInterface(),
+                    l = o.getSystemPath(SystemPath.EXTENSION);
+                o.evalScript('saveSelectedLanguage("' + n + '", "' + l + '")'),
+                    loadTranslations(n);
+            });
+        }),
+        document.addEventListener("click", function () {
+            e.classList.remove("active"), e.setAttribute("aria-expanded", "false");
+        });
 }
 
 // Инициализация активного спойлера
@@ -204,52 +178,33 @@ if (activeSpoiler) {
 }
 
 // Функция для копирования текста в буфер обмена с использованием document.execCommand('copy')
-function copyToClipboard(text) {
-    var tempTextArea = document.createElement('textarea');
-    tempTextArea.value = text;
-    tempTextArea.style.position = 'fixed'; // Избегаем прокрутки страницы
-    tempTextArea.style.opacity = '0';
-    document.body.appendChild(tempTextArea);
-    tempTextArea.focus();
-    tempTextArea.select();
-
+function copyToClipboard(e) {
+    var t = document.createElement("textarea");
+    (t.value = e),
+        (t.style.position = "fixed"),
+        (t.style.opacity = "0"),
+        document.body.appendChild(t),
+        t.focus(),
+        t.select();
     try {
-        var successful = document.execCommand('copy');
-        if (successful) {
-            console.log('Текст скопирован в буфер обмена:', text);
-
-            // Сохраняем ссылку на элемент в момент копирования
-            let element = currentHoveredElement;
-
-            // Проверяем, что элемент существует
-            if (element) {
-                // Сбрасываем предыдущий таймер для этого элемента, если он существует
-                if (element.copyTimeout) {
-                    clearTimeout(element.copyTimeout);
-                }
-
-                // Добавляем класс 'show-copied' к элементу
-                element.classList.add('show-copied');
-
-                // Устанавливаем новый таймер для удаления класса
-                element.copyTimeout = setTimeout(function () {
-                    element.classList.remove('show-copied');
-                    delete element.copyTimeout; // Удаляем свойство после использования
-                }, 1125);
-            }
-
-        } else {
-            console.error('Не удалось скопировать текст');
-        }
-    } catch (err) {
-        console.error('Ошибка при попытке скопировать текст:', err);
+        if (document.execCommand("copy")) {
+            console.log("Текст скопирован в буфер обмена:", e);
+            let a = currentHoveredElement;
+            a &&
+                (a.copyTimeout && clearTimeout(a.copyTimeout),
+                    a.classList.add("show-copied"),
+                    (a.copyTimeout = setTimeout(function () {
+                        a.classList.remove("show-copied"), delete a.copyTimeout;
+                    }, 1125)));
+        } else console.error("Не удалось скопировать текст");
+    } catch (n) {
+        console.error("Ошибка при попытке скопировать текст:", n);
     }
-
-    // Удаляем временный элемент
-    document.body.removeChild(tempTextArea);
+    document.body.removeChild(t);
 }
 
 // Переменная для хранения текущего элемента под курсором
+activeSpoiler && updateActiveIndicator(activeSpoiler);
 let currentHoveredElement = null;
 
 // Отслеживаем перемещение мыши и обновляем текущий элемент
@@ -285,32 +240,42 @@ document.addEventListener('keydown', function (event) {
 
 // Обновляем функцию загрузки настроек при запуске панели
 function loadSettings() {
-    var csInterface = new CSInterface();
-    var extensionPath = csInterface.getSystemPath(SystemPath.EXTENSION);
-    csInterface.evalScript('loadSettings("' + extensionPath + '")', function (result) {
-        var settings = JSON.parse(result);
-        var selectedLanguage = 'EN'; // Язык по умолчанию
-        if (settings && settings.language) {
-            selectedLanguage = settings.language.toUpperCase();
-        }
-
-        var selectedLanguageElement = document.querySelector('.selected-language');
-        selectedLanguageElement.textContent = selectedLanguage;
-
-        // Загружаем английские переводы по умолчанию, затем выбранный язык
-        loadDefaultTranslations(function() {
-            loadTranslations(selectedLanguage);
-        });
+    var e = new CSInterface(),
+        t = e.getSystemPath(SystemPath.EXTENSION);
+    e.evalScript('loadSettings("' + t + '")', function (e) {
+        var t = JSON.parse(e),
+            a = "EN";
+        t && t.language && (a = t.language.toUpperCase()),
+            (document.querySelector(".selected-language").textContent = a),
+            loadDefaultTranslations(function () {
+                loadTranslations(a);
+            });
     });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    initializeLanguageSelector();
-    initializeIconClickHandlers();
-
-    // Загружаем английские переводы по умолчанию
-    loadDefaultTranslations();
-
-    // Загружаем настройки и применяем переводы
-    loadSettings();
-});
+document.addEventListener("mousemove", function (e) {
+    let t = document.elementFromPoint(e.clientX, e.clientY);
+    if (t) {
+        if (
+            t.classList.contains("variable-name-block") ||
+            t.classList.contains("variable-example-block")
+        )
+            currentHoveredElement = t;
+        else {
+            let a = t.closest(".variable-name-block, .variable-example-block");
+            currentHoveredElement = a || null;
+        }
+    }
+}),
+    document.addEventListener("keydown", function (e) {
+        if (e.ctrlKey && ("c" === e.key || "C" === e.key) && currentHoveredElement) {
+            let t = currentHoveredElement.getAttribute("data-value");
+            t && (copyToClipboard(t), e.preventDefault());
+        }
+    }),
+    document.addEventListener("DOMContentLoaded", function () {
+        initializeLanguageSelector(),
+            initializeIconClickHandlers(),
+            loadDefaultTranslations(),
+            loadSettings();
+    });
