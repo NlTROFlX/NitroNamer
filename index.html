@@ -242,19 +242,21 @@
             height: 24px;
             cursor: pointer;
             opacity: 0;
-            transition: opacity 125ms ease-out, filter 125ms ease-out;
+            transition: opacity 125ms ease;
+            /* Removed filter from transition */
             pointer-events: none;
             /* Set initial icon color to #b9b9b9 */
             filter: invert(72%) sepia(2%) saturate(10%) hue-rotate(320deg) brightness(88%) contrast(85%);
-            }
+        }
 
-            .visible {
+        .visible {
             opacity: 1;
-            }
+        }
 
-            .video-container:hover .control-icon {
+        .video-container:hover .control-icon {
             /* Change icon color to #2d8ceb on hover */
             filter: invert(47%) sepia(74%) saturate(1796%) hue-rotate(192deg) brightness(96%) contrast(100%);
+            /* No transition on filter */
         }
     </style>
 </head>
