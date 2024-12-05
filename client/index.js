@@ -19,7 +19,7 @@ function loadTranslations(e) {
                 }
             else
                 console.error("Файл перевода не найден или пустой."),
-                    "EN" !== e && loadTranslations("EN");
+                "EN" !== e && loadTranslations("EN");
         }
     );
 }
@@ -59,15 +59,16 @@ function initializeIconClickHandlers() {
     document.querySelectorAll(".clickable-icon").forEach(function (t) {
         var a = t.getAttribute("data-url");
         a
-            ? ((t.style.cursor = "pointer"),
+            ?
+            ((t.style.cursor = "pointer"),
                 t.addEventListener("click", function () {
                     try {
                         e.openURLInDefaultBrowser(a);
                     } catch (t) {
                         console.error("Не удалось открыть URL:", t);
                     }
-                }))
-            : console.error("Для иконки отсутствует атрибут 'data-url'.");
+                })) :
+            console.error("Для иконки отсутствует атрибут 'data-url'.");
     });
 }
 
@@ -76,8 +77,8 @@ function initializeIconClickHandlers() {
 function toggleSpoiler(e) {
     e.classList.contains("inactive") &&
         (document.querySelectorAll(".spoiler").forEach(function (t) {
-            t !== e && (t.classList.remove("active"), t.classList.add("inactive"));
-        }),
+                t !== e && (t.classList.remove("active"), t.classList.add("inactive"));
+            }),
             e.classList.remove("inactive"),
             e.classList.add("active")),
         updateActiveIndicator(e);
@@ -85,8 +86,8 @@ function toggleSpoiler(e) {
 
 function selectSubItem(e) {
     document.querySelectorAll(".spoiler-content p").forEach(function (e) {
-        e.classList.remove("selected");
-    }),
+            e.classList.remove("selected");
+        }),
         e.classList.add("selected");
 }
 
@@ -134,12 +135,12 @@ function updateActiveIndicator(e) {
         var l =
             e.offsetTop + n.offsetTop + n.offsetHeight / 2 - t.offsetHeight / 2,
             i =
-                t.getBoundingClientRect().left -
-                t.parentElement.getBoundingClientRect().left;
+            t.getBoundingClientRect().left -
+            t.parentElement.getBoundingClientRect().left;
         (t.style.top = l + "px"),
-            (a.style.height = l + "px"),
-            (a.style.left = i + t.offsetWidth / 2 + "px"),
-            (t.textContent = o.length);
+        (a.style.height = l + "px"),
+        (a.style.left = i + t.offsetWidth / 2 + "px"),
+        (t.textContent = o.length);
     }
 }
 
@@ -149,16 +150,16 @@ function initializeLanguageSelector() {
         t = e.querySelector(".selected-language"),
         a = e.querySelector(".language-dropdown").querySelectorAll(".language-option");
     e.addEventListener("click", function (t) {
-        t.stopPropagation();
-        var a = e.classList.toggle("active");
-        e.setAttribute("aria-expanded", a);
-    }),
+            t.stopPropagation();
+            var a = e.classList.toggle("active");
+            e.setAttribute("aria-expanded", a);
+        }),
         a.forEach(function (a) {
             a.addEventListener("click", function (a) {
                 a.stopPropagation();
                 var n = this.textContent;
                 (t.textContent = n),
-                    e.classList.remove("active"),
+                e.classList.remove("active"),
                     e.setAttribute("aria-expanded", "false");
                 var o = new CSInterface(),
                     l = o.getSystemPath(SystemPath.EXTENSION);
@@ -181,9 +182,9 @@ if (activeSpoiler) {
 function copyToClipboard(e) {
     var t = document.createElement("textarea");
     (t.value = e),
-        (t.style.position = "fixed"),
-        (t.style.opacity = "0"),
-        document.body.appendChild(t),
+    (t.style.position = "fixed"),
+    (t.style.opacity = "0"),
+    document.body.appendChild(t),
         t.focus(),
         t.select();
     try {
@@ -254,19 +255,19 @@ function loadSettings() {
 }
 
 document.addEventListener("mousemove", function (e) {
-    let t = document.elementFromPoint(e.clientX, e.clientY);
-    if (t) {
-        if (
-            t.classList.contains("variable-name-block") ||
-            t.classList.contains("variable-example-block")
-        )
-            currentHoveredElement = t;
-        else {
-            let a = t.closest(".variable-name-block, .variable-example-block");
-            currentHoveredElement = a || null;
+        let t = document.elementFromPoint(e.clientX, e.clientY);
+        if (t) {
+            if (
+                t.classList.contains("variable-name-block") ||
+                t.classList.contains("variable-example-block")
+            )
+                currentHoveredElement = t;
+            else {
+                let a = t.closest(".variable-name-block, .variable-example-block");
+                currentHoveredElement = a || null;
+            }
         }
-    }
-}),
+    }),
     document.addEventListener("keydown", function (e) {
         if (e.ctrlKey && ("c" === e.key || "C" === e.key) && currentHoveredElement) {
             let t = currentHoveredElement.getAttribute("data-value");

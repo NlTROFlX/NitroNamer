@@ -141,11 +141,11 @@
 }
 
 .videoblock:hover .video-container,
-.videoblock:hover .video-info{
+.videoblock:hover .video-info {
     border-color: #8a8a8a;
 }
 
-.videoblock:hover .video-info{
+.videoblock:hover .video-info {
     border-top-color: #313131;
 }
 
@@ -164,7 +164,7 @@
     border-bottom: none;
     cursor: pointer;
     transition: border-color 0.125s ease;
-    transition-timing-function: ease!important;
+    transition-timing-function: ease !important;
 }
 
 .video-container #video {
@@ -189,7 +189,7 @@
     justify-content: left;
     margin-top: -1px;
     transition: border-color 0.125s ease;
-    transition-timing-function: ease!important;
+    transition-timing-function: ease !important;
 }
 
 /* Стили для отображения текущего времени */
@@ -386,36 +386,40 @@
 
 #video {
     transition: filter 125ms ease;
-  }
-  
-  /* Apply grayscale filter when the video is paused */
-  .videoblock.paused #video {
-    filter: grayscale(100%);
-  }
+}
 
-  /* Always have a filter applied to the video */
+/* Apply grayscale filter when the video is paused */
+.videoblock.paused #video {
+    filter: grayscale(100%);
+}
+
+/* Always have a filter applied to the video */
 #video {
     transition: filter 125ms ease;
-    filter: grayscale(0%); /* Ensure the filter property is always present */
-  }
-  
-  /* Apply grayscale filter when the video is paused */
-  .videoblock.paused #video {
-    filter: grayscale(100%);
-  }
+    filter: grayscale(0%);
+    /* Ensure the filter property is always present */
+}
 
-  .video-overlay {
+/* Apply grayscale filter when the video is paused */
+.videoblock.paused #video {
+    filter: grayscale(100%);
+}
+
+.video-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0); /* Initially transparent */
+    background-color: rgba(0, 0, 0, 0);
+    /* Initially transparent */
     transition: background-color 125ms ease;
-    pointer-events: none; /* Allow clicks to pass through to the video */
-  }
-  
-  /* Apply 50% darkness when the video is paused */
-  .videoblock.paused .video-overlay {
-    background-color: rgba(0, 0, 0, 0.5); /* 50% black overlay */
-  }
+    pointer-events: none;
+    /* Allow clicks to pass through to the video */
+}
+
+/* Apply 50% darkness when the video is paused */
+.videoblock.paused .video-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    /* 50% black overlay */
+}
