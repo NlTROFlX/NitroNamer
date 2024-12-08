@@ -1,6 +1,16 @@
 {
+    "textbox-copied": "- Copied",
+    
+    "globalVarRightBlock_1": "Specifications:",
+    "globalVarRightBlock_2": "Description:",
+    "globalVarRightBlock_3": "Features:",
+    "globalVarRightBlock_3_1": "Not available.",
+    "globalVarRightBlock_4": "Video examples:",
+    "globalVarRightBlock_5": "Text examples:",
+
     "titleThinItalic": "NitroNamer",
     "titleSemiboldItalic": " Variable Library",
+    "homeText": "Home",
     "introductionHeader": "INTRODUCTION",
     "panelFunctions": "Panel Functions",
     "homePage_listFunctions_1": "Possibilities",
@@ -71,5 +81,13 @@
     "leftBlock_spoilerOther_1": "Other",
     "leftBlock_spoilerOther_2": "[1] O - Current layer name.",
     "leftBlock_spoilerOther_3": "[1] Lpnt - Parent layer name.",
-    "leftBlock_spoilerOther_4": "[2] Fext - Extension type."
+    "leftBlock_spoilerOther_4": "[2] Fext - Extension type.",
+
+    "cVarPage_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Source of data: <span class=\"variable-text-block-span-1\">Pre-comp</span><br>",
+    "cVarPage_2": "The variable <span class=\"variable-text-block-span-1\">C</span> is the name of the current composition in which the layer being processed is located.",
+    "varC_videoExample_1": " | Demonstration of the C variable",
+
+    "pnVarPage_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Source of data: <span class=\"variable-text-block-span-1\">Current project</span><br>",
+    "pnVarPage_2": "The variable <span class=\"variable-text-block-span-1\">Pn</span> provides the name of the current project in Adobe After Effects without the file extension.",
+    "varPn_videoExample_1": " | Demonstration of the Pn variable"
 }

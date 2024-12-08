@@ -1,6 +1,16 @@
 {
+    "textbox-copied": "- Скопировано",
+    
+    "globalVarRightBlock_1": "Технические характеристики:",
+    "globalVarRightBlock_2": "Описание:",
+    "globalVarRightBlock_3": "Особенности:",
+    "globalVarRightBlock_3_1": "Нет.",
+    "globalVarRightBlock_4": "Видео примеры:",
+    "globalVarRightBlock_5": "Текстовые примеры:",
+
     "titleThinItalic": "NitroNamer",
     "titleSemiboldItalic": " Библиотека Переменных",
+    "homeText": "Главная",
     "introductionHeader": "ВВЕДЕНИЕ",
     "panelFunctions": "Функции Панели",
     "homePage_listFunctions_1": "Возможности",
@@ -71,5 +81,13 @@
     "leftBlock_spoilerOther_1": "Другие",
     "leftBlock_spoilerOther_2": "[1] O - Имя текущего слоя.",
     "leftBlock_spoilerOther_3": "[1] Lpnt - Имя родительского слоя.",
-    "leftBlock_spoilerOther_4": "[2] Fext - Тип расширения."
+    "leftBlock_spoilerOther_4": "[2] Fext - Тип расширения.",
+
+    "cVarPage_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Прекомпозиция</span><br>",
+    "cVarPage_2": "Переменная <span class=\"variable-text-block-span-1\">C</span> это имя текущей композиции, в которой находится обрабатываемый слой.",
+    "varC_videoExample_1": " | Демонстрация работы переменной C ",
+
+    "pnVarPage_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Текущий проект</span><br>",
+    "pnVarPage_2": "Переменная <span class=\"variable-text-block-span-1\">Pn</span> — возвращает имя текущего проекта AE.",
+    "varPn_videoExample_1": " | Демонстрация работы переменной Pn "
 }

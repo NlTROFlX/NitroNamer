@@ -157,6 +157,7 @@ html {
     padding-left: 8px;
     color: #b9b9b9;
     position: relative;
+    cursor: pointer;
 }
 
 .title-thin-italic {
@@ -173,6 +174,35 @@ html {
     font-style: italic;
     font-size: 24px;
     margin: 0;
+}
+
+.title-thin-italic,
+.title-semibold-italic {
+    transition: color 0.125s ease;
+}
+
+/* Стили для нового элемента "Home" */
+.home-text {
+    font-family: 'Fira Sans', sans-serif;
+    font-weight: 100;
+    font-style: italic;
+    font-size: 24px;
+    margin: 0;
+    opacity: 0;
+    transition: opacity 0.125s ease;
+    color: #e7e7e7; /* Цвет текста "Home" */
+    margin-left: 5px; /* Отступ между "Variable Library" и "Home" */
+    white-space: nowrap; /* Предотвращает перенос текста */
+}
+
+/* Стили при наведении на .top-bar */
+.top-bar:hover .title-thin-italic,
+.top-bar:hover .title-semibold-italic {
+    color: #e7e7e7;
+}
+
+.top-bar:hover .home-text {
+    opacity: 1;
 }
 
 /* Линия, соединяющая top-bar и кружок */
