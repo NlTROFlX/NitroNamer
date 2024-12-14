@@ -39,7 +39,7 @@
     },
     "currentSettings": {
         "UICompact": false,
-        "allLayers": true,
+        "allLayers": false,
         "template": "E(levels, drop shadow[ # ]) | Lexp(opacity, position)",
         "briefly": false,
         "brieflyType": 0,
@@ -48,5 +48,16 @@
         "modeActive": true,
         "selectedPresetTemplate": "(LayerName).i"
     },
-    "selectedLanguage": "Russian"
+    "selectedLanguage": "Russian",
+    "nameApply": {
+        "shapeLayer": false,
+        "textLayer": false,
+        "nullObject": false,
+        "adjustmentLayer": true,
+        "footageLayer": true,
+        "solidLayer": true,
+        "preComp": true,
+        "cameraLayer": true,
+        "lightLayer": false
+    }
 }
