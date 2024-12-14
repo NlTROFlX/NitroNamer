@@ -46,7 +46,7 @@
         "selectedPresetIndex": 0,
         "modeIndex": 0,
         "modeActive": true,
-        "selectedPresetTemplate": "E(levels, drop shadow[ # ])"
+        "selectedPresetTemplate": "(LayerName).i"
     },
     "selectedLanguage": "Russian"
 }

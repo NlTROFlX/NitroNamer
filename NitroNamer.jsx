@@ -238,6 +238,7 @@ function buildUI(thisObj) {
     }
 
     function handleRadioButtonClick() {
+        // Проверяем, какая радиокнопка была нажата
         if (this === rdoAllLayers) {
             rdoAllLayers.value = true;
             rdoOnlySelected.value = false;
@@ -245,10 +246,28 @@ function buildUI(thisObj) {
             rdoAllLayers.value = false;
             rdoOnlySelected.value = true;
         }
+    
+        // Обновляем счетчики слоев и предпросмотр
         updateLayerCounts();
         updatePreview();
         resetRenameButtonIcon();
         saveCurrentSettings();
+    
+        // Проверяем, нажата ли клавиша Shift
+        var isShiftPressed = ScriptUI.environment.keyboardState.shiftKey;
+    
+        if (isShiftPressed) {
+            // Определяем путь к NNNameApply.jsx (предполагая, что он в той же папке, что и variables.json)
+            var scriptFolderPath = new File($.fileName).path;
+            var nnNameApplyPath = File(scriptFolderPath + "/NitroNamer/settings/NNNameApply.jsx");
+    
+            if (nnNameApplyPath.exists) {
+                // Открываем NNNameApply.jsx
+                $.evalFile(nnNameApplyPath);
+            } else {
+                alert("Script NNNameApply.jsx not found at " + nnNameApplyPath.fsName, scriptMessageHead_1);
+            }
+        }
     }
 
     rdoAllLayers.onClick = handleRadioButtonClick;
