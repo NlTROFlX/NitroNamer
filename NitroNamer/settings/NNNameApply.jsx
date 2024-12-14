@@ -2,7 +2,7 @@
 // ====== NNNameApply.jsx >>>
 
 function buildApplyUI(a) {
-    var e = a instanceof Panel ? a : new Window("palette", "NNNameApply", undefined, { resizeable: true });
+    var e = a instanceof Panel ? a : new Window("palette", "NitroNamer - Type filter", undefined, { resizeable: true });
     e.orientation = "column";
     e.alignChildren = ["fill", "top"];
     e.spacing = 10;
@@ -19,12 +19,24 @@ function buildApplyUI(a) {
     i.size = [100, 25];
 
     var o = e.add("group");
-    o.orientation = "column";
+    o.orientation = "row"; // Родительская группа для двух колонок
     o.alignChildren = ["left", "top"];
-    o.spacing = 5;
+    o.spacing = 10;
 
-    var layerTypes = ["Shape Layer", "Text Layer", "Null Object", "Adjustment Layer", "Footage Layer", "Solid Layer", "Pre-Comp", "Camera Layer", "Light Layer"];
-    var checkboxKeys = ["shapeLayer", "textLayer", "nullObject", "adjustmentLayer", "footageLayer", "solidLayer", "preComp", "cameraLayer", "lightLayer"];
+    // Создаём две дочерние группы для колонок
+    var col1 = o.add("group");
+    col1.orientation = "column";
+    col1.alignChildren = ["left", "top"];
+    col1.spacing = 5;
+
+    var col2 = o.add("group");
+    col2.orientation = "column";
+    col2.alignChildren = ["left", "top"];
+    col2.spacing = 5;
+
+    // Добавляем "Audio Layer" в массив типов слоёв
+    var layerTypes = ["Shape Layer", "Text Layer", "Null Object", "Adjustment Layer", "Footage Layer", "Solid Layer", "Pre-Comp", "Camera Layer", "Light Layer", "Audio Layer"];
+    var checkboxKeys = ["shapeLayer", "textLayer", "nullObject", "adjustmentLayer", "footageLayer", "solidLayer", "preComp", "cameraLayer", "lightLayer", "audioLayer"];
     var t = [];
 
     // Определение пути к settings.json
@@ -73,7 +85,8 @@ function buildApplyUI(a) {
                     "solidLayer": false,
                     "preComp": false,
                     "cameraLayer": false,
-                    "lightLayer": false
+                    "lightLayer": false,
+                    "audioLayer": false  // Добавляем Audio Layer
                 }
             };
             writeJSONFile(settingsFilePath, defaultSettings);
@@ -90,7 +103,8 @@ function buildApplyUI(a) {
                     "solidLayer": false,
                     "preComp": false,
                     "cameraLayer": false,
-                    "lightLayer": false
+                    "lightLayer": false,
+                    "audioLayer": false  // Добавляем Audio Layer
                 };
                 writeJSONFile(settingsFilePath, existingSettings);
             } else {
@@ -104,7 +118,8 @@ function buildApplyUI(a) {
                     "solidLayer": false,
                     "preComp": false,
                     "cameraLayer": false,
-                    "lightLayer": false
+                    "lightLayer": false,
+                    "audioLayer": false  // Добавляем Audio Layer
                 };
                 for (var key in defaultNameApply) {
                     if (defaultNameApply.hasOwnProperty(key) && existingSettings.nameApply[key] === undefined) {
@@ -122,9 +137,14 @@ function buildApplyUI(a) {
     // Чтение текущих настроек
     var currentSettings = readJSONFile(settingsFilePath);
 
-    // Создание чекбоксов
+    // Создание чекбоксов и распределение их по колонкам
     for (var p = 0; p < layerTypes.length; p++) {
-        var d = o.add("checkbox", undefined, layerTypes[p]);
+        var d;
+        if (p < Math.ceil(layerTypes.length / 2)) {
+            d = col1.add("checkbox", undefined, layerTypes[p]);
+        } else {
+            d = col2.add("checkbox", undefined, layerTypes[p]);
+        }
         d.value = currentSettings.nameApply[checkboxKeys[p]];
         t.push(d);
     }

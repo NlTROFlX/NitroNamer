@@ -2497,7 +2497,8 @@ function buildUI(thisObj) {
                     "Solid": "solidLayer",
                     "Pre-comp": "preComp",
                     "Camera": "cameraLayer",
-                    "Light": "lightLayer"
+                    "Light": "lightLayer",
+                    "Audio": "audioLayer"  // Добавляем Audio Layer
                 };
     
                 app.beginUndoGroup("Rename Layers by Template");
