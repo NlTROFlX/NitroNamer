@@ -20,20 +20,20 @@ function showHelp() {
         return panel;
     };
 
-    // First row of groups
+    
     var firstRow = helpWin.add("group", undefined);
     firstRow.orientation = "row";
     firstRow.alignChildren = ["fill", "top"];
     firstRow.spacing = 10;
 
-    // Composition Information Variables
+    
     var compVariables = [
         "C - Current composition name",
         "Pn - Project name"
     ];
     addGroupPanel(firstRow, "Composition Information", compVariables);
 
-    // Time and Duration Variables
+    
     var timeVariables = [
         "Ip - In point of the layer",
         "Op - Out point of the layer",
@@ -45,7 +45,7 @@ function showHelp() {
     ];
     addGroupPanel(firstRow, "Time and Duration", timeVariables);
 
-    // Effects Variables
+    
     var effectsVariables = [
         "E - Name of effects",
         "E(Delimiter) - Effects with custom delimiter",
@@ -54,7 +54,7 @@ function showHelp() {
     ];
     addGroupPanel(firstRow, "Effects", effectsVariables);
 
-    // Frame Rate and Resolution Variables
+    
     var frameResVariables = [
         "F - Frame Rate",
         "R - Resolution (Width*Height)",
@@ -63,13 +63,13 @@ function showHelp() {
     ];
     addGroupPanel(firstRow, "Frame Rate and Resolution", frameResVariables);
 
-    // Second row of groups
+    
     var secondRow = helpWin.add("group", undefined);
     secondRow.orientation = "row";
     secondRow.alignChildren = ["fill", "top"];
     secondRow.spacing = 10;
 
-    // Indexes and Identifiers Variables
+    
     var indexVariables = [
         "I - Index of available layers",
         "I(0) - index with initial number",
@@ -78,7 +78,7 @@ function showHelp() {
     ];
     addGroupPanel(secondRow, "Indexes and Identifiers", indexVariables);
 
-    // Layer Properties Variables
+    
     var layerPropertiesVariables = [
         "T - Layer type (Pre-comp, Footage, Shape, Solid, Null, Adjustment, Audio, Text, Light, Camera)",
         "S - Source name (file or pre-comp)",
@@ -101,7 +101,7 @@ function showHelp() {
     ];
     addGroupPanel(secondRow, "Layer Properties", layerPropertiesVariables);
 
-    // Other Variables
+    
     var otherVariables = [
         "O - Original name of the layer",
         "Lpnt - Name of the final parent layer",
@@ -128,10 +128,10 @@ function showHelp() {
         helpWin.close();
     };
 
-    // Add the new button to open the URL for donations
+    
     var btnNitrofix = buttonsSubGroup.add("button", undefined, "NitroNamer 2024.3 | Say thanks or buy a coffee for NITROFIX");
     btnNitrofix.onClick = function() {
-        var url = "https://boosty.to/nitrofix";
+        var url = "https:
         if ($.os.indexOf("Windows") !== -1) {
             system.callSystem("cmd.exe /c start " + url);
         } else {
@@ -139,10 +139,10 @@ function showHelp() {
         }
     };
 
-    // Add the new button to open the GitHub project page
+    
     var btnGitHub = buttonsSubGroup.add("button", undefined, "Project page on GitHub");
     btnGitHub.onClick = function() {
-        var url = "https://github.com/NlTROFlX/NitroNamer";
+        var url = "https:
         if ($.os.indexOf("Windows") !== -1) {
             system.callSystem("cmd.exe /c start " + url);
         } else {
@@ -150,7 +150,7 @@ function showHelp() {
         }
     };
 
-    // Add the new button to show LICENSE
+    
     var btnLicense = buttonsSubGroup.add("button", undefined, "LICENSE");
     btnLicense.onClick = function() {
         var licenseWin = new Window("dialog", "NitroNamer 2024.3 - LICENSE", undefined, {resizeable: true});
@@ -192,5 +192,5 @@ function showHelp() {
     helpWin.show();
 }
 
-// Call the help window function
+
 showHelp();

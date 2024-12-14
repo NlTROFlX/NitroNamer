@@ -238,7 +238,7 @@ function buildUI(thisObj) {
     }
 
     function handleRadioButtonClick() {
-        // Проверяем, какая радиокнопка была нажата
+        
         if (this === rdoAllLayers) {
             rdoAllLayers.value = true;
             rdoOnlySelected.value = false;
@@ -247,22 +247,22 @@ function buildUI(thisObj) {
             rdoOnlySelected.value = true;
         }
     
-        // Обновляем счетчики слоев и предпросмотр
+        
         updateLayerCounts();
         updatePreview();
         resetRenameButtonIcon();
         saveCurrentSettings();
     
-        // Проверяем, нажата ли клавиша Shift
+        
         var isShiftPressed = ScriptUI.environment.keyboardState.shiftKey;
     
         if (isShiftPressed) {
-            // Определяем путь к NNNameApply.jsx (предполагая, что он в той же папке, что и variables.json)
+            
             var scriptFolderPath = new File($.fileName).path;
             var nnNameApplyPath = File(scriptFolderPath + "/NitroNamer/settings/NNNameApply.jsx");
     
             if (nnNameApplyPath.exists) {
-                // Открываем NNNameApply.jsx
+                
                 $.evalFile(nnNameApplyPath);
             } else {
                 alert("Script NNNameApply.jsx not found at " + nnNameApplyPath.fsName, scriptMessageHead_1);
@@ -308,7 +308,7 @@ function buildUI(thisObj) {
         updateLayerCounts();
         updateRenameButtonIcon();
 
-        // Если активен режим "search", обновляем выпадающий список
+        
         if (isActive && modes[currentModeIndex] === "search") {
             updatePresetsDropdown(loadSettings());
         }
@@ -328,7 +328,7 @@ function buildUI(thisObj) {
         resetRenameButtonIcon();
         updateRenameButtonIcon();
 
-        // Если активен режим "search", обновляем выпадающий список
+        
         if (isActive && modes[currentModeIndex] === "search") {
             updatePresetsDropdown(loadSettings());
         }
@@ -1327,14 +1327,14 @@ function buildUI(thisObj) {
             var settings = loadSettings();
             var userPresets = settings.userPresets || {};
 
-            // Увеличиваем usageFrequency при каждом выборе пресета
+            
             if (preset.hasOwnProperty('usageFrequency')) {
                 preset.usageFrequency += 1;
             } else {
                 preset.usageFrequency = 1;
             }
 
-            // Обновляем пресет в userPresets
+            
             for (var key in userPresets) {
                 if (userPresets.hasOwnProperty(key) && userPresets[key].template === preset.template) {
                     userPresets[key] = preset;
@@ -1346,7 +1346,7 @@ function buildUI(thisObj) {
             var settingsFile = scriptFolderPath + "/NitroNamer/settings/settings.json";
             writeJSONFile(settingsFile, settings);
 
-            // Остальной код остается без изменений...
+            
 
             rdoAllLayers.value = preset.allLayers;
             rdoOnlySelected.value = !preset.allLayers;
@@ -1400,39 +1400,39 @@ function buildUI(thisObj) {
             if (userPresets.hasOwnProperty(key)) {
                 var preset = userPresets[key];
 
-                // Обработка режима "favorites"
+                
                 if (isActive && modes[currentModeIndex] === "favorites") {
                     if (preset.favoritesTemplate) {
                         presetsArray.push(preset);
                     }
                 }
-                // Обработка режима "search"
+                
                 else if (isActive && modes[currentModeIndex] === "search") {
                     if (searchTerm === "") {
-                        // Если поисковый запрос пуст, показываем все пресеты
+                        
                         presetsArray.push(preset);
                     } else {
-                        // Проверяем, содержит ли шаблон пресета поисковый запрос
+                        
                         if (preset.template.toLowerCase().indexOf(searchTerm) !== -1) {
                             presetsArray.push(preset);
                         }
                     }
                 } else {
-                    // Для остальных режимов или когда режим не активен, добавляем все пресеты
+                    
                     presetsArray.push(preset);
                 }
             }
         }
 
-        // Сортировка пресетов
+        
         if (isActive) {
             if (modes[currentModeIndex] === "chart") {
-                // Сортировка по частоте использования
+                
                 presetsArray.sort(function (a, b) {
                     return (b.usageFrequency || 0) - (a.usageFrequency || 0);
                 });
             } else if (modes[currentModeIndex] === "date") {
-                // Сортировка по дате создания
+                
                 presetsArray.sort(function (a, b) {
                     var dateA = new Date(a.creationDate);
                     var dateB = new Date(b.creationDate);
@@ -1447,20 +1447,20 @@ function buildUI(thisObj) {
                     return dateA.getTime() - dateB.getTime();
                 });
             } else if (modes[currentModeIndex] === "longArrowDown") {
-                // Сортировка по длине шаблона (убывание)
+                
                 presetsArray.sort(function (a, b) {
                     return b.template.length - a.template.length;
                 });
             } else if (modes[currentModeIndex] === "longArrowUp") {
-                // Сортировка по длине шаблона (возрастание)
+                
                 presetsArray.sort(function (a, b) {
                     return a.template.length - b.template.length;
                 });
             }
-            // Для режимов "favorites" и "search" дополнительная сортировка не требуется
+            
         }
 
-        // Заполнение выпадающего списка
+        
         if (presetsArray.length === 0) {
             ddLayerMode.add("item", "No presets saved or suitable presets.");
         } else {
@@ -1487,7 +1487,7 @@ function buildUI(thisObj) {
                     } else if (modes[currentModeIndex] === "longArrowDown" || modes[currentModeIndex] === "longArrowUp") {
                         displayText += " {" + presetsArray[i].template.length + "}";
                     }
-                    // В режимах "favorites" и "search" дополнительную информацию не добавляем
+                    
                 }
 
                 var item = ddLayerMode.add("item", displayText);
@@ -1495,7 +1495,7 @@ function buildUI(thisObj) {
             }
         }
 
-        // Выбор текущего пресета
+        
         var selectedPresetTemplate = settings.currentSettings ? settings.currentSettings.selectedPresetTemplate : null;
         var selectedIndex = -1;
 
@@ -2476,18 +2476,18 @@ function buildUI(thisObj) {
     var localIndex = 0;
 
     function renameLayersByTemplate(allLayers, template, briefly, brieflyCase, showShyLocked, reverseOrder, ctrlKey, shiftKey, altKey, ctrlShift) {
-        checkAndUpdateSettings(); // Убедимся, что настройки загружены
+        checkAndUpdateSettings(); 
         incrementValues = {};
         localIndex = 1;
         var u = app.project;
         if (u && u.activeItem instanceof CompItem) {
             var m = u.activeItem;
             if (m.numLayers > 0) {
-                // Загрузим текущие настройки
+                
                 var settings = loadSettings();
                 var nameApply = settings.nameApply || {};
     
-                // Сопоставление типов
+                
                 var layerTypeMap = {
                     "Shape": "shapeLayer",
                     "Text": "textLayer",
@@ -2498,40 +2498,40 @@ function buildUI(thisObj) {
                     "Pre-comp": "preComp",
                     "Camera": "cameraLayer",
                     "Light": "lightLayer",
-                    "Audio": "audioLayer"  // Добавляем Audio Layer
+                    "Audio": "audioLayer"  
                 };
     
                 app.beginUndoGroup("Rename Layers by Template");
     
-                // Получаем слои для переименования
+                
                 var c = getLayerOrder(m, allLayers, altKey);  
                 var f = [];
     
                 for (var p = 0; p < c.length; p++) {
                     var v = c[p];
-                    // Пропускаем shy/locked слои если showShyLocked не активен
+                    
                     if ((!v.shy || showShyLocked) && !v.locked && (allLayers || v.selected)) {
     
-                        // Получаем тип слоя
+                        
                         var lt = getLayerType(v);
-                        // Определяем ключ для nameApply
+                        
                         var applyKey = layerTypeMap[lt];
     
-                        // Если ключа нет в карте, значит этот тип не предусмотрен, пропускаем
+                        
                         if (applyKey === undefined) {
-                            // Здесь можно решить: либо пропустить, либо всегда переименовывать.
-                            // В данном примере пропускаем:
+                            
+                            
                             continue;
                         }
     
-                        // Проверяем значение в nameApply
+                        
                         var shouldRename = nameApply[applyKey];
                         if (!shouldRename) {
-                            // Если значение false, пропускаем этот слой
+                            
                             continue;
                         }
     
-                        // Если значение true - переименовываем
+                        
                         var d = {
                             T: getLayerType(v),
                             i: v.index,

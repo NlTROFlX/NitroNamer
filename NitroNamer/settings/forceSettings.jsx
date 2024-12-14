@@ -1,5 +1,5 @@
 (function() {
-    // Get the script's file and folder path
+    
     var scriptFile = new File($.fileName);
     var scriptFolderPath = scriptFile.path;
 
@@ -41,17 +41,17 @@
         }
     };
 
-    // Define the path to the tooltips file
+    
     var tooltipsFilePath = scriptFolderPath + "/tooltips.json";
     var tooltipsFile = new File(tooltipsFilePath);
 
-    // Write the English tooltips JSON data to the file
+    
     tooltipsFile.encoding = "UTF-8";
     tooltipsFile.open("w");
     tooltipsFile.write(JSON.stringify(tooltipsEU, null, 4));
     tooltipsFile.close();
 
-    // Save the selected language in settings.json
+    
     var settingsFolderPath = scriptFolderPath;
     var settingsFilePath = settingsFolderPath + "/settings.json";
     var settingsFile = new File(settingsFilePath);
@@ -65,7 +65,7 @@
 
     writeJSONFile(settingsFilePath, settingsData);
 
-    // Utility functions to read and write JSON files
+    
     function readJSONFile(filePath) {
         var file = new File(filePath);
         var data = {};

@@ -1,5 +1,5 @@
-// ===================
-// ====== NNNameApply.jsx >>>
+
+
 
 function buildApplyUI(a) {
     var e = a instanceof Panel ? a : new Window("palette", "NitroNamer - Type filter", undefined, { resizeable: true });
@@ -19,11 +19,11 @@ function buildApplyUI(a) {
     i.size = [100, 25];
 
     var o = e.add("group");
-    o.orientation = "row"; // Родительская группа для двух колонок
+    o.orientation = "row"; 
     o.alignChildren = ["left", "top"];
     o.spacing = 10;
 
-    // Создаём две дочерние группы для колонок
+    
     var col1 = o.add("group");
     col1.orientation = "column";
     col1.alignChildren = ["left", "top"];
@@ -34,18 +34,18 @@ function buildApplyUI(a) {
     col2.alignChildren = ["left", "top"];
     col2.spacing = 5;
 
-    // Добавляем "Audio Layer" в массив типов слоёв
+    
     var layerTypes = ["Shape Layer", "Text Layer", "Null Object", "Adjustment Layer", "Footage Layer", "Solid Layer", "Pre-Comp", "Camera Layer", "Light Layer", "Audio Layer"];
     var checkboxKeys = ["shapeLayer", "textLayer", "nullObject", "adjustmentLayer", "footageLayer", "solidLayer", "preComp", "cameraLayer", "lightLayer", "audioLayer"];
     var t = [];
 
-    // Определение пути к settings.json
+    
     var scriptFile = new File($.fileName);
     var scriptFolderPath = scriptFile.path;
     var settingsFilePath = scriptFolderPath + "/settings.json";
     var settingsFile = new File(settingsFilePath);
 
-    // Функции для чтения и записи JSON
+    
     function readJSONFile(filePath) {
         var file = new File(filePath);
         var data = {};
@@ -69,7 +69,7 @@ function buildApplyUI(a) {
         file.close();
     }
 
-    // Функция для инициализации settings.json, если он не существует
+    
     function initializeSettings() {
         if (!settingsFile.exists) {
             var defaultSettings = {
@@ -86,12 +86,12 @@ function buildApplyUI(a) {
                     "preComp": false,
                     "cameraLayer": false,
                     "lightLayer": false,
-                    "audioLayer": false  // Добавляем Audio Layer
+                    "audioLayer": false  
                 }
             };
             writeJSONFile(settingsFilePath, defaultSettings);
         } else {
-            // Проверка наличия раздела "nameApply" и его ключей
+            
             var existingSettings = readJSONFile(settingsFilePath);
             if (!existingSettings.nameApply) {
                 existingSettings.nameApply = {
@@ -104,11 +104,11 @@ function buildApplyUI(a) {
                     "preComp": false,
                     "cameraLayer": false,
                     "lightLayer": false,
-                    "audioLayer": false  // Добавляем Audio Layer
+                    "audioLayer": false  
                 };
                 writeJSONFile(settingsFilePath, existingSettings);
             } else {
-                // Убедиться, что все ключи присутствуют
+                
                 var defaultNameApply = {
                     "shapeLayer": false,
                     "textLayer": false,
@@ -119,7 +119,7 @@ function buildApplyUI(a) {
                     "preComp": false,
                     "cameraLayer": false,
                     "lightLayer": false,
-                    "audioLayer": false  // Добавляем Audio Layer
+                    "audioLayer": false  
                 };
                 for (var key in defaultNameApply) {
                     if (defaultNameApply.hasOwnProperty(key) && existingSettings.nameApply[key] === undefined) {
@@ -131,13 +131,13 @@ function buildApplyUI(a) {
         }
     }
 
-    // Инициализация настроек при запуске
+    
     initializeSettings();
 
-    // Чтение текущих настроек
+    
     var currentSettings = readJSONFile(settingsFilePath);
 
-    // Создание чекбоксов и распределение их по колонкам
+    
     for (var p = 0; p < layerTypes.length; p++) {
         var d;
         if (p < Math.ceil(layerTypes.length / 2)) {
@@ -149,7 +149,7 @@ function buildApplyUI(a) {
         t.push(d);
     }
 
-    // Функция для обновления settings.json при изменении состояния чекбокса
+    
     function updateSettings(key, value) {
         var settings = readJSONFile(settingsFilePath);
         if (!settings.nameApply) {
@@ -159,7 +159,7 @@ function buildApplyUI(a) {
         writeJSONFile(settingsFilePath, settings);
     }
 
-    // Добавление обработчиков событий для чекбоксов
+    
     for (var p = 0; p < t.length; p++) {
         (function(index) {
             t[index].onClick = function() {
@@ -168,7 +168,7 @@ function buildApplyUI(a) {
         })(p);
     }
 
-    // Обработчики кнопок "Select All" и "Deselect All"
+    
     n.onClick = function() {
         for (var a = 0; a < t.length; a++) {
             t[a].value = true;
@@ -189,7 +189,7 @@ function buildApplyUI(a) {
     return e;
 }
 
-// Создание и отображение панели
+
 var applyPanel = buildApplyUI(this);
 if (applyPanel instanceof Window) {
     applyPanel.center();
@@ -198,4 +198,4 @@ if (applyPanel instanceof Window) {
     applyPanel.layout.layout(true);
 }
 
-// ===================
+

@@ -40,94 +40,94 @@ function loadVariables() {
 
 var variablesData = loadVariables();
 var lastText = "";
-var userIsTyping = false; // Flag to track if the user is typing
+var userIsTyping = false; 
 
 function buildNewUI(thisObj) {
-    // Create a window or panel for the UI
+    
     var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "NitroNamer - variable settings", undefined, {resizeable: true});
     win.orientation = "column";
     win.alignChildren = ["fill", "top"];
     win.preferredSize.height = 50;
     win.margins = [4, 4, 4, 4];
 
-    // Create a group for the drop-down list, icon, and input field
+    
     var grpDropdownAndInput = win.add("group", undefined);
-    grpDropdownAndInput.orientation = "row"; // Set orientation to horizontal
+    grpDropdownAndInput.orientation = "row"; 
     grpDropdownAndInput.alignChildren = ["fill", "center"];
     grpDropdownAndInput.margins = [0,0,0,0];
     grpDropdownAndInput.size = [175,24];
 
-    // Add input field for variable name
+    
     var inputFieldVariableName = grpDropdownAndInput.add("edittext", undefined, "");
-    inputFieldVariableName.characters = 10; // Set width of the input field
+    inputFieldVariableName.characters = 10; 
 
-    // Add icon
+    
     var scriptFile = new File($.fileName);
-    var scriptFolderPath = scriptFile.path.replace("/scripts", "/img"); // Adjust the path to point to the img folder
+    var scriptFolderPath = scriptFile.path.replace("/scripts", "/img"); 
     var iconFile = new File(scriptFolderPath + "/search.png");
     if (iconFile.exists) {
         var icon = grpDropdownAndInput.add("image", undefined, iconFile);
-        icon.size = [24, 24]; // Set the size of the icon
+        icon.size = [24, 24]; 
     } else {
         alert("Icon file not found: " + iconFile.fsName, scriptMessageHead_1);
     }
 
-    // Add drop-down list with variable names
+    
     var variableNames = ["An", "Ar", "E", "F", "R", "H", "W", "Lexp", "Fext", "Lmc", "Lmn",  "Tm"];
     var ddVariableNames = grpDropdownAndInput.add("dropdownlist", undefined, variableNames);
-    ddVariableNames.selection = 0; // Select the first item by default
+    ddVariableNames.selection = 0; 
 
-    // Add inscription
+    
     var grpInputTextFieldVariableName = win.add("group", undefined);
     grpInputTextFieldVariableName.orientation = "column";
     grpInputTextFieldVariableName.alignment = ["fill", "left"];
     grpInputTextFieldVariableName.size=[100,12];
     grpInputTextFieldVariableName.margins = [0, -10, 0, 0];
 
-    var originalTextFieldLabel  = "Value of an undefined variable"; // the original label text
+    var originalTextFieldLabel  = "Value of an undefined variable"; 
 
     var inputTextFieldVariableName = grpInputTextFieldVariableName.add("statictext", undefined, originalTextFieldLabel );
     inputTextFieldVariableName.maximumSize.height = 12;
     inputTextFieldVariableName.alignment = ["fill", "center"];
     inputTextFieldVariableName.margins = [0, -10, 0, 0];
 
-    // Create a group for the input field and save button
+    
     var grpInputAndButton = win.add("group", undefined);
-    grpInputAndButton.orientation = "row"; // Set orientation to horizontal
+    grpInputAndButton.orientation = "row"; 
     grpInputAndButton.alignChildren = ["fill", "left"];
     grpInputAndButton.margins = [0,-10,0,0];
 
-    // Add input field for variable value
+    
     var inputFieldVariableValue = grpInputAndButton.add("edittext", undefined, "");
-    inputFieldVariableValue.characters = 20; // Set width of the input field
-    inputFieldVariableValue.size = [150, 24]; // Set the size of the input field
+    inputFieldVariableValue.characters = 20; 
+    inputFieldVariableValue.size = [150, 24]; 
     inputFieldVariableValue.margins = [0,-10,0,0];
 
     function filterDropdownList() {
-        var searchText = inputFieldVariableName.text.toLowerCase(); // Get the input text and convert to lowercase
-        if (searchText === lastText) return; // Exit if the text hasn't changed
+        var searchText = inputFieldVariableName.text.toLowerCase(); 
+        if (searchText === lastText) return; 
         lastText = searchText;
     
-        ddVariableNames.removeAll(); // Clear current dropdown items
+        ddVariableNames.removeAll(); 
     
-        // Filter and add items to the dropdown list
+        
         for (var i = 0; i < variableNames.length; i++) {
             if (variableNames[i].toLowerCase().indexOf(searchText) !== -1) {
                 ddVariableNames.add("item", variableNames[i]);
             }
         }
     
-        // If no matching items, add a message
+        
         if (ddVariableNames.items.length === 0) {
             ddVariableNames.add("item", "No matches found");
         } else {
-            ddVariableNames.selection = 0; // Select the first item
+            ddVariableNames.selection = 0; 
         }
     
-        userIsTyping = false; // Reset typing flag
+        userIsTyping = false; 
     }
 
-    // Add save button with icon and hover effect
+    
     var saveIconFile = new File(scriptFolderPath + "/save.png");
     var saveIconHoverFile = new File(scriptFolderPath + "/saveHover.png");
     var deleteIconHoverFile = new File(scriptFolderPath + "/deleteHover.png");
@@ -137,21 +137,21 @@ function buildNewUI(thisObj) {
     var doneIconFile = new File(scriptFolderPath + "/doneIcon.png");
 
     var btnSave = grpInputAndButton.add("iconbutton", undefined, saveIconFile, {style: "toolbutton"});
-    btnSave.size = [24, 24]; // Set button size
-    btnSave.imageSize = [24, 24]; // Set image size
+    btnSave.size = [24, 24]; 
+    btnSave.imageSize = [24, 24]; 
 
-    // Create a group for the radio buttons
+    
     var grpRadioButtons = win.add("group", undefined);
-    grpRadioButtons.orientation = "row"; // Set orientation to horizontal
-    grpRadioButtons.alignChildren = ["center", "center"]; // Center the buttons
-    grpRadioButtons.alignment = ["center", "bottom"]; // Align the group to the center bottom
+    grpRadioButtons.orientation = "row"; 
+    grpRadioButtons.alignChildren = ["center", "center"]; 
+    grpRadioButtons.alignment = ["center", "bottom"]; 
     grpRadioButtons.margins = [0,-10,0,0];
 
-    // Add radio buttons
+    
     var rdoDefault = grpRadioButtons.add("radiobutton", undefined, "Default value");
     var rdoCustom = grpRadioButtons.add("radiobutton", undefined, "Custom value");
 
-    // Set the default selection
+    
     rdoDefault.value = true;
 
     btnSave.addEventListener("mouseover", function(event) {
@@ -172,7 +172,7 @@ function buildNewUI(thisObj) {
         btnSave.imageSize = [24, 24];
     });
 
-    // Function to reset UI fields
+    
     function resetUIFields() {
         inputFieldVariableName.text = "";
         inputFieldVariableValue.text = "";
@@ -186,12 +186,12 @@ function buildNewUI(thisObj) {
 
     var variablesData = loadVariables();
 
-    // Event listener for input field changes
+    
     inputFieldVariableName.onChanging = function() {
-        userIsTyping = true; // Set typing flag
-        filterDropdownList(); // Call the filter function
+        userIsTyping = true; 
+        filterDropdownList(); 
 
-        // Check if the entered variable name exists in JSON data
+        
         if (variablesData && variablesData[inputFieldVariableName.text]) {
             inputTextFieldVariableName.text = originalTextFieldLabel;
             btnSave.image = saveIconFile;
@@ -202,12 +202,12 @@ function buildNewUI(thisObj) {
         btnSave.imageSize = [24, 24];
     };
 
-    // Add event listener to dropdown list
+    
     ddVariableNames.onChange = function() {
         if (ddVariableNames.selection) {
             inputFieldVariableName.text = ddVariableNames.selection.text;
 
-            // Check if the selected variable name exists in JSON data
+            
             if (variablesData && variablesData[inputFieldVariableName.text]) {
                 var variableSettings = variablesData[inputFieldVariableName.text];
 
@@ -222,12 +222,12 @@ function buildNewUI(thisObj) {
         }
     };
     
-    // Add event listener to handle Enter key press in input field
+    
     inputFieldVariableName.addEventListener("keydown", function(event) {
         if (event.keyName === "Enter" && ddVariableNames.selection) {
             inputFieldVariableName.text = ddVariableNames.selection.text;
 
-            // Check if the selected variable name exists in JSON data
+            
             if (variablesData && variablesData[inputFieldVariableName.text]) {
                 var variableSettings = variablesData[inputFieldVariableName.text];
 
@@ -242,21 +242,21 @@ function buildNewUI(thisObj) {
         }
     });
 
-    // Add event listener to save button
+    
     btnSave.onClick = function() {
         var scriptFile = new File($.fileName);
         var variablesFilePath = scriptFile.path.replace("/scripts", "/scripts/variables.json");
         var variablesFile = new File(variablesFilePath);
 
         if (!initialData[inputFieldVariableName.text]) {
-            // Variable does not exist, show warning icon and change text
+            
             btnSave.image = warningIconFile;
             btnSave.imageSize = [24, 24];
 
             inputTextFieldVariableName.text = "Invalid variable name";
         } else {
             if (ScriptUI.environment.keyboardState.shiftKey) {
-                // Reset current variable settings to initialData
+                
                 if (variablesData && inputFieldVariableName.text) {
                     var variableName = inputFieldVariableName.text;
                     if (initialData[variableName]) {
@@ -276,7 +276,7 @@ function buildNewUI(thisObj) {
                     alert("Settings reset for variable: " + variableName, scriptMessageHead_1);
                 }
             } else if (ScriptUI.environment.keyboardState.ctrlKey && ScriptUI.environment.keyboardState.altKey) {
-                // Reset all variables to initialData
+                
                 for (var key in initialData) {
                     if (initialData.hasOwnProperty(key)) {
                         variablesData[key] = {
@@ -295,11 +295,11 @@ function buildNewUI(thisObj) {
                 resetUIFields();
                 alert("All settings reset to initial values.", scriptMessageHead_1);
             } else {
-                // Save current settings
+                
                 if (variablesData && inputFieldVariableName.text) {
                     var variableName = inputFieldVariableName.text;
 
-                    // Ensure the variable entry exists in variablesData
+                    
                     if (!variablesData[variableName]) {
                         variablesData[variableName] = {
                             "defaultValue": "",
@@ -310,7 +310,7 @@ function buildNewUI(thisObj) {
 
                     var variableSettings = variablesData[variableName];
 
-                    // Save the value based on which radio button is active
+                    
                     if (rdoDefault.value) {
                         variableSettings.defaultValue = inputFieldVariableValue.text;
                         variableSettings.active = false;
@@ -319,7 +319,7 @@ function buildNewUI(thisObj) {
                         variableSettings.active = true;
                     }
 
-                    // Save the updated settings back to the JSON file
+                    
                     variablesFile.open("w");
                     variablesFile.encoding = "UTF-8";
                     variablesFile.write(JSON.stringify(variablesData, null, 4));
@@ -328,7 +328,7 @@ function buildNewUI(thisObj) {
                     inputTextFieldVariableName.text = "Variable settings saved";
                     btnSave.image = doneIconFile;
 
-                    // Reset the text and icon back after mouseout
+                    
                     btnSave.addEventListener("mouseout", function resetIconAndText(event) {
                         inputTextFieldVariableName.text = originalTextFieldLabel;
                         btnSave.image = saveIconFile;
@@ -341,7 +341,7 @@ function buildNewUI(thisObj) {
         }
     };
 
-    // Add event listeners for radio buttons
+    
     rdoDefault.onClick = function() {
         if (variablesData && variablesData[inputFieldVariableName.text]) {
             var variableSettings = variablesData[inputFieldVariableName.text];
@@ -358,7 +358,7 @@ function buildNewUI(thisObj) {
         }
     };
 
-    // Display the window or panel
+    
     if (win instanceof Window) {
         win.center();
         win.show();

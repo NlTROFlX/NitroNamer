@@ -1,9 +1,9 @@
 (function() {
-    // Get the script's file and folder path
+    
     var scriptFile = new File($.fileName);
     var scriptFolderPath = scriptFile.path;
 
-    // Your existing tooltipsRU and tooltipsEU objects with added mode descriptions
+    
     var tooltipsRU = {
         "NitroNamer": {
             "tooltips": {
@@ -80,19 +80,19 @@
         }
     };
 
-    // Create the UI
+    
     var dialog = new Window("dialog", "NitroNamer");
     dialog.orientation = "column";
     dialog.alignChildren = ["fill", "top"];
-    dialog.spacing = 5; // Minimize spacing
-    dialog.margins = 10; // Minimize margins
+    dialog.spacing = 5; 
+    dialog.margins = 10; 
 
-    // Add the text label for the prompt
+    
     var lblPrompt = dialog.add("statictext", undefined, "Choose Tooltip Language");
     lblPrompt.alignment = ["fill", "center"];
 
     var languageGroup = dialog.add("group");
-    languageGroup.orientation = "row"; // Radio buttons on one line
+    languageGroup.orientation = "row"; 
     languageGroup.alignChildren = ["fill", "center"];
     languageGroup.spacing = 10;
     languageGroup.margins = 0;
@@ -100,14 +100,14 @@
     var rdoEnglish = languageGroup.add("radiobutton", undefined, "English");
     var rdoRussian = languageGroup.add("radiobutton", undefined, "Russian");
 
-    // Set default selection
+    
     rdoEnglish.value = true;
 
-    // Define the Confirm button before using it in the function
+    
     var btnConfirm = dialog.add("button", undefined, "Confirm");
-    btnConfirm.alignment = ["fill", "center"]; // Button full width
+    btnConfirm.alignment = ["fill", "center"]; 
 
-    // Now that all UI elements are defined, define the updateInterfaceText function
+    
     function updateInterfaceText() {
         if (rdoEnglish.value) {
             lblPrompt.text = "Tooltip Language";
@@ -118,28 +118,28 @@
         }
     }
 
-    // Event listeners to update interface text when language changes
+    
     rdoEnglish.onClick = updateInterfaceText;
     rdoRussian.onClick = updateInterfaceText;
 
-    updateInterfaceText(); // Initialize the text
+    updateInterfaceText(); 
 
     btnConfirm.onClick = function() {
         var selectedLanguage = rdoEnglish.value ? "English" : "Russian";
         var tooltipsData = rdoEnglish.value ? tooltipsEU : tooltipsRU;
-        //var fileName = "tooltips.json"; // We'll use a common file name
+        
 
-        // Define the path to the tooltips file
+        
         var tooltipsFilePath = scriptFolderPath + "/tooltips.json";
         var tooltipsFile = new File(tooltipsFilePath);
 
-        // Write the JSON data to the file
+        
         tooltipsFile.encoding = "UTF-8";
         tooltipsFile.open("w");
         tooltipsFile.write(JSON.stringify(tooltipsData, null, 4));
         tooltipsFile.close();
 
-        // Save the selected language in settings.json
+        
         var settingsFolderPath = scriptFolderPath;
         var settingsFilePath = settingsFolderPath + "/settings.json";
         var settingsFile = new File(settingsFilePath);
@@ -153,11 +153,11 @@
 
         writeJSONFile(settingsFilePath, settingsData);
 
-        // Close the dialog
+        
         dialog.close();
     };
 
-    // Utility functions to read and write JSON files
+    
     function readJSONFile(filePath) {
         var file = new File(filePath);
         var data = {};
@@ -181,7 +181,7 @@
         file.close();
     }
 
-    // Show the dialog
+    
     dialog.center();
     dialog.show();
 })();
