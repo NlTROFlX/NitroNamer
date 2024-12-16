@@ -6,7 +6,7 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1731597869501,
-            "usageFrequency": 1,
+            "usageFrequency": 2,
             "favoritesTemplate": false
         },
         "preset_3": {
@@ -15,7 +15,7 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1731588916628,
-            "usageFrequency": 1,
+            "usageFrequency": 2,
             "favoritesTemplate": true
         },
         "preset_2": {
@@ -24,7 +24,7 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1731588855979,
-            "usageFrequency": 3,
+            "usageFrequency": 4,
             "favoritesTemplate": true
         },
         "preset_1": {
@@ -33,20 +33,20 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1731588837777,
-            "usageFrequency": 4,
+            "usageFrequency": 5,
             "favoritesTemplate": false
         }
     },
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "T.i",
+        "template": "D(1):D(2):D(3)_Cd",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,
         "modeIndex": 0,
         "modeActive": true,
-        "selectedPresetTemplate": "(LayerName).i"
+        "selectedPresetTemplate": "(LayerPreComp).i"
     },
     "selectedLanguage": "Russian",
     "nameApply": {

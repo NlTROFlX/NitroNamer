@@ -2289,48 +2289,72 @@ function buildUI(thisObj) {
     var incrementValues = {};
 
     function replaceVariables(template, variables, originalName, layer, settings) {
+        // Разбиваем шаблон регулярного выражения на части, чтобы сделать код более читаемым
+        var regexParts = [
+            "\\(([^()]+)\\)",
+            "Df",
+            "Ec\\(([^()\\[\\]]+?)\\)",
+            "Ec",
+            "E\\(\\[([^\\[\\]]+)\\]\\)",
+            "E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+            "E",
+            "An\\(\\[([^\\[\\]]+)\\]\\)",
+            "An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+            "An",
+            "Lexp\\(\\[([^\\[\\]]+)\\]\\)",
+            "Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+            "Lexp",
+            "D\\(([^()\\[\\]]+)\\)",
+            "D",
+            "Fext\\(([^()\\[\\]]+)\\)",
+            "Fext",
+            "Ip",
+            "Op",
+            "Tm",
+            "Ar\\(([^()\\[\\]]+)\\)",
+            "Ar",
+            "Pn",
+            "Lpos",
+            "Lsc",
+            "Lrot",
+            "Lops",
+            "Lpnt\\(([^()\\[\\]]+)\\)",
+            "Lpnt",
+            "Cd\\(([^()\\[\\]]+)\\)",
+            "Cd",
+            "Lmc\\(\\[([^\\[\\]]+)\\]\\)",
+            "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+            "Lmc",
+            "Lmn\\(\\[([^\\[\\]]+)\\]\\)",
+            "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+            "Lmn",
+            "I\\(([^()\\[\\]]+)\\)",
+            "I",
+            "[A-Z]",
+            "i",
+            "S",
+            "W",
+            "H"
+        ];
+    
+        var regex = new RegExp(regexParts.join("|"), "g");
         var usedVariables = [];
         var result = template;
-
         if (template.match(/^\(([^()]+)\)$/)) {
             return template.match(/^\(([^()]+)\)$/)[1];
         }
-
-        var regex = /\(([^()]+)\)|Df|Ec\(([^()\[\]]+?)\)|Ec|E\(\[([^\[\]]+)\]\)|E\(([^()\[\]]+?)(?:\[(.*?)\])?\)|E|An\(\[([^\[\]]+)\]\)|An\(([^()\[\]]+?)(?:\[(.*?)\])?\)|An|Lexp\(\[([^\[\]]+)\]\)|Lexp\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lexp|D\(([^()\[\]]+)\)|D|Fext\(([^()\[\]]+)\)|Fext|Ip|Op|Tm|Ar\(([^()\[\]]+)\)|Ar|Pn|Lpos|Lsc|Lrot|Lops|Lpnt\(([^()\[\]]+)\)|Lpnt|Cd\(([^()\[\]]+)\)|Cd|Lmc\(\[([^\[\]]+)\]\)|Lmc\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lmc|Lmn\(\[([^\[\]]+)\]\)|Lmn\(([^()\[\]]+?)(?:\[(.*?)\])?\)|Lmn|I\(([^()\[\]]+)\)|I|[A-Z]|i|S|W|H/g;
-
         var incrementValues = {};
-
-        result = result.replace(regex, function (match,
-            group,
-            ecFilters,
-            eSeparatorOnly, eEffects, eSeparator,
-            anSeparatorOnly, anProps, anSeparator,
-            lexpSeparatorOnly, lexpProps, lexpSeparator,
-            durationFormat,
-            customFext,
-            customAr,
-            parentIndex,
-            dateFormat,
-            lmcSeparatorOnly, lmcFilters, lmcSeparator,
-            lmnSeparatorOnly, lmnFilters, lmnSeparator,
-            customI
-        ) {
+        result = result.replace(regex, function(match, group, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, customI) {
             var value;
-
             if (group !== undefined) {
-
                 return group;
             } else if (eSeparatorOnly !== undefined) {
-
                 value = getEffectNames(layer, settings, null, eSeparatorOnly);
             } else if (eEffects !== undefined) {
-
                 value = getEffectNames(layer, settings, eEffects, eSeparator);
             } else if (match === 'E') {
-
                 value = getEffectNames(layer, settings);
             } else if (customI !== undefined) {
-
                 var uniqueKey = "I(" + customI + ")_" + usedVariables.length;
                 var initialValue = parseInt(customI, 10);
                 if (!incrementValues[uniqueKey]) {
@@ -2340,124 +2364,85 @@ function buildUI(thisObj) {
                 usedVariables.push(uniqueKey);
                 return value;
             } else if (match === 'I') {
-
                 value = localIndex++;
             } else if (anSeparatorOnly !== undefined) {
-
                 value = getAnimatedProperties(layer, settings, null, anSeparatorOnly);
             } else if (anProps !== undefined) {
-
                 value = getAnimatedProperties(layer, settings, anProps, anSeparator);
             } else if (match === 'An') {
-
                 value = getAnimatedProperties(layer, settings);
             } else if (lexpSeparatorOnly !== undefined) {
-
                 value = getExpressionControlledProperties(layer, settings, null, lexpSeparatorOnly);
             } else if (lexpProps !== undefined) {
-
                 value = getExpressionControlledProperties(layer, settings, lexpProps, lexpSeparator);
             } else if (match === 'Lexp') {
-
                 value = getExpressionControlledProperties(layer, settings);
             } else if (match === 'Fext') {
-
                 value = variables['Fext'];
             } else if (lmnSeparatorOnly !== undefined) {
-
                 value = getMaskNames(layer, settings, null, lmnSeparatorOnly);
             } else if (lmnFilters !== undefined) {
-
                 value = getMaskNames(layer, settings, lmnFilters, lmnSeparator);
             } else if (match === 'Lmn') {
-
                 value = getMaskNames(layer, settings);
             } else if (lmcSeparatorOnly !== undefined) {
-
                 value = getMaskCount(layer, settings, null, lmcSeparatorOnly);
             } else if (lmcFilters !== undefined) {
-
                 value = getMaskCount(layer, settings, lmcFilters, lmcSeparator);
             } else if (match === 'Lmc') {
-
                 value = getMaskCount(layer, settings);
             } else if (customAr !== undefined) {
-
                 value = getAspectRatio(layer, settings, true);
             } else if (match === 'Ar') {
-
                 value = variables['Ar'];
             } else if (durationFormat !== undefined) {
-
                 value = typeof variables['D'] === 'function' ? variables['D'](durationFormat) : variables['D'];
             } else if (match === 'D') {
-
                 value = typeof variables['D'] === 'function' ? variables['D']() : variables['D'];
             } else if (match === 'Df') {
-
                 value = variables['Df'];
             } else if (ecFilters !== undefined) {
-
                 value = getEffectsCount(layer, settings, ecFilters);
             } else if (match === 'Ec') {
-
                 value = getEffectsCount(layer, settings);
             } else if (match === 'Ip') {
-
                 value = variables['Ip'];
             } else if (match === 'Op') {
-
                 value = variables['Op'];
             } else if (match === 'Tm') {
-
                 value = variables['Tm'];
             } else if (match === 'Pn') {
-
                 value = variables['Pn'];
             } else if (match === 'Lpos') {
-
                 value = variables['Lpos'];
             } else if (match === 'Lsc') {
-
                 value = variables['Lsc'];
             } else if (match === 'Lrot') {
-
                 value = variables['Lrot'];
             } else if (match === 'Lops') {
-
                 value = variables['Lops'];
             } else if (match === 'Lpnt') {
-
                 value = variables['Lpnt'];
             } else if (parentIndex !== undefined) {
-
                 value = variables['LpntIndex'];
             } else if (dateFormat !== undefined) {
-
                 value = getCurrentDate(dateFormat);
             } else if (match === 'Cd') {
-
                 value = getCurrentDate();
             } else if (/[A-Z]/.test(match)) {
-
                 value = variables[match];
             } else if (match === 'i') {
-
                 value = variables['i'];
             } else if (match === 'S') {
-
                 value = variables['S'];
             } else if (match === 'W') {
-
                 value = variables['W'];
             } else if (match === 'H') {
-
                 value = variables['H'];
             } else {
-
                 value = '';
             }
-
+    
             if (value !== undefined && value !== "") {
                 usedVariables.push(match);
                 return value;
@@ -2465,11 +2450,9 @@ function buildUI(thisObj) {
                 return "";
             }
         });
-
         if (result === originalName || result === "") {
             return originalName;
         }
-
         return result;
     }
 
