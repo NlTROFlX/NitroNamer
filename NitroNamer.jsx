@@ -2303,7 +2303,7 @@ function buildUI(thisObj) {
         var filterLower = filter.toLowerCase().trim();
         var layerTypeLower = layerType.toLowerCase();
         
-        // Соотнесение фильтров с типами слоев
+        
         if (
             (filterLower === "shape"   && layerTypeLower === "shape")     ||
             (filterLower === "text"    && layerTypeLower === "text")      ||
@@ -2323,7 +2323,7 @@ function buildUI(thisObj) {
     }
 
     function replaceVariables(template, variables, originalName, layer, settings) {
-        // Разбиваем шаблон регулярного выражения на части, чтобы сделать код более читаемым
+        
         var regexParts = [
             "\\(([^()]+)\\)",
             "T\\(([^()\\[\\]]+)\\)",
@@ -2384,9 +2384,9 @@ function buildUI(thisObj) {
             if (group !== undefined) {
                 return group;
             } else if (tFilter !== undefined) {
-                // Пользователь указал фильтр для T(...)
+                
                 var layerType = variables['T']; 
-                // Вызываем вынесенную функцию
+                
                 value = filterLayerType(layerType, tFilter);
                 return value;
             } else if (match === 'T') {
@@ -2465,22 +2465,22 @@ function buildUI(thisObj) {
                 value = variables['Lrot'];
             } else if (match === 'Lops') {
                 value = variables['Lops'];
-            } else if (parentIndex !== undefined) { // Случай Lpnt(...) с аргументом
-                // Здесь parentIndex — аргумент, вытащенный из Lpnt(что-то)
+            } else if (parentIndex !== undefined) { 
+                
                 if (parentIndex === 'i') {
-                    // Старый режим: Lpnt(i) - возвращаем индекс родительского слоя
+                    
                     value = variables['LpntIndex'];
                 } else if (!isNaN(parseInt(parentIndex, 10))) {
-                    // Новый режим: Lpnt(число)
-                    // Например, Lpnt(1) или Lpnt(2)
+                    
+                    
                     var depth = parseInt(parentIndex, 10);
                     value = getParentNameAtDepth(layer, depth);
                 } else {
-                    // Если непонятный аргумент, возвращаем верхнего родителя по умолчанию
+                    
                     value = variables['Lpnt'];
                 }
             } else if (match === 'Lpnt') {
-                // Без аргументов: возвращаем имя верхнего родителя
+                
                 value = variables['Lpnt'];
             } else if (dateFormat !== undefined) {
                 value = getCurrentDate(dateFormat);
