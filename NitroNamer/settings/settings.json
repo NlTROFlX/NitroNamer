@@ -39,14 +39,14 @@
     },
     "currentSettings": {
         "UICompact": false,
-        "allLayers": true,
-        "template": "D(1):D(2):D(3)_Cd",
+        "allLayers": false,
+        "template": "Lpnt(3)_Lpnt(i)",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,
         "modeIndex": 0,
         "modeActive": true,
-        "selectedPresetTemplate": "(LayerPreComp).i"
+        "selectedPresetTemplate": "(LayerName).i"
     },
     "selectedLanguage": "Russian",
     "nameApply": {

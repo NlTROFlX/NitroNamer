@@ -2288,6 +2288,16 @@ function buildUI(thisObj) {
 
     var incrementValues = {};
 
+    function getParentNameAtDepth(layer, depth) {
+        var currentLayer = layer;
+        var steps = 0;
+        while (currentLayer.parent && steps < depth) {
+            currentLayer = currentLayer.parent;
+            steps++;
+        }
+        return currentLayer.name;
+    }    
+
     function replaceVariables(template, variables, originalName, layer, settings) {
         // Разбиваем шаблон регулярного выражения на части, чтобы сделать код более читаемым
         var regexParts = [
@@ -2421,10 +2431,23 @@ function buildUI(thisObj) {
                 value = variables['Lrot'];
             } else if (match === 'Lops') {
                 value = variables['Lops'];
+            } else if (parentIndex !== undefined) { // Случай Lpnt(...) с аргументом
+                // Здесь parentIndex — аргумент, вытащенный из Lpnt(что-то)
+                if (parentIndex === 'i') {
+                    // Старый режим: Lpnt(i) - возвращаем индекс родительского слоя
+                    value = variables['LpntIndex'];
+                } else if (!isNaN(parseInt(parentIndex, 10))) {
+                    // Новый режим: Lpnt(число)
+                    // Например, Lpnt(1) или Lpnt(2)
+                    var depth = parseInt(parentIndex, 10);
+                    value = getParentNameAtDepth(layer, depth);
+                } else {
+                    // Если непонятный аргумент, возвращаем верхнего родителя по умолчанию
+                    value = variables['Lpnt'];
+                }
             } else if (match === 'Lpnt') {
+                // Без аргументов: возвращаем имя верхнего родителя
                 value = variables['Lpnt'];
-            } else if (parentIndex !== undefined) {
-                value = variables['LpntIndex'];
             } else if (dateFormat !== undefined) {
                 value = getCurrentDate(dateFormat);
             } else if (match === 'Cd') {
