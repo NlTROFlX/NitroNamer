@@ -2296,12 +2296,37 @@ function buildUI(thisObj) {
             steps++;
         }
         return currentLayer.name;
-    }    
+    }
+
+    function filterLayerType(layerType, filter) {
+        if (!layerType) return "";
+        var filterLower = filter.toLowerCase().trim();
+        var layerTypeLower = layerType.toLowerCase();
+        
+        // Соотнесение фильтров с типами слоев
+        if (
+            (filterLower === "shape"   && layerTypeLower === "shape")     ||
+            (filterLower === "text"    && layerTypeLower === "text")      ||
+            (filterLower === "null"    && layerTypeLower === "null")      ||
+            (filterLower === "adj"     && layerTypeLower === "adjustment")||
+            (filterLower === "footage" && layerTypeLower === "footage")   ||
+            (filterLower === "solid"   && layerTypeLower === "solid")     ||
+            (filterLower === "precomp" && layerTypeLower === "pre-comp")  ||
+            (filterLower === "camera"  && layerTypeLower === "camera")    ||
+            (filterLower === "light"   && layerTypeLower === "light")     ||
+            (filterLower === "audio"   && layerTypeLower === "audio")
+        ) {
+            return layerType;
+        } else {
+            return "";
+        }
+    }
 
     function replaceVariables(template, variables, originalName, layer, settings) {
         // Разбиваем шаблон регулярного выражения на части, чтобы сделать код более читаемым
         var regexParts = [
             "\\(([^()]+)\\)",
+            "T\\(([^()\\[\\]]+)\\)",
             "Df",
             "Ec\\(([^()\\[\\]]+?)\\)",
             "Ec",
@@ -2354,10 +2379,19 @@ function buildUI(thisObj) {
             return template.match(/^\(([^()]+)\)$/)[1];
         }
         var incrementValues = {};
-        result = result.replace(regex, function(match, group, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, customI) {
+        result = result.replace(regex, function(match, group, tFilter, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, customI) {
             var value;
             if (group !== undefined) {
                 return group;
+            } else if (tFilter !== undefined) {
+                // Пользователь указал фильтр для T(...)
+                var layerType = variables['T']; 
+                // Вызываем вынесенную функцию
+                value = filterLayerType(layerType, tFilter);
+                return value;
+            } else if (match === 'T') {
+                value = variables['T'];
+                return value !== undefined ? value : "";
             } else if (eSeparatorOnly !== undefined) {
                 value = getEffectNames(layer, settings, null, eSeparatorOnly);
             } else if (eEffects !== undefined) {

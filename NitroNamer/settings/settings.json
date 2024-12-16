@@ -6,7 +6,7 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1731597869501,
-            "usageFrequency": 2,
+            "usageFrequency": 3,
             "favoritesTemplate": false
         },
         "preset_3": {
@@ -39,8 +39,8 @@
     },
     "currentSettings": {
         "UICompact": false,
-        "allLayers": false,
-        "template": "Lpnt(3)_Lpnt(i)",
+        "allLayers": true,
+        "template": "T(Footage).i",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,
