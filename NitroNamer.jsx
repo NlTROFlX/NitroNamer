@@ -2307,11 +2307,23 @@ function buildUI(thisObj) {
             var comp = proj.activeItem;
             var selectedLayers = comp.selectedLayers;
             if (selectedLayers.length > 0) {
+                // Берём последний выделенный слой
                 var layer = selectedLayers[selectedLayers.length - 1];
                 var selectedProperties = layer.selectedProperties;
                 if (selectedProperties.length > 0) {
-                    var lastSelectedProperty = selectedProperties[selectedProperties.length - 1];
-                    return lastSelectedProperty.name;
+                    var propertyNames = [];
+                    for (var i = 0; i < selectedProperties.length; i++) {
+                        var prop = selectedProperties[i];
+                        // Проверяем, что это не группа, а именно свойство
+                        if (prop.propertyType === PropertyType.PROPERTY) {
+                            propertyNames.push(prop.name);
+                        }
+                    }
+                    if (propertyNames.length > 0) {
+                        return propertyNames.join(", ");
+                    } else {
+                        return "NoSelectedProperty";
+                    }
                 } else {
                     return "NoSelectedProperty";
                 }
@@ -2322,6 +2334,7 @@ function buildUI(thisObj) {
             return "NoActiveComp";
         }
     }    
+    
 
     function filterLayerType(layerType, filter) {
         if (!layerType) return "";
@@ -2629,7 +2642,8 @@ function buildUI(thisObj) {
                             LpntIndex: getLayerParentIndex(v),
                             Lpnt: getImmediateParentName(v),
                             Lmc: getMaskCount(v, variableSettings),
-                            Lmn: getMaskNames(v, variableSettings)
+                            Lmn: getMaskNames(v, variableSettings),
+                            attr: getSelectedPropertyName()
                         };
     
                         var g = replaceVariables(template, d, v.name, v, variableSettings);
