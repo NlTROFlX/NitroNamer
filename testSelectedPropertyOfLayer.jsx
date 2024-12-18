@@ -1,60 +1,77 @@
-// Функция для создания графического интерфейса
 function createUI(thisObj) {
     var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "Выбранные свойства", undefined, {resizeable: true});
     win.orientation = "column";
     win.alignChildren = ["fill", "top"];
 
-    // Список для отображения выбранных свойств
     var propertyList = win.add("listbox", undefined, [], {multiselect: false});
     propertyList.preferredSize = [400, 300];
 
-    // Кнопка для обновления списка свойств
     var refreshButton = win.add("button", undefined, "Обновить");
-
-    // Обработчик нажатия кнопки
-    refreshButton.onClick = function() {
+    refreshButton.onClick = function () {
         updatePropertyList(propertyList);
     };
 
-    win.onResizing = win.onResize = function() {
+    win.onResizing = win.onResize = function () {
         win.layout.resize();
     };
 
     return win;
 }
 
-// Функция для обновления списка свойств
+
+function getPropertyHierarchy(property) {
+    var hierarchy = [];
+    var currentProperty = property;
+
+    while (currentProperty) {
+        hierarchy.unshift(currentProperty.name); 
+        currentProperty = currentProperty.propertyGroup(); 
+    }
+
+    return hierarchy.join(" > "); 
+}
+
 function updatePropertyList(propertyList) {
     propertyList.removeAll();
 
-    // Проверяем, является ли активный элемент композицией
     if (app.project.activeItem instanceof CompItem) {
         var comp = app.project.activeItem;
         var selectedLayers = comp.selectedLayers;
 
-        // Проходим по каждому выбранному слою
-        for (var i = 0; i < selectedLayers.length; i++) {
-            var layer = selectedLayers[i];
+        if (selectedLayers.length > 0) {
+            var layer = selectedLayers[selectedLayers.length - 1]; 
             var selectedProperties = layer.selectedProperties;
 
-            // Если нет выбранных свойств, отображаем сообщение
             if (selectedProperties.length === 0) {
                 propertyList.add("item", "Слой: " + layer.name + " - Нет выбранных свойств");
             } else {
-                // Проходим по каждому выбранному свойству
                 for (var j = 0; j < selectedProperties.length; j++) {
                     var property = selectedProperties[j];
-                    var propertyValue = (property.value !== undefined) ? property.value.toString() : "N/A";
-                    propertyList.add("item", "Слой: " + layer.name + ", Свойство: " + property.name + ", Значение: " + propertyValue);
+                    var hierarchy = getPropertyHierarchy(property); 
+
+                    
+                    var propertyValue;
+                    try {
+                        if (property.propertyValueType !== PropertyValueType.CUSTOM_VALUE && property.value !== undefined) {
+                            propertyValue = property.value.toString();
+                        } else {
+                            propertyValue = "N/A";
+                        }
+                    } catch (e) {
+                        propertyValue = "Недоступно"; 
+                    }
+
+                    propertyList.add("item", "Слой: " + layer.name + ", Путь: " + hierarchy + ", Значение: " + propertyValue);
                 }
             }
+        } else {
+            propertyList.add("item", "Нет выбранных слоёв.");
         }
     } else {
         propertyList.add("item", "Активный элемент не является композицией.");
     }
 }
 
-// Основная функция
 function main(thisObj) {
     var ui = createUI(thisObj);
     if (ui instanceof Window) {
