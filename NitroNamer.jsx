@@ -1,3 +1,5 @@
+var currentAttr = "";
+
 function buildUI(thisObj) {
 
     var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "NitroNamer 2024.4 - dev", undefined, { resizeable: true });
@@ -1655,7 +1657,8 @@ function buildUI(thisObj) {
             "LpntIndex": getLayerParentIndex(layer),
             "Cd": getCurrentDate(),
             "Lmc": getMaskCount(layer, settings),
-            "Lmn": getMaskNames(layer, settings)
+            "Lmn": getMaskNames(layer, settings),
+            "attr": getSelectedPropertyName()
         };
 
         if (briefly && !isNaN(parseFloat(variables.F))) {
@@ -2298,6 +2301,28 @@ function buildUI(thisObj) {
         return currentLayer.name;
     }
 
+    function getSelectedPropertyName() {
+        var proj = app.project;
+        if (proj && proj.activeItem instanceof CompItem) {
+            var comp = proj.activeItem;
+            var selectedLayers = comp.selectedLayers;
+            if (selectedLayers.length > 0) {
+                var layer = selectedLayers[selectedLayers.length - 1];
+                var selectedProperties = layer.selectedProperties;
+                if (selectedProperties.length > 0) {
+                    var lastSelectedProperty = selectedProperties[selectedProperties.length - 1];
+                    return lastSelectedProperty.name;
+                } else {
+                    return "NoSelectedProperty";
+                }
+            } else {
+                return "NoSelectedLayers";
+            }
+        } else {
+            return "NoActiveComp";
+        }
+    }    
+
     function filterLayerType(layerType, filter) {
         if (!layerType) return "";
         var filterLower = filter.toLowerCase().trim();
@@ -2365,6 +2390,7 @@ function buildUI(thisObj) {
             "Lmn",
             "I\\(([^()\\[\\]]+)\\)",
             "I",
+            "attr",
             "[A-Z]",
             "i",
             "S",
@@ -2391,7 +2417,8 @@ function buildUI(thisObj) {
                 return value;
             } else if (match === 'T') {
                 value = variables['T'];
-                return value !== undefined ? value : "";
+            } else if (match === "attr") {
+                value = variables['attr'];
             } else if (eSeparatorOnly !== undefined) {
                 value = getEffectNames(layer, settings, null, eSeparatorOnly);
             } else if (eEffects !== undefined) {
