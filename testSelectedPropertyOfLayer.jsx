@@ -18,17 +18,9 @@ function createUI(thisObj) {
     return win;
 }
 
-
-function getPropertyHierarchy(property) {
-    var hierarchy = [];
-    var currentProperty = property;
-
-    while (currentProperty) {
-        hierarchy.unshift(currentProperty.name); 
-        currentProperty = currentProperty.propertyGroup(); 
-    }
-
-    return hierarchy.join(" > "); 
+// Функция для получения имени последнего элемента иерархии
+function getLastElementName(property) {
+    return property.name; // Возвращает только имя текущего свойства или эффекта
 }
 
 function updatePropertyList(propertyList) {
@@ -39,30 +31,18 @@ function updatePropertyList(propertyList) {
         var selectedLayers = comp.selectedLayers;
 
         if (selectedLayers.length > 0) {
-            var layer = selectedLayers[selectedLayers.length - 1]; 
+            var layer = selectedLayers[selectedLayers.length - 1]; // Берём только последний выбранный слой
             var selectedProperties = layer.selectedProperties;
 
             if (selectedProperties.length === 0) {
-                propertyList.add("item", "Слой: " + layer.name + " - Нет выбранных свойств");
+                propertyList.add("item", "Слой: " + layer.name + " - Нет выбранных атрибутов");
             } else {
-                for (var j = 0; j < selectedProperties.length; j++) {
-                    var property = selectedProperties[j];
-                    var hierarchy = getPropertyHierarchy(property); 
+                // Берём только последнее выбранное свойство или эффект
+                var lastSelectedProperty = selectedProperties[selectedProperties.length - 1];
+                var lastElementName = getLastElementName(lastSelectedProperty); // Получаем имя последнего элемента
 
-                    
-                    var propertyValue;
-                    try {
-                        if (property.propertyValueType !== PropertyValueType.CUSTOM_VALUE && property.value !== undefined) {
-                            propertyValue = property.value.toString();
-                        } else {
-                            propertyValue = "N/A";
-                        }
-                    } catch (e) {
-                        propertyValue = "Недоступно"; 
-                    }
-
-                    propertyList.add("item", "Слой: " + layer.name + ", Путь: " + hierarchy + ", Значение: " + propertyValue);
-                }
+                // Добавляем только имя последнего элемента в список
+                propertyList.add("item", "Слой: " + layer.name + ", Атрибут: " + lastElementName);
             }
         } else {
             propertyList.add("item", "Нет выбранных слоёв.");
