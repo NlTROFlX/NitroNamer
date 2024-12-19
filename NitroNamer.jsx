@@ -2421,17 +2421,17 @@ function buildUI(thisObj) {
             "Lpnt",
             "Cd\\(([^()\\[\\]]+)\\)",
             "Cd",
-            "Lmc\\(\\[([^\\[\\]]+)\\]\\)",
-            "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+            "Lmc\\(\\[([^\\[\\]]+)\\]\\)", // Lmc с фильтром типа []
+            "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", // Lmc(...)
             "Lmc",
-            "Lmn\\(\\[([^\\[\\]]+)\\]\\)",
-            "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+            "Lmn\\(\\[([^\\[\\]]+)\\]\\)", // Lmn с фильтром типа []
+            "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", // Lmn(...)
             "Lmn",
             "I\\(([^()\\[\\]]+)\\)",
             "I",
             "attr",
-            "e(\\d+)", // Переменные эффектов
-            "m(\\d+)", // Добавляем переменные масок
+            "e(\\d+)",
+            "m(\\d+)", // Переменные для масок m1, m2, ...
             "[A-Z]",
             "i",
             "S",
@@ -2441,6 +2441,8 @@ function buildUI(thisObj) {
     
         var regex = new RegExp(regexParts.join("|"), "g");
         var usedVariables = [];
+        var nthEffectRegex = /e(\d+)/g;
+        var nthMaskRegex = /m(\d+)/g;
     
         var result = template;
         if (template.match(/^\(([^()]+)\)$/)) {
@@ -2468,10 +2470,14 @@ function buildUI(thisObj) {
                 value = variables['attr'];
             } else if (ecFilters !== undefined) {
                 // Ec(...)
-                var nthEffectRegex = /e(\d+)/g;
                 ecFilters = ecFilters.replace(nthEffectRegex, function(fullMatch, number) {
                     var effectNumber = parseInt(number, 10);
                     return getNthEffectName(layer, effectNumber, settings);
+                });
+                // Маски внутри Ec логически не нужны, но если вдруг:
+                ecFilters = ecFilters.replace(nthMaskRegex, function(fullMatch, number) {
+                    var maskNumber = parseInt(number, 10);
+                    return getNthMaskName(layer, maskNumber, settings);
                 });
                 value = getEffectsCount(layer, settings, ecFilters);
             } else if (match === 'Ec') {
@@ -2480,20 +2486,23 @@ function buildUI(thisObj) {
                 value = getEffectNames(layer, settings, null, eSeparatorOnly);
             } else if (eEffects !== undefined) {
                 // E(...)
-                var nthEffectRegex = /e(\d+)/g;
                 eEffects = eEffects.replace(nthEffectRegex, function(fullMatch, number) {
                     var effectNumber = parseInt(number, 10);
                     return getNthEffectName(layer, effectNumber, settings);
+                });
+                eEffects = eEffects.replace(nthMaskRegex, function(fullMatch, number) {
+                    var maskNumber = parseInt(number, 10);
+                    return getNthMaskName(layer, maskNumber, settings);
                 });
                 value = getEffectNames(layer, settings, eEffects, eSeparator);
             } else if (match === 'E') {
                 value = getEffectNames(layer, settings);
             } else if (nthEffectIndex !== undefined) {
-                // Переменные e1, e2 ...
+                // e1, e2 ...
                 var effectNumber = parseInt(nthEffectIndex, 10);
                 value = getNthEffectName(layer, effectNumber, settings);
             } else if (nthMaskIndex !== undefined) {
-                // Переменные m1, m2 ...
+                // m1, m2 ...
                 var maskNumber = parseInt(nthMaskIndex, 10);
                 value = getNthMaskName(layer, maskNumber, settings);
             } else if (customI !== undefined) {
@@ -2522,14 +2531,34 @@ function buildUI(thisObj) {
             } else if (match === 'Fext') {
                 value = variables['Fext'];
             } else if (lmnSeparatorOnly !== undefined) {
-                value = getMaskNames(layer, settings, null, lmnSeparatorOnly);
+                // Lmn([filters]) - заменяем m1, m2...
+                lmnSeparatorOnly = lmnSeparatorOnly.replace(nthMaskRegex, function(fullMatch, number) {
+                    var maskNumber = parseInt(number, 10);
+                    return getNthMaskName(layer, maskNumber, settings);
+                });
+                value = getMaskNames(layer, settings, lmnSeparatorOnly, null);
             } else if (lmnFilters !== undefined) {
+                // Lmn(...)
+                lmnFilters = lmnFilters.replace(nthMaskRegex, function(fullMatch, number) {
+                    var maskNumber = parseInt(number, 10);
+                    return getNthMaskName(layer, maskNumber, settings);
+                });
                 value = getMaskNames(layer, settings, lmnFilters, lmnSeparator);
             } else if (match === 'Lmn') {
                 value = getMaskNames(layer, settings);
             } else if (lmcSeparatorOnly !== undefined) {
-                value = getMaskCount(layer, settings, null, lmcSeparatorOnly);
+                // Lmc([filters]) - заменяем m1, m2...
+                lmcSeparatorOnly = lmcSeparatorOnly.replace(nthMaskRegex, function(fullMatch, number) {
+                    var maskNumber = parseInt(number, 10);
+                    return getNthMaskName(layer, maskNumber, settings);
+                });
+                value = getMaskCount(layer, settings, lmcSeparatorOnly, null);
             } else if (lmcFilters !== undefined) {
+                // Lmc(...)
+                lmcFilters = lmcFilters.replace(nthMaskRegex, function(fullMatch, number) {
+                    var maskNumber = parseInt(number, 10);
+                    return getNthMaskName(layer, maskNumber, settings);
+                });
                 value = getMaskCount(layer, settings, lmcFilters, lmcSeparator);
             } else if (match === 'Lmc') {
                 value = getMaskCount(layer, settings);
@@ -2741,7 +2770,6 @@ function buildUI(thisObj) {
         }
     }
     
-
     function getEffectNames(layer, settings, effectsFilter, customSeparator) {
         var effectNames = [];
         var effectNamesFilter = null;
