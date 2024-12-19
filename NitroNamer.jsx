@@ -2344,10 +2344,10 @@ function buildUI(thisObj) {
 
     function getNthMaskName(layer, n, settings) {
         if (layer.mask && layer.mask.numProperties >= n) {
-            // Возвращаем имя n-й маски
+            
             return layer.mask.property(n).name;
         } else {
-            // Маска с таким индексом отсутствует, используем логику Lmn
+            
             if (settings && settings.Lmn) {
                 return settings.Lmn.active ? settings.Lmn.customValue : settings.Lmn.defaultValue;
             } else {
@@ -2382,61 +2382,61 @@ function buildUI(thisObj) {
 
     function replaceVariables(template, variables, originalName, layer, settings) {
         var result = template;
-        // В шаблоне могут быть переменные вида:
-        // ( ... ), T(...), D(...), An(...), Lexp(...), E(...), Ec(...), Lmn(...), Lmc(...)
-        // а также простые переменные T, I, i, S, W, H, attr и т.д.
-        //
-        // Список шаблонов:
-        // (group), T(filter), D(format), An([props][separator]), E([effects][separator]), Lexp([props][separator])
-        // Fext(extension), Ar([filter]), Ip, Op, Tm, Pn, Lpos, Lsc, Lrot, Lops, Lpnt(depth or i), Cd(format)
-        // Lmc([maskFilter][separator]), Lmn([maskFilter][separator])
-        // e1, e2 ... для E/Ec, m1, m2 ... для Lmn/Lmc, attr для выбранных свойств
+        
+        
+        
+        
+        
+        
+        
+        
+        
     
         var nthEffectRegex = /e(\d+)/g;
         var nthMaskRegex = /m(\d+)/g;
     
-        // Основной RegExp для поиска всех возможных шаблонов
+        
         var regex = new RegExp([
-            "\\(([^()]+)\\)",              // ( ... )
-            "T\\(([^()\\[\\]]+)\\)",       // T(...)
-            "Df",                          // Df
-            "Ec\\(([^()\\[\\]]+?)\\)",     // Ec(...)
-            "Ec",                          // Ec
-            "E\\(\\[([^\\[\\]]+)\\]\\)",  // E([...])
-            "E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", // E(...)
-            "E",                           // E
-            "An\\(\\[([^\\[\\]]+)\\]\\)", // An([...])
-            "An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", // An(...)
-            "An",                          // An
-            "Lexp\\(\\[([^\\[\\]]+)\\]\\)", // Lexp([...])
-            "Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", // Lexp(...)
-            "Lexp",                        // Lexp
-            "D\\(([^()\\[\\]]+)\\)",       // D(...)
-            "D",                           // D
-            "Fext\\(([^()\\[\\]]+)\\)",    // Fext(...)
-            "Fext",                        // Fext
-            "Ip", "Op", "Tm",              // Ip, Op, Tm
-            "Ar\\(([^()\\[\\]]+)\\)",      // Ar(...)
-            "Ar",                          // Ar
+            "\\(([^()]+)\\)",              
+            "T\\(([^()\\[\\]]+)\\)",       
+            "Df",                          
+            "Ec\\(([^()\\[\\]]+?)\\)",     
+            "Ec",                          
+            "E\\(\\[([^\\[\\]]+)\\]\\)",  
+            "E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", 
+            "E",                           
+            "An\\(\\[([^\\[\\]]+)\\]\\)", 
+            "An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", 
+            "An",                          
+            "Lexp\\(\\[([^\\[\\]]+)\\]\\)", 
+            "Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", 
+            "Lexp",                        
+            "D\\(([^()\\[\\]]+)\\)",       
+            "D",                           
+            "Fext\\(([^()\\[\\]]+)\\)",    
+            "Fext",                        
+            "Ip", "Op", "Tm",              
+            "Ar\\(([^()\\[\\]]+)\\)",      
+            "Ar",                          
             "Pn", "Lpos", "Lsc", "Lrot", "Lops",
-            "Lpnt\\(([^()\\[\\]]+)\\)",    // Lpnt(...)
-            "Lpnt",                        // Lpnt
-            "Cd\\(([^()\\[\\]]+)\\)",      // Cd(...)
-            "Cd",                          // Cd
-            "Lmc\\(\\[([^\\[\\]]+)\\]\\)", // Lmc([...])
-            "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", // Lmc(...)
-            "Lmc",                         // Lmc
-            "Lmn\\(\\[([^\\[\\]]+)\\]\\)", // Lmn([...])
-            "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", // Lmn(...)
-            "Lmn",                         // Lmn
-            "I\\(([^()\\[\\]]+)\\)",       // I(...)
-            "I",                           // I
-            "attr",                        // attr
-            "e(\\d+)",                     // e1, e2...
-            "m(\\d+)",                     // m1, m2...
-            "[A-Z]",                       // A single capital letter: T, S, W, H ...
-            "i",                           // i
-            "S", "W", "H"                  // S, W, H
+            "Lpnt\\(([^()\\[\\]]+)\\)",    
+            "Lpnt",                        
+            "Cd\\(([^()\\[\\]]+)\\)",      
+            "Cd",                          
+            "Lmc\\(\\[([^\\[\\]]+)\\]\\)", 
+            "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", 
+            "Lmc",                         
+            "Lmn\\(\\[([^\\[\\]]+)\\]\\)", 
+            "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", 
+            "Lmn",                         
+            "I\\(([^()\\[\\]]+)\\)",       
+            "I",                           
+            "attr",                        
+            "e(\\d+)",                     
+            "m(\\d+)",                     
+            "[A-Z]",                       
+            "i",                           
+            "S", "W", "H"                  
         ].join("|"), "g");
     
         var usedVariables = {};
@@ -2456,17 +2456,17 @@ function buildUI(thisObj) {
         ) {
             var value;
     
-            // Прежде чем вернуть значение, обрабатываем специфические случаи
-            // E, Ec: e1... заменяются на конкретные эффекты
-            // Lmn, Lmc: m1... заменяются на конкретные маски
-            // Теперь для An(...) и Lexp(...): attr внутри аргументов должен заменяться на variables['attr']
+            
+            
+            
+            
     
-            // Подготовим подстановки для attr внутри anProps, anSeparatorOnly, lexpProps, lexpSeparatorOnly если они определены
+            
             if (anSeparatorOnly !== undefined) {
                 anSeparatorOnly = anSeparatorOnly.replace(/attr/g, variables['attr']);
             }
             if (anProps !== undefined) {
-                // Заменяем attr на значение переменной
+                
                 anProps = anProps.replace(/attr/g, variables['attr']);
             }
             if (lexpSeparatorOnly !== undefined) {
@@ -2476,10 +2476,10 @@ function buildUI(thisObj) {
                 lexpProps = lexpProps.replace(/attr/g, variables['attr']);
             }
     
-            // Аналогично для ecFilters, lmnFilters, lmcFilters, если нужно, но пользователь просил только для An и Lexp.
-            // Однако, если вы захотите расширить, можно сделать замену attr и там.
+            
+            
     
-            // Применяем замены nthEffectRegex / nthMaskRegex при необходимости
+            
             if (ecFilters !== undefined) {
                 ecFilters = ecFilters.replace(nthEffectRegex, function(fullMatch, number) {
                     var effectNumber = parseInt(number, 10);
@@ -2541,9 +2541,9 @@ function buildUI(thisObj) {
                 });
             }
     
-            // Обработка каждого совпадения
+            
             if (group !== undefined) {
-                // ( ... ) без всяких идентификаторов, просто вернуть содержимое
+                
                 return group;
             } else if (tFilter !== undefined) {
                 var layerType = variables['T'];
@@ -2648,7 +2648,7 @@ function buildUI(thisObj) {
                 var maskNumber = parseInt(nthMaskIndex, 10);
                 value = getNthMaskName(layer, maskNumber, settings);
             } else if (/[A-Z]/.test(match)) {
-                value = variables[match]; // Для одиночных символов A-Z
+                value = variables[match]; 
             } else if (match === 'i') {
                 value = variables['i'];
             } else if (match === 'S') {
