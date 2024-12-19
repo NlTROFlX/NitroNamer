@@ -11,15 +11,15 @@
 *
 **************************************************************************************************/
 
-// This is the JavaScript code for bridging to native functionality
-// See CEPEngine_extensions.cpp for implementation of native methods.
-//
-// Note: So far all native file i/o functions are synchronous, and aynchronous file i/o is TBD.
 
-/** Version v11.0.0 */
 
-/*jslint vars: true, plusplus: true, devel: true, browser: true, nomen: true, indent: 4, forin: true, maxerr: 50, regexp: true */
-/*global define, native */
+
+
+
+
+
+
+
 
 var cep;
 if (!cep) {
@@ -38,7 +38,7 @@ if (!cep.util) {
     cep.util = {};
 }
 (function () {
-    // Internal function to get the last error code.
+    
     native function GetLastError();
     function getLastError() {
         return GetLastError();
@@ -49,8 +49,8 @@ if (!cep.util) {
         return result;
     }
 
-    // Error values. These MUST be in sync with the error values
-    // at the top of CEPEngine_extensions.cpp
+    
+    
 
     /**
      * @constant No error.
@@ -608,8 +608,8 @@ if (!cep.util) {
         },
 
         b64_to_utf8: function(base64str) {
-            // If a base64 string contains any whitespace character, DOM Exception 5 occurs during window.atob, please see
-			// http://stackoverflow.com/questions/14695988/dom-exception-5-invalid-character-error-on-valid-base64-image-string-in-javascri
+            
+			
             base64str = base64str.replace(/\s/g, '');
             return decodeURIComponent(escape(window.atob(base64str)));
         },
@@ -636,9 +636,9 @@ if (!cep.util) {
      *
      * @param url {string} The URL of the page/file to open, or the email address.
      * Must use HTTP/HTTPS/file/mailto. For example:
-     *  "http://www.adobe.com"
-     *  "https://github.com"
-     *  "file:///C:/log.txt"
+     *  "http:
+     *  "https:
+     *  "file:
      *  "mailto:test@adobe.com"
      *
      * @return An object with this property:
@@ -649,9 +649,9 @@ if (!cep.util) {
      **/
     native function OpenURLInDefaultBrowser();
     cep.util.openURLInDefaultBrowser = function (url) {
-        if (url && (url.indexOf("http://") === 0 || 
-                    url.indexOf("https://") === 0 || 
-                    url.indexOf("file://") === 0 || 
+        if (url && (url.indexOf("http:
+                    url.indexOf("https:
+                    url.indexOf("file:
                     url.indexOf("mailto:") === 0)) {
             OpenURLInDefaultBrowser(url);
             return getErrorResult();

@@ -18,9 +18,9 @@ function createUI(thisObj) {
     return win;
 }
 
-// Функция для получения имени последнего элемента иерархии
+
 function getLastElementName(property) {
-    return property.name; // Возвращает только имя текущего свойства или эффекта
+    return property.name; 
 }
 
 function updatePropertyList(propertyList) {
@@ -31,17 +31,17 @@ function updatePropertyList(propertyList) {
         var selectedLayers = comp.selectedLayers;
 
         if (selectedLayers.length > 0) {
-            var layer = selectedLayers[selectedLayers.length - 1]; // Берём только последний выбранный слой
+            var layer = selectedLayers[selectedLayers.length - 1]; 
             var selectedProperties = layer.selectedProperties;
 
             if (selectedProperties.length === 0) {
                 propertyList.add("item", "Слой: " + layer.name + " - Нет выбранных атрибутов");
             } else {
-                // Берём только последнее выбранное свойство или эффект
+                
                 var lastSelectedProperty = selectedProperties[selectedProperties.length - 1];
-                var lastElementName = getLastElementName(lastSelectedProperty); // Получаем имя последнего элемента
+                var lastElementName = getLastElementName(lastSelectedProperty); 
 
-                // Добавляем только имя последнего элемента в список
+                
                 propertyList.add("item", "Слой: " + layer.name + ", Атрибут: " + lastElementName);
             }
         } else {

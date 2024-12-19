@@ -11,7 +11,7 @@
 *
 **************************************************************************************************/
 
-/** CSInterface - v11.0.0 */
+
 
 /**
  * Stores constants for the window types supported by the CSXS infrastructure.
@@ -20,16 +20,16 @@ function CSXSWindowType()
 {
 }
 
-/** Constant for the CSXS window type Panel. */
+
 CSXSWindowType._PANEL = "Panel";
 
-/** Constant for the CSXS window type Modeless. */
+
 CSXSWindowType._MODELESS = "Modeless";
 
-/** Constant for the CSXS window type ModalDialog. */
+
 CSXSWindowType._MODAL_DIALOG = "ModalDialog";
 
-/** EvalScript error message */
+
 EvalScript_ErrMessage = "EvalScript error.";
 
 /**
@@ -171,7 +171,7 @@ function CSEvent(type, scope, appId, extensionId)
     this.extensionId = extensionId;
 }
 
-/** Event-specific data. */
+
 CSEvent.prototype.data = "";
 
 /**
@@ -184,22 +184,22 @@ function SystemPath()
 {
 }
 
-/** The path to user data.  */
+
 SystemPath.USER_DATA = "userData";
 
-/** The path to common files for Adobe applications.  */
+
 SystemPath.COMMON_FILES = "commonFiles";
 
-/** The path to the user's default document folder.  */
+
 SystemPath.MY_DOCUMENTS = "myDocuments";
 
-/** @deprecated. Use \c #SystemPath.Extension.  */
+
 SystemPath.APPLICATION = "application";
 
-/** The path to current extension.  */
+
 SystemPath.EXTENSION = "extension";
 
-/** The path to hosting application's executable.  */
+
 SystemPath.HOST_APPLICATION = "hostApplication";
 
 /**
@@ -210,13 +210,13 @@ function ColorType()
 {
 }
 
-/** RGB color type. */
+
 ColorType.RGB = "rgb";
 
-/** Gradient color type. */
+
 ColorType.GRADIENT = "gradient";
 
-/** Null color type. */
+
 ColorType.NONE = "none";
 
 /**
@@ -381,7 +381,7 @@ function HostCapabilities(EXTENDED_PANEL_MENU, EXTENDED_PANEL_ICONS, DELEGATE_AP
     this.EXTENDED_PANEL_ICONS = EXTENDED_PANEL_ICONS;
     this.DELEGATE_APE_ENGINE = DELEGATE_APE_ENGINE;
     this.SUPPORT_HTML_EXTENSIONS = SUPPORT_HTML_EXTENSIONS;
-    this.DISABLE_FLASH_EXTENSIONS = DISABLE_FLASH_EXTENSIONS; // Since 5.0.0
+    this.DISABLE_FLASH_EXTENSIONS = DISABLE_FLASH_EXTENSIONS; 
 }
 
 /**
@@ -440,7 +440,7 @@ function ContextMenuItemStatus(menuItemID, enabled, checked)
     this.enabled = enabled;
     this.checked = checked;
 }
-//------------------------------ CSInterface ----------------------------------
+
 
 /**
  * @class CSInterface
@@ -465,18 +465,18 @@ function CSInterface()
  * The callback function should be like below:
  *
  * @example
- * // event is a CSEvent object, but user can ignore it.
+ * 
  * function OnAppThemeColorChanged(event)
  * {
- *    // Should get a latest HostEnvironment object from application.
+ *    
  *    var skinInfo = JSON.parse(window.__adobe_cep__.getHostEnvironment()).appSkinInfo;
- *    // Gets the style information such as color info from the skinInfo,
- *    // and redraw all UI controls of your extension according to the style info.
+ *    
+ *    
  * }
  */
 CSInterface.THEME_COLOR_CHANGED_EVENT = "com.adobe.csxs.events.ThemeColorChanged";
 
-/** The host environment data object. */
+
 CSInterface.prototype.hostEnvironment = window.__adobe_cep__ ? JSON.parse(window.__adobe_cep__.getHostEnvironment()) : null;
 
 /** Retrieves information about the host environment in which the
@@ -492,7 +492,7 @@ CSInterface.prototype.getHostEnvironment = function()
 
 /** Loads binary file created which is located at url asynchronously
 *
-*@param urlName url at which binary file is located. Local files should start with 'file://'
+*@param urlName url at which binary file is located. Local files should start with 'file:
 *@param callback Optional. A callback function that returns after binary is loaded
 
 *@example
@@ -506,7 +506,7 @@ CSInterface.prototype.loadBinAsync = function(urlName,callback)
     try
     {
         var xhr = new XMLHttpRequest();
-        xhr.responseType = 'arraybuffer'; // make response as ArrayBuffer
+        xhr.responseType = 'arraybuffer'; 
         xhr.open('GET', urlName, true);
         xhr.onerror = function ()
         {
@@ -550,15 +550,15 @@ CSInterface.prototype.loadBinSync  = function(pathName)
     try
     {
         var OSVersion = this.getOSInformation();
-        if(pathName.startsWith("file://"))
+        if(pathName.startsWith("file:
         {
             if (OSVersion.indexOf("Windows") >= 0)
             {
-               pathName = pathName.replace("file:///", "");
+               pathName = pathName.replace("file:
             }
             else if (OSVersion.indexOf("Mac") >= 0)
             {
-                pathName = pathName.replace("file://", "");
+                pathName = pathName.replace("file:
             }
             window.__adobe_cep__.loadSnapshot(pathName);
             return true;
@@ -569,11 +569,11 @@ CSInterface.prototype.loadBinSync  = function(pathName)
         console.log(err);
         return false;
     }
-    //control should not come here
+    
     return false;
 };
 
-/** Closes this extension. */
+
 CSInterface.prototype.closeExtension = function()
 {
     window.__adobe_cep__.closeExtension();
@@ -592,11 +592,11 @@ CSInterface.prototype.getSystemPath = function(pathType)
     var OSVersion = this.getOSInformation();
     if (OSVersion.indexOf("Windows") >= 0)
     {
-      path = path.replace("file:///", "");
+      path = path.replace("file:
     }
     else if (OSVersion.indexOf("Mac") >= 0)
     {
-      path = path.replace("file://", "");
+      path = path.replace("file:
     }
     return path;
 };
@@ -758,11 +758,11 @@ CSInterface.prototype.initResourceBundle = function()
     for (var n = 0; n < resElms.length; n++)
     {
        var resEl = resElms[n];
-       // Get the resource key from the element.
+       
        var resKey = resEl.getAttribute('data-locale');
        if (resKey)
        {
-           // Get all the resources that start with the key.
+           
            for (var key in resourceBundle)
            {
                if (key.indexOf(resKey) === 0)
@@ -796,7 +796,7 @@ CSInterface.prototype.dumpInstallationInfo = function()
 
 /**
  * Retrieves version information for the current Operating System,
- * See http://www.useragentstring.com/pages/Chrome/ for Chrome \c navigator.userAgent values.
+ * See http:
  *
  * @return A string containing the OS version, or "unknown Operation System".
  * If user customizes the User Agent by setting CEF command parameter "--user-agent", only
@@ -880,9 +880,9 @@ CSInterface.prototype.getOSInformation = function()
  *
  * @param url  The URL of the page/file to open, or the email address.
  * Must use HTTP/HTTPS/file/mailto protocol. For example:
- *   "http://www.adobe.com"
- *   "https://github.com"
- *   "file:///C:/log.txt"
+ *   "http:
+ *   "https:
+ *   "file:
  *   "mailto:test@adobe.com"
  *
  * @return One of these error codes:\n
@@ -1046,7 +1046,7 @@ CSInterface.prototype.updatePanelMenuItem = function(menuItemLabel, enabled, che
  * - Checkable attribute takes precedence over Checked attribute.
  * - a PNG icon. For optimal display results please supply a 16 x 16px icon as larger dimensions will increase the size of the menu item.
      The Chrome extension contextMenus API was taken as a reference.
-     https://developer.chrome.com/extensions/contextMenus
+     https:
  * - the items with icons and checkable items cannot coexist on the same menu level. The former take precedences over the latter.
  *
  * @param menu      A XML string which describes menu structure.
@@ -1087,7 +1087,7 @@ CSInterface.prototype.setContextMenu = function(menu, callback)
  * - a PNG icon. For optimal display results please supply a 16 x 16px icon as larger dimensions will increase the size of the menu item.
      The Chrome extension contextMenus API was taken as a reference.
  * - the items with icons and checkable items cannot coexist on the same menu level. The former take precedences over the latter.
-     https://developer.chrome.com/extensions/contextMenus
+     https:
  *
  * @param menu      A JSON string which describes menu structure.
  * @param callback  The callback function which is called when a menu item is clicked. The only parameter is the returned ID of clicked menu item.

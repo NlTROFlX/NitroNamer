@@ -11,7 +11,7 @@
 *
 **************************************************************************************************/
 
-/** Vulcan - v11.2.0 */
+
 
 /**
  * @class Vulcan
@@ -376,10 +376,10 @@ Vulcan.prototype.getSelfEndPoint = function()
     return window.__adobe_cep__.invokeSync("vulcanGetSelfEndPoint", JSON.stringify(params));
 };
 
-/** Singleton instance of Vulcan **/
+
 var VulcanInterface = new Vulcan();
 
-//--------------------------------- Vulcan Message ------------------------------
+
 
 /**
  * @class VulcanMessage
@@ -485,7 +485,7 @@ VulcanMessage.prototype.toString = function()
     return str;
 };
 
-//--------------------------------------- Util --------------------------------
+
 
 /**
  * Formats a string based on a template.
@@ -532,7 +532,7 @@ function GetValueByKey(xmlStr, key)
         }
         catch(e)
         {
-            //log the error
+            
         }
     }
     return "";

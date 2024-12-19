@@ -2307,14 +2307,14 @@ function buildUI(thisObj) {
             var comp = proj.activeItem;
             var selectedLayers = comp.selectedLayers;
             if (selectedLayers.length > 0) {
-                // Берём последний выделенный слой
+                
                 var layer = selectedLayers[selectedLayers.length - 1];
                 var selectedProperties = layer.selectedProperties;
                 if (selectedProperties.length > 0) {
                     var propertyNames = [];
                     for (var i = 0; i < selectedProperties.length; i++) {
                         var prop = selectedProperties[i];
-                        // Проверяем, что это не группа, а именно свойство
+                        
                         if (prop.propertyType === PropertyType.PROPERTY) {
                             propertyNames.push(prop.name);
                         }
@@ -2335,12 +2335,12 @@ function buildUI(thisObj) {
         }
     }
 
-    // Добавим вспомогательную функцию для получения имени эффекта по индексу
+    
     function getNthEffectName(layer, n, settings) {
         if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties >= n) {
             return layer.property("ADBE Effect Parade").property(n).name;
         } else {
-            // Используем настройки E для случая, если эффекта нет.
+            
             if (settings && settings.E) {
                 return settings.E.active ? settings.E.customValue : settings.E.defaultValue;
             } else {
@@ -2452,8 +2452,8 @@ function buildUI(thisObj) {
             } else if (match === 'attr') {
                 value = variables['attr'];
             } else if (ecFilters !== undefined) {
-                // Обработка Ec(...)
-                // Перед использованием getEffectsCount, заменим e1, e2 ... на реальные имена эффектов.
+                
+                
                 var nthEffectRegex = /e(\d+)/g;
                 ecFilters = ecFilters.replace(nthEffectRegex, function(fullMatch, number) {
                     var effectNumber = parseInt(number, 10);
@@ -2465,7 +2465,7 @@ function buildUI(thisObj) {
             } else if (eSeparatorOnly !== undefined) {
                 value = getEffectNames(layer, settings, null, eSeparatorOnly);
             } else if (eEffects !== undefined) {
-                // Обработка E(...)
+                
                 var nthEffectRegex = /e(\d+)/g;
                 eEffects = eEffects.replace(nthEffectRegex, function(fullMatch, number) {
                     var effectNumber = parseInt(number, 10);
@@ -2475,7 +2475,7 @@ function buildUI(thisObj) {
             } else if (match === 'E') {
                 value = getEffectNames(layer, settings);
             } else if (nthEffectIndex !== undefined) {
-                // Переменные e1, e2 ... вне E(...) или Ec(...)
+                
                 var effectNumber = parseInt(nthEffectIndex, 10);
                 value = getNthEffectName(layer, effectNumber, settings);
             } else if (customI !== undefined) {
