@@ -2349,6 +2349,20 @@ function buildUI(thisObj) {
         }
     }
 
+    function getNthMaskName(layer, n, settings) {
+        if (layer.mask && layer.mask.numProperties >= n) {
+            // Возвращаем имя n-й маски
+            return layer.mask.property(n).name;
+        } else {
+            // Маска с таким индексом отсутствует, используем логику Lmn
+            if (settings && settings.Lmn) {
+                return settings.Lmn.active ? settings.Lmn.customValue : settings.Lmn.defaultValue;
+            } else {
+                return "NoMaskNames";
+            }
+        }
+    }
+
     function filterLayerType(layerType, filter) {
         if (!layerType) return "";
         var filterLower = filter.toLowerCase().trim();
@@ -2416,7 +2430,8 @@ function buildUI(thisObj) {
             "I\\(([^()\\[\\]]+)\\)",
             "I",
             "attr",
-            "e(\\d+)",
+            "e(\\d+)", // Переменные эффектов
+            "m(\\d+)", // Добавляем переменные масок
             "[A-Z]",
             "i",
             "S",
@@ -2437,7 +2452,7 @@ function buildUI(thisObj) {
             anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator,
             durationFormat, customFext, customAr, parentIndex, dateFormat,
             lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly,
-            lmnFilters, lmnSeparator, customI, nthEffectIndex) {
+            lmnFilters, lmnSeparator, customI, nthEffectIndex, nthMaskIndex) {
     
             var value;
     
@@ -2452,8 +2467,7 @@ function buildUI(thisObj) {
             } else if (match === 'attr') {
                 value = variables['attr'];
             } else if (ecFilters !== undefined) {
-                
-                
+                // Ec(...)
                 var nthEffectRegex = /e(\d+)/g;
                 ecFilters = ecFilters.replace(nthEffectRegex, function(fullMatch, number) {
                     var effectNumber = parseInt(number, 10);
@@ -2465,7 +2479,7 @@ function buildUI(thisObj) {
             } else if (eSeparatorOnly !== undefined) {
                 value = getEffectNames(layer, settings, null, eSeparatorOnly);
             } else if (eEffects !== undefined) {
-                
+                // E(...)
                 var nthEffectRegex = /e(\d+)/g;
                 eEffects = eEffects.replace(nthEffectRegex, function(fullMatch, number) {
                     var effectNumber = parseInt(number, 10);
@@ -2475,9 +2489,13 @@ function buildUI(thisObj) {
             } else if (match === 'E') {
                 value = getEffectNames(layer, settings);
             } else if (nthEffectIndex !== undefined) {
-                
+                // Переменные e1, e2 ...
                 var effectNumber = parseInt(nthEffectIndex, 10);
                 value = getNthEffectName(layer, effectNumber, settings);
+            } else if (nthMaskIndex !== undefined) {
+                // Переменные m1, m2 ...
+                var maskNumber = parseInt(nthMaskIndex, 10);
+                value = getNthMaskName(layer, maskNumber, settings);
             } else if (customI !== undefined) {
                 var uniqueKey = "I(" + customI + ")_" + usedVariables.length;
                 var initialValue = parseInt(customI, 10);
@@ -2582,7 +2600,7 @@ function buildUI(thisObj) {
             return originalName;
         }
         return result;
-    }    
+    }
 
     var localIndex = 0;
 

@@ -42,7 +42,7 @@
     "Lmn": {
         "defaultValue": "NoMaskNames",
         "customValue": "Custom{Lmn}",
-        "active": false
+        "active": true
     },
     "R": {
         "defaultValue": "NoResolution",
