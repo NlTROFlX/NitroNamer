@@ -1,5 +1,23 @@
 {
     "userPresets": {
+        "preset_6": {
+            "allLayers": true,
+            "template": "e1, e2, e3 | Lmn | m1, m2, m3 | Lmn(m1) | Lmc(m2, m3) | E(e1) | Ec(e1, e4)",
+            "briefly": false,
+            "brieflyType": 0,
+            "creationDate": 1734640371151,
+            "usageFrequency": 0,
+            "favoritesTemplate": false
+        },
+        "preset_5": {
+            "allLayers": true,
+            "template": "Lexp(attr, [ # ])",
+            "briefly": false,
+            "brieflyType": 0,
+            "creationDate": 1734640123059,
+            "usageFrequency": 0,
+            "favoritesTemplate": false
+        },
         "preset_4": {
             "allLayers": true,
             "template": "E(levels, drop shadow[ # ])",
@@ -40,7 +58,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "Lmc(m1, m2, m3)",
+        "template": "e1, e2, e3 | Lmn | m1, m2, m3 | Lmn(m1) | Lmc(m2, m3) | E(e1) | Ec(e1, e4)",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,

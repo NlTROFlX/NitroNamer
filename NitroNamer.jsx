@@ -1,8 +1,8 @@
-var currentAttr = "";
-
 function buildUI(thisObj) {
 
-    var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "NitroNamer 2024.4 - dev", undefined, { resizeable: true });
+    var scriptMessageHead_1 = "NitroNamer 2025.1 - dev";
+
+    var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", scriptMessageHead_1, undefined, { resizeable: true });
     var globalWidthSizeElements = 310;
     var globalWidthSizeElementsCorrect = 14;
     var globalHeightSizeElementsMax = 376;
@@ -13,8 +13,6 @@ function buildUI(thisObj) {
     win.active = true;
     win.margins = [4, 4, 4, 4];
     win.layout.layout(true);
-
-    var scriptMessageHead_1 = "NitroNamer 2024.4 - dev";
 
     var grpLayerSelection = win.add("group", undefined);
     grpLayerSelection.orientation = "row";
@@ -2187,10 +2185,6 @@ function buildUI(thisObj) {
         return false;
     }
 
-    function isBoundLayer(layer) {
-        return layer.parent !== null;
-    }
-
     function getLayerParentIndex(layer) {
         var comp = layer.containingComp;
 
@@ -2335,7 +2329,6 @@ function buildUI(thisObj) {
         }
     }
 
-    
     function getNthEffectName(layer, n, settings) {
         if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties >= n) {
             return layer.property("ADBE Effect Parade").property(n).name;
@@ -2388,134 +2381,184 @@ function buildUI(thisObj) {
     }
 
     function replaceVariables(template, variables, originalName, layer, settings) {
-        var regexParts = [
-            "\\(([^()]+)\\)",
-            "T\\(([^()\\[\\]]+)\\)",
-            "Df",
-            "Ec\\(([^()\\[\\]]+?)\\)",
-            "Ec",
-            "E\\(\\[([^\\[\\]]+)\\]\\)",
-            "E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
-            "E",
-            "An\\(\\[([^\\[\\]]+)\\]\\)",
-            "An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
-            "An",
-            "Lexp\\(\\[([^\\[\\]]+)\\]\\)",
-            "Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
-            "Lexp",
-            "D\\(([^()\\[\\]]+)\\)",
-            "D",
-            "Fext\\(([^()\\[\\]]+)\\)",
-            "Fext",
-            "Ip",
-            "Op",
-            "Tm",
-            "Ar\\(([^()\\[\\]]+)\\)",
-            "Ar",
-            "Pn",
-            "Lpos",
-            "Lsc",
-            "Lrot",
-            "Lops",
-            "Lpnt\\(([^()\\[\\]]+)\\)",
-            "Lpnt",
-            "Cd\\(([^()\\[\\]]+)\\)",
-            "Cd",
-            "Lmc\\(\\[([^\\[\\]]+)\\]\\)", // Lmc с фильтром типа []
-            "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", // Lmc(...)
-            "Lmc",
-            "Lmn\\(\\[([^\\[\\]]+)\\]\\)", // Lmn с фильтром типа []
-            "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", // Lmn(...)
-            "Lmn",
-            "I\\(([^()\\[\\]]+)\\)",
-            "I",
-            "attr",
-            "e(\\d+)",
-            "m(\\d+)", // Переменные для масок m1, m2, ...
-            "[A-Z]",
-            "i",
-            "S",
-            "W",
-            "H"
-        ];
+        var result = template;
+        // В шаблоне могут быть переменные вида:
+        // ( ... ), T(...), D(...), An(...), Lexp(...), E(...), Ec(...), Lmn(...), Lmc(...)
+        // а также простые переменные T, I, i, S, W, H, attr и т.д.
+        //
+        // Список шаблонов:
+        // (group), T(filter), D(format), An([props][separator]), E([effects][separator]), Lexp([props][separator])
+        // Fext(extension), Ar([filter]), Ip, Op, Tm, Pn, Lpos, Lsc, Lrot, Lops, Lpnt(depth or i), Cd(format)
+        // Lmc([maskFilter][separator]), Lmn([maskFilter][separator])
+        // e1, e2 ... для E/Ec, m1, m2 ... для Lmn/Lmc, attr для выбранных свойств
     
-        var regex = new RegExp(regexParts.join("|"), "g");
-        var usedVariables = [];
         var nthEffectRegex = /e(\d+)/g;
         var nthMaskRegex = /m(\d+)/g;
     
-        var result = template;
-        if (template.match(/^\(([^()]+)\)$/)) {
-            return template.match(/^\(([^()]+)\)$/)[1];
-        }
+        // Основной RegExp для поиска всех возможных шаблонов
+        var regex = new RegExp([
+            "\\(([^()]+)\\)",              // ( ... )
+            "T\\(([^()\\[\\]]+)\\)",       // T(...)
+            "Df",                          // Df
+            "Ec\\(([^()\\[\\]]+?)\\)",     // Ec(...)
+            "Ec",                          // Ec
+            "E\\(\\[([^\\[\\]]+)\\]\\)",  // E([...])
+            "E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", // E(...)
+            "E",                           // E
+            "An\\(\\[([^\\[\\]]+)\\]\\)", // An([...])
+            "An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", // An(...)
+            "An",                          // An
+            "Lexp\\(\\[([^\\[\\]]+)\\]\\)", // Lexp([...])
+            "Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", // Lexp(...)
+            "Lexp",                        // Lexp
+            "D\\(([^()\\[\\]]+)\\)",       // D(...)
+            "D",                           // D
+            "Fext\\(([^()\\[\\]]+)\\)",    // Fext(...)
+            "Fext",                        // Fext
+            "Ip", "Op", "Tm",              // Ip, Op, Tm
+            "Ar\\(([^()\\[\\]]+)\\)",      // Ar(...)
+            "Ar",                          // Ar
+            "Pn", "Lpos", "Lsc", "Lrot", "Lops",
+            "Lpnt\\(([^()\\[\\]]+)\\)",    // Lpnt(...)
+            "Lpnt",                        // Lpnt
+            "Cd\\(([^()\\[\\]]+)\\)",      // Cd(...)
+            "Cd",                          // Cd
+            "Lmc\\(\\[([^\\[\\]]+)\\]\\)", // Lmc([...])
+            "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", // Lmc(...)
+            "Lmc",                         // Lmc
+            "Lmn\\(\\[([^\\[\\]]+)\\]\\)", // Lmn([...])
+            "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", // Lmn(...)
+            "Lmn",                         // Lmn
+            "I\\(([^()\\[\\]]+)\\)",       // I(...)
+            "I",                           // I
+            "attr",                        // attr
+            "e(\\d+)",                     // e1, e2...
+            "m(\\d+)",                     // m1, m2...
+            "[A-Z]",                       // A single capital letter: T, S, W, H ...
+            "i",                           // i
+            "S", "W", "H"                  // S, W, H
+        ].join("|"), "g");
     
-        result = result.replace(regex, function (match, group, tFilter, ecFilters,
-            eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps,
-            anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator,
-            durationFormat, customFext, customAr, parentIndex, dateFormat,
-            lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly,
-            lmnFilters, lmnSeparator, customI, nthEffectIndex, nthMaskIndex) {
+        var usedVariables = {};
     
+        var localIndex = variables['I'] || 1;
+        var incrementValues = {};
+    
+        result = result.replace(regex, function(match,
+            group, tFilter, ecFilters,
+            eSeparatorOnly, eEffects, eSeparator,
+            anSeparatorOnly, anProps, anSeparator,
+            lexpSeparatorOnly, lexpProps, lexpSeparator,
+            durationFormat, customFext, customAr,
+            parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator,
+            lmnSeparatorOnly, lmnFilters, lmnSeparator,
+            customI, nthEffectIndex, nthMaskIndex
+        ) {
             var value;
     
+            // Прежде чем вернуть значение, обрабатываем специфические случаи
+            // E, Ec: e1... заменяются на конкретные эффекты
+            // Lmn, Lmc: m1... заменяются на конкретные маски
+            // Теперь для An(...) и Lexp(...): attr внутри аргументов должен заменяться на variables['attr']
+    
+            // Подготовим подстановки для attr внутри anProps, anSeparatorOnly, lexpProps, lexpSeparatorOnly если они определены
+            if (anSeparatorOnly !== undefined) {
+                anSeparatorOnly = anSeparatorOnly.replace(/attr/g, variables['attr']);
+            }
+            if (anProps !== undefined) {
+                // Заменяем attr на значение переменной
+                anProps = anProps.replace(/attr/g, variables['attr']);
+            }
+            if (lexpSeparatorOnly !== undefined) {
+                lexpSeparatorOnly = lexpSeparatorOnly.replace(/attr/g, variables['attr']);
+            }
+            if (lexpProps !== undefined) {
+                lexpProps = lexpProps.replace(/attr/g, variables['attr']);
+            }
+    
+            // Аналогично для ecFilters, lmnFilters, lmcFilters, если нужно, но пользователь просил только для An и Lexp.
+            // Однако, если вы захотите расширить, можно сделать замену attr и там.
+    
+            // Применяем замены nthEffectRegex / nthMaskRegex при необходимости
+            if (ecFilters !== undefined) {
+                ecFilters = ecFilters.replace(nthEffectRegex, function(fullMatch, number) {
+                    var effectNumber = parseInt(number, 10);
+                    return getNthEffectName(layer, effectNumber, settings);
+                }).replace(nthMaskRegex, function(fullMatch, number) {
+                    var maskNumber = parseInt(number, 10);
+                    return getNthMaskName(layer, maskNumber, settings);
+                });
+            }
+            if (eEffects !== undefined) {
+                eEffects = eEffects.replace(nthEffectRegex, function(fullMatch, number) {
+                    var effectNumber = parseInt(number, 10);
+                    return getNthEffectName(layer, effectNumber, settings);
+                }).replace(nthMaskRegex, function(fullMatch, number) {
+                    var maskNumber = parseInt(number, 10);
+                    return getNthMaskName(layer, maskNumber, settings);
+                });
+            }
+            if (anProps !== undefined) {
+                anProps = anProps.replace(nthEffectRegex, function(fullMatch, number) {
+                    var effectNumber = parseInt(number, 10);
+                    return getNthEffectName(layer, effectNumber, settings);
+                }).replace(nthMaskRegex, function(fullMatch, number) {
+                    var maskNumber = parseInt(number, 10);
+                    return getNthMaskName(layer, maskNumber, settings);
+                });
+            }
+            if (lmcFilters !== undefined) {
+                lmcFilters = lmcFilters.replace(nthMaskRegex, function(fullMatch, number) {
+                    var maskNumber = parseInt(number, 10);
+                    return getNthMaskName(layer, maskNumber, settings);
+                });
+            }
+            if (lmnFilters !== undefined) {
+                lmnFilters = lmnFilters.replace(nthMaskRegex, function(fullMatch, number) {
+                    var maskNumber = parseInt(number, 10);
+                    return getNthMaskName(layer, maskNumber, settings);
+                });
+            }
+            if (lmnSeparatorOnly !== undefined) {
+                lmnSeparatorOnly = lmnSeparatorOnly.replace(nthMaskRegex, function(fullMatch, number) {
+                    var maskNumber = parseInt(number, 10);
+                    return getNthMaskName(layer, maskNumber, settings);
+                });
+            }
+            if (lmcSeparatorOnly !== undefined) {
+                lmcSeparatorOnly = lmcSeparatorOnly.replace(nthMaskRegex, function(fullMatch, number) {
+                    var maskNumber = parseInt(number, 10);
+                    return getNthMaskName(layer, maskNumber, settings);
+                });
+            }
+            if (lexpProps !== undefined) {
+                lexpProps = lexpProps.replace(nthEffectRegex, function(fullMatch, number) {
+                    var effectNumber = parseInt(number, 10);
+                    return getNthEffectName(layer, effectNumber, settings);
+                }).replace(nthMaskRegex, function(fullMatch, number) {
+                    var maskNumber = parseInt(number, 10);
+                    return getNthMaskName(layer, maskNumber, settings);
+                });
+            }
+    
+            // Обработка каждого совпадения
             if (group !== undefined) {
+                // ( ... ) без всяких идентификаторов, просто вернуть содержимое
                 return group;
             } else if (tFilter !== undefined) {
                 var layerType = variables['T'];
                 value = filterLayerType(layerType, tFilter);
                 return value;
-            } else if (match === 'T') {
-                value = variables['T'];
-            } else if (match === 'attr') {
-                value = variables['attr'];
             } else if (ecFilters !== undefined) {
-                // Ec(...)
-                ecFilters = ecFilters.replace(nthEffectRegex, function(fullMatch, number) {
-                    var effectNumber = parseInt(number, 10);
-                    return getNthEffectName(layer, effectNumber, settings);
-                });
-                // Маски внутри Ec логически не нужны, но если вдруг:
-                ecFilters = ecFilters.replace(nthMaskRegex, function(fullMatch, number) {
-                    var maskNumber = parseInt(number, 10);
-                    return getNthMaskName(layer, maskNumber, settings);
-                });
                 value = getEffectsCount(layer, settings, ecFilters);
             } else if (match === 'Ec') {
                 value = getEffectsCount(layer, settings);
             } else if (eSeparatorOnly !== undefined) {
                 value = getEffectNames(layer, settings, null, eSeparatorOnly);
             } else if (eEffects !== undefined) {
-                // E(...)
-                eEffects = eEffects.replace(nthEffectRegex, function(fullMatch, number) {
-                    var effectNumber = parseInt(number, 10);
-                    return getNthEffectName(layer, effectNumber, settings);
-                });
-                eEffects = eEffects.replace(nthMaskRegex, function(fullMatch, number) {
-                    var maskNumber = parseInt(number, 10);
-                    return getNthMaskName(layer, maskNumber, settings);
-                });
                 value = getEffectNames(layer, settings, eEffects, eSeparator);
             } else if (match === 'E') {
                 value = getEffectNames(layer, settings);
-            } else if (nthEffectIndex !== undefined) {
-                // e1, e2 ...
-                var effectNumber = parseInt(nthEffectIndex, 10);
-                value = getNthEffectName(layer, effectNumber, settings);
-            } else if (nthMaskIndex !== undefined) {
-                // m1, m2 ...
-                var maskNumber = parseInt(nthMaskIndex, 10);
-                value = getNthMaskName(layer, maskNumber, settings);
-            } else if (customI !== undefined) {
-                var uniqueKey = "I(" + customI + ")_" + usedVariables.length;
-                var initialValue = parseInt(customI, 10);
-                if (!incrementValues[uniqueKey]) {
-                    incrementValues[uniqueKey] = initialValue;
-                }
-                value = incrementValues[uniqueKey]++;
-                usedVariables.push(uniqueKey);
-                return value;
-            } else if (match === 'I') {
-                value = localIndex++;
             } else if (anSeparatorOnly !== undefined) {
                 value = getAnimatedProperties(layer, settings, null, anSeparatorOnly);
             } else if (anProps !== undefined) {
@@ -2528,48 +2571,14 @@ function buildUI(thisObj) {
                 value = getExpressionControlledProperties(layer, settings, lexpProps, lexpSeparator);
             } else if (match === 'Lexp') {
                 value = getExpressionControlledProperties(layer, settings);
-            } else if (match === 'Fext') {
-                value = variables['Fext'];
-            } else if (lmnSeparatorOnly !== undefined) {
-                // Lmn([filters]) - заменяем m1, m2...
-                lmnSeparatorOnly = lmnSeparatorOnly.replace(nthMaskRegex, function(fullMatch, number) {
-                    var maskNumber = parseInt(number, 10);
-                    return getNthMaskName(layer, maskNumber, settings);
-                });
-                value = getMaskNames(layer, settings, lmnSeparatorOnly, null);
-            } else if (lmnFilters !== undefined) {
-                // Lmn(...)
-                lmnFilters = lmnFilters.replace(nthMaskRegex, function(fullMatch, number) {
-                    var maskNumber = parseInt(number, 10);
-                    return getNthMaskName(layer, maskNumber, settings);
-                });
-                value = getMaskNames(layer, settings, lmnFilters, lmnSeparator);
-            } else if (match === 'Lmn') {
-                value = getMaskNames(layer, settings);
-            } else if (lmcSeparatorOnly !== undefined) {
-                // Lmc([filters]) - заменяем m1, m2...
-                lmcSeparatorOnly = lmcSeparatorOnly.replace(nthMaskRegex, function(fullMatch, number) {
-                    var maskNumber = parseInt(number, 10);
-                    return getNthMaskName(layer, maskNumber, settings);
-                });
-                value = getMaskCount(layer, settings, lmcSeparatorOnly, null);
-            } else if (lmcFilters !== undefined) {
-                // Lmc(...)
-                lmcFilters = lmcFilters.replace(nthMaskRegex, function(fullMatch, number) {
-                    var maskNumber = parseInt(number, 10);
-                    return getNthMaskName(layer, maskNumber, settings);
-                });
-                value = getMaskCount(layer, settings, lmcFilters, lmcSeparator);
-            } else if (match === 'Lmc') {
-                value = getMaskCount(layer, settings);
-            } else if (customAr !== undefined) {
-                value = getAspectRatio(layer, settings, true);
-            } else if (match === 'Ar') {
-                value = variables['Ar'];
             } else if (durationFormat !== undefined) {
                 value = typeof variables['D'] === 'function' ? variables['D'](durationFormat) : variables['D'];
             } else if (match === 'D') {
                 value = typeof variables['D'] === 'function' ? variables['D']() : variables['D'];
+            } else if (customFext !== undefined) {
+                value = getFileExtension(layer, settings, customFext);
+            } else if (match === 'Fext') {
+                value = variables['Fext'];
             } else if (match === 'Df') {
                 value = variables['Df'];
             } else if (match === 'Ip') {
@@ -2578,6 +2587,10 @@ function buildUI(thisObj) {
                 value = variables['Op'];
             } else if (match === 'Tm') {
                 value = variables['Tm'];
+            } else if (customAr !== undefined) {
+                value = getAspectRatio(layer, settings, true);
+            } else if (match === 'Ar') {
+                value = variables['Ar'];
             } else if (match === 'Pn') {
                 value = variables['Pn'];
             } else if (match === 'Lpos') {
@@ -2591,8 +2604,8 @@ function buildUI(thisObj) {
             } else if (parentIndex !== undefined) {
                 if (parentIndex === 'i') {
                     value = variables['LpntIndex'];
-                } else if (!isNaN(parseInt(parentIndex, 10))) {
-                    var depth = parseInt(parentIndex, 10);
+                } else if(!isNaN(parseInt(parentIndex,10))) {
+                    var depth = parseInt(parentIndex,10);
                     value = getParentNameAtDepth(layer, depth);
                 } else {
                     value = variables['Lpnt'];
@@ -2603,8 +2616,39 @@ function buildUI(thisObj) {
                 value = getCurrentDate(dateFormat);
             } else if (match === 'Cd') {
                 value = getCurrentDate();
+            } else if (lmcSeparatorOnly !== undefined) {
+                value = getMaskCount(layer, settings, lmcSeparatorOnly, null);
+            } else if (lmcFilters !== undefined) {
+                value = getMaskCount(layer, settings, lmcFilters, lmcSeparator);
+            } else if (match === 'Lmc') {
+                value = getMaskCount(layer, settings);
+            } else if (lmnSeparatorOnly !== undefined) {
+                value = getMaskNames(layer, settings, lmnSeparatorOnly, null);
+            } else if (lmnFilters !== undefined) {
+                value = getMaskNames(layer, settings, lmnFilters, lmnSeparator);
+            } else if (match === 'Lmn') {
+                value = getMaskNames(layer, settings);
+            } else if (customI !== undefined) {
+                var uniqueKey = "I(" + customI + ")_" + usedVariables.length;
+                var initialValue = parseInt(customI, 10);
+                if (!incrementValues[uniqueKey]) {
+                    incrementValues[uniqueKey] = initialValue;
+                }
+                value = incrementValues[uniqueKey]++;
+                usedVariables[uniqueKey] = true;
+                return value;
+            } else if (match === 'I') {
+                value = localIndex++;
+            } else if (match === 'attr') {
+                value = variables['attr'];
+            } else if (nthEffectIndex !== undefined) {
+                var effectNumber = parseInt(nthEffectIndex, 10);
+                value = getNthEffectName(layer, effectNumber, settings);
+            } else if (nthMaskIndex !== undefined) {
+                var maskNumber = parseInt(nthMaskIndex, 10);
+                value = getNthMaskName(layer, maskNumber, settings);
             } else if (/[A-Z]/.test(match)) {
-                value = variables[match];
+                value = variables[match]; // Для одиночных символов A-Z
             } else if (match === 'i') {
                 value = variables['i'];
             } else if (match === 'S') {
@@ -2617,12 +2661,7 @@ function buildUI(thisObj) {
                 value = '';
             }
     
-            if (value !== undefined && value !== "") {
-                usedVariables.push(match);
-                return value;
-            } else {
-                return "";
-            }
+            return (value !== undefined && value !== "") ? value : "";
         });
     
         if (result === originalName || result === "") {
@@ -2630,6 +2669,7 @@ function buildUI(thisObj) {
         }
         return result;
     }
+    
 
     var localIndex = 0;
 
