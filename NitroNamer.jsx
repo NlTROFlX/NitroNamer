@@ -2451,10 +2451,21 @@ function buildUI(thisObj) {
                 value = variables['T'];
             } else if (match === 'attr') {
                 value = variables['attr'];
+            } else if (ecFilters !== undefined) {
+                // Обработка Ec(...)
+                // Перед использованием getEffectsCount, заменим e1, e2 ... на реальные имена эффектов.
+                var nthEffectRegex = /e(\d+)/g;
+                ecFilters = ecFilters.replace(nthEffectRegex, function(fullMatch, number) {
+                    var effectNumber = parseInt(number, 10);
+                    return getNthEffectName(layer, effectNumber, settings);
+                });
+                value = getEffectsCount(layer, settings, ecFilters);
+            } else if (match === 'Ec') {
+                value = getEffectsCount(layer, settings);
             } else if (eSeparatorOnly !== undefined) {
                 value = getEffectNames(layer, settings, null, eSeparatorOnly);
             } else if (eEffects !== undefined) {
-                // Перед вызовом getEffectNames, заменим все e1, e2 и т.д. в аргументах.
+                // Обработка E(...)
                 var nthEffectRegex = /e(\d+)/g;
                 eEffects = eEffects.replace(nthEffectRegex, function(fullMatch, number) {
                     var effectNumber = parseInt(number, 10);
@@ -2464,7 +2475,7 @@ function buildUI(thisObj) {
             } else if (match === 'E') {
                 value = getEffectNames(layer, settings);
             } else if (nthEffectIndex !== undefined) {
-                // Переменные e1, e2 и т.д. вне E(...)
+                // Переменные e1, e2 ... вне E(...) или Ec(...)
                 var effectNumber = parseInt(nthEffectIndex, 10);
                 value = getNthEffectName(layer, effectNumber, settings);
             } else if (customI !== undefined) {
@@ -2514,10 +2525,6 @@ function buildUI(thisObj) {
                 value = typeof variables['D'] === 'function' ? variables['D']() : variables['D'];
             } else if (match === 'Df') {
                 value = variables['Df'];
-            } else if (ecFilters !== undefined) {
-                value = getEffectsCount(layer, settings, ecFilters);
-            } else if (match === 'Ec') {
-                value = getEffectsCount(layer, settings);
             } else if (match === 'Ip') {
                 value = variables['Ip'];
             } else if (match === 'Op') {
@@ -2575,8 +2582,7 @@ function buildUI(thisObj) {
             return originalName;
         }
         return result;
-    }
-    
+    }    
 
     var localIndex = 0;
 
