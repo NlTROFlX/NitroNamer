@@ -2333,8 +2333,21 @@ function buildUI(thisObj) {
         } else {
             return "NoActiveComp";
         }
-    }    
-    
+    }
+
+    // Добавим вспомогательную функцию для получения имени эффекта по индексу
+    function getNthEffectName(layer, n, settings) {
+        if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties >= n) {
+            return layer.property("ADBE Effect Parade").property(n).name;
+        } else {
+            // Используем настройки E для случая, если эффекта нет.
+            if (settings && settings.E) {
+                return settings.E.active ? settings.E.customValue : settings.E.defaultValue;
+            } else {
+                return "NoEffects";
+            }
+        }
+    }
 
     function filterLayerType(layerType, filter) {
         if (!layerType) return "";
@@ -2361,7 +2374,6 @@ function buildUI(thisObj) {
     }
 
     function replaceVariables(template, variables, originalName, layer, settings) {
-        
         var regexParts = [
             "\\(([^()]+)\\)",
             "T\\(([^()\\[\\]]+)\\)",
@@ -2404,6 +2416,7 @@ function buildUI(thisObj) {
             "I\\(([^()\\[\\]]+)\\)",
             "I",
             "attr",
+            "e(\\d+)",
             "[A-Z]",
             "i",
             "S",
@@ -2413,31 +2426,47 @@ function buildUI(thisObj) {
     
         var regex = new RegExp(regexParts.join("|"), "g");
         var usedVariables = [];
+    
         var result = template;
         if (template.match(/^\(([^()]+)\)$/)) {
             return template.match(/^\(([^()]+)\)$/)[1];
         }
-        var incrementValues = {};
-        result = result.replace(regex, function(match, group, tFilter, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, customI) {
+    
+        result = result.replace(regex, function (match, group, tFilter, ecFilters,
+            eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps,
+            anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator,
+            durationFormat, customFext, customAr, parentIndex, dateFormat,
+            lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly,
+            lmnFilters, lmnSeparator, customI, nthEffectIndex) {
+    
             var value;
+    
             if (group !== undefined) {
                 return group;
             } else if (tFilter !== undefined) {
-                
-                var layerType = variables['T']; 
-                
+                var layerType = variables['T'];
                 value = filterLayerType(layerType, tFilter);
                 return value;
             } else if (match === 'T') {
                 value = variables['T'];
-            } else if (match === "attr") {
+            } else if (match === 'attr') {
                 value = variables['attr'];
             } else if (eSeparatorOnly !== undefined) {
                 value = getEffectNames(layer, settings, null, eSeparatorOnly);
             } else if (eEffects !== undefined) {
+                // Перед вызовом getEffectNames, заменим все e1, e2 и т.д. в аргументах.
+                var nthEffectRegex = /e(\d+)/g;
+                eEffects = eEffects.replace(nthEffectRegex, function(fullMatch, number) {
+                    var effectNumber = parseInt(number, 10);
+                    return getNthEffectName(layer, effectNumber, settings);
+                });
                 value = getEffectNames(layer, settings, eEffects, eSeparator);
             } else if (match === 'E') {
                 value = getEffectNames(layer, settings);
+            } else if (nthEffectIndex !== undefined) {
+                // Переменные e1, e2 и т.д. вне E(...)
+                var effectNumber = parseInt(nthEffectIndex, 10);
+                value = getNthEffectName(layer, effectNumber, settings);
             } else if (customI !== undefined) {
                 var uniqueKey = "I(" + customI + ")_" + usedVariables.length;
                 var initialValue = parseInt(customI, 10);
@@ -2505,22 +2534,16 @@ function buildUI(thisObj) {
                 value = variables['Lrot'];
             } else if (match === 'Lops') {
                 value = variables['Lops'];
-            } else if (parentIndex !== undefined) { 
-                
+            } else if (parentIndex !== undefined) {
                 if (parentIndex === 'i') {
-                    
                     value = variables['LpntIndex'];
                 } else if (!isNaN(parseInt(parentIndex, 10))) {
-                    
-                    
                     var depth = parseInt(parentIndex, 10);
                     value = getParentNameAtDepth(layer, depth);
                 } else {
-                    
                     value = variables['Lpnt'];
                 }
             } else if (match === 'Lpnt') {
-                
                 value = variables['Lpnt'];
             } else if (dateFormat !== undefined) {
                 value = getCurrentDate(dateFormat);
@@ -2547,11 +2570,13 @@ function buildUI(thisObj) {
                 return "";
             }
         });
+    
         if (result === originalName || result === "") {
             return originalName;
         }
         return result;
     }
+    
 
     var localIndex = 0;
 
