@@ -2382,15 +2382,6 @@ function buildUI(thisObj) {
 
     function replaceVariables(template, variables, originalName, layer, settings) {
         var result = template;
-        
-        
-        
-        
-        
-        
-        
-        
-        
     
         var nthEffectRegex = /e(\d+)/g;
         var nthMaskRegex = /m(\d+)/g;
@@ -2455,12 +2446,6 @@ function buildUI(thisObj) {
             customI, nthEffectIndex, nthMaskIndex
         ) {
             var value;
-    
-            
-            
-            
-            
-    
             
             if (anSeparatorOnly !== undefined) {
                 anSeparatorOnly = anSeparatorOnly.replace(/attr/g, variables['attr']);
