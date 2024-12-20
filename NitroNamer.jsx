@@ -596,61 +596,58 @@ function buildUI(thisObj) {
         }
     };
 
-    btnFavorites.onClick = function () {
+    btnFavorites.onClick = function() {
         var selectedPreset = ddLayerMode.selection;
-        if (selectedPreset) {
-            var presetTemplate = selectedPreset.text;
+        if (selectedPreset && selectedPreset.preset) {
+            var presetTemplate = selectedPreset.preset.template;
             var settings = loadSettings();
             var userPresets = settings.userPresets || {};
-
             for (var key in userPresets) {
                 if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
-                    var preset = userPresets[key];
-
-                    preset.favoritesTemplate = !preset.favoritesTemplate;
-
-                    userPresets[key] = preset;
-
-                    settings.userPresets = userPresets;
-                    var scriptFile = new File($.fileName);
-                    var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
-                    var settingsFile = scriptFolderPath + "/settings.json";
-
-                    writeJSONFile(settingsFile, settings);
-
-                    updateFavoritesButtonIcon(preset.favoritesTemplate);
-
+                    userPresets[key].favoritesTemplate = !userPresets[key].favoritesTemplate;
+                    btnFavorites.isFavorite = userPresets[key].favoritesTemplate;
+                    writeJSONFile(new File(scriptFolderPath + "/NitroNamer/settings/settings.json"), settings);
+                    updateFavoritesButtonIcon();
                     break;
                 }
             }
         }
     };
 
-    btnFavorites.addEventListener("mouseover", function () {
-        var isFavorite = btnFavorites.isFavorite;
-
-        if (isFavorite) {
-            btnFavorites.image = File(scriptFolderPath + "/NitroNamer/img/favoritesHover.png");
-        } else {
-            btnFavorites.image = File(scriptFolderPath + "/NitroNamer/img/favoritesHover.png");
-        }
-        btnFavorites.imageSize = [24, 24];
+    btnFavorites.addEventListener("mouseover", function() {
+        btnFavorites.isMouseOver = true;
+        updateFavoritesButtonIcon();
     });
 
-    btnFavorites.addEventListener("mouseout", function () {
-        var isFavorite = btnFavorites.isFavorite;
-        updateFavoritesButtonIcon(isFavorite);
+    btnFavorites.addEventListener("mouseout", function() {
+        btnFavorites.isMouseOver = false;
+        updateFavoritesButtonIcon();
     });
 
-    function updateFavoritesButtonIcon(isFavorite) {
-        btnFavorites.isFavorite = isFavorite;
-
-        if (isFavorite) {
-            btnFavorites.image = File(scriptFolderPath + "/NitroNamer/img/favoritesHover.png");
+    function updateFavoritesButtonIcon() {
+        var iconPath = scriptFolderPath + "/NitroNamer/img/";
+        
+        if (btnFavorites.isMouseOver) {
+            // Наведен курсор
+            if (btnFavorites.isFavorite) {
+                // Избранный + ховер
+                btnFavorites.image = File(iconPath + "favoritesModeHover.png");
+            } else {
+                // Не избранный + ховер
+                btnFavorites.image = File(iconPath + "favoritesHover.png");
+            }
         } else {
-            btnFavorites.image = File(scriptFolderPath + "/NitroNamer/img/favorites.png");
+            // Нет наведения курсора
+            if (btnFavorites.isFavorite) {
+                // Избранный без ховера
+                btnFavorites.image = File(iconPath + "favoritesHover.png");
+            } else {
+                // Не избранный без ховера
+                btnFavorites.image = File(iconPath + "favorites.png");
+            }
         }
-        btnFavorites.imageSize = [24, 24];
+    
+        btnFavorites.imageSize = [24,24];
     }
 
     btnSave.onClick = function () {
@@ -1251,50 +1248,39 @@ function buildUI(thisObj) {
 
     function applySettings(settings) {
         isInitializing = true;
-
         ddLayerMode.onChange = null;
-
-        if (settings && settings.currentSettings) {
+        if(settings && settings.currentSettings) {
             rdoAllLayers.value = settings.currentSettings.allLayers;
             rdoOnlySelected.value = !settings.currentSettings.allLayers;
             txtTemplate.text = settings.currentSettings.template || "(LayerName).i";
             chkBriefly.value = settings.currentSettings.briefly;
             ddBrieflyType.selection = settings.currentSettings.brieflyType || 0;
-
             currentModeIndex = settings.currentSettings.modeIndex !== undefined ? settings.currentSettings.modeIndex : 0;
             isActive = settings.currentSettings.modeActive !== undefined ? settings.currentSettings.modeActive : false;
-
             updateLayerCounts();
             updatePreview();
             resetRenameButtonIcon();
-        } else if (settings && settings.userPresets && Object.keys(settings.userPresets).length > 0) {
+        } else if(settings && settings.userPresets && Object.keys(settings.userPresets).length > 0) {
             var lastPresetKey = Object.keys(settings.userPresets).pop();
             var lastPreset = settings.userPresets[lastPresetKey];
-
             rdoAllLayers.value = lastPreset.allLayers;
             rdoOnlySelected.value = !lastPreset.allLayers;
             txtTemplate.text = lastPreset.template || "(LayerName).i";
             chkBriefly.value = lastPreset.briefly;
             ddBrieflyType.selection = lastPreset.brieflyType || 0;
-
             currentModeIndex = 0;
             isActive = false;
-
             updateLayerCounts();
             updatePreview();
             resetRenameButtonIcon();
         }
-
         var isCompact = settings.currentSettings && settings.currentSettings.UICompact;
         setMinimizeButtonIcon(isCompact);
-
         updatePresetsDropdown(settings);
-
         var selectedPresetTemplate = settings.currentSettings.selectedPresetTemplate;
-
-        if (selectedPresetTemplate) {
-            for (var i = 0; i < ddLayerMode.items.length; i++) {
-                if (ddLayerMode.items[i].text === selectedPresetTemplate) {
+        if(selectedPresetTemplate) {
+            for(var i=0; i<ddLayerMode.items.length; i++) {
+                if(ddLayerMode.items[i].text === selectedPresetTemplate) {
                     ddLayerMode.selection = i;
                     break;
                 }
@@ -1302,85 +1288,55 @@ function buildUI(thisObj) {
         } else {
             ddLayerMode.selection = 0;
         }
-
         updateModeButtonIcon();
-
-        if (settings.currentSettings && typeof settings.currentSettings.selectedPresetIndex !== 'undefined') {
+        if(settings.currentSettings && typeof settings.currentSettings.selectedPresetIndex !== 'undefined') {
             ddLayerMode.selection = settings.currentSettings.selectedPresetIndex;
         } else {
             ddLayerMode.selection = 0;
         }
-
         txtTemplate.text = settings.currentSettings.template || "(LayerName).i";
-
         ddLayerMode.onChange = dropdownChangeHandler;
-
-        if (settings && settings.userPresets && ddLayerMode.selection) {
-            var selectedPresetTemplate = ddLayerMode.selection.text;
-            var userPresets = settings.userPresets;
-
-            var isFavorite = false;
-            for (var key in userPresets) {
-                if (userPresets.hasOwnProperty(key) && userPresets[key].template === selectedPresetTemplate) {
-                    var preset = userPresets[key];
-                    isFavorite = preset.favoritesTemplate || false;
-                    break;
-                }
-            }
-            updateFavoritesButtonIcon(isFavorite);
+        if(settings && settings.userPresets && ddLayerMode.selection && ddLayerMode.selection.preset) {
+            btnFavorites.isFavorite = ddLayerMode.selection.preset.favoritesTemplate;
+            updateFavoritesButtonIcon();
         } else {
-            updateFavoritesButtonIcon(false);
+            btnFavorites.isFavorite = false;
+            updateFavoritesButtonIcon();
         }
-
         isInitializing = false;
-    }
+    }    
 
-    function dropdownChangeHandler() {
-        if (isInitializing) {
-            return;
-        }
-
-        var selectedItem = ddLayerMode.selection;
-        if (selectedItem && selectedItem.preset) {
-            var preset = selectedItem.preset;
-            var selectedTemplate = preset.template;
-
-            var settings = loadSettings();
-            var userPresets = settings.userPresets || {};
-
-            
-            if (preset.hasOwnProperty('usageFrequency')) {
-                preset.usageFrequency += 1;
-            } else {
-                preset.usageFrequency = 1;
+    function dropdownChangeHandler(){
+        if(isInitializing){return;}
+        var selectedItem=ddLayerMode.selection;
+        if(selectedItem&&selectedItem.preset){
+            var preset=selectedItem.preset;
+            var selectedTemplate=preset.template;
+            var settings=loadSettings();
+            var userPresets=settings.userPresets||{};
+            if(preset.hasOwnProperty('usageFrequency')){
+                preset.usageFrequency+=1;
+            }else{
+                preset.usageFrequency=1;
             }
-
-            
-            for (var key in userPresets) {
-                if (userPresets.hasOwnProperty(key) && userPresets[key].template === preset.template) {
-                    userPresets[key] = preset;
+            for(var key in userPresets){
+                if(userPresets.hasOwnProperty(key)&&userPresets[key].template===preset.template){
+                    userPresets[key]=preset;
                     break;
                 }
             }
-
-            settings.userPresets = userPresets;
-            var settingsFile = scriptFolderPath + "/NitroNamer/settings/settings.json";
-            writeJSONFile(settingsFile, settings);
-
-            
-
-            rdoAllLayers.value = preset.allLayers;
-            rdoOnlySelected.value = !preset.allLayers;
-            txtTemplate.text = preset.template;
-            chkBriefly.value = preset.briefly;
-            ddBrieflyType.selection = preset.brieflyType || 0;
-
+            settings.userPresets=userPresets;
+            writeJSONFile(scriptFolderPath + "/NitroNamer/settings/settings.json", settings);
+            rdoAllLayers.value=preset.allLayers;
+            rdoOnlySelected.value=!preset.allLayers;
+            txtTemplate.text=preset.template;
+            chkBriefly.value=preset.briefly;
+            ddBrieflyType.selection=preset.brieflyType||0;
             updateLayerCounts();
             updatePreview();
             resetRenameButtonIcon();
             updateRenameButtonIcon();
-
-            var currentSettings = {
+            var currentSettings={
                 allLayers: rdoAllLayers.value,
                 template: txtTemplate.text,
                 briefly: chkBriefly.value,
@@ -1388,21 +1344,17 @@ function buildUI(thisObj) {
                 selectedPresetTemplate: preset.template
             };
             saveSettings(currentSettings, true);
-
-            updateFavoritesButtonIcon(preset.favoritesTemplate);
-
+            btnFavorites.isFavorite = preset.favoritesTemplate;
+            updateFavoritesButtonIcon();
             updatePresetsDropdown(settings);
-
             ddLayerMode.onChange = null;
-
-            for (var i = 0; i < ddLayerMode.items.length; i++) {
+            for(var i=0; i < ddLayerMode.items.length; i++){
                 var item = ddLayerMode.items[i];
-                if (item.preset && item.preset.template === selectedTemplate) {
+                if(item.preset && item.preset.template === selectedTemplate){
                     ddLayerMode.selection = i;
                     break;
                 }
             }
-
             ddLayerMode.onChange = dropdownChangeHandler;
         }
     }
