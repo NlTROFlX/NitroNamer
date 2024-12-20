@@ -335,59 +335,59 @@ function buildUI(thisObj) {
     };
 
     txtTemplate.addEventListener("keydown", function(event) {
-        // Проверяем, что нажата клавиша "Enter"
+        
         if (event.keyName === "Enter") {
             var selectedPresetItem = ddLayerMode.selection;
             
-            // Проверяем, что выбранный элемент существует и содержит объект пресета
+            
             if (selectedPresetItem && selectedPresetItem.preset) {
                 var preset = selectedPresetItem.preset;
                 
-                // Устанавливаем значение шаблона из выбранного пресета в поле ввода
+                
                 txtTemplate.text = preset.template;
                 
-                // Увеличиваем значение usageFrequency для выбранного пресета
+                
                 if (preset.hasOwnProperty('usageFrequency')) {
                     preset.usageFrequency += 1;
                 } else {
                     preset.usageFrequency = 1;
                 }
                 
-                // Сохраняем обновлённые настройки
+                
                 var settings = loadSettings();
                 var userPresets = settings.userPresets || {};
                 
-                // Находим ключ пресета в userPresets
+                
                 for (var key in userPresets) {
                     if (userPresets.hasOwnProperty(key) && userPresets[key].template === preset.template) {
-                        userPresets[key] = preset; // Обновляем пресет с новым usageFrequency
+                        userPresets[key] = preset; 
                         break;
                     }
                 }
                 
                 settings.userPresets = userPresets;
                 
-                // Путь к файлу настроек
+                
                 var scriptFile = new File($.fileName);
                 var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
                 var settingsFile = new File(scriptFolderPath + "/settings.json");
                 
-                // Записываем обновлённые настройки в файл
+                
                 writeJSONFile(settingsFile, settings);
                 
-                // Обновляем состояние радиокнопок и других элементов UI
+                
                 rdoAllLayers.value = preset.allLayers;
                 rdoOnlySelected.value = !preset.allLayers;
                 chkBriefly.value = preset.briefly;
                 ddBrieflyType.selection = preset.brieflyType || 0;
                 
-                // Обновляем количество слоёв и превью
+                
                 updateLayerCounts();
                 updatePreview();
                 resetRenameButtonIcon();
                 updateRenameButtonIcon();
                 
-                // Сохраняем текущие настройки
+                
                 var currentSettings = {
                     allLayers: rdoAllLayers.value,
                     template: txtTemplate.text,
@@ -397,10 +397,10 @@ function buildUI(thisObj) {
                 };
                 saveSettings(currentSettings, true);
                 
-                // Обновляем иконку избранного, если применимо
+                
                 updateFavoritesButtonIcon(preset.favoritesTemplate);
                 
-                // Обновляем выпадающий список пресетов
+                
                 updatePresetsDropdown(settings);
             } else {
                 alert("Нет выбранного пресета для применения.", "NitroNamer 2025.1 - dev");
@@ -2326,19 +2326,19 @@ function buildUI(thisObj) {
                 var layer = selectedLayers[selectedLayers.length - 1];
                 var selectedProperties = layer.selectedProperties;
                 if (selectedProperties.length > 0) {
-                    // Предположим, что нас интересует первая выделенная собственность
+                    
                     var prop = selectedProperties[0];
     
-                    // Проверка является ли данный объект группой свойств
+                    
                     function isGroup(p) {
                         return (p instanceof PropertyGroup || p instanceof MaskPropertyGroup);
                     }
     
-                    // Если сразу выбрана группа
+                    
                     if (isGroup(prop)) {
                         return prop.name;
                     } else {
-                        // Если выбрано свойство, поднимаемся по цепочке parentProperty пока не найдём группу
+                        
                         var parent = prop.parentProperty;
                         while (parent && !isGroup(parent) && !(parent instanceof CompItem)) {
                             parent = parent.parentProperty;
@@ -2347,7 +2347,7 @@ function buildUI(thisObj) {
                         if (parent && isGroup(parent)) {
                             return parent.name;
                         } else {
-                            // Если не удалось найти подходящую группу
+                            
                             return "NoSelectedPropertyGroup";
                         }
                     }
