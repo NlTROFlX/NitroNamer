@@ -42,7 +42,7 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1731588855979,
-            "usageFrequency": 4,
+            "usageFrequency": 5,
             "favoritesTemplate": true
         },
         "preset_1": {
@@ -58,13 +58,13 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "e1, e2, e3 | Lmn | m1, m2, m3 | Lmn(m1) | Lmc(m2, m3) | E(e1) | Ec(e1, e4)",
+        "template": "prop: attr",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,
         "modeIndex": 0,
         "modeActive": true,
-        "selectedPresetTemplate": "(LayerName).i"
+        "selectedPresetTemplate": "(LayerShape).i"
     },
     "selectedLanguage": "Russian",
     "nameApply": {

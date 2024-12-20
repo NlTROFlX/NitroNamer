@@ -1656,7 +1656,8 @@ function buildUI(thisObj) {
             "Cd": getCurrentDate(),
             "Lmc": getMaskCount(layer, settings),
             "Lmn": getMaskNames(layer, settings),
-            "attr": getSelectedPropertyName()
+            "attr": getSelectedPropertyName(),
+            "prop": getSelectedPropertyGroupName()
         };
 
         if (briefly && !isNaN(parseFloat(variables.F))) {
@@ -2295,6 +2296,51 @@ function buildUI(thisObj) {
         return currentLayer.name;
     }
 
+    function getSelectedPropertyGroupName() {
+        var proj = app.project;
+        if (proj && proj.activeItem instanceof CompItem) {
+            var comp = proj.activeItem;
+            var selectedLayers = comp.selectedLayers;
+            if (selectedLayers.length > 0) {
+                var layer = selectedLayers[selectedLayers.length - 1];
+                var selectedProperties = layer.selectedProperties;
+                if (selectedProperties.length > 0) {
+                    // Предположим, что нас интересует первая выделенная собственность
+                    var prop = selectedProperties[0];
+    
+                    // Проверка является ли данный объект группой свойств
+                    function isGroup(p) {
+                        return (p instanceof PropertyGroup || p instanceof MaskPropertyGroup);
+                    }
+    
+                    // Если сразу выбрана группа
+                    if (isGroup(prop)) {
+                        return prop.name;
+                    } else {
+                        // Если выбрано свойство, поднимаемся по цепочке parentProperty пока не найдём группу
+                        var parent = prop.parentProperty;
+                        while (parent && !isGroup(parent) && !(parent instanceof CompItem)) {
+                            parent = parent.parentProperty;
+                        }
+    
+                        if (parent && isGroup(parent)) {
+                            return parent.name;
+                        } else {
+                            // Если не удалось найти подходящую группу
+                            return "NoSelectedPropertyGroup";
+                        }
+                    }
+                } else {
+                    return "NoSelectedProperty";
+                }
+            } else {
+                return "NoSelectedLayers";
+            }
+        } else {
+            return "NoActiveComp";
+        }
+    }    
+
     function getSelectedPropertyName() {
         var proj = app.project;
         if (proj && proj.activeItem instanceof CompItem) {
@@ -2422,7 +2468,8 @@ function buildUI(thisObj) {
             "Lmn",                         
             "I\\(([^()\\[\\]]+)\\)",       
             "I",                           
-            "attr",                        
+            "attr",
+            "prop",                   
             "e(\\d+)",                     
             "m(\\d+)",                     
             "[A-Z]",                       
@@ -2460,11 +2507,7 @@ function buildUI(thisObj) {
             if (lexpProps !== undefined) {
                 lexpProps = lexpProps.replace(/attr/g, variables['attr']);
             }
-    
-            
-            
-    
-            
+
             if (ecFilters !== undefined) {
                 ecFilters = ecFilters.replace(nthEffectRegex, function(fullMatch, number) {
                     var effectNumber = parseInt(number, 10);
@@ -2624,6 +2667,8 @@ function buildUI(thisObj) {
                 return value;
             } else if (match === 'I') {
                 value = localIndex++;
+            } else if (match === 'prop') {
+                value = variables['prop'];
             } else if (match === 'attr') {
                 value = variables['attr'];
             } else if (nthEffectIndex !== undefined) {
@@ -2654,7 +2699,6 @@ function buildUI(thisObj) {
         }
         return result;
     }
-    
 
     var localIndex = 0;
 
