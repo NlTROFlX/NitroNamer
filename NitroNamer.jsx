@@ -334,59 +334,80 @@ function buildUI(thisObj) {
         }
     };
 
-    txtTemplate.addEventListener("keydown", function (event) {
-        checkAndUpdateSettings();
+    txtTemplate.addEventListener("keydown", function(event) {
+        // Проверяем, что нажата клавиша "Enter"
         if (event.keyName === "Enter") {
-            var selectedPreset = ddLayerMode.selection;
-            if (selectedPreset) {
-                var presetTemplate = selectedPreset.text;
+            var selectedPresetItem = ddLayerMode.selection;
+            
+            // Проверяем, что выбранный элемент существует и содержит объект пресета
+            if (selectedPresetItem && selectedPresetItem.preset) {
+                var preset = selectedPresetItem.preset;
+                
+                // Устанавливаем значение шаблона из выбранного пресета в поле ввода
+                txtTemplate.text = preset.template;
+                
+                // Увеличиваем значение usageFrequency для выбранного пресета
+                if (preset.hasOwnProperty('usageFrequency')) {
+                    preset.usageFrequency += 1;
+                } else {
+                    preset.usageFrequency = 1;
+                }
+                
+                // Сохраняем обновлённые настройки
                 var settings = loadSettings();
                 var userPresets = settings.userPresets || {};
-
+                
+                // Находим ключ пресета в userPresets
                 for (var key in userPresets) {
-                    if (userPresets.hasOwnProperty(key) && userPresets[key].template === presetTemplate) {
-                        var preset = userPresets[key];
-
-                        if (preset.hasOwnProperty('usageFrequency')) {
-                            preset.usageFrequency += 1;
-                        } else {
-                            preset.usageFrequency = 1;
-                        }
-
-                        userPresets[key] = preset;
-
-                        settings.userPresets = userPresets;
-                        var scriptFile = new File($.fileName);
-                        var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
-                        var settingsFile = scriptFolderPath + "/settings.json";
-
-                        writeJSONFile(settingsFile, settings);
-
-                        rdoAllLayers.value = preset.allLayers;
-                        rdoOnlySelected.value = !preset.allLayers;
-                        txtTemplate.text = preset.template;
-                        chkBriefly.value = preset.briefly;
-                        ddBrieflyType.selection = preset.brieflyType || 0;
-
-                        updateLayerCounts();
-                        updatePreview();
-                        resetRenameButtonIcon();
-                        updateRenameButtonIcon();
-
-                        var currentSettings = {
-                            allLayers: rdoAllLayers.value,
-                            template: txtTemplate.text,
-                            briefly: chkBriefly.value,
-                            brieflyType: ddBrieflyType.selection.index,
-                            selectedPresetIndex: ddLayerMode.selection.index
-                        };
-                        saveSettings(currentSettings, true);
+                    if (userPresets.hasOwnProperty(key) && userPresets[key].template === preset.template) {
+                        userPresets[key] = preset; // Обновляем пресет с новым usageFrequency
                         break;
                     }
                 }
+                
+                settings.userPresets = userPresets;
+                
+                // Путь к файлу настроек
+                var scriptFile = new File($.fileName);
+                var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
+                var settingsFile = new File(scriptFolderPath + "/settings.json");
+                
+                // Записываем обновлённые настройки в файл
+                writeJSONFile(settingsFile, settings);
+                
+                // Обновляем состояние радиокнопок и других элементов UI
+                rdoAllLayers.value = preset.allLayers;
+                rdoOnlySelected.value = !preset.allLayers;
+                chkBriefly.value = preset.briefly;
+                ddBrieflyType.selection = preset.brieflyType || 0;
+                
+                // Обновляем количество слоёв и превью
+                updateLayerCounts();
+                updatePreview();
+                resetRenameButtonIcon();
+                updateRenameButtonIcon();
+                
+                // Сохраняем текущие настройки
+                var currentSettings = {
+                    allLayers: rdoAllLayers.value,
+                    template: txtTemplate.text,
+                    briefly: chkBriefly.value,
+                    brieflyType: ddBrieflyType.selection.index,
+                    selectedPresetTemplate: preset.template
+                };
+                saveSettings(currentSettings, true);
+                
+                // Обновляем иконку избранного, если применимо
+                updateFavoritesButtonIcon(preset.favoritesTemplate);
+                
+                // Обновляем выпадающий список пресетов
+                updatePresetsDropdown(settings);
+            } else {
+                alert("Нет выбранного пресета для применения.", "NitroNamer 2025.1 - dev");
             }
         }
-    });
+    });    
+    
 
     win.onShow = function () {
         ddLayerMode.size = [txtTemplate.size[0], ddLayerMode.size[1]];
