@@ -2,29 +2,27 @@
     "userPresets": {
         "preset_6": {
             "allLayers": true,
-            "template": "e1, e2, e3 | Lmn | m1, m2, m3 | Lmn(m1) | Lmc(m2, m3) | E(e1) | Ec(e1, e4)",
+            "template": "T.i",
             "briefly": false,
             "brieflyType": 0,
-            "creationDate": 1734640371151,
-            "usageFrequency": 8,
-            "favoritesTemplate": false
+            "usageFrequency": 2
         },
-        "preset_5": {
+        "preset_1": {
             "allLayers": true,
             "template": "Lexp(attr, [ # ])",
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1734640123059,
-            "usageFrequency": 4,
+            "usageFrequency": 12,
             "favoritesTemplate": true
         },
-        "preset_4": {
+        "preset_2": {
             "allLayers": true,
             "template": "E(levels, drop shadow[ # ])",
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1731597869501,
-            "usageFrequency": 8,
+            "usageFrequency": 10,
             "favoritesTemplate": false
         },
         "preset_3": {
@@ -34,37 +32,37 @@
             "brieflyType": 0,
             "creationDate": 1731588916628,
             "usageFrequency": 12,
-            "favoritesTemplate": true
+            "favoritesTemplate": false
         },
-        "preset_2": {
+        "preset_4": {
             "allLayers": true,
             "template": "(LayerShape).i",
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1731588855979,
-            "usageFrequency": 9,
+            "usageFrequency": 10,
             "favoritesTemplate": true
         },
-        "preset_1": {
+        "preset_5": {
             "allLayers": true,
             "template": "(LayerName).i",
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1731588837777,
-            "usageFrequency": 12,
+            "usageFrequency": 14,
             "favoritesTemplate": false
         }
     },
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "(LayerPreComp).i",
+        "template": "Lexp(attr, [ # ])",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,
         "modeIndex": 0,
-        "modeActive": true,
-        "selectedPresetTemplate": "(LayerPreComp).i"
+        "modeActive": false,
+        "selectedPresetTemplate": "Lexp(attr, [ # ])"
     },
     "selectedLanguage": "Russian",
     "nameApply": {
