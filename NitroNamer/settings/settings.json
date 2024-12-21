@@ -14,7 +14,7 @@
             "template": "T.i",
             "briefly": false,
             "brieflyType": 0,
-            "usageFrequency": 7
+            "usageFrequency": 12
         },
         "preset_1": {
             "allLayers": true,
@@ -31,7 +31,7 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1731597869501,
-            "usageFrequency": 11,
+            "usageFrequency": 13,
             "favoritesTemplate": false
         },
         "preset_3": {
@@ -40,7 +40,7 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1731588916628,
-            "usageFrequency": 12,
+            "usageFrequency": 13,
             "favoritesTemplate": false
         },
         "preset_4": {
@@ -65,7 +65,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "Lexp(attr)",
+        "template": "prop",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,

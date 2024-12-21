@@ -1712,7 +1712,7 @@ function buildUI(thisObj) {
 			"Lmc": getMaskCount(layer, settings),
 			"Lmn": getMaskNames(layer, settings),
 			"attr": getSelectedPropertyName(),
-			"prop": getSelectedPropertyGroupNamesForLayer(layer, getSelectedPropertyPaths()).length > 0 ? getSelectedPropertyGroupNamesForLayer(layer, getSelectedPropertyPaths()).join(", ") : "Prop does not exist"
+			"prop": getSelectedPropertyGroupNamesForLayer(layer, getSelectedPropertyPaths()).length > 0 ? getSelectedPropertyGroupNamesForLayer(layer, getSelectedPropertyPaths()).join(", ") : "Property not selected"
 		};
 
 		if (briefly && !isNaN(parseFloat(variables.F))) {
@@ -2378,53 +2378,56 @@ function buildUI(thisObj) {
 							return parent.name;
 						} else {
 
-							return "NoSelectedPropertyGroup";
+							return "Attribute not selected";
 						}
 					}
 				} else {
-					return "NoSelectedProperty";
+					return "Attribute not selected";
 				}
 			} else {
-				return "NoSelectedLayers";
+				return "Attribute not selected";
 			}
 		} else {
-			return "NoActiveComp";
+			return "Attribute not selected";
 		}
 	}
 
-	function getSelectedPropertyGroupNamesForLayer(layer, propertyPaths) {
+	function getSelectedPropertyGroupNamesForLayer(layer, propertyPaths){
 		var propNames = [];
-		if (!propertyPaths || propertyPaths.length === 0) {
+		if(!propertyPaths || propertyPaths.length === 0){
 			return propNames;
 		}
-		for (var p = 0; p < propertyPaths.length; p++) {
+		for(var p = 0; p < propertyPaths.length; p++){
 			var propertyPath = propertyPaths[p];
 			var propGroup = layer;
 			var pathExists = true;
-			for (var i = 0; i < propertyPath.length; i++) {
+			for(var i = 0; i < propertyPath.length; i++){
 				var propName = propertyPath[i];
-				if (propGroup.property(propName)) {
+				if(propGroup.property(propName)){
 					propGroup = propGroup.property(propName);
-				} else {
+				}
+				else{
 					pathExists = false;
 					break;
 				}
 			}
-			if (pathExists) {
-
-				if (propGroup instanceof PropertyGroup || propGroup instanceof MaskPropertyGroup) {
+			if(pathExists){
+				// Проверяем, является ли propGroup группой свойств и содержит ли она свойства
+				if((propGroup instanceof PropertyGroup || propGroup instanceof MaskPropertyGroup) && propGroup.numProperties > 0){
 					propNames.push(propGroup.name);
-				} else if (propGroup instanceof Property) {
+				}
+				// Если это свойство, добавляем имя родительской группы (только если родительская группа существует и содержит свойства)
+				else if(propGroup instanceof Property && propGroup.parentProperty instanceof PropertyGroup && propGroup.parentProperty.numProperties > 0){
 					propNames.push(propGroup.parentProperty.name);
 				}
 			}
 		}
-
-		propNames = propNames.filter(function(item, pos) {
+		// Удаляем дубликаты
+		propNames = propNames.filter(function(item, pos){
 			return propNames.indexOf(item) === pos;
 		});
 		return propNames;
-	}
+	}	
 
 	function getSelectedPropertyName() {
 		var proj = app.project;
@@ -2447,16 +2450,16 @@ function buildUI(thisObj) {
 					if (propertyNames.length > 0) {
 						return propertyNames.join(", ");
 					} else {
-						return "NoSelectedProperty";
+						return "Attribute not selected";
 					}
 				} else {
-					return "NoSelectedProperty";
+					return "Attribute not selected";
 				}
 			} else {
-				return "NoSelectedLayers";
+				return "Attribute not selected";
 			}
 		} else {
-			return "NoActiveComp";
+			return "Attribute not selected";
 		}
 	}
 
@@ -2889,10 +2892,10 @@ function buildUI(thisObj) {
 							continue;
 						}
 						var attrNames = propertyPaths ? getAttributeNamesForLayer(currentLayer, propertyPaths) : [];
-						var attrNameCombined = attrNames.length > 0 ? attrNames.join(", ") : "Attribute does not exist";
+						var attrNameCombined = attrNames.length > 0 ? attrNames.join(", ") : "Attribute not selected";
 
 						var propNames = propertyPaths ? getSelectedPropertyGroupNamesForLayer(currentLayer, propertyPaths) : [];
-						var propNameCombined = propNames.length > 0 ? propNames.join(", ") : "Prop does not exist";
+						var propNameCombined = propNames.length > 0 ? propNames.join(", ") : "Property not selected";
 
 						var templateData = {
 							T: getLayerType(currentLayer),
