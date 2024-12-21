@@ -65,7 +65,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "E(e1, e2, [ # ])",
+        "template": "| Lexp(attr) | prop",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,

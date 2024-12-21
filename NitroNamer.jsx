@@ -2426,6 +2426,76 @@ function buildUI(thisObj) {
 		}
 	}
 
+	function getSelectedPropertyPaths(){
+		var proj = app.project;
+		var paths = [];
+		
+		if(proj && proj.activeItem instanceof CompItem){
+			var comp = proj.activeItem;
+			var selectedLayers = comp.selectedLayers;
+			
+			if(selectedLayers.length > 0){
+				var layer = selectedLayers[selectedLayers.length - 1];
+				var selectedProperties = layer.selectedProperties;
+				
+				if(selectedProperties.length > 0){
+					for(var i = 0; i < selectedProperties.length; i++){
+						var prop = selectedProperties[i];
+						
+						if(prop instanceof Property){
+							var path = [];
+							var currentProp = prop;
+							
+							while(currentProp && currentProp !== layer){
+								path.unshift(currentProp.name);
+								currentProp = currentProp.parentProperty;
+							}
+							
+							paths.push(path);
+						}
+					}
+					
+					if(paths.length > 0){
+						return paths;
+					}
+				}
+			}
+		}
+		
+		return null;
+	}	
+
+	function getAttributeNamesForLayer(layer, propertyPaths){
+		var attrNames = [];
+		
+		if(!propertyPaths || propertyPaths.length === 0){
+			return attrNames;
+		}
+		
+		for(var p = 0; p < propertyPaths.length; p++){
+			var propertyPath = propertyPaths[p];
+			var propGroup = layer;
+			var pathExists = true;
+			
+			for(var i = 0; i < propertyPath.length; i++){
+				var propName = propertyPath[i];
+				
+				if(propGroup.property(propName)){
+					propGroup = propGroup.property(propName);
+				} else {
+					pathExists = false;
+					break;
+				}
+			}
+			
+			if(pathExists && propGroup instanceof Property){
+				attrNames.push(propGroup.name);
+			}
+		}
+		
+		return attrNames;
+	}	
+
 	function getNthEffectName(layer, n, settings) {
 		if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties >= n) {
 			return layer.property("ADBE Effect Parade").property(n).name;
@@ -2753,30 +2823,18 @@ function buildUI(thisObj) {
 
 	var localIndex = 0;
 
-	function renameLayersByTemplate(
-		allLayers, 
-		template, 
-		briefly, 
-		brieflyCase, 
-		showShyLocked, 
-		reverseOrder, 
-		ctrlKey, 
-		shiftKey, 
-		altKey, 
-		ctrlShift
-	) {
+	function renameLayersByTemplate(allLayers, template, briefly, brieflyCase, showShyLocked, reverseOrder, ctrlKey, shiftKey, altKey, ctrlShift){
 		checkAndUpdateSettings();
 		var incrementValues = {};
 		var localIndex = 1;
 		var project = app.project;
-	
-		if (project && project.activeItem instanceof CompItem) {
+		
+		if(project && project.activeItem instanceof CompItem){
 			var activeComp = project.activeItem;
-	
-			if (activeComp.numLayers > 0) {
+			
+			if(activeComp.numLayers > 0){
 				var settings = loadSettings();
 				var nameApplySettings = settings.nameApply || {};
-	
 				var layerTypeMap = {
 					"Shape": "shapeLayer",
 					"Text": "textLayer",
@@ -2789,28 +2847,38 @@ function buildUI(thisObj) {
 					"Light": "lightLayer",
 					"Audio": "audioLayer"
 				};
-	
+				
 				app.beginUndoGroup("Rename Layers by Template");
-	
+				
+				// Получаем пути к выбранным свойствам
+				var propertyPaths = getSelectedPropertyPaths();
+				
 				var orderedLayers = getLayerOrder(activeComp, allLayers, altKey);
 				var layersToRename = [];
-	
-				for (var i = 0; i < orderedLayers.length; i++) {
+				
+				for(var i = 0; i < orderedLayers.length; i++){
 					var currentLayer = orderedLayers[i];
-	
-					if ((!currentLayer.shy || showShyLocked) && !currentLayer.locked && (allLayers || currentLayer.selected)) {
+					
+					if((!currentLayer.shy || showShyLocked) && !currentLayer.locked && (allLayers || currentLayer.selected)){
 						var layerType = getLayerType(currentLayer);
 						var applyKey = layerTypeMap[layerType];
-	
-						if (applyKey === undefined) {
+						
+						if(applyKey === undefined){
 							continue;
 						}
-	
+						
 						var shouldRename = nameApplySettings[applyKey];
-						if (!shouldRename) {
+						
+						if(!shouldRename){
 							continue;
 						}
-	
+						
+						// Получаем имена атрибутов для текущего слоя
+						var attrNames = propertyPaths ? getAttributeNamesForLayer(currentLayer, propertyPaths) : [];
+						
+						// Объединяем имена атрибутов, разделяя их запятой и пробелом
+						var attrNameCombined = attrNames.length > 0 ? attrNames.join(", ") : "Attribute does not exist";
+						
 						var templateData = {
 							T: getLayerType(currentLayer),
 							i: currentLayer.index,
@@ -2842,13 +2910,13 @@ function buildUI(thisObj) {
 							Lpnt: getImmediateParentName(currentLayer),
 							Lmc: getMaskCount(currentLayer, variableSettings),
 							Lmn: getMaskNames(currentLayer, variableSettings),
-							attr: getSelectedPropertyName()
+							attr: attrNameCombined // Устанавливаем объединённые имена атрибутов
 						};
-	
+						
 						var newName = replaceVariables(template, templateData, currentLayer.name, currentLayer, variableSettings);
-	
-						if (briefly) {
-							switch (brieflyCase) {
+						
+						if(briefly){
+							switch(brieflyCase){
 								case "Camel Case":
 									newName = toCamelCase(newName);
 									break;
@@ -2866,37 +2934,31 @@ function buildUI(thisObj) {
 									break;
 							}
 						}
-	
-						layersToRename.push({
-							layer: currentLayer,
-							newName: newName
-						});
+						
+						layersToRename.push({ layer: currentLayer, newName: newName });
 					}
 				}
-	
-				for (var j = 0; j < layersToRename.length; j++) {
+				
+				for(var j = 0; j < layersToRename.length; j++){
 					var renameItem = layersToRename[j];
 					var layer = renameItem.layer;
 					var newName = renameItem.newName;
-	
-					if (altKey) {
+					
+					if(altKey){
 						layer.name = layer.name + newName;
-					} else if (ctrlKey) {
+					} else if(ctrlKey){
 						layer.name = newName + layer.name;
-					} else {
+					} else{
 						layer.name = newName;
 					}
 				}
-	
+				
 				app.endUndoGroup();
-			} else {
+			} else{
 				alert("В активной композиции нет слоёв.", scriptMessageHead_1);
 			}
-		} else {
-			alert("Пожалуйста, выберите корректную композицию.", scriptMessageHead_1);
 		}
 	}
-	
 
 	function getEffectNames(layer, settings, effectsFilter, customSeparator) {
 		var effectNames = [];
