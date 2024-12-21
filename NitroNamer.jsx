@@ -658,21 +658,21 @@ function buildUI(thisObj) {
 		var iconPath = scriptFolderPath + "/NitroNamer/img/";
 
 		if (btnFavorites.isMouseOver) {
-			// Наведен курсор
+
 			if (btnFavorites.isFavorite) {
-				// Избранный + ховер
+
 				btnFavorites.image = File(iconPath + "favoritesModeHover.png");
 			} else {
-				// Не избранный + ховер
+
 				btnFavorites.image = File(iconPath + "favoritesHover.png");
 			}
 		} else {
-			// Нет наведения курсора
+
 			if (btnFavorites.isFavorite) {
-				// Избранный без ховера
+
 				btnFavorites.image = File(iconPath + "favoritesHover.png");
 			} else {
-				// Не избранный без ховера
+
 				btnFavorites.image = File(iconPath + "favorites.png");
 			}
 		}
@@ -1712,7 +1712,7 @@ function buildUI(thisObj) {
 			"Lmc": getMaskCount(layer, settings),
 			"Lmn": getMaskNames(layer, settings),
 			"attr": getSelectedPropertyName(),
-			"prop": getSelectedPropertyGroupName()
+			"prop": getSelectedPropertyGroupNamesForLayer(layer, getSelectedPropertyPaths()).length > 0 ? getSelectedPropertyGroupNamesForLayer(layer, getSelectedPropertyPaths()).join(", ") : "Prop does not exist"
 		};
 
 		if (briefly && !isNaN(parseFloat(variables.F))) {
@@ -2392,6 +2392,37 @@ function buildUI(thisObj) {
 		}
 	}
 
+	function getSelectedPropertyGroupNamesForLayer(layer, propertyPaths){
+		var propNames = [];
+		if(!propertyPaths || propertyPaths.length === 0){
+			return propNames;
+		}
+		for(var p=0; p < propertyPaths.length; p++){
+			var propertyPath = propertyPaths[p];
+			var propGroup = layer;
+			var pathExists = true;
+			for(var i=0; i < propertyPath.length; i++){
+				var propName = propertyPath[i];
+				if(propGroup.property(propName)){
+					propGroup = propGroup.property(propName);
+				}
+				else{
+					pathExists = false;
+					break;
+				}
+			}
+			if(pathExists && propGroup instanceof Property){
+				// Возвращаем имя группы свойств (например, "Rectangle Path 1")
+				propNames.push(propGroup.parentProperty.name);
+			}
+		}
+		// Удаляем дубликаты
+		propNames = propNames.filter(function(item, pos){
+			return propNames.indexOf(item) === pos;
+		});
+		return propNames;
+	}	
+
 	function getSelectedPropertyName() {
 		var proj = app.project;
 		if (proj && proj.activeItem instanceof CompItem) {
@@ -2426,75 +2457,75 @@ function buildUI(thisObj) {
 		}
 	}
 
-	function getSelectedPropertyPaths(){
+	function getSelectedPropertyPaths() {
 		var proj = app.project;
 		var paths = [];
-		
-		if(proj && proj.activeItem instanceof CompItem){
+
+		if (proj && proj.activeItem instanceof CompItem) {
 			var comp = proj.activeItem;
 			var selectedLayers = comp.selectedLayers;
-			
-			if(selectedLayers.length > 0){
+
+			if (selectedLayers.length > 0) {
 				var layer = selectedLayers[selectedLayers.length - 1];
 				var selectedProperties = layer.selectedProperties;
-				
-				if(selectedProperties.length > 0){
-					for(var i = 0; i < selectedProperties.length; i++){
+
+				if (selectedProperties.length > 0) {
+					for (var i = 0; i < selectedProperties.length; i++) {
 						var prop = selectedProperties[i];
-						
-						if(prop instanceof Property){
+
+						if (prop instanceof Property) {
 							var path = [];
 							var currentProp = prop;
-							
-							while(currentProp && currentProp !== layer){
+
+							while (currentProp && currentProp !== layer) {
 								path.unshift(currentProp.name);
 								currentProp = currentProp.parentProperty;
 							}
-							
+
 							paths.push(path);
 						}
 					}
-					
-					if(paths.length > 0){
+
+					if (paths.length > 0) {
 						return paths;
 					}
 				}
 			}
 		}
-		
-		return null;
-	}	
 
-	function getAttributeNamesForLayer(layer, propertyPaths){
+		return null;
+	}
+
+	function getAttributeNamesForLayer(layer, propertyPaths) {
 		var attrNames = [];
-		
-		if(!propertyPaths || propertyPaths.length === 0){
+
+		if (!propertyPaths || propertyPaths.length === 0) {
 			return attrNames;
 		}
-		
-		for(var p = 0; p < propertyPaths.length; p++){
+
+		for (var p = 0; p < propertyPaths.length; p++) {
 			var propertyPath = propertyPaths[p];
 			var propGroup = layer;
 			var pathExists = true;
-			
-			for(var i = 0; i < propertyPath.length; i++){
+
+			for (var i = 0; i < propertyPath.length; i++) {
 				var propName = propertyPath[i];
-				
-				if(propGroup.property(propName)){
+
+				if (propGroup.property(propName)) {
 					propGroup = propGroup.property(propName);
 				} else {
 					pathExists = false;
 					break;
 				}
 			}
-			
-			if(pathExists && propGroup instanceof Property){
+
+			if (pathExists && propGroup instanceof Property) {
 				attrNames.push(propGroup.name);
 			}
 		}
-		
+
 		return attrNames;
-	}	
+	}
 
 	function getNthEffectName(layer, n, settings) {
 		if (layer.property("ADBE Effect Parade") && layer.property("ADBE Effect Parade").numProperties >= n) {
@@ -2828,10 +2859,8 @@ function buildUI(thisObj) {
 		var incrementValues = {};
 		var localIndex = 1;
 		var project = app.project;
-		
 		if(project && project.activeItem instanceof CompItem){
 			var activeComp = project.activeItem;
-			
 			if(activeComp.numLayers > 0){
 				var settings = loadSettings();
 				var nameApplySettings = settings.nameApply || {};
@@ -2847,38 +2876,24 @@ function buildUI(thisObj) {
 					"Light": "lightLayer",
 					"Audio": "audioLayer"
 				};
-				
 				app.beginUndoGroup("Rename Layers by Template");
-				
-				// Получаем пути к выбранным свойствам
 				var propertyPaths = getSelectedPropertyPaths();
-				
 				var orderedLayers = getLayerOrder(activeComp, allLayers, altKey);
 				var layersToRename = [];
-				
-				for(var i = 0; i < orderedLayers.length; i++){
+				for(var i=0; i < orderedLayers.length; i++){
 					var currentLayer = orderedLayers[i];
-					
 					if((!currentLayer.shy || showShyLocked) && !currentLayer.locked && (allLayers || currentLayer.selected)){
 						var layerType = getLayerType(currentLayer);
 						var applyKey = layerTypeMap[layerType];
-						
-						if(applyKey === undefined){
-							continue;
-						}
-						
+						if(applyKey === undefined){ continue; }
 						var shouldRename = nameApplySettings[applyKey];
-						
-						if(!shouldRename){
-							continue;
-						}
-						
-						// Получаем имена атрибутов для текущего слоя
+						if(!shouldRename){ continue; }
 						var attrNames = propertyPaths ? getAttributeNamesForLayer(currentLayer, propertyPaths) : [];
-						
-						// Объединяем имена атрибутов, разделяя их запятой и пробелом
 						var attrNameCombined = attrNames.length > 0 ? attrNames.join(", ") : "Attribute does not exist";
-						
+	
+						var propNames = propertyPaths ? getSelectedPropertyGroupNamesForLayer(currentLayer, propertyPaths) : [];
+						var propNameCombined = propNames.length > 0 ? propNames.join(", ") : "Prop does not exist";
+	
 						var templateData = {
 							T: getLayerType(currentLayer),
 							i: currentLayer.index,
@@ -2910,11 +2925,10 @@ function buildUI(thisObj) {
 							Lpnt: getImmediateParentName(currentLayer),
 							Lmc: getMaskCount(currentLayer, variableSettings),
 							Lmn: getMaskNames(currentLayer, variableSettings),
-							attr: attrNameCombined // Устанавливаем объединённые имена атрибутов
+							attr: attrNameCombined,
+							prop: propNameCombined // Добавлено
 						};
-						
 						var newName = replaceVariables(template, templateData, currentLayer.name, currentLayer, variableSettings);
-						
 						if(briefly){
 							switch(brieflyCase){
 								case "Camel Case":
@@ -2934,31 +2948,33 @@ function buildUI(thisObj) {
 									break;
 							}
 						}
-						
-						layersToRename.push({ layer: currentLayer, newName: newName });
+						layersToRename.push({layer: currentLayer, newName: newName});
 					}
 				}
-				
-				for(var j = 0; j < layersToRename.length; j++){
+				for(var j=0; j < layersToRename.length; j++){
 					var renameItem = layersToRename[j];
 					var layer = renameItem.layer;
 					var newName = renameItem.newName;
-					
 					if(altKey){
 						layer.name = layer.name + newName;
-					} else if(ctrlKey){
+					}
+					else if(ctrlKey){
 						layer.name = newName + layer.name;
-					} else{
+					}
+					else{
 						layer.name = newName;
 					}
 				}
-				
 				app.endUndoGroup();
-			} else{
+			}
+			else{
 				alert("В активной композиции нет слоёв.", scriptMessageHead_1);
 			}
 		}
-	}
+		else{
+			alert("В активной композиции нет слоёв.", scriptMessageHead_1);
+		}
+	}	
 
 	function getEffectNames(layer, settings, effectsFilter, customSeparator) {
 		var effectNames = [];

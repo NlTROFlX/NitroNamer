@@ -65,7 +65,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "| Lexp(attr) | prop",
+        "template": "prop | attr",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,
