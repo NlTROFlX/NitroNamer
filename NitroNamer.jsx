@@ -2753,19 +2753,30 @@ function buildUI(thisObj) {
 
 	var localIndex = 0;
 
-	function renameLayersByTemplate(allLayers, template, briefly, brieflyCase, showShyLocked, reverseOrder, ctrlKey, shiftKey, altKey, ctrlShift) {
+	function renameLayersByTemplate(
+		allLayers, 
+		template, 
+		briefly, 
+		brieflyCase, 
+		showShyLocked, 
+		reverseOrder, 
+		ctrlKey, 
+		shiftKey, 
+		altKey, 
+		ctrlShift
+	) {
 		checkAndUpdateSettings();
-		incrementValues = {};
-		localIndex = 1;
-		var u = app.project;
-		if (u && u.activeItem instanceof CompItem) {
-			var m = u.activeItem;
-			if (m.numLayers > 0) {
-
+		var incrementValues = {};
+		var localIndex = 1;
+		var project = app.project;
+	
+		if (project && project.activeItem instanceof CompItem) {
+			var activeComp = project.activeItem;
+	
+			if (activeComp.numLayers > 0) {
 				var settings = loadSettings();
-				var nameApply = settings.nameApply || {};
-
-
+				var nameApplySettings = settings.nameApply || {};
+	
 				var layerTypeMap = {
 					"Shape": "shapeLayer",
 					"Text": "textLayer",
@@ -2778,120 +2789,114 @@ function buildUI(thisObj) {
 					"Light": "lightLayer",
 					"Audio": "audioLayer"
 				};
-
+	
 				app.beginUndoGroup("Rename Layers by Template");
-
-
-				var c = getLayerOrder(m, allLayers, altKey);
-				var f = [];
-
-				for (var p = 0; p < c.length; p++) {
-					var v = c[p];
-
-					if ((!v.shy || showShyLocked) && !v.locked && (allLayers || v.selected)) {
-
-
-						var lt = getLayerType(v);
-
-						var applyKey = layerTypeMap[lt];
-
-
+	
+				var orderedLayers = getLayerOrder(activeComp, allLayers, altKey);
+				var layersToRename = [];
+	
+				for (var i = 0; i < orderedLayers.length; i++) {
+					var currentLayer = orderedLayers[i];
+	
+					if ((!currentLayer.shy || showShyLocked) && !currentLayer.locked && (allLayers || currentLayer.selected)) {
+						var layerType = getLayerType(currentLayer);
+						var applyKey = layerTypeMap[layerType];
+	
 						if (applyKey === undefined) {
-
-
 							continue;
 						}
-
-
-						var shouldRename = nameApply[applyKey];
+	
+						var shouldRename = nameApplySettings[applyKey];
 						if (!shouldRename) {
-
 							continue;
 						}
-
-
-						var d = {
-							T: getLayerType(v),
-							i: v.index,
+	
+						var templateData = {
+							T: getLayerType(currentLayer),
+							i: currentLayer.index,
 							I: localIndex,
-							O: v.name,
-							E: getEffectNames(v, variableSettings),
-							An: getAnimatedProperties(v, variableSettings),
-							F: getFrameRate(v, variableSettings),
-							R: getResolution(v, variableSettings),
-							D: getDuration(v),
-							Df: getDurationInFrames(v),
-							C: m.name,
-							Ip: v.inPoint.toFixed(2),
-							Op: v.outPoint.toFixed(2),
-							S: getSourceName(v),
-							W: getWidth(v, variableSettings),
-							H: getHeight(v, variableSettings),
-							Tm: getTrackMatteType(v, variableSettings),
-							Ar: getAspectRatio(v, variableSettings),
-							Ec: getEffectsCount(v, variableSettings),
+							O: currentLayer.name,
+							E: getEffectNames(currentLayer, variableSettings),
+							An: getAnimatedProperties(currentLayer, variableSettings),
+							F: getFrameRate(currentLayer, variableSettings),
+							R: getResolution(currentLayer, variableSettings),
+							D: getDuration(currentLayer),
+							Df: getDurationInFrames(currentLayer),
+							C: activeComp.name,
+							Ip: currentLayer.inPoint.toFixed(2),
+							Op: currentLayer.outPoint.toFixed(2),
+							S: getSourceName(currentLayer),
+							W: getWidth(currentLayer, variableSettings),
+							H: getHeight(currentLayer, variableSettings),
+							Tm: getTrackMatteType(currentLayer, variableSettings),
+							Ar: getAspectRatio(currentLayer, variableSettings),
+							Ec: getEffectsCount(currentLayer, variableSettings),
 							Pn: getProjectName(),
-							Lpos: getLayerPosition(v),
-							Lsc: getLayerScale(v),
-							Lrot: getLayerRotation(v),
-							Lops: getLayerOpacity(v),
-							Lexp: getExpressionControlledProperties(v, variableSettings),
-							Fext: getFileExtension(v, variableSettings),
-							LpntIndex: getLayerParentIndex(v),
-							Lpnt: getImmediateParentName(v),
-							Lmc: getMaskCount(v, variableSettings),
-							Lmn: getMaskNames(v, variableSettings),
+							Lpos: getLayerPosition(currentLayer),
+							Lsc: getLayerScale(currentLayer),
+							Lrot: getLayerRotation(currentLayer),
+							Lops: getLayerOpacity(currentLayer),
+							Lexp: getExpressionControlledProperties(currentLayer, variableSettings),
+							Fext: getFileExtension(currentLayer, variableSettings),
+							LpntIndex: getLayerParentIndex(currentLayer),
+							Lpnt: getImmediateParentName(currentLayer),
+							Lmc: getMaskCount(currentLayer, variableSettings),
+							Lmn: getMaskNames(currentLayer, variableSettings),
 							attr: getSelectedPropertyName()
 						};
-
-						var g = replaceVariables(template, d, v.name, v, variableSettings);
+	
+						var newName = replaceVariables(template, templateData, currentLayer.name, currentLayer, variableSettings);
+	
 						if (briefly) {
 							switch (brieflyCase) {
 								case "Camel Case":
-									g = toCamelCase(g);
+									newName = toCamelCase(newName);
 									break;
 								case "Pascal Case":
-									g = toPascalCase(g);
+									newName = toPascalCase(newName);
 									break;
 								case "Snake Case":
-									g = toSnakeCase(g);
+									newName = toSnakeCase(newName);
 									break;
 								case "Kebab Case":
-									g = toKebabCase(g);
+									newName = toKebabCase(newName);
 									break;
 								case "Screaming Snake Case":
-									g = toScreamingSnakeCase(g);
+									newName = toScreamingSnakeCase(newName);
 									break;
 							}
 						}
-
-						f.push({
-							layer: v,
-							newName: g
+	
+						layersToRename.push({
+							layer: currentLayer,
+							newName: newName
 						});
 					}
 				}
-
-				for (var y = 0; y < f.length; y++) {
-					var h = f[y],
-						v = h.layer,
-						g = h.newName;
+	
+				for (var j = 0; j < layersToRename.length; j++) {
+					var renameItem = layersToRename[j];
+					var layer = renameItem.layer;
+					var newName = renameItem.newName;
+	
 					if (altKey) {
-						v.name = v.name + g;
+						layer.name = layer.name + newName;
 					} else if (ctrlKey) {
-						v.name = g + v.name;
+						layer.name = newName + layer.name;
 					} else {
-						v.name = g;
+						layer.name = newName;
 					}
 				}
+	
 				app.endUndoGroup();
 			} else {
-				alert("No layers in the active composition.", scriptMessageHead_1);
+				alert("В активной композиции нет слоёв.", scriptMessageHead_1);
 			}
 		} else {
-			alert("Please select a valid composition.", scriptMessageHead_1);
+			alert("Пожалуйста, выберите корректную композицию.", scriptMessageHead_1);
 		}
 	}
+	
 
 	function getEffectNames(layer, settings, effectsFilter, customSeparator) {
 		var effectNames = [];
