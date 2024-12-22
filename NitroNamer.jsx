@@ -2347,87 +2347,39 @@ function buildUI(thisObj) {
 		return currentLayer.name;
 	}
 
-	function getSelectedPropertyGroupName() {
-		var proj = app.project;
-		if (proj && proj.activeItem instanceof CompItem) {
-			var comp = proj.activeItem;
-			var selectedLayers = comp.selectedLayers;
-			if (selectedLayers.length > 0) {
-				var layer = selectedLayers[selectedLayers.length - 1];
-				var selectedProperties = layer.selectedProperties;
-				if (selectedProperties.length > 0) {
-
-					var prop = selectedProperties[0];
-
-
-					function isGroup(p) {
-						return (p instanceof PropertyGroup || p instanceof MaskPropertyGroup);
-					}
-
-
-					if (isGroup(prop)) {
-						return prop.name;
-					} else {
-
-						var parent = prop.parentProperty;
-						while (parent && !isGroup(parent) && !(parent instanceof CompItem)) {
-							parent = parent.parentProperty;
-						}
-
-						if (parent && isGroup(parent)) {
-							return parent.name;
-						} else {
-
-							return "Attribute not selected";
-						}
-					}
-				} else {
-					return "Attribute not selected";
-				}
-			} else {
-				return "Attribute not selected";
-			}
-		} else {
-			return "Attribute not selected";
-		}
-	}
-
-	function getSelectedPropertyGroupNamesForLayer(layer, propertyPaths){
+	function getSelectedPropertyGroupNamesForLayer(layer, propertyPaths) {
 		var propNames = [];
-		if(!propertyPaths || propertyPaths.length === 0){
+		if (!propertyPaths || propertyPaths.length === 0) {
 			return propNames;
 		}
-		for(var p = 0; p < propertyPaths.length; p++){
+		for (var p = 0; p < propertyPaths.length; p++) {
 			var propertyPath = propertyPaths[p];
 			var propGroup = layer;
 			var pathExists = true;
-			for(var i = 0; i < propertyPath.length; i++){
+			for (var i = 0; i < propertyPath.length; i++) {
 				var propName = propertyPath[i];
-				if(propGroup.property(propName)){
+				if (propGroup.property(propName)) {
 					propGroup = propGroup.property(propName);
-				}
-				else{
+				} else {
 					pathExists = false;
 					break;
 				}
 			}
-			if(pathExists){
-				// Проверяем, является ли propGroup группой свойств и содержит ли она свойства
-				if((propGroup instanceof PropertyGroup || propGroup instanceof MaskPropertyGroup) && propGroup.numProperties > 0){
+			if (pathExists) {
+
+				if ((propGroup instanceof PropertyGroup || propGroup instanceof MaskPropertyGroup) && propGroup.numProperties > 0) {
 					propNames.push(propGroup.name);
-				}
-				// Если это свойство, добавляем имя родительской группы (только если родительская группа существует и содержит свойства)
-				else if(propGroup instanceof Property && propGroup.parentProperty instanceof PropertyGroup && propGroup.parentProperty.numProperties > 0){
+				} else if (propGroup instanceof Property && propGroup.parentProperty instanceof PropertyGroup && propGroup.parentProperty.numProperties > 0) {
 					propNames.push(propGroup.parentProperty.name);
 				}
 			}
 		}
-		// Удаляем дубликаты
-		propNames = propNames.filter(function(item, pos){
+
+		propNames = propNames.filter(function(item, pos) {
 			return propNames.indexOf(item) === pos;
 		});
 		return propNames;
-	}	
+	}
 
 	function getSelectedPropertyName() {
 		var proj = app.project;
