@@ -1,3 +1,5 @@
+var cycleState = {};
+
 function buildUI(thisObj) {
 
 	var scriptMessageHead_1 = "NitroNamer 2025.1 - dev";
@@ -2535,7 +2537,6 @@ function buildUI(thisObj) {
 		var nthEffectRegex = /e(\d+)/g;
 		var nthMaskRegex = /m(\d+)/g;
 
-
 		var regex = new RegExp([
 			"\\(([^()]+)\\)",
 			"T\\(([^()\\[\\]]+)\\)",
@@ -2577,7 +2578,8 @@ function buildUI(thisObj) {
 			"m(\\d+)",
 			"[A-Z]",
 			"i",
-			"S", "W", "H"
+			"S", "W", "H",
+			"@cycle\\(\\s*(\\d+)\\s*,\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)", "cycle"
 		].join("|"), "g");
 
 		var usedVariables = {};
@@ -2593,7 +2595,7 @@ function buildUI(thisObj) {
 			durationFormat, customFext, customAr,
 			parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator,
 			lmnSeparatorOnly, lmnFilters, lmnSeparator,
-			customI, nthEffectIndex, nthMaskIndex
+			customI, nthEffectIndex, nthMaskIndex, cycleCount, cycleA, cycleB
 		) {
 			var value;
 
@@ -2672,9 +2674,29 @@ function buildUI(thisObj) {
 				});
 			}
 
+			if (cycleCount !== undefined && cycleA !== undefined && cycleB !== undefined) {
+				var N = parseInt(cycleCount, 10);
+				if (!cycleState[template]) {
+					// Инициализация состояния цикла для данного шаблона
+					cycleState[template] = {
+						count: 0,
+						current: cycleA
+					};
+				}
+	
+				var currentCycle = cycleState[template];
+				value = currentCycle.current;
+	
+				currentCycle.count += 1;
+				if (currentCycle.count >= N) {
+					currentCycle.count = 0;
+					currentCycle.current = (currentCycle.current === cycleA) ? cycleB : cycleA;
+				}
+	
+				return value;
+			}
 
 			if (group !== undefined) {
-
 				return group;
 			} else if (tFilter !== undefined) {
 				var layerType = variables['T'];
@@ -2806,6 +2828,7 @@ function buildUI(thisObj) {
 	var localIndex = 0;
 
 	function renameLayersByTemplate(allLayers, template, briefly, brieflyCase, showShyLocked, reverseOrder, ctrlKey, shiftKey, altKey, ctrlShift) {
+		cycleState = {};
 		checkAndUpdateSettings();
 		var incrementValues = {};
 		var localIndex = 1;
