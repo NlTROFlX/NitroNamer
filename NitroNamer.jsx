@@ -1,7 +1,6 @@
 var cycleState = {};
 
 function buildUI(thisObj) {
-
 	var scriptMessageHead_1 = "NitroNamer 2025.1 - dev";
 
 	var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", scriptMessageHead_1, undefined, {
@@ -2828,6 +2827,7 @@ function buildUI(thisObj) {
 		var incrementValues = {};
 		var localIndex = 1;
 		var project = app.project;
+	
 		if (project && project.activeItem instanceof CompItem) {
 			var activeComp = project.activeItem;
 			if (activeComp.numLayers > 0) {
@@ -2849,6 +2849,7 @@ function buildUI(thisObj) {
 				var propertyPaths = getSelectedPropertyPaths();
 				var orderedLayers = getLayerOrder(activeComp, allLayers, altKey);
 				var layersToRename = [];
+	
 				for (var i = 0; i < orderedLayers.length; i++) {
 					var currentLayer = orderedLayers[i];
 					if ((!currentLayer.shy || showShyLocked) && !currentLayer.locked && (allLayers || currentLayer.selected)) {
@@ -2863,13 +2864,15 @@ function buildUI(thisObj) {
 						}
 						var attrNames = propertyPaths ? getAttributeNamesForLayer(currentLayer, propertyPaths) : [];
 						var attrNameCombined = attrNames.length > 0 ? attrNames.join(", ") : "Attribute not selected";
-
 						var propNames = propertyPaths ? getSelectedPropertyGroupNamesForLayer(currentLayer, propertyPaths) : [];
 						var propNameCombined = propNames.length > 0 ? propNames.join(", ") : "Property not selected";
-
+						
+						// Определение общего количества слоев для переименования
+						var totalLayers = layersToRename.length + 1; // +1 для текущего слоя
+	
 						var templateData = {
 							T: getLayerType(currentLayer),
-							i: currentLayer.index,
+							i: reverseOrder ? (totalLayers) : localIndex,
 							I: localIndex,
 							O: currentLayer.name,
 							E: getEffectNames(currentLayer, variableSettings),
@@ -2901,7 +2904,9 @@ function buildUI(thisObj) {
 							attr: attrNameCombined,
 							prop: propNameCombined
 						};
+	
 						var newName = replaceVariables(template, templateData, currentLayer.name, currentLayer, variableSettings);
+						
 						if (briefly) {
 							switch (brieflyCase) {
 								case "Camel Case":
@@ -2921,18 +2926,17 @@ function buildUI(thisObj) {
 									break;
 							}
 						}
-						layersToRename.push({
-							layer: currentLayer,
-							newName: newName
-						});
+						layersToRename.push({ layer: currentLayer, newName: newName });
+						localIndex++;
 					}
 				}
+	
 				for (var j = 0; j < layersToRename.length; j++) {
 					var renameItem = layersToRename[j];
 					var layer = renameItem.layer;
 					var newName = renameItem.newName;
 					if (altKey) {
-						layer.name = layer.name + newName;
+						layer.name = newName; // Изменено: заменяем имя полностью
 					} else if (ctrlKey) {
 						layer.name = newName + layer.name;
 					} else {
@@ -2946,7 +2950,7 @@ function buildUI(thisObj) {
 		} else {
 			alert("В активной композиции нет слоёв.", scriptMessageHead_1);
 		}
-	}
+	}	
 
 	function getEffectNames(layer, settings, effectsFilter, customSeparator) {
 		var effectNames = [];

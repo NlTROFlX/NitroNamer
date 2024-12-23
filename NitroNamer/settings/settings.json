@@ -4,7 +4,8 @@
             "allLayers": true,
             "template": "(Layer)_@cycle(2, '(Type):T.i', '(ProjectName):Pn.i')",
             "briefly": false,
-            "brieflyType": 0
+            "brieflyType": 0,
+            "usageFrequency": 1
         },
         "preset_7": {
             "allLayers": true,
@@ -77,7 +78,7 @@
         "selectedPresetIndex": 0,
         "modeIndex": 5,
         "modeActive": false,
-        "selectedPresetTemplate": "(Layer)_@cycle(2, 'T.i', 'C.i')"
+        "selectedPresetTemplate": "(Layer)_@cycle(2, '(Type):T.i', '(ProjectName):Pn.i')"
     },
     "selectedLanguage": "Russian",
     "nameApply": {
