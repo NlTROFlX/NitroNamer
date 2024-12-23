@@ -1,5 +1,11 @@
 {
     "userPresets": {
+        "preset_8": {
+            "allLayers": true,
+            "template": "(Layer)_@cycle(2, '(Type):T.i', '(ProjectName):Pn.i')",
+            "briefly": false,
+            "brieflyType": 0
+        },
         "preset_7": {
             "allLayers": true,
             "template": "An(attr)",
@@ -65,13 +71,13 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "(Layer)_@cycle(2, 'template_A', 'template_B')_T.i",
+        "template": "T.i",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,
         "modeIndex": 5,
         "modeActive": false,
-        "selectedPresetTemplate": "An(attr)"
+        "selectedPresetTemplate": "(Layer)_@cycle(2, 'T.i', 'C.i')"
     },
     "selectedLanguage": "Russian",
     "nameApply": {

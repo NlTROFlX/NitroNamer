@@ -2677,23 +2677,18 @@ function buildUI(thisObj) {
 			if (cycleCount !== undefined && cycleA !== undefined && cycleB !== undefined) {
 				var N = parseInt(cycleCount, 10);
 				if (!cycleState[template]) {
-					// Инициализация состояния цикла для данного шаблона
-					cycleState[template] = {
-						count: 0,
-						current: cycleA
-					};
+					cycleState[template] = { count: 0, current: cycleA };
 				}
-	
 				var currentCycle = cycleState[template];
-				value = currentCycle.current;
-	
+				var cycleValue = currentCycle.current;
 				currentCycle.count += 1;
 				if (currentCycle.count >= N) {
 					currentCycle.count = 0;
 					currentCycle.current = (currentCycle.current === cycleA) ? cycleB : cycleA;
 				}
-	
-				return value;
+				// Рекурсивная подстановка переменных внутри cycleA или cycleB
+				var processedCycleValue = replaceVariables(cycleValue, variables, originalName, layer, settings);
+				return processedCycleValue;
 			}
 
 			if (group !== undefined) {
