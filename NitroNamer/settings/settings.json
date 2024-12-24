@@ -21,7 +21,7 @@
             "template": "T.i",
             "briefly": false,
             "brieflyType": 0,
-            "usageFrequency": 13
+            "usageFrequency": 14
         },
         "preset_1": {
             "allLayers": true,
@@ -78,7 +78,7 @@
         "selectedPresetIndex": 0,
         "modeIndex": 5,
         "modeActive": false,
-        "selectedPresetTemplate": "(Layer)_@cycle(2, '(Type):T.i', '(ProjectName):Pn.i')"
+        "selectedPresetTemplate": "T.i"
     },
     "selectedLanguage": "Russian",
     "nameApply": {

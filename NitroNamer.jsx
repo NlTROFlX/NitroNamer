@@ -2937,18 +2937,21 @@ function buildUI(thisObj) {
 					}
 				}
 
-				for (var j = 0; j < layersToRename.length; j++) {
+				for(var j=0; j < layersToRename.length; j++) {
 					var renameItem = layersToRename[j];
 					var layer = renameItem.layer;
 					var newName = renameItem.newName;
-					if (altKey) {
+					if(altKey){
+						// Если нажата клавиша Alt, полностью заменяем имя слоя
 						layer.name = newName;
-					} else if (ctrlKey) {
+					} else if(shiftKey){
+						// Если нажата клавиша Shift, добавляем шаблон к началу имени слоя
 						layer.name = newName + layer.name;
 					} else {
+						// Стандартное поведение: заменяем имя слоя на новое
 						layer.name = newName;
 					}
-				}
+				}				
 				app.endUndoGroup();
 			} else {
 				alert("В активной композиции нет слоёв.", scriptMessageHead_1);
