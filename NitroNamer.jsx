@@ -2676,7 +2676,10 @@ function buildUI(thisObj) {
 			if (cycleCount !== undefined && cycleA !== undefined && cycleB !== undefined) {
 				var N = parseInt(cycleCount, 10);
 				if (!cycleState[template]) {
-					cycleState[template] = { count: 0, current: cycleA };
+					cycleState[template] = {
+						count: 0,
+						current: cycleA
+					};
 				}
 				var currentCycle = cycleState[template];
 				var cycleValue = currentCycle.current;
@@ -2685,7 +2688,7 @@ function buildUI(thisObj) {
 					currentCycle.count = 0;
 					currentCycle.current = (currentCycle.current === cycleA) ? cycleB : cycleA;
 				}
-				// Рекурсивная подстановка переменных внутри cycleA или cycleB
+
 				var processedCycleValue = replaceVariables(cycleValue, variables, originalName, layer, settings);
 				return processedCycleValue;
 			}
@@ -2827,7 +2830,7 @@ function buildUI(thisObj) {
 		var incrementValues = {};
 		var localIndex = 1;
 		var project = app.project;
-	
+
 		if (project && project.activeItem instanceof CompItem) {
 			var activeComp = project.activeItem;
 			if (activeComp.numLayers > 0) {
@@ -2849,7 +2852,7 @@ function buildUI(thisObj) {
 				var propertyPaths = getSelectedPropertyPaths();
 				var orderedLayers = getLayerOrder(activeComp, allLayers, altKey);
 				var layersToRename = [];
-	
+
 				for (var i = 0; i < orderedLayers.length; i++) {
 					var currentLayer = orderedLayers[i];
 					if ((!currentLayer.shy || showShyLocked) && !currentLayer.locked && (allLayers || currentLayer.selected)) {
@@ -2866,10 +2869,10 @@ function buildUI(thisObj) {
 						var attrNameCombined = attrNames.length > 0 ? attrNames.join(", ") : "Attribute not selected";
 						var propNames = propertyPaths ? getSelectedPropertyGroupNamesForLayer(currentLayer, propertyPaths) : [];
 						var propNameCombined = propNames.length > 0 ? propNames.join(", ") : "Property not selected";
-						
-						// Определение общего количества слоев для переименования
-						var totalLayers = layersToRename.length + 1; // +1 для текущего слоя
-	
+
+
+						var totalLayers = layersToRename.length + 1;
+
 						var templateData = {
 							T: getLayerType(currentLayer),
 							i: reverseOrder ? (totalLayers) : localIndex,
@@ -2904,9 +2907,9 @@ function buildUI(thisObj) {
 							attr: attrNameCombined,
 							prop: propNameCombined
 						};
-	
+
 						var newName = replaceVariables(template, templateData, currentLayer.name, currentLayer, variableSettings);
-						
+
 						if (briefly) {
 							switch (brieflyCase) {
 								case "Camel Case":
@@ -2926,17 +2929,20 @@ function buildUI(thisObj) {
 									break;
 							}
 						}
-						layersToRename.push({ layer: currentLayer, newName: newName });
+						layersToRename.push({
+							layer: currentLayer,
+							newName: newName
+						});
 						localIndex++;
 					}
 				}
-	
+
 				for (var j = 0; j < layersToRename.length; j++) {
 					var renameItem = layersToRename[j];
 					var layer = renameItem.layer;
 					var newName = renameItem.newName;
 					if (altKey) {
-						layer.name = newName; // Изменено: заменяем имя полностью
+						layer.name = newName;
 					} else if (ctrlKey) {
 						layer.name = newName + layer.name;
 					} else {
@@ -2950,7 +2956,7 @@ function buildUI(thisObj) {
 		} else {
 			alert("В активной композиции нет слоёв.", scriptMessageHead_1);
 		}
-	}	
+	}
 
 	function getEffectNames(layer, settings, effectsFilter, customSeparator) {
 		var effectNames = [];
