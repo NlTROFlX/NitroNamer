@@ -1327,6 +1327,22 @@ function buildUI(thisObj) {
 		}
 	}
 
+	function getTypeIndexInComp(layer) {
+		var comp = layer.containingComp;
+		var type = getLayerType(layer);
+		var count = 0;
+		for (var i = 1; i <= comp.numLayers; i++) {
+			var l = comp.layer(i);
+			if (getLayerType(l) === type) {
+				count++;
+				if (l === layer) {
+					return count;
+				}
+			}
+		}
+		return 1; // На всякий случай
+	}	
+
 	variableSettings = loadVariableSettings();
 
 	function applySettings(settings) {
@@ -2539,6 +2555,7 @@ function buildUI(thisObj) {
 		var regex = new RegExp([
 			"\\(([^()]+)\\)",
 			"T\\(([^()\\[\\]]+)\\)",
+			"it",
 			"Df",
 			"Ec\\(([^()\\[\\]]+?)\\)",
 			"Ec",
@@ -2695,6 +2712,12 @@ function buildUI(thisObj) {
 
 			if (group !== undefined) {
 				return group;
+			} else if (match === 'it') {
+				if (variables.hasOwnProperty('it')) {
+					value = variables['it'];
+				} else {
+					value = getTypeIndexInComp(layer);
+				}
 			} else if (tFilter !== undefined) {
 				var layerType = variables['T'];
 				value = filterLayerType(layerType, tFilter);
@@ -2849,6 +2872,7 @@ function buildUI(thisObj) {
 					"Audio": "audioLayer"
 				};
 				app.beginUndoGroup("Rename Layers by Template");
+				var typeCounter = {};
 				var propertyPaths = getSelectedPropertyPaths();
 				var orderedLayers = getLayerOrder(activeComp, allLayers, altKey);
 				var layersToRename = [];
@@ -2861,15 +2885,22 @@ function buildUI(thisObj) {
 						if (applyKey === undefined) {
 							continue;
 						}
+
 						var shouldRename = nameApplySettings[applyKey];
 						if (!shouldRename) {
 							continue;
 						}
+
+						if (!typeCounter[layerType]) {
+							typeCounter[layerType] = 1;
+						} else {
+							typeCounter[layerType]++;
+						}
+
 						var attrNames = propertyPaths ? getAttributeNamesForLayer(currentLayer, propertyPaths) : [];
 						var attrNameCombined = attrNames.length > 0 ? attrNames.join(", ") : "Attribute not selected";
 						var propNames = propertyPaths ? getSelectedPropertyGroupNamesForLayer(currentLayer, propertyPaths) : [];
 						var propNameCombined = propNames.length > 0 ? propNames.join(", ") : "Property not selected";
-
 
 						var totalLayers = layersToRename.length + 1;
 
@@ -2877,6 +2908,7 @@ function buildUI(thisObj) {
 							T: getLayerType(currentLayer),
 							i: reverseOrder ? (totalLayers) : localIndex,
 							I: localIndex,
+							it: typeCounter[layerType],
 							O: currentLayer.name,
 							E: getEffectNames(currentLayer, variableSettings),
 							An: getAnimatedProperties(currentLayer, variableSettings),
