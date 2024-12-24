@@ -72,7 +72,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "T.it | i",
+        "template": "*",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,

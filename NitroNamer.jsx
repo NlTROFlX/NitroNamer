@@ -2569,6 +2569,8 @@ function buildUI(thisObj) {
 					var newName = renameItem.newName;
 					if (altKey) {
 						layer.name = newName;
+					} else if (ctrlKey){
+						layer.name = layer.name + newName;
 					} else if (shiftKey) {
 						layer.name = newName + layer.name;
 					} else {
