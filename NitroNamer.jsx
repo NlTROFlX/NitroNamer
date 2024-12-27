@@ -2430,32 +2430,17 @@ function buildUI(thisObj) {
 	}
 	var localIndex = 0;
 
-	function renameLayersByTemplate(
-		allLayers,
-		template,
-		briefly,
-		brieflyCase,
-		showShyLocked,
-		reverseOrder,
-		ctrlKey,
-		shiftKey,
-		altKey,
-		ctrlShift
-	) {
+	function renameLayersByTemplate(allLayers, template, briefly, brieflyCase, showShyLocked, reverseOrder, ctrlKey, shiftKey, altKey, ctrlShift) {
 		cycleState = {};
 		checkAndUpdateSettings();
 		var incrementValues = {};
 		var localIndex = 1;
 		var project = app.project;
-
 		if (project && project.activeItem instanceof CompItem) {
 			var activeComp = project.activeItem;
-
 			if (activeComp.numLayers > 0) {
 				var settings = loadSettings();
 				var nameApplySettings = settings.nameApply || {};
-
-
 				var layerTypeMap = {
 					"Shape": "shapeLayer",
 					"Text": "textLayer",
@@ -2468,17 +2453,8 @@ function buildUI(thisObj) {
 					"Light": "lightLayer",
 					"Audio": "audioLayer"
 				};
-
 				app.beginUndoGroup("Rename Layers by Template");
-
-
 				var orderedLayers = getLayerOrder(activeComp, allLayers, false);
-
-
-
-
-
-
 				var typeTotals = {};
 				for (var i = 1; i <= activeComp.numLayers; i++) {
 					var ly = activeComp.layer(i);
@@ -2488,20 +2464,11 @@ function buildUI(thisObj) {
 					}
 					typeTotals[lt]++;
 				}
-
-
-
-
-
 				var typeCounter = {};
-
-
 				var totalLayersInComp = activeComp.numLayers;
 				var globalI = altKey ? totalLayersInComp : 1;
-
 				var propertyPaths = getSelectedPropertyPaths();
 				var layersToRename = [];
-
 				for (var idx = 0; idx < orderedLayers.length; idx++) {
 					var currentLayer = orderedLayers[idx];
 					var currentI = globalI;
@@ -2510,52 +2477,32 @@ function buildUI(thisObj) {
 					} else {
 						globalI++;
 					}
-
-
 					var layerType = getLayerType(currentLayer);
-
-
 					var typeIndex = getTypeIndexInComp(currentLayer);
-
-
 					var totalTypeLayers = typeTotals[layerType] || 1;
-
-
 					var it = reverseOrder ? (totalTypeLayers - typeIndex + 1) : typeIndex;
-
-
 					if ((!currentLayer.shy || showShyLocked) && !currentLayer.locked && (allLayers || currentLayer.selected)) {
-
 						var layerType = getLayerType(currentLayer);
 						var applyKey = layerTypeMap[layerType];
 						if (applyKey === undefined) {
-
 							continue;
 						}
 						var shouldRename = nameApplySettings[applyKey];
 						if (!shouldRename) {
-
 							continue;
 						}
-
 						if (!typeCounter.hasOwnProperty(layerType)) {
 							typeCounter[layerType] = altKey ? typeTotals[layerType] : 1;
 						}
-
-
 						if (altKey) {
 							typeCounter[layerType]--;
 						} else {
 							typeCounter[layerType]++;
 						}
-
-
 						var attrNames = propertyPaths ? getAttributeNamesForLayer(currentLayer, propertyPaths) : [];
 						var attrNameCombined = attrNames.length > 0 ? attrNames.join(", ") : "Attribute not selected";
-
 						var propNames = propertyPaths ? getSelectedPropertyGroupNamesForLayer(currentLayer, propertyPaths) : [];
 						var propNameCombined = propNames.length > 0 ? propNames.join(", ") : "Property not selected";
-
 						var templateData = {
 							T: layerType,
 							i: currentI,
@@ -2591,11 +2538,7 @@ function buildUI(thisObj) {
 							attr: attrNameCombined,
 							prop: propNameCombined
 						};
-
-
 						var newName = replaceVariables(template, templateData, currentLayer.name, currentLayer, variableSettings);
-
-
 						if (briefly) {
 							switch (brieflyCase) {
 								case "Camel Case":
@@ -2615,22 +2558,16 @@ function buildUI(thisObj) {
 									break;
 							}
 						}
-
-
 						layersToRename.push({
 							layer: currentLayer,
 							newName: newName
 						});
 					}
 				}
-
-
 				for (var j = 0; j < layersToRename.length; j++) {
 					var renameItem = layersToRename[j];
 					var layer = renameItem.layer;
 					var newName = renameItem.newName;
-
-
 					if (altKey) {
 						layer.name = newName;
 					} else if (ctrlKey) {
@@ -2641,7 +2578,6 @@ function buildUI(thisObj) {
 						layer.name = newName;
 					}
 				}
-
 				app.endUndoGroup();
 			} else {
 				alert("В активной композиции нет слоёв.", scriptMessageHead_1);
@@ -2650,7 +2586,6 @@ function buildUI(thisObj) {
 			alert("В активной композиции нет слоёв.", scriptMessageHead_1);
 		}
 	}
-
 
 	function getEffectNames(layer, settings, effectsFilter, customSeparator) {
 		var effectNames = [];
