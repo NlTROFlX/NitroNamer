@@ -23,7 +23,7 @@
             "template": "(Layer)_@cycle(2, '(Type):T.i', '(ProjectName):Pn.i')",
             "briefly": false,
             "brieflyType": 0,
-            "usageFrequency": 6
+            "usageFrequency": 7
         },
         "preset_7": {
             "allLayers": true,
@@ -90,7 +90,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "@cycle(2, '(A)', '(B)')",
+        "template": "(Layer)_@cycle(2, '(Type):T.i', '(ProjectName):Pn.i')",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,

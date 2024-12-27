@@ -2279,20 +2279,11 @@ function buildUI(thisObj) {
 				});
 			}
 			if (cycleCount !== undefined && cycleA !== undefined && cycleB !== undefined) {
-				var N = parseInt(cycleCount, 10);
-				if (!cycleState[template]) {
-					cycleState[template] = {
-						count: 0,
-						current: cycleA
-					};
-				}
-				var currentCycle = cycleState[template];
-				var cycleValue = currentCycle.current;
-				currentCycle.count += 1;
-				if (currentCycle.count >= N) {
-					currentCycle.count = 0;
-					currentCycle.current = (currentCycle.current === cycleA) ? cycleB : cycleA;
-				}
+				var iValue = parseInt(variables["i"], 10);
+				if (isNaN(iValue) || iValue < 1) iValue = 1;
+				var cycleBlock = 2 * cycleCount;
+				var indexInBlock = (iValue - 1) % cycleBlock;
+				var cycleValue = (indexInBlock < cycleCount) ? cycleA : cycleB;
 				var processedCycleValue = replaceVariables(cycleValue, variables, originalName, layer, settings);
 				return processedCycleValue;
 			}
@@ -2431,7 +2422,6 @@ function buildUI(thisObj) {
 	var localIndex = 0;
 
 	function renameLayersByTemplate(allLayers, template, briefly, brieflyCase, showShyLocked, reverseOrder, ctrlKey, shiftKey, altKey, ctrlShift) {
-		cycleState = {};
 		checkAndUpdateSettings();
 		var incrementValues = {};
 		var localIndex = 1;
