@@ -2413,8 +2413,6 @@ function buildUI(thisObj) {
 				value = '';
 			}
 			if (replaceFindStr !== undefined && replaceWithStr !== undefined) {
-				// делаем замену во всём originalName:
-				// все вхождения replaceFindStr → replaceWithStr
 				var replacedName = originalName.split(replaceFindStr).join(replaceWithStr);
 				return replacedName;
 			}
