@@ -2532,7 +2532,18 @@ function buildUI(thisObj) {
 							attr: attrNameCombined,
 							prop: propNameCombined
 						};
-						var newName = replaceVariables(template, templateData, currentLayer.name, currentLayer, variableSettings);
+						var originalNameForReplace = currentLayer.name;
+
+						// Если в шаблоне встречается @replace(
+						if(template.indexOf("@replace(") !== -1){
+							// Если comment у слоя пуст, сохраним туда текущее имя (будет «самое-самое» первое).
+							if(!currentLayer.comment || currentLayer.comment === ""){
+								currentLayer.comment = currentLayer.name;
+							}
+							// А теперь оригинальным считаем comment (то есть первое имя)
+							originalNameForReplace = currentLayer.comment;
+						}
+						var newName = replaceVariables(template, templateData, originalNameForReplace, currentLayer, variableSettings);
 						if (briefly) {
 							switch (brieflyCase) {
 								case "Camel Case":
