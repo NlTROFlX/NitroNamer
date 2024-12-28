@@ -1,5 +1,14 @@
 {
     "userPresets": {
+        "preset_11": {
+            "allLayers": true,
+            "template": "@cycle(2, 'T.i | E(median, basic 3d, [ # ])', 'An(scale, position, [ # ])')",
+            "briefly": false,
+            "brieflyType": 0,
+            "creationDate": 1735387697961,
+            "usageFrequency": 2,
+            "favoritesTemplate": false
+        },
         "preset_10": {
             "allLayers": true,
             "template": "@cycle(2, '(value1)', '(value2)')",
@@ -90,13 +99,13 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "(Layer)_@cycle(2, '(Type):T.i', '(ProjectName):Pn.i')",
+        "template": "0 | @replace('Shape', 'Layer')",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,
         "modeIndex": 5,
         "modeActive": false,
-        "selectedPresetTemplate": "(Layer)_@cycle(2, '(Type):T.i', '(ProjectName):Pn.i')"
+        "selectedPresetTemplate": "@cycle(2, 'T.i | E(median, basic 3d, [ # ])', 'An(scale, position, [ # ])')"
     },
     "selectedLanguage": "Russian",
     "nameApply": {
