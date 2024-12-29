@@ -2413,7 +2413,11 @@ function buildUI(thisObj) {
 				value = '';
 			}
 			if (replaceFindStr !== undefined && replaceWithStr !== undefined) {
-				var replacedName = originalName.split(replaceFindStr).join(replaceWithStr);
+				function escapeRegExp(str) {
+					return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+				}
+				var safeFindStr = escapeRegExp(replaceFindStr);
+				var replacedName = originalName.replace(new RegExp(safeFindStr, 'g'), replaceWithStr);
 				return replacedName;
 			}
 			return (value !== undefined && value !== "") ? value : "";
@@ -2533,16 +2537,7 @@ function buildUI(thisObj) {
 							prop: propNameCombined
 						};
 						var originalNameForReplace = currentLayer.name;
-
-						// Если в шаблоне встречается @replace(
-						if(template.indexOf("@replace(") !== -1){
-							// Если comment у слоя пуст, сохраним туда текущее имя (будет «самое-самое» первое).
-							if(!currentLayer.comment || currentLayer.comment === ""){
-								currentLayer.comment = currentLayer.name;
-							}
-							// А теперь оригинальным считаем comment (то есть первое имя)
-							originalNameForReplace = currentLayer.comment;
-						}
+						var originalNameForReplace = currentLayer.name;
 						var newName = replaceVariables(template, templateData, originalNameForReplace, currentLayer, variableSettings);
 						if (briefly) {
 							switch (brieflyCase) {
