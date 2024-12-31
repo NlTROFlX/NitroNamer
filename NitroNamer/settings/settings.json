@@ -108,7 +108,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "@replace('Shape', 'LayerType')",
+        "template": "T.i | I | I(10)",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,

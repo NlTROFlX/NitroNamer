@@ -1,4 +1,6 @@
 var cycleState = {};
+var incrementValues = {};
+var localIndex = 0;
 
 function buildUI(thisObj) {
 	var scriptMessageHead_1 = "NitroNamer 2025.1 - dev";
@@ -1435,7 +1437,6 @@ function buildUI(thisObj) {
 	function generateNewName(layer, template, briefly, brieflyType, settings) {
 		resetLocalIndex();
 		checkAndUpdateSettings();
-		incrementValues = {};
 		var variables = {
 			"T": getLayerType(layer),
 			"i": layer.index,
@@ -2029,7 +2030,6 @@ function buildUI(thisObj) {
 	function resetLocalIndex() {
 		localIndex = 1;
 	}
-	var incrementValues = {};
 
 	function getParentNameAtDepth(layer, depth) {
 		var currentLayer = layer;
@@ -2202,8 +2202,6 @@ function buildUI(thisObj) {
 		var nthMaskRegex = /m(\d+)/g;
 		var regex = new RegExp(["\\(([^()]+)\\)", "T\\(([^()\\[\\]]+)\\)", "it", "Df", "Ec\\(([^()\\[\\]]+?)\\)", "Ec", "E\\(\\[([^\\[\\]]+)\\]\\)", "E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "E", "An\\(\\[([^\\[\\]]+)\\]\\)", "An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "An", "Lexp\\(\\[([^\\[\\]]+)\\]\\)", "Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lexp", "D\\(([^()\\[\\]]+)\\)", "D", "Fext\\(([^()\\[\\]]+)\\)", "Fext", "Ip", "Op", "Tm", "Ar\\(([^()\\[\\]]+)\\)", "Ar", "Pn", "Lpos", "Lsc", "Lrot", "Lops", "Lpnt\\(([^()\\[\\]]+)\\)", "Lpnt", "Cd\\(([^()\\[\\]]+)\\)", "Cd", "Lmc\\(\\[([^\\[\\]]+)\\]\\)", "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmc", "Lmn\\(\\[([^\\[\\]]+)\\]\\)", "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmn", "I\\(([^()\\[\\]]+)\\)", "I", "attr", "prop", "e(\\d+)", "m(\\d+)", "[A-Z]", "i", "S", "W", "H", "@cycle\\(\\s*(\\d+)\\s*,\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)", "cycle", "@replace\\(\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)"].join("|"), "g");
 		var usedVariables = {};
-		var localIndex = variables['I'] || 1;
-		var incrementValues = {};
 		result = result.replace(regex, function(match, group, tFilter, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, customI, nthEffectIndex, nthMaskIndex, cycleCount, cycleA, cycleB, replaceFindStr, replaceWithStr) {
 			var value;
 			if (anSeparatorOnly !== undefined) {
@@ -2427,11 +2425,9 @@ function buildUI(thisObj) {
 		}
 		return result;
 	}
-	var localIndex = 0;
 
 	function renameLayersByTemplate(allLayers, template, briefly, brieflyCase, showShyLocked, reverseOrder, ctrlKey, shiftKey, altKey, ctrlShift) {
 		checkAndUpdateSettings();
-		var incrementValues = {};
 		var localIndex = 1;
 		var project = app.project;
 		if (project && project.activeItem instanceof CompItem) {
