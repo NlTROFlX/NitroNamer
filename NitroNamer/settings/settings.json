@@ -6,7 +6,7 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1735468654574,
-            "usageFrequency": 4,
+            "usageFrequency": 5,
             "favoritesTemplate": false
         },
         "preset_11": {
@@ -108,7 +108,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "T.i | I(10) | I(20) | I(5)",
+        "template": "T.i | I(10) | I(10,r)",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,

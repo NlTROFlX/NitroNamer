@@ -2382,16 +2382,47 @@ function buildUI(thisObj) {
 				value = getMaskNames(layer, settings, lmnFilters, lmnSeparator);
 			} else if (match === 'Lmn') {
 				value = getMaskNames(layer, settings);
-			} else if (customI !== undefined) {
+			} else if(customI !== undefined) {
+				// Пример: I(10,r) или I(r) или просто I(10)
+				// Считаем, что в templateData мы уже передали totalLayers
 				var uniqueKey = "I(" + customI + ")_" + usedVariables.length;
-				var initialValue = parseInt(customI, 10);
-				if (!incrementValues[uniqueKey]) {
-					incrementValues[uniqueKey] = initialValue;
+				var parts = customI.split(",");
+				var offset = 0;       // Смещение (N)
+				var isReverse = false; 
+			
+				// Парсим, что в скобках:
+				//  - Если 'r' — значит включить режим инвертирования
+				//  - Если число — это offset
+				for(var p = 0; p < parts.length; p++){
+					var segment = parts[p].trim();
+					if(segment === "r"){
+						isReverse = true;
+					} else {
+						var parsedInt = parseInt(segment, 10);
+						if(!isNaN(parsedInt)){
+							offset = parsedInt;
+						}
+					}
 				}
-				value = incrementValues[uniqueKey]++;
-				usedVariables[uniqueKey] = true;
+			
+				if(isReverse){
+					// Инвертированный индекс:
+					//   totalLayers - currentLocalIndex + 1 + offset
+					var totalLayers = variables.totalLayers || 1; 
+					var reverseVal = (totalLayers - currentLocalIndex + 1) + offset;
+					value = reverseVal;
+				} else {
+					// Обычное поведение, если 'r' не встретился
+					if(!incrementValues[uniqueKey]){
+						incrementValues[uniqueKey] = offset;
+					}
+					value = incrementValues[uniqueKey]++;
+					usedVariables[uniqueKey] = true;
+				}
 				return value;
-			} else if (match === 'I') {
+			
+			} else if(match === 'I') {
+				// Старый вариант без аргументов
 				value = currentLocalIndex;
 			} else if (match === 'prop') {
 				value = variables['prop'];
@@ -2440,6 +2471,7 @@ function buildUI(thisObj) {
 		var project = app.project;
 		if (project && project.activeItem instanceof CompItem) {
 			var activeComp = project.activeItem;
+			var totalLayersInComp = activeComp.numLayers;
 			if (activeComp.numLayers > 0) {
 				var settings = loadSettings();
 				var nameApplySettings = settings.nameApply || {};
@@ -2506,6 +2538,7 @@ function buildUI(thisObj) {
 						var propNames = propertyPaths ? getSelectedPropertyGroupNamesForLayer(currentLayer, propertyPaths) : [];
 						var propNameCombined = propNames.length > 0 ? propNames.join(", ") : "Property not selected";
 						var templateData = {
+							totalLayers: totalLayersInComp,
 							T: layerType,
 							i: currentI,
 							I: localIndex,
