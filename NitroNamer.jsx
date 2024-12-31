@@ -1370,6 +1370,7 @@ function buildUI(thisObj) {
 		var settings = loadSettings();
 		var isCompact = settings.currentSettings && settings.currentSettings.UICompact;
 		resetLocalIndex();
+		resetIncrementValues();
 		checkAndUpdateSettings();
 		var proj = app.project;
 		if (proj) {
@@ -2031,6 +2032,10 @@ function buildUI(thisObj) {
 		localIndex = 1;
 	}
 
+	function resetIncrementValues() {
+		incrementValues = {};
+	}	
+
 	function getParentNameAtDepth(layer, depth) {
 		var currentLayer = layer;
 		var steps = 0;
@@ -2430,6 +2435,7 @@ function buildUI(thisObj) {
 
 	function renameLayersByTemplate(allLayers, template, briefly, brieflyCase, showShyLocked, reverseOrder, ctrlKey, shiftKey, altKey, ctrlShift) {
 		checkAndUpdateSettings();
+		resetIncrementValues();
 		var localIndex = 1;
 		var project = app.project;
 		if (project && project.activeItem instanceof CompItem) {
