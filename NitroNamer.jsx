@@ -2034,7 +2034,7 @@ function buildUI(thisObj) {
 
 	function resetIncrementValues() {
 		incrementValues = {};
-	}	
+	}
 
 	function getParentNameAtDepth(layer, depth) {
 		var currentLayer = layer;
@@ -2382,47 +2382,35 @@ function buildUI(thisObj) {
 				value = getMaskNames(layer, settings, lmnFilters, lmnSeparator);
 			} else if (match === 'Lmn') {
 				value = getMaskNames(layer, settings);
-			} else if(customI !== undefined) {
-				// Пример: I(10,r) или I(r) или просто I(10)
-				// Считаем, что в templateData мы уже передали totalLayers
+			} else if (customI !== undefined) {
 				var uniqueKey = "I(" + customI + ")_" + usedVariables.length;
 				var parts = customI.split(",");
-				var offset = 0;       // Смещение (N)
-				var isReverse = false; 
-			
-				// Парсим, что в скобках:
-				//  - Если 'r' — значит включить режим инвертирования
-				//  - Если число — это offset
-				for(var p = 0; p < parts.length; p++){
+				var offset = 0;
+				var isReverse = false;
+				for (var p = 0; p < parts.length; p++) {
 					var segment = parts[p].trim();
-					if(segment === "r"){
+					if (segment === "r") {
 						isReverse = true;
 					} else {
 						var parsedInt = parseInt(segment, 10);
-						if(!isNaN(parsedInt)){
+						if (!isNaN(parsedInt)) {
 							offset = parsedInt;
 						}
 					}
 				}
-			
-				if(isReverse){
-					// Инвертированный индекс:
-					//   totalLayers - currentLocalIndex + 1 + offset
-					var totalLayers = variables.totalLayers || 1; 
+				if (isReverse) {
+					var totalLayers = variables.totalLayers || 1;
 					var reverseVal = (totalLayers - currentLocalIndex + 1) + offset;
 					value = reverseVal;
 				} else {
-					// Обычное поведение, если 'r' не встретился
-					if(!incrementValues[uniqueKey]){
+					if (!incrementValues[uniqueKey]) {
 						incrementValues[uniqueKey] = offset;
 					}
 					value = incrementValues[uniqueKey]++;
 					usedVariables[uniqueKey] = true;
 				}
 				return value;
-			
-			} else if(match === 'I') {
-				// Старый вариант без аргументов
+			} else if (match === 'I') {
 				value = currentLocalIndex;
 			} else if (match === 'prop') {
 				value = variables['prop'];
