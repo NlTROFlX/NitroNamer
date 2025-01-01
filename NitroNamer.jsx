@@ -1438,10 +1438,11 @@ function buildUI(thisObj) {
 	function generateNewName(layer, template, briefly, brieflyType, settings) {
 		resetLocalIndex();
 		checkAndUpdateSettings();
+		var oldLocalIndex = localIndex;
+		localIndex = 1;
 		var variables = {
 			"T": getLayerType(layer),
 			"i": layer.index,
-			"I": localIndex,
 			"O": layer.name,
 			"E": getEffectNames(layer, settings),
 			"An": getAnimatedProperties(layer, settings),
@@ -1480,6 +1481,7 @@ function buildUI(thisObj) {
 		if (briefly) {
 			newName = toBrieflyCase(newName, brieflyType);
 		}
+		localIndex = oldLocalIndex;
 		return newName;
 	}
 
@@ -2455,7 +2457,7 @@ function buildUI(thisObj) {
 	function renameLayersByTemplate(allLayers, template, briefly, brieflyCase, showShyLocked, reverseOrder, ctrlKey, shiftKey, altKey, ctrlShift) {
 		checkAndUpdateSettings();
 		resetIncrementValues();
-		var localIndex = 1;
+		localIndex = 1;
 		var project = app.project;
 		if (project && project.activeItem instanceof CompItem) {
 			var activeComp = project.activeItem;
@@ -2602,6 +2604,7 @@ function buildUI(thisObj) {
 					} else {
 						layer.name = newName;
 					}
+					localIndex++;
 				}
 				app.endUndoGroup();
 			} else {
