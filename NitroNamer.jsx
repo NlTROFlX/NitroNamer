@@ -1369,8 +1369,6 @@ function buildUI(thisObj) {
 	function updatePreview() {
 		var settings = loadSettings();
 		var isCompact = settings.currentSettings && settings.currentSettings.UICompact;
-		resetLocalIndex();
-		resetIncrementValues();
 		checkAndUpdateSettings();
 		var proj = app.project;
 		if (proj) {
@@ -1387,7 +1385,7 @@ function buildUI(thisObj) {
 					var template = txtTemplate.text;
 					var briefly = chkBriefly.value;
 					var brieflyType = ddBrieflyType.selection.text;
-					var newName = generateNewName(layer, template, briefly, brieflyType, variableSettings);
+					var newName = generateNewName(layer, template, briefly, brieflyType, variableSettings, true);
 					if (!isCompact) {
 						txtOriginal.text = originalName;
 						txtRenamed.text = newName;
@@ -1435,14 +1433,24 @@ function buildUI(thisObj) {
 		}
 	}
 
-	function generateNewName(layer, template, briefly, brieflyType, settings) {
+	function generateNewName(layer, template, briefly, brieflyType, settings, isPreview) {
 		resetLocalIndex();
 		checkAndUpdateSettings();
 		var oldLocalIndex = localIndex;
-		localIndex = 1;
+		if (isPreview) {
+			var comp = layer.containingComp;
+			var totalLayers = comp ? comp.numLayers : 1;
+	
+			// Пример: без Alt, просто показываем обычный (прямой) индекс:
+			localIndex = layer.index;
+	
+			// Если нужно прямо «обратный», можно:
+			// localIndex = (totalLayers - layer.index + 1);
+		}
 		var variables = {
 			"T": getLayerType(layer),
 			"i": layer.index,
+			"totalLayers": comp ? comp.numLayers : 1,
 			"O": layer.name,
 			"E": getEffectNames(layer, settings),
 			"An": getAnimatedProperties(layer, settings),
@@ -2457,7 +2465,6 @@ function buildUI(thisObj) {
 	function renameLayersByTemplate(allLayers, template, briefly, brieflyCase, showShyLocked, reverseOrder, ctrlKey, shiftKey, altKey, ctrlShift) {
 		checkAndUpdateSettings();
 		resetIncrementValues();
-		localIndex = 1;
 		var project = app.project;
 		if (project && project.activeItem instanceof CompItem) {
 			var activeComp = project.activeItem;
@@ -2493,6 +2500,7 @@ function buildUI(thisObj) {
 				var globalI = altKey ? totalLayersInComp : 1;
 				var propertyPaths = getSelectedPropertyPaths();
 				var layersToRename = [];
+				localIndex = 1;
 				for (var idx = 0; idx < orderedLayers.length; idx++) {
 					var currentLayer = orderedLayers[idx];
 					var currentI = globalI;
@@ -2565,7 +2573,7 @@ function buildUI(thisObj) {
 						};
 						var originalNameForReplace = currentLayer.name;
 						var originalNameForReplace = currentLayer.name;
-						var newName = replaceVariables(template, templateData, originalNameForReplace, currentLayer, variableSettings);
+						var newName = replaceVariables(template, templateData, originalNameForReplace, currentLayer, variableSettings, false);
 						if (briefly) {
 							switch (brieflyCase) {
 								case "Camel Case":
