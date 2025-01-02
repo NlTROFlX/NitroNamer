@@ -108,7 +108,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "I(r)",
+        "template": "I(10) | I(10, r) | --- I | I(r)",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,

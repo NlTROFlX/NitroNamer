@@ -1441,11 +1441,11 @@ function buildUI(thisObj) {
 			var comp = layer.containingComp;
 			var totalLayers = comp ? comp.numLayers : 1;
 	
-			// Пример: без Alt, просто показываем обычный (прямой) индекс:
+			
 			localIndex = layer.index;
 	
-			// Если нужно прямо «обратный», можно:
-			// localIndex = (totalLayers - layer.index + 1);
+			
+			
 		}
 		var variables = {
 			"T": getLayerType(layer),
@@ -1485,7 +1485,7 @@ function buildUI(thisObj) {
 		if (briefly && !isNaN(parseFloat(variables.F))) {
 			variables.F = parseFloat(variables.F).toFixed(2);
 		}
-		var newName = replaceVariables(template, variables, layer.name, layer, settings);
+		var newName = replaceVariables(template, variables, layer.name, layer, settings, isPreview)
 		if (briefly) {
 			newName = toBrieflyCase(newName, brieflyType);
 		}
@@ -2211,7 +2211,7 @@ function buildUI(thisObj) {
 		}
 	}
 
-	function replaceVariables(template, variables, originalName, layer, settings) {
+	function replaceVariables(template, variables, originalName, layer, settings, isPreview) {
 		var result = template;
 		var nthEffectRegex = /e(\d+)/g;
 		var nthMaskRegex = /m(\d+)/g;
@@ -2298,7 +2298,7 @@ function buildUI(thisObj) {
 				var cycleBlock = 2 * cycleCount;
 				var indexInBlock = (iValue - 1) % cycleBlock;
 				var cycleValue = (indexInBlock < cycleCount) ? cycleA : cycleB;
-				var processedCycleValue = replaceVariables(cycleValue, variables, originalName, layer, settings);
+				var processedCycleValue = replaceVariables(cycleValue, variables, originalName, layer, settings, isPreview);
 				return processedCycleValue;
 			}
 			if (group !== undefined) {
@@ -2409,15 +2409,24 @@ function buildUI(thisObj) {
 					}
 				}
 				if (isReverse) {
-					var totalLayers = variables.totalLayers || 1;
-					var reverseVal = (totalLayers - currentLocalIndex + 1) + offset;
-					value = reverseVal;
+					if (isPreview) {
+				           value = 1; // Устанавливаем значение 1 при предпросмотре
+				       }
+				       else {
+						var totalLayers = variables.totalLayers || 1;
+						var reverseVal = (totalLayers - currentLocalIndex + 1) + offset;
+						value = reverseVal;
+						}
 				} else {
-					if (!incrementValues[uniqueKey]) {
-						incrementValues[uniqueKey] = offset;
-					}
-					value = incrementValues[uniqueKey]++;
-					usedVariables[uniqueKey] = true;
+					if (!isPreview) {
+		                 if (!incrementValues[uniqueKey]) {
+		                     incrementValues[uniqueKey] = offset;
+		                 }
+		                 value = incrementValues[uniqueKey]++;
+		                 usedVariables[uniqueKey] = true;
+		             } else {
+		                 value = offset; // В режиме предпросмотра показываем offset, не меняя счётчик
+		             }
 				}
 				return value;
 			} else if (match === 'I') {
@@ -2572,8 +2581,7 @@ function buildUI(thisObj) {
 							prop: propNameCombined
 						};
 						var originalNameForReplace = currentLayer.name;
-						var originalNameForReplace = currentLayer.name;
-						var newName = replaceVariables(template, templateData, originalNameForReplace, currentLayer, variableSettings, false);
+						var newName = replaceVariables(template, templateData, originalNameForReplace, layer, variableSettings, false);
 						if (briefly) {
 							switch (brieflyCase) {
 								case "Camel Case":
