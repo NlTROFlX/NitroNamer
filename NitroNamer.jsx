@@ -116,7 +116,7 @@ function buildUI(thisObj) {
 	var ddLayerMode = grpDropdownAndButtons.add("dropdownlist", undefined, presetTemplates);
 	ddLayerMode.maximumSize.width = globalWidthSizeElements - 42;
 	ddLayerMode.selection = 0;
-	ddLayerMode.onChange = function () {
+	ddLayerMode.onChange = function() {
 		var selectedPreset = ddLayerMode.selection;
 		if (selectedPreset) {
 			var presetTemplate = selectedPreset.text;
@@ -158,7 +158,7 @@ function buildUI(thisObj) {
 			}
 		}
 	};
-	btnModeSwitch.onClick = function () {
+	btnModeSwitch.onClick = function() {
 		var isAltPressed = ScriptUI.environment.keyboardState.altKey;
 		var isCtrlPressed = ScriptUI.environment.keyboardState.ctrlKey;
 		if (isAltPressed) {
@@ -179,12 +179,12 @@ function buildUI(thisObj) {
 		saveCurrentSettings();
 		updatePresetsDropdown(loadSettings());
 	};
-	btnModeSwitch.addEventListener("mouseover", function () {
+	btnModeSwitch.addEventListener("mouseover", function() {
 		isMouseOverButton = true;
 		updateModeButtonIcon();
 		updateModeSwitchTooltip();
 	});
-	btnModeSwitch.addEventListener("mouseout", function () {
+	btnModeSwitch.addEventListener("mouseout", function() {
 		isMouseOverButton = false;
 		updateModeButtonIcon();
 		updateModeSwitchTooltip();
@@ -269,10 +269,10 @@ function buildUI(thisObj) {
 	txtTemplate.alignment = ["fill", "top"];
 	txtTemplate.margins = [0, -10, 0, 0];
 	txtTemplate.maximumSize.width = globalWidthSizeElements;
-	txtTemplate.addEventListener("click", function () {
+	txtTemplate.addEventListener("click", function() {
 		checkAndUpdateSettings();
 	});
-	txtTemplate.onChanging = function () {
+	txtTemplate.onChanging = function() {
 		checkAndUpdateSettings();
 		updatePreview();
 		updateLayerCounts();
@@ -281,7 +281,7 @@ function buildUI(thisObj) {
 			updatePresetsDropdown(loadSettings());
 		}
 	};
-	txtTemplate.onChange = function () {
+	txtTemplate.onChange = function() {
 		checkAndUpdateSettings();
 		var currentSettings = {
 			allLayers: rdoAllLayers.value,
@@ -298,7 +298,7 @@ function buildUI(thisObj) {
 			updatePresetsDropdown(loadSettings());
 		}
 	};
-	txtTemplate.addEventListener("keydown", function (event) {
+	txtTemplate.addEventListener("keydown", function(event) {
 		if (event.keyName === "Enter") {
 			var selectedPresetItem = ddLayerMode.selection;
 			if (selectedPresetItem && selectedPresetItem.preset) {
@@ -345,7 +345,7 @@ function buildUI(thisObj) {
 			}
 		}
 	});
-	win.onShow = function () {
+	win.onShow = function() {
 		ddLayerMode.size = [txtTemplate.size[0], ddLayerMode.size[1]];
 	};
 	var grpTextFields = win.add("group", undefined);
@@ -413,7 +413,7 @@ function buildUI(thisObj) {
 	var ddBrieflyType = grpBriefly.add("dropdownlist", undefined, ["Camel Case", "Pascal Case", "Snake Case", "Kebab Case", "Screaming Snake Case"]);
 	ddBrieflyType.maximumSize.width = 150;
 	ddBrieflyType.selection = 0;
-	chkBriefly.onClick = function () {
+	chkBriefly.onClick = function() {
 		var currentSettings = {
 			allLayers: rdoAllLayers.value,
 			template: txtTemplate.text,
@@ -425,7 +425,7 @@ function buildUI(thisObj) {
 		updateLayerCounts();
 		resetRenameButtonIcon();
 	};
-	ddBrieflyType.onChange = function () {
+	ddBrieflyType.onChange = function() {
 		var currentSettings = {
 			allLayers: rdoAllLayers.value,
 			template: txtTemplate.text,
@@ -445,11 +445,11 @@ function buildUI(thisObj) {
 	}
 
 	function addHoverEffect(button, iconPath) {
-		button.addEventListener("mouseover", function () {
+		button.addEventListener("mouseover", function() {
 			button.image = File(iconPath + "Hover.png");
 			button.imageSize = [24, 24];
 		});
-		button.addEventListener("mouseout", function () {
+		button.addEventListener("mouseout", function() {
 			button.image = File(iconPath + ".png");
 			button.imageSize = [24, 24];
 		});
@@ -463,7 +463,7 @@ function buildUI(thisObj) {
 	addHoverEffect(btnVariables, scriptFolderPath + "/NitroNamer/img/variablesIcon");
 	addHoverEffect(btnReset, scriptFolderPath + "/NitroNamer/img/resetIcon");
 	addHoverEffect(btnSettings, scriptFolderPath + "/NitroNamer/img/settings");
-	btnRename.addEventListener("mouseover", function () {
+	btnRename.addEventListener("mouseover", function() {
 		checkAndUpdateSettings();
 		updatePreview();
 		updateLayerCounts();
@@ -483,10 +483,10 @@ function buildUI(thisObj) {
 		}
 		btnRename.imageSize = [24, 24];
 	});
-	btnRename.addEventListener("mouseout", function () {
+	btnRename.addEventListener("mouseout", function() {
 		updateRenameButtonIcon();
 	});
-	btnVariables.onClick = function () {
+	btnVariables.onClick = function() {
 		var scriptFilePath = File(scriptFolderPath + "/NitroNamer/scripts/NNLayerInfo.jsx");
 		if (scriptFilePath.exists) {
 			$.evalFile(scriptFilePath);
@@ -494,7 +494,7 @@ function buildUI(thisObj) {
 			alert("Script file not found: " + scriptFilePath.fsName, scriptMessageHead_1);
 		}
 	};
-	btnCopy.onClick = function () {
+	btnCopy.onClick = function() {
 		var proj = app.project;
 		if (proj && proj.activeItem instanceof CompItem) {
 			var comp = proj.activeItem;
@@ -523,7 +523,7 @@ function buildUI(thisObj) {
 			alert("Please select a valid composition.", scriptMessageHead_1);
 		}
 	};
-	btnFavorites.onClick = function () {
+	btnFavorites.onClick = function() {
 		var selectedPreset = ddLayerMode.selection;
 		if (selectedPreset && selectedPreset.preset) {
 			var presetTemplate = selectedPreset.preset.template;
@@ -540,11 +540,11 @@ function buildUI(thisObj) {
 			}
 		}
 	};
-	btnFavorites.addEventListener("mouseover", function () {
+	btnFavorites.addEventListener("mouseover", function() {
 		btnFavorites.isMouseOver = true;
 		updateFavoritesButtonIcon();
 	});
-	btnFavorites.addEventListener("mouseout", function () {
+	btnFavorites.addEventListener("mouseout", function() {
 		btnFavorites.isMouseOver = false;
 		updateFavoritesButtonIcon();
 	});
@@ -566,7 +566,7 @@ function buildUI(thisObj) {
 		}
 		btnFavorites.imageSize = [24, 24];
 	}
-	btnSave.onClick = function () {
+	btnSave.onClick = function() {
 		var settings = {
 			allLayers: rdoAllLayers.value,
 			template: txtTemplate.text,
@@ -620,17 +620,17 @@ function buildUI(thisObj) {
 			}
 		}
 	};
-	btnSave.addEventListener("mouseover", function () {
+	btnSave.addEventListener("mouseover", function() {
 		if (ScriptUI.environment.keyboardState.shiftKey) {
 			btnSave.image = File(scriptFolderPath + "/NitroNamer/img/refreshHover.png");
 		} else {
 			btnSave.image = File(scriptFolderPath + "/NitroNamer/img/saveHover.png");
 		}
 	});
-	btnSave.addEventListener("mouseout", function () {
+	btnSave.addEventListener("mouseout", function() {
 		btnSave.image = File(scriptFolderPath + "/NitroNamer/img/save.png");
 	});
-	btnCircleMinus.onClick = function () {
+	btnCircleMinus.onClick = function() {
 		var selectedItem = ddLayerMode.selection;
 		var selectedPreset = ddLayerMode.selection;
 		if (selectedItem && selectedPreset && selectedPreset.text !== "Save your new preset" && selectedPreset.text !== "Please select a preset to delete") {
@@ -686,7 +686,7 @@ function buildUI(thisObj) {
 			updatePresetsDropdown(loadSettings());
 		}
 	};
-	btnMinimize.onClick = function () {
+	btnMinimize.onClick = function() {
 		var settings = loadSettings();
 		var currentSettings = settings.currentSettings || {};
 		var isCompact = !currentSettings.UICompact;
@@ -695,8 +695,9 @@ function buildUI(thisObj) {
 		saveSettings(currentSettings, true);
 		setMinimizeButtonIcon(isCompact);
 	};
-	btnRename.onClick = function () {
-		if (!btnRename.enabled) return;
+	btnRename.onClick = function() {
+		if (!btnRename.enabled)
+			return;
 		var allLayers = rdoAllLayers.value;
 		var template = txtTemplate.text;
 		var briefly = chkBriefly.value;
@@ -713,12 +714,12 @@ function buildUI(thisObj) {
 		btnRename.image = File(scriptFolderPath + "/NitroNamer/img/doneIcon.png");
 		btnRename.imageSize = [24, 24];
 	};
-	btnHelp.onClick = function () {
+	btnHelp.onClick = function() {
 		updateLayerCounts();
 		var helpScriptPath = scriptFolderPath + "/NitroNamer/scripts/NNHelp.jsx";
 		$.evalFile(helpScriptPath);
 	};
-	btnReset.onClick = function () {
+	btnReset.onClick = function() {
 		rdoAllLayers.value = true;
 		rdoOnlySelected.value = false;
 		txtTemplate.text = "(LayerName).i";
@@ -728,7 +729,7 @@ function buildUI(thisObj) {
 		updatePreview();
 		resetRenameButtonIcon();
 	};
-	btnSettings.onClick = function () {
+	btnSettings.onClick = function() {
 		var settingsScriptPath = scriptFolderPath + "/NitroNamer/scripts/NNSettings.jsx";
 		$.evalFile(settingsScriptPath);
 	};
@@ -1009,7 +1010,7 @@ function buildUI(thisObj) {
 		};
 		var filterList = null;
 		if (maskFilter) {
-			filterList = maskFilter.split(',').map(function (item) {
+			filterList = maskFilter.split(',').map(function(item) {
 				return item.trim();
 			});
 		}
@@ -1063,7 +1064,7 @@ function buildUI(thisObj) {
 		};
 		var filterList = null;
 		if (maskFilter) {
-			filterList = maskFilter.split(',').map(function (item) {
+			filterList = maskFilter.split(',').map(function(item) {
 				return item.trim();
 			});
 		}
@@ -1264,11 +1265,11 @@ function buildUI(thisObj) {
 		}
 		if (isActive) {
 			if (modes[currentModeIndex] === "chart") {
-				presetsArray.sort(function (a, b) {
+				presetsArray.sort(function(a, b) {
 					return (b.usageFrequency || 0) - (a.usageFrequency || 0);
 				});
 			} else if (modes[currentModeIndex] === "date") {
-				presetsArray.sort(function (a, b) {
+				presetsArray.sort(function(a, b) {
 					var dateA = new Date(a.creationDate);
 					var dateB = new Date(b.creationDate);
 					if (isNaN(dateA.getTime())) {
@@ -1280,11 +1281,11 @@ function buildUI(thisObj) {
 					return dateA.getTime() - dateB.getTime();
 				});
 			} else if (modes[currentModeIndex] === "longArrowDown") {
-				presetsArray.sort(function (a, b) {
+				presetsArray.sort(function(a, b) {
 					return b.template.length - a.template.length;
 				});
 			} else if (modes[currentModeIndex] === "longArrowUp") {
-				presetsArray.sort(function (a, b) {
+				presetsArray.sort(function(a, b) {
 					return a.template.length - b.template.length;
 				});
 			}
@@ -1301,9 +1302,7 @@ function buildUI(thisObj) {
 						if (presetsArray[i].creationDate) {
 							var creationDate = new Date(presetsArray[i].creationDate);
 							if (!isNaN(creationDate.getTime())) {
-								var formattedDate = creationDate.getFullYear() + "-" +
-									("0" + (creationDate.getMonth() + 1)).slice(-2) + "-" +
-									("0" + creationDate.getDate()).slice(-2);
+								var formattedDate = creationDate.getFullYear() + "-" + ("0" + (creationDate.getMonth() + 1)).slice(-2) + "-" + ("0" + creationDate.getDate()).slice(-2);
 								displayText += " {" + formattedDate + "}";
 							} else {
 								displayText += " {Unknown date}";
@@ -1440,12 +1439,7 @@ function buildUI(thisObj) {
 		if (isPreview) {
 			var comp = layer.containingComp;
 			var totalLayers = comp ? comp.numLayers : 1;
-
-
 			localIndex = layer.index;
-
-
-
 		}
 		var variables = {
 			"T": getLayerType(layer),
@@ -1515,7 +1509,7 @@ function buildUI(thisObj) {
 		var propertyNames = null;
 		var separator = customSeparator || ", ";
 		if (propertiesFilter) {
-			propertyNames = propertiesFilter.split(',').map(function (name) {
+			propertyNames = propertiesFilter.split(',').map(function(name) {
 				return name.trim().toLowerCase();
 			});
 		}
@@ -1600,7 +1594,7 @@ function buildUI(thisObj) {
 	}
 
 	function toPascalCase(str) {
-		return str.replace(/\w\S*/g, function (txt) {
+		return str.replace(/\w\S*/g, function(txt) {
 			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 		});
 	}
@@ -1618,21 +1612,32 @@ function buildUI(thisObj) {
 	}
 
 	function getLayerType(layer) {
-		if (layer.nullLayer) return "Null";
-		if (layer.adjustmentLayer) return "Adjustment";
+		if (layer.nullLayer)
+			return "Null";
+		if (layer.adjustmentLayer)
+			return "Adjustment";
 		if (layer instanceof AVLayer && layer.hasVideo) {
-			if (layer.source instanceof CompItem) return "Pre-comp";
+			if (layer.source instanceof CompItem)
+				return "Pre-comp";
 			if (layer.source instanceof FootageItem) {
-				if (layer.source.mainSource instanceof SolidSource) return "Solid";
-				if (layer.source.mainSource instanceof FileSource) return "Footage";
-				if (layer.source.mainSource instanceof AudioSource) return "Audio";
+				if (layer.source.mainSource instanceof SolidSource)
+					return "Solid";
+				if (layer.source.mainSource instanceof FileSource)
+					return "Footage";
+				if (layer.source.mainSource instanceof AudioSource)
+					return "Audio";
 			}
 		}
-		if (layer instanceof ShapeLayer) return "Shape";
-		if (layer instanceof TextLayer) return "Text";
-		if (layer instanceof LightLayer) return "Light";
-		if (layer instanceof CameraLayer) return "Camera";
-		if (layer.hasAudio && !layer.hasVideo) return "Audio";
+		if (layer instanceof ShapeLayer)
+			return "Shape";
+		if (layer instanceof TextLayer)
+			return "Text";
+		if (layer instanceof LightLayer)
+			return "Light";
+		if (layer instanceof CameraLayer)
+			return "Camera";
+		if (layer.hasAudio && !layer.hasVideo)
+			return "Audio";
 		return "Unknown";
 	}
 
@@ -1670,7 +1675,7 @@ function buildUI(thisObj) {
 		var minutes = Math.floor((duration % 3600) / 60);
 		var seconds = Math.floor(duration % 60);
 		var milliseconds = Math.floor((duration * 1000) % 1000);
-		return function (format) {
+		return function(format) {
 			switch (format) {
 				case '1':
 					return (hours < 10 ? "0" + hours : hours);
@@ -1681,9 +1686,7 @@ function buildUI(thisObj) {
 				case '4':
 					return (milliseconds < 100 ? (milliseconds < 10 ? "00" + milliseconds : "0" + milliseconds) : milliseconds);
 				default:
-					return (hours < 10 ? "0" + hours : hours) + ":" +
-						(minutes < 10 ? "0" + minutes : minutes) + ":" +
-						(seconds < 10 ? "0" + seconds : seconds);
+					return (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
 			}
 		};
 	}
@@ -1753,7 +1756,7 @@ function buildUI(thisObj) {
 			if (inPixels) {
 				return width + "px:" + height + "px";
 			}
-			var gcd = function (a, b) {
+			var gcd = function(a, b) {
 				return b == 0 ? a : gcd(b, a % b);
 			};
 			var divisor = gcd(width, height);
@@ -1766,7 +1769,7 @@ function buildUI(thisObj) {
 		var effectsCount = 0;
 		var effectsNamesFilter = null;
 		if (effectsFilter) {
-			effectsNamesFilter = effectsFilter.split(',').map(function (name) {
+			effectsNamesFilter = effectsFilter.split(',').map(function(name) {
 				return name.trim().toLowerCase();
 			});
 		}
@@ -1810,7 +1813,7 @@ function buildUI(thisObj) {
 		var propertyNames = null;
 		var separator = customSeparator || ", ";
 		if (propertiesFilter) {
-			propertyNames = propertiesFilter.split(',').map(function (name) {
+			propertyNames = propertiesFilter.split(',').map(function(name) {
 				return name.trim().toLowerCase();
 			});
 		}
@@ -1978,7 +1981,7 @@ function buildUI(thisObj) {
 					childLayers.push(currentLayer);
 				}
 			}
-			childLayers.sort(function (a, b) {
+			childLayers.sort(function(a, b) {
 				return a.index - b.index;
 			});
 			var allAbove = true;
@@ -2082,7 +2085,7 @@ function buildUI(thisObj) {
 				}
 			}
 		}
-		propNames = propNames.filter(function (item, pos) {
+		propNames = propNames.filter(function(item, pos) {
 			return propNames.indexOf(item) === pos;
 		});
 		return propNames;
@@ -2201,7 +2204,8 @@ function buildUI(thisObj) {
 	}
 
 	function filterLayerType(layerType, filter) {
-		if (!layerType) return "";
+		if (!layerType)
+			return "";
 		var filterLower = filter.toLowerCase().trim();
 		var layerTypeLower = layerType.toLowerCase();
 		if ((filterLower === "shape" && layerTypeLower === "shape") || (filterLower === "text" && layerTypeLower === "text") || (filterLower === "null" && layerTypeLower === "null") || (filterLower === "adj" && layerTypeLower === "adjustment") || (filterLower === "footage" && layerTypeLower === "footage") || (filterLower === "solid" && layerTypeLower === "solid") || (filterLower === "precomp" && layerTypeLower === "pre-comp") || (filterLower === "camera" && layerTypeLower === "camera") || (filterLower === "light" && layerTypeLower === "light") || (filterLower === "audio" && layerTypeLower === "audio")) {
@@ -2218,7 +2222,7 @@ function buildUI(thisObj) {
 		var regex = new RegExp(["\\(([^()]+)\\)", "T\\(([^()\\[\\]]+)\\)", "it", "Df", "Ec\\(([^()\\[\\]]+?)\\)", "Ec", "E\\(\\[([^\\[\\]]+)\\]\\)", "E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "E", "An\\(\\[([^\\[\\]]+)\\]\\)", "An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "An", "Lexp\\(\\[([^\\[\\]]+)\\]\\)", "Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lexp", "D\\(([^()\\[\\]]+)\\)", "D", "Fext\\(([^()\\[\\]]+)\\)", "Fext", "Ip", "Op", "Tm", "Ar\\(([^()\\[\\]]+)\\)", "Ar", "Pn", "Lpos", "Lsc", "Lrot", "Lops", "Lpnt\\(([^()\\[\\]]+)\\)", "Lpnt", "Cd\\(([^()\\[\\]]+)\\)", "Cd", "Lmc\\(\\[([^\\[\\]]+)\\]\\)", "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmc", "Lmn\\(\\[([^\\[\\]]+)\\]\\)", "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmn", "I\\(([^()\\[\\]]+)\\)", "I", "attr", "prop", "e(\\d+)", "m(\\d+)", "[A-Z]", "i", "S", "W", "H", "@cycle\\(\\s*(\\d+)\\s*,\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)", "cycle", "@replace\\(\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)"].join("|"), "g");
 		var usedVariables = {};
 		var currentLocalIndex = localIndex;
-		result = result.replace(regex, function (match, group, tFilter, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, customI, nthEffectIndex, nthMaskIndex, cycleCount, cycleA, cycleB, replaceFindStr, replaceWithStr) {
+		result = result.replace(regex, function(match, group, tFilter, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, customI, nthEffectIndex, nthMaskIndex, cycleCount, cycleA, cycleB, replaceFindStr, replaceWithStr) {
 			var value;
 			if (anSeparatorOnly !== undefined) {
 				anSeparatorOnly = anSeparatorOnly.replace(/attr/g, variables['attr']);
@@ -2233,68 +2237,69 @@ function buildUI(thisObj) {
 				lexpProps = lexpProps.replace(/attr/g, variables['attr']);
 			}
 			if (ecFilters !== undefined) {
-				ecFilters = ecFilters.replace(nthEffectRegex, function (fullMatch, number) {
+				ecFilters = ecFilters.replace(nthEffectRegex, function(fullMatch, number) {
 					var effectNumber = parseInt(number, 10);
 					return getNthEffectName(layer, effectNumber, settings);
-				}).replace(nthMaskRegex, function (fullMatch, number) {
+				}).replace(nthMaskRegex, function(fullMatch, number) {
 					var maskNumber = parseInt(number, 10);
 					return getNthMaskName(layer, maskNumber, settings);
 				});
 			}
 			if (eEffects !== undefined) {
-				eEffects = eEffects.replace(nthEffectRegex, function (fullMatch, number) {
+				eEffects = eEffects.replace(nthEffectRegex, function(fullMatch, number) {
 					var effectNumber = parseInt(number, 10);
 					return getNthEffectName(layer, effectNumber, settings);
-				}).replace(nthMaskRegex, function (fullMatch, number) {
+				}).replace(nthMaskRegex, function(fullMatch, number) {
 					var maskNumber = parseInt(number, 10);
 					return getNthMaskName(layer, maskNumber, settings);
 				});
 			}
 			if (anProps !== undefined) {
-				anProps = anProps.replace(nthEffectRegex, function (fullMatch, number) {
+				anProps = anProps.replace(nthEffectRegex, function(fullMatch, number) {
 					var effectNumber = parseInt(number, 10);
 					return getNthEffectName(layer, effectNumber, settings);
-				}).replace(nthMaskRegex, function (fullMatch, number) {
+				}).replace(nthMaskRegex, function(fullMatch, number) {
 					var maskNumber = parseInt(number, 10);
 					return getNthMaskName(layer, maskNumber, settings);
 				});
 			}
 			if (lmcFilters !== undefined) {
-				lmcFilters = lmcFilters.replace(nthMaskRegex, function (fullMatch, number) {
+				lmcFilters = lmcFilters.replace(nthMaskRegex, function(fullMatch, number) {
 					var maskNumber = parseInt(number, 10);
 					return getNthMaskName(layer, maskNumber, settings);
 				});
 			}
 			if (lmnFilters !== undefined) {
-				lmnFilters = lmnFilters.replace(nthMaskRegex, function (fullMatch, number) {
+				lmnFilters = lmnFilters.replace(nthMaskRegex, function(fullMatch, number) {
 					var maskNumber = parseInt(number, 10);
 					return getNthMaskName(layer, maskNumber, settings);
 				});
 			}
 			if (lmnSeparatorOnly !== undefined) {
-				lmnSeparatorOnly = lmnSeparatorOnly.replace(nthMaskRegex, function (fullMatch, number) {
+				lmnSeparatorOnly = lmnSeparatorOnly.replace(nthMaskRegex, function(fullMatch, number) {
 					var maskNumber = parseInt(number, 10);
 					return getNthMaskName(layer, maskNumber, settings);
 				});
 			}
 			if (lmcSeparatorOnly !== undefined) {
-				lmcSeparatorOnly = lmcSeparatorOnly.replace(nthMaskRegex, function (fullMatch, number) {
+				lmcSeparatorOnly = lmcSeparatorOnly.replace(nthMaskRegex, function(fullMatch, number) {
 					var maskNumber = parseInt(number, 10);
 					return getNthMaskName(layer, maskNumber, settings);
 				});
 			}
 			if (lexpProps !== undefined) {
-				lexpProps = lexpProps.replace(nthEffectRegex, function (fullMatch, number) {
+				lexpProps = lexpProps.replace(nthEffectRegex, function(fullMatch, number) {
 					var effectNumber = parseInt(number, 10);
 					return getNthEffectName(layer, effectNumber, settings);
-				}).replace(nthMaskRegex, function (fullMatch, number) {
+				}).replace(nthMaskRegex, function(fullMatch, number) {
 					var maskNumber = parseInt(number, 10);
 					return getNthMaskName(layer, maskNumber, settings);
 				});
 			}
 			if (cycleCount !== undefined && cycleA !== undefined && cycleB !== undefined) {
 				var iValue = parseInt(variables["i"], 10);
-				if (isNaN(iValue) || iValue < 1) iValue = 1;
+				if (isNaN(iValue) || iValue < 1)
+					iValue = 1;
 				var cycleBlock = 2 * cycleCount;
 				var indexInBlock = (iValue - 1) % cycleBlock;
 				var cycleValue = (indexInBlock < cycleCount) ? cycleA : cycleB;
@@ -2397,7 +2402,6 @@ function buildUI(thisObj) {
 				var parts = customI.split(",");
 				var offset = 0;
 				var isReverse = false;
-
 				for (var p = 0; p < parts.length; p++) {
 					var segment = parts[p].trim();
 					if (segment === "r") {
@@ -2409,14 +2413,9 @@ function buildUI(thisObj) {
 						}
 					}
 				}
-
-
 				var currentI = variables["i"];
 				var totalLayers = variables["totalLayers"] || 1;
-
 				if (isReverse) {
-
-
 					if (offset !== 0) {
 						var step = (totalLayers - currentI);
 						value = offset - step;
@@ -2424,16 +2423,13 @@ function buildUI(thisObj) {
 						value = (totalLayers - currentI + 1);
 					}
 				} else {
-
 					if (!isPreview) {
-
 						if (!incrementValues[uniqueKey]) {
 							incrementValues[uniqueKey] = offset || 1;
 						}
 						value = incrementValues[uniqueKey]++;
 						usedVariables[uniqueKey] = true;
 					} else {
-
 						value = (offset || 1) + (currentI - 1);
 					}
 				}
@@ -2646,7 +2642,7 @@ function buildUI(thisObj) {
 		var effectNamesFilter = null;
 		var separator = customSeparator || ", ";
 		if (effectsFilter) {
-			effectNamesFilter = effectsFilter.split(',').map(function (name) {
+			effectNamesFilter = effectsFilter.split(',').map(function(name) {
 				return name.trim().toLowerCase();
 			});
 		}
