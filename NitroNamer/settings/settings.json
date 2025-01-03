@@ -24,7 +24,7 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1735310388001,
-            "usageFrequency": 2,
+            "usageFrequency": 3,
             "favoritesTemplate": false
         },
         "preset_9": {
@@ -108,13 +108,13 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "I(10) | I(11) | I(10, r) | I(10, r) ___ I | I ___ E",
+        "template": "Lpnt",
         "briefly": false,
         "brieflyType": 0,
         "selectedPresetIndex": 0,
-        "modeIndex": 5,
+        "modeIndex": 1,
         "modeActive": false,
-        "selectedPresetTemplate": "@replace('Shape', 'LayerType')"
+        "selectedPresetTemplate": "@cycle(2, '(value1)', '(value2)')"
     },
     "selectedLanguage": "Russian",
     "nameApply": {
