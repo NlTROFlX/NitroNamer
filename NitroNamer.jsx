@@ -2398,10 +2398,18 @@ function buildUI(thisObj) {
 			} else if (match === 'Lmn') {
 				value = getMaskNames(layer, settings);
 			} else if (customI !== undefined) {
-				var uniqueKey = "I(" + customI + ")_" + usedVariables.length;
+				// Было так (устаревшее решение):
+				// var uniqueKey = "I(" + customI + ")_" + usedVariables.length;
+			
+				// --- НОВЫЙ ВАРИАНТ ---
+				// 1) Убираем добавление usedVariables.length, чтобы все одинаковые I(...) внутри
+				//    одного слоя считались одной и той же переменной, а не разными вхождениями:
+				var uniqueKey = "I(" + customI + ")";
+			
 				var parts = customI.split(",");
 				var offset = 0;
 				var isReverse = false;
+			
 				for (var p = 0; p < parts.length; p++) {
 					var segment = parts[p].trim();
 					if (segment === "r") {
@@ -2413,8 +2421,16 @@ function buildUI(thisObj) {
 						}
 					}
 				}
+			
+				// Если уже рассчитывали эту переменную в рамках ОДНОГО слоя — возвращаем ранее вычисленный результат
+				if (usedVariables.hasOwnProperty(uniqueKey)) {
+					return usedVariables[uniqueKey];
+				}
+			
+				// В противном случае считаем заново
 				var currentI = variables["i"];
 				var totalLayers = variables["totalLayers"] || 1;
+			
 				if (isReverse) {
 					if (offset !== 0) {
 						var step = (totalLayers - currentI);
@@ -2424,15 +2440,20 @@ function buildUI(thisObj) {
 					}
 				} else {
 					if (!isPreview) {
+						// Если надо учитывать прирост для нескольких слоёв в глобальном инкременте:
 						if (!incrementValues[uniqueKey]) {
 							incrementValues[uniqueKey] = offset || 1;
 						}
 						value = incrementValues[uniqueKey]++;
-						usedVariables[uniqueKey] = true;
 					} else {
+						// В режиме предпросмотра (isPreview = true) не трогаем глобальный счётчик,
+						// а лишь показываем, какое будет значение
 						value = (offset || 1) + (currentI - 1);
 					}
 				}
+			
+				// Сохраняем результат, чтобы при повторных совпадениях I(10) вернуть то же число
+				usedVariables[uniqueKey] = value;
 				return value;
 			} else if (match === 'I') {
 				value = currentLocalIndex;
@@ -2587,7 +2608,7 @@ function buildUI(thisObj) {
 							prop: propNameCombined
 						};
 						var originalNameForReplace = currentLayer.name;
-						var newName = replaceVariables(template, templateData, originalNameForReplace, layer, variableSettings, false);
+						var newName = replaceVariables(template, templateData, originalNameForReplace, currentLayer, variableSettings, false);
 						if (briefly) {
 							switch (brieflyCase) {
 								case "Camel Case":
