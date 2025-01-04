@@ -1,136 +1,114 @@
-/* Подключение шрифта FiraSans */
 @font-face {
     font-family: 'FiraSans';
     src: url('./fonts/FiraSans-Black.ttf') format('truetype');
     font-weight: 900;
     font-style: normal;
 }
-
 @font-face {
     font-family: 'FiraSans';
     src: url('./fonts/FiraSans-BlackItalic.ttf') format('truetype');
     font-weight: 900;
     font-style: italic;
 }
-
 @font-face {
     font-family: 'FiraSans';
     src: url('./fonts/FiraSans-Bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
 }
-
 @font-face {
     font-family: 'FiraSans';
     src: url('./fonts/FiraSans-BoldItalic.ttf') format('truetype');
     font-weight: 700;
     font-style: italic;
 }
-
 @font-face {
     font-family: 'FiraSans';
     src: url('./fonts/FiraSans-ExtraBold.ttf') format('truetype');
     font-weight: 800;
     font-style: normal;
 }
-
 @font-face {
     font-family: 'FiraSans';
     src: url('./fonts/FiraSans-ExtraBoldItalic.ttf') format('truetype');
     font-weight: 800;
     font-style: italic;
 }
-
 @font-face {
     font-family: 'FiraSans';
     src: url('./fonts/FiraSans-ExtraLight.ttf') format('truetype');
     font-weight: 200;
     font-style: normal;
 }
-
 @font-face {
     font-family: 'FiraSans';
     src: url('./fonts/FiraSans-ExtraLightItalic.ttf') format('truetype');
     font-weight: 200;
     font-style: italic;
 }
-
 @font-face {
     font-family: 'FiraSans';
     src: url('./fonts/FiraSans-Italic.ttf') format('truetype');
     font-weight: 400;
     font-style: italic;
 }
-
 @font-face {
     font-family: 'FiraSans';
     src: url('./fonts/FiraSans-Light.ttf') format('truetype');
     font-weight: 300;
     font-style: normal;
 }
-
 @font-face {
     font-family: 'FiraSans';
     src: url('./fonts/FiraSans-LightItalic.ttf') format('truetype');
     font-weight: 300;
     font-style: italic;
 }
-
 @font-face {
     font-family: 'FiraSans';
     src: url('./fonts/FiraSans-Medium.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
 }
-
 @font-face {
     font-family: 'FiraSans';
     src: url('./fonts/FiraSans-MediumItalic.ttf') format('truetype');
     font-weight: 500;
     font-style: italic;
 }
-
 @font-face {
     font-family: 'FiraSans';
     src: url('./fonts/FiraSans-Regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
 }
-
 @font-face {
     font-family: 'FiraSans';
     src: url('./fonts/FiraSans-SemiBold.ttf') format('truetype');
     font-weight: 600;
     font-style: normal;
 }
-
 @font-face {
     font-family: 'FiraSans';
     src: url('./fonts/FiraSans-SemiBoldItalic.ttf') format('truetype');
     font-weight: 600;
     font-style: italic;
 }
-
 @font-face {
     font-family: 'FiraSans';
     src: url('./fonts/FiraSans-Thin.ttf') format('truetype');
     font-weight: 100;
     font-style: normal;
 }
-
 @font-face {
     font-family: 'FiraSans';
     src: url('./fonts/FiraSans-ThinItalic.ttf') format('truetype');
     font-weight: 100;
     font-style: italic;
 }
-
-/* Определение CSS-переменных для отступов */
 :root {
     --tooltip-offset: 10px;
 }
-
-/* Основной контейнер видео блока */
 .videoblock {
     position: relative;
     padding-left: 18.65px;
@@ -139,18 +117,12 @@
     display: inline-block;
     background-color: #232323;
 }
-
-.videoblock:hover .video-container,
-.videoblock:hover .video-info {
+.videoblock:hover .video-container, .videoblock:hover .video-info {
     border-color: #8a8a8a;
 }
-
 .videoblock:hover .video-info {
     border-top-color: #313131;
 }
-
-
-/* Контейнер видео плеера */
 .video-container {
     position: relative;
     overflow: visible;
@@ -166,15 +138,11 @@
     transition: border-color 0.125s ease;
     transition-timing-function: ease !important;
 }
-
 .video-container #video {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
-
-
-/* Информационная панель видео */
 .video-info {
     position: relative;
     overflow: visible;
@@ -191,8 +159,6 @@
     transition: border-color 0.125s ease;
     transition-timing-function: ease !important;
 }
-
-/* Стили для отображения текущего времени */
 #currentTime {
     display: block;
     position: relative;
@@ -202,8 +168,6 @@
     font-size: 12px;
     font-variant-numeric: tabular-nums;
 }
-
-
 #titleVideo {
     display: block;
     position: relative;
@@ -212,8 +176,6 @@
     font-family: 'Fira Sans', sans-serif;
     font-size: 12px;
 }
-
-/* Прогресс Бар с контейнером для области наведения */
 #progressBarContainer {
     position: absolute;
     width: calc(100% - 35px);
@@ -224,8 +186,6 @@
     pointer-events: auto;
     transform: translateY(-22px);
 }
-
-/* Фон прогресс-бара */
 #progressBarBackground {
     position: relative;
     width: 100%;
@@ -234,16 +194,12 @@
     background-color: #8a8a8a;
     transition: height 0.125s ease, top 0.125s ease;
 }
-
-/* Заполнение прогресс-бара */
 #progressBarFill {
     width: 0%;
     height: 100%;
     background-color: #2d8ceb;
     transition: width 0.125s ease, height 0.125s ease, top 0.125s ease;
 }
-
-/* Кнопка перемотки */
 #seekKnob {
     position: absolute;
     width: 8px;
@@ -256,8 +212,6 @@
     cursor: pointer;
     transition: left 0.125s ease, width 0.125s ease, height 0.125s ease, border 0.125s ease, background-color 0.125s ease;
 }
-
-/* Псевдоэлемент для внутреннего круга при наведении */
 #seekKnob::before {
     content: '';
     position: absolute;
@@ -271,13 +225,9 @@
     opacity: 0;
     transition: opacity 0.125s ease;
 }
-
-/* Показать внутренний круг при наведении на seekKnob */
 #seekKnob:hover::before {
     opacity: 1;
 }
-
-/* Иконки управления воспроизведением */
 .control-icon {
     position: absolute;
     top: 50%;
@@ -290,39 +240,27 @@
     transition: opacity 0.125s ease;
     pointer-events: none;
 }
-
-/* Класс для отображения иконки */
 .visible {
     opacity: 1;
 }
-
-/* Изменение высоты прогресс-бара при наведении на контейнер */
-#progressBarContainer:hover #progressBarBackground,
-#progressBarContainer:hover #progressBarFill {
+#progressBarContainer:hover #progressBarBackground, #progressBarContainer:hover #progressBarFill {
     height: 5px;
     top: 6px;
 }
-
-/* Изменение стилей seekKnob при наведении на прогресс-бар */
 #progressBarContainer:hover #seekKnob {
     width: 14px;
     height: 14px;
     border: 1px solid #2d8ceb;
     background-color: #232323;
 }
-
-/* Класс для отключения переходов */
 .no-transition {
     transition: none !important;
 }
-
-/* Стили для временного блока */
 #timeTooltip {
     position: absolute;
     width: 53px;
     height: 16px;
     background-color: #161616;
-    /* Обновленный цвет фона */
     border: 1px solid #313131;
     color: white;
     font-family: Arial, sans-serif;
@@ -332,14 +270,9 @@
     border-radius: 2px;
     pointer-events: none;
     opacity: 0;
-    /* Изначально скрыт */
     transition: opacity 0.125s ease;
-    /* Плавная анимация появления и исчезновения */
     transform: translateX(-50%);
-    /* Центрирование относительно курсора */
 }
-
-/* Стили для белого кружка при наведении */
 #hoverCircle {
     position: absolute;
     width: 5px;
@@ -349,14 +282,10 @@
     border-radius: 50%;
     transform: translate(-50%, -50%);
     opacity: 0;
-    /* Изначально видим */
     transition: opacity 0.3s ease;
-    /* Увеличили время для более плавного эффекта */
     pointer-events: none;
-    /* Устанавливаем вертикальную позицию на 50% */
     top: 50%;
 }
-
 .control-icon {
     position: absolute;
     top: 50%;
@@ -368,43 +297,28 @@
     opacity: 0;
     z-index: 999;
     transition: opacity 125ms ease;
-    /* Removed filter from transition */
     pointer-events: none;
-    /* Set initial icon color to #b9b9b9 */
     filter: invert(72%) sepia(2%) saturate(10%) hue-rotate(320deg) brightness(88%) contrast(85%);
 }
-
 .visible {
     opacity: 1;
 }
-
 .video-container:hover .control-icon {
-    /* Change icon color to #2d8ceb on hover */
     filter: invert(47%) sepia(74%) saturate(1796%) hue-rotate(192deg) brightness(96%) contrast(100%);
-    /* No transition on filter */
 }
-
 #video {
     transition: filter 125ms ease;
 }
-
-/* Apply grayscale filter when the video is paused */
 .videoblock.paused #video {
     filter: grayscale(100%);
 }
-
-/* Always have a filter applied to the video */
 #video {
     transition: filter 125ms ease;
     filter: grayscale(0%);
-    /* Ensure the filter property is always present */
 }
-
-/* Apply grayscale filter when the video is paused */
 .videoblock.paused #video {
     filter: grayscale(100%);
 }
-
 .video-overlay {
     position: absolute;
     top: 0;
@@ -412,14 +326,9 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0);
-    /* Initially transparent */
     transition: background-color 125ms ease;
     pointer-events: none;
-    /* Allow clicks to pass through to the video */
 }
-
-/* Apply 50% darkness when the video is paused */
 .videoblock.paused .video-overlay {
     background-color: rgba(0, 0, 0, 0.5);
-    /* 50% black overlay */
 }
