@@ -159,6 +159,23 @@
     transition: border-color 0.125s ease;
     transition-timing-function: ease !important;
 }
+/* Стили для иконки scale-up */
+.scale-up-icon {
+    width: 12px; /* Установленный размер иконки */
+    height: 12px;
+    margin-left: auto; /* Отодвигает иконку вправо внутри flex-контейнера */
+    margin-right: 4px; /* Отступ справа */
+    cursor: pointer; /* Изменяет курсор на указатель при наведении */
+    transition: filter 0.125s ease; /* Плавный переход фильтра */
+}
+
+/* Изменение цвета иконки при наведении */
+.scale-up-icon:hover {
+    filter: invert(48%) sepia(82%) saturate(2053%) hue-rotate(177deg) brightness(95%) contrast(102%);
+    transition: filter 0.125s ease;
+}
+
+
 #currentTime {
     display: block;
     position: relative;
@@ -304,7 +321,8 @@
     opacity: 1;
 }
 .video-container:hover .control-icon {
-    filter: invert(47%) sepia(74%) saturate(1796%) hue-rotate(192deg) brightness(96%) contrast(100%);
+    filter: invert(48%) sepia(82%) saturate(2053%) hue-rotate(177deg) brightness(95%) contrast(102%);
+    transition: filter 0.125s ease;
 }
 #video {
     transition: filter 125ms ease;
