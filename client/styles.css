@@ -147,7 +147,7 @@ html {
 .top-bar {
     width: 100%;
     height: 40px;
-    background-color: #161616;
+    background-color: #1d1d1d;
     border-bottom: 1px solid #313131;
     box-sizing: border-box;
     display: flex;
@@ -419,7 +419,7 @@ html {
 
 .left,
 .right {
-    background-color: #1d1d1d;
+    background-color: #232323;
 }
 
 /* Стиль активного спойлера */
@@ -505,7 +505,7 @@ html {
 
 /* Стиль неактивного спойлера */
 .spoiler.inactive {
-    background-color: #1d1d1d;
+    background-color: #232323;
     padding: 8px;
     transition: background-color 0.125s ease;
     /* Плавная анимация для фона */
@@ -573,7 +573,7 @@ html {
     width: 100%;
     height: 40px;
     min-height: 40px;
-    background-color: #161616;
+    background-color: #1d1d1d;
     border-top: 1px solid #313131;
     box-sizing: border-box;
     margin-top: auto;

@@ -137,7 +137,7 @@
     background-color: rgba(255, 255, 255, 1);
     overflow: hidden;
     display: inline-block;
-    background-color: #1d1d1d;
+    background-color: #232323;
 }
 
 .videoblock:hover .video-container,
@@ -180,7 +180,7 @@
     overflow: visible;
     width: 314.552px;
     height: 31px;
-    background-color: rgba(22, 22, 22, 1);
+    background-color: #1d1d1d;
     border: 1px solid rgba(49, 49, 49, 1);
     border-bottom-right-radius: 1.5px;
     border-bottom-left-radius: 1.5px;
