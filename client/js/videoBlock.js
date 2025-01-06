@@ -12,6 +12,8 @@ document.addEventListener("DOMContentLoaded", function() {
 		var currentTimeElement = videoblock.querySelector("#currentTime");
 		var timeTooltip = videoblock.querySelector("#timeTooltip");
 		var hoverCircle = videoblock.querySelector("#hoverCircle");
+		var scaleIcon = videoblock.querySelector(".scale-up-icon");
+        var shadowOverlay = document.getElementById("shadow-overlay");
 		var isDragging = false;
 		var lastTime = 0;
 		var isHovering = false;
@@ -197,6 +199,37 @@ document.addEventListener("DOMContentLoaded", function() {
 			isHovering = false;
 			timeTooltip.style.opacity = "0";
 			hoverCircle.style.opacity = "0";
+		});
+		function handleScaleIconClick() {
+            if (!videoblock.classList.contains("enlarged")) {
+                // Увеличиваем плеер
+                videoblock.classList.add("enlarged");
+                shadowOverlay.style.display = "block";
+                scaleIcon.src = "icons/scale-down.svg"; // Заменяем иконку
+            } else {
+                // Уменьшаем плеер
+                videoblock.classList.remove("enlarged");
+                shadowOverlay.style.display = "none";
+                scaleIcon.src = "icons/scale-up.svg"; // Возвращаем иконку
+            }
+        }
+
+        // Обработчик клика по иконке увеличения
+        scaleIcon.addEventListener("click", function(event) {
+            event.stopPropagation(); // Предотвращаем всплытие события
+            handleScaleIconClick();
+        });
+		// Обработчик клика по затеняющему фону для уменьшения плеера
+		var shadowOverlay = document.getElementById("shadow-overlay");
+		shadowOverlay.addEventListener("click", function() {
+			document.querySelectorAll(".videoblock.enlarged").forEach(function(videoblock) {
+				videoblock.classList.remove("enlarged");
+				var scaleIcon = videoblock.querySelector(".scale-up-icon");
+				if (scaleIcon) {
+					scaleIcon.src = "icons/scale-up.svg";
+				}
+			});
+			shadowOverlay.style.display = "none";
 		});
 		updateIconsOnStateChange();
 		currentTimeElement.textContent = formatTime(0);

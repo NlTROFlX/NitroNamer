@@ -19,7 +19,7 @@ function saveSelectedLanguage(selectedLanguage, extensionPath) {
 			try {
 				settings = JSON.parse(content);
 			} catch (e) {
-				alert("Ошибка чтения настроек. Будут использованы настройки по умолчанию.");
+				//alert("Ошибка чтения настроек. Будут использованы настройки по умолчанию.");
 				settings = {};
 			}
 		} else {
@@ -48,7 +48,7 @@ function loadSettings(extensionPath) {
 			try {
 				settings = JSON.parse(content);
 			} catch (e) {
-				alert("Ошибка чтения настроек.");
+				//alert("Ошибка чтения настроек.");
 				settings = {};
 			}
 		} else {
