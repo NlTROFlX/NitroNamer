@@ -1,129 +1,130 @@
 @font-face {
-    font-family: 'FiraSans';
-    src: url('./fonts/FiraSans-Black.ttf') format('truetype');
+    font-family: "FiraSans";
+    src: url("./fonts/FiraSans-Black.ttf") format("truetype");
     font-weight: 900;
     font-style: normal;
-}
-@font-face {
-    font-family: 'FiraSans';
-    src: url('./fonts/FiraSans-BlackItalic.ttf') format('truetype');
+   }
+   @font-face {
+    font-family: "FiraSans";
+    src: url("./fonts/FiraSans-BlackItalic.ttf") format("truetype");
     font-weight: 900;
     font-style: italic;
-}
-@font-face {
-    font-family: 'FiraSans';
-    src: url('./fonts/FiraSans-Bold.ttf') format('truetype');
+   }
+   @font-face {
+    font-family: "FiraSans";
+    src: url("./fonts/FiraSans-Bold.ttf") format("truetype");
     font-weight: 700;
     font-style: normal;
-}
-@font-face {
-    font-family: 'FiraSans';
-    src: url('./fonts/FiraSans-BoldItalic.ttf') format('truetype');
+   }
+   @font-face {
+    font-family: "FiraSans";
+    src: url("./fonts/FiraSans-BoldItalic.ttf") format("truetype");
     font-weight: 700;
     font-style: italic;
-}
-@font-face {
-    font-family: 'FiraSans';
-    src: url('./fonts/FiraSans-ExtraBold.ttf') format('truetype');
+   }
+   @font-face {
+    font-family: "FiraSans";
+    src: url("./fonts/FiraSans-ExtraBold.ttf") format("truetype");
     font-weight: 800;
     font-style: normal;
-}
-@font-face {
-    font-family: 'FiraSans';
-    src: url('./fonts/FiraSans-ExtraBoldItalic.ttf') format('truetype');
+   }
+   @font-face {
+    font-family: "FiraSans";
+    src: url("./fonts/FiraSans-ExtraBoldItalic.ttf") format("truetype");
     font-weight: 800;
     font-style: italic;
-}
-@font-face {
-    font-family: 'FiraSans';
-    src: url('./fonts/FiraSans-ExtraLight.ttf') format('truetype');
+   }
+   @font-face {
+    font-family: "FiraSans";
+    src: url("./fonts/FiraSans-ExtraLight.ttf") format("truetype");
     font-weight: 200;
     font-style: normal;
-}
-@font-face {
-    font-family: 'FiraSans';
-    src: url('./fonts/FiraSans-ExtraLightItalic.ttf') format('truetype');
+   }
+   @font-face {
+    font-family: "FiraSans";
+    src: url("./fonts/FiraSans-ExtraLightItalic.ttf") format("truetype");
     font-weight: 200;
     font-style: italic;
-}
-@font-face {
-    font-family: 'FiraSans';
-    src: url('./fonts/FiraSans-Italic.ttf') format('truetype');
+   }
+   @font-face {
+    font-family: "FiraSans";
+    src: url("./fonts/FiraSans-Italic.ttf") format("truetype");
     font-weight: 400;
     font-style: italic;
-}
-@font-face {
-    font-family: 'FiraSans';
-    src: url('./fonts/FiraSans-Light.ttf') format('truetype');
+   }
+   @font-face {
+    font-family: "FiraSans";
+    src: url("./fonts/FiraSans-Light.ttf") format("truetype");
     font-weight: 300;
     font-style: normal;
-}
-@font-face {
-    font-family: 'FiraSans';
-    src: url('./fonts/FiraSans-LightItalic.ttf') format('truetype');
+   }
+   @font-face {
+    font-family: "FiraSans";
+    src: url("./fonts/FiraSans-LightItalic.ttf") format("truetype");
     font-weight: 300;
     font-style: italic;
-}
-@font-face {
-    font-family: 'FiraSans';
-    src: url('./fonts/FiraSans-Medium.ttf') format('truetype');
+   }
+   @font-face {
+    font-family: "FiraSans";
+    src: url("./fonts/FiraSans-Medium.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
-}
-@font-face {
-    font-family: 'FiraSans';
-    src: url('./fonts/FiraSans-MediumItalic.ttf') format('truetype');
+   }
+   @font-face {
+    font-family: "FiraSans";
+    src: url("./fonts/FiraSans-MediumItalic.ttf") format("truetype");
     font-weight: 500;
     font-style: italic;
-}
-@font-face {
-    font-family: 'FiraSans';
-    src: url('./fonts/FiraSans-Regular.ttf') format('truetype');
+   }
+   @font-face {
+    font-family: "FiraSans";
+    src: url("./fonts/FiraSans-Regular.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
-}
-@font-face {
-    font-family: 'FiraSans';
-    src: url('./fonts/FiraSans-SemiBold.ttf') format('truetype');
+   }
+   @font-face {
+    font-family: "FiraSans";
+    src: url("./fonts/FiraSans-SemiBold.ttf") format("truetype");
     font-weight: 600;
     font-style: normal;
-}
-@font-face {
-    font-family: 'FiraSans';
-    src: url('./fonts/FiraSans-SemiBoldItalic.ttf') format('truetype');
+   }
+   @font-face {
+    font-family: "FiraSans";
+    src: url("./fonts/FiraSans-SemiBoldItalic.ttf") format("truetype");
     font-weight: 600;
     font-style: italic;
-}
-@font-face {
-    font-family: 'FiraSans';
-    src: url('./fonts/FiraSans-Thin.ttf') format('truetype');
+   }
+   @font-face {
+    font-family: "FiraSans";
+    src: url("./fonts/FiraSans-Thin.ttf") format("truetype");
     font-weight: 100;
     font-style: normal;
-}
-@font-face {
-    font-family: 'FiraSans';
-    src: url('./fonts/FiraSans-ThinItalic.ttf') format('truetype');
+   }
+   @font-face {
+    font-family: "FiraSans";
+    src: url("./fonts/FiraSans-ThinItalic.ttf") format("truetype");
     font-weight: 100;
     font-style: italic;
-}
-:root {
+   }
+   :root {
     --tooltip-offset: 10px;
-}
-.videoblock {
+   }
+   .videoblock {
     position: relative;
     padding-left: 18.65px;
     background-color: rgba(255, 255, 255, 1);
     overflow: hidden;
     display: inline-block;
     background-color: #232323;
-}
-.videoblock:hover .video-container, .videoblock:hover .video-info {
+   }
+   .videoblock:hover .video-container,
+   .videoblock:hover .video-info {
     border-color: #8a8a8a;
-}
-.videoblock:hover .video-info {
+   }
+   .videoblock:hover .video-info {
     border-top-color: #313131;
-}
-.video-container {
+   }
+   .video-container {
     position: relative;
     overflow: visible;
     width: 314.552px;
@@ -137,13 +138,13 @@
     cursor: pointer;
     transition: border-color 0.125s ease;
     transition-timing-function: ease !important;
-}
-.video-container #video {
+   }
+   .video-container #video {
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
-.video-info {
+   }
+   .video-info {
     position: relative;
     overflow: visible;
     width: 314.552px;
@@ -158,42 +159,41 @@
     margin-top: -1px;
     transition: border-color 0.125s ease;
     transition-timing-function: ease !important;
-}
-/* Стили для иконки scale-up */
-.scale-up-icon {
-    width: 12px; /* Установленный размер иконки */
+   }
+   
+   .scale-up-icon {
+    width: 12px;
     height: 12px;
-    margin-left: auto; /* Отодвигает иконку вправо внутри flex-контейнера */
-    margin-right: 4px; /* Отступ справа */
-    cursor: pointer; /* Изменяет курсор на указатель при наведении */
-    transition: filter 0.125s ease; /* Плавный переход фильтра */
-}
-
-/* Изменение цвета иконки при наведении */
-.scale-up-icon:hover {
-    filter: invert(48%) sepia(82%) saturate(2053%) hue-rotate(177deg) brightness(95%) contrast(102%);
+    margin-left: auto;
+    margin-right: 4px;
+    cursor: pointer;
     transition: filter 0.125s ease;
-}
-
-
-#currentTime {
+   }
+   
+   .scale-up-icon:hover {
+    filter: invert(48%) sepia(82%) saturate(2053%) hue-rotate(177deg)
+     brightness(95%) contrast(102%);
+    transition: filter 0.125s ease;
+   }
+   
+   #currentTime {
     display: block;
     position: relative;
     margin-left: 7px;
     color: #b9b9b9;
-    font-family: 'Fira Sans', sans-serif;
+    font-family: "Fira Sans", sans-serif;
     font-size: 12px;
     font-variant-numeric: tabular-nums;
-}
-#titleVideo {
+   }
+   #titleVideo {
     display: block;
     position: relative;
     margin-left: 0px;
     color: #b9b9b9;
-    font-family: 'Fira Sans', sans-serif;
+    font-family: "Fira Sans", sans-serif;
     font-size: 12px;
-}
-#progressBarContainer {
+   }
+   #progressBarContainer {
     position: absolute;
     width: calc(100% - 35px);
     height: 21px;
@@ -202,22 +202,22 @@
     cursor: pointer;
     pointer-events: auto;
     transform: translateY(-22px);
-}
-#progressBarBackground {
+   }
+   #progressBarBackground {
     position: relative;
     width: 100%;
     height: 1px;
     top: 10px;
     background-color: #8a8a8a;
     transition: height 0.125s ease, top 0.125s ease;
-}
-#progressBarFill {
+   }
+   #progressBarFill {
     width: 0%;
     height: 100%;
     background-color: #2d8ceb;
     transition: width 0.125s ease, height 0.125s ease, top 0.125s ease;
-}
-#seekKnob {
+   }
+   #seekKnob {
     position: absolute;
     width: 8px;
     height: 8px;
@@ -227,10 +227,11 @@
     background-color: rgba(45, 140, 235, 1);
     border-radius: 50%;
     cursor: pointer;
-    transition: left 0.125s ease, width 0.125s ease, height 0.125s ease, border 0.125s ease, background-color 0.125s ease;
-}
-#seekKnob::before {
-    content: '';
+    transition: left 0.125s ease, width 0.125s ease, height 0.125s ease,
+     border 0.125s ease, background-color 0.125s ease;
+   }
+   #seekKnob::before {
+    content: "";
     position: absolute;
     top: 50%;
     left: 50%;
@@ -241,11 +242,11 @@
     transform: translate(-50%, -50%);
     opacity: 0;
     transition: opacity 0.125s ease;
-}
-#seekKnob:hover::before {
+   }
+   #seekKnob:hover::before {
     opacity: 1;
-}
-.control-icon {
+   }
+   .control-icon {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -256,24 +257,25 @@
     opacity: 0;
     transition: opacity 0.125s ease;
     pointer-events: none;
-}
-.visible {
+   }
+   .visible {
     opacity: 1;
-}
-#progressBarContainer:hover #progressBarBackground, #progressBarContainer:hover #progressBarFill {
+   }
+   #progressBarContainer:hover #progressBarBackground,
+   #progressBarContainer:hover #progressBarFill {
     height: 5px;
     top: 6px;
-}
-#progressBarContainer:hover #seekKnob {
+   }
+   #progressBarContainer:hover #seekKnob {
     width: 14px;
     height: 14px;
     border: 1px solid #2d8ceb;
     background-color: #232323;
-}
-.no-transition {
+   }
+   .no-transition {
     transition: none !important;
-}
-#timeTooltip {
+   }
+   #timeTooltip {
     position: absolute;
     width: 53px;
     height: 16px;
@@ -289,8 +291,8 @@
     opacity: 0;
     transition: opacity 0.125s ease;
     transform: translateX(-50%);
-}
-#hoverCircle {
+   }
+   #hoverCircle {
     position: absolute;
     width: 5px;
     height: 5px;
@@ -302,8 +304,8 @@
     transition: opacity 0.3s ease;
     pointer-events: none;
     top: 50%;
-}
-.control-icon {
+   }
+   .control-icon {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -315,29 +317,31 @@
     z-index: 999;
     transition: opacity 125ms ease;
     pointer-events: none;
-    filter: invert(72%) sepia(2%) saturate(10%) hue-rotate(320deg) brightness(88%) contrast(85%);
-}
-.visible {
+    filter: invert(72%) sepia(2%) saturate(10%) hue-rotate(320deg) brightness(88%)
+     contrast(85%);
+   }
+   .visible {
     opacity: 1;
-}
-.video-container:hover .control-icon {
-    filter: invert(48%) sepia(82%) saturate(2053%) hue-rotate(177deg) brightness(95%) contrast(102%);
+   }
+   .video-container:hover .control-icon {
+    filter: invert(48%) sepia(82%) saturate(2053%) hue-rotate(177deg)
+     brightness(95%) contrast(102%);
     transition: filter 0.125s ease;
-}
-#video {
+   }
+   #video {
     transition: filter 125ms ease;
-}
-.videoblock.paused #video {
+   }
+   .videoblock.paused #video {
     filter: grayscale(100%);
-}
-#video {
+   }
+   #video {
     transition: filter 125ms ease;
     filter: grayscale(0%);
-}
-.videoblock.paused #video {
+   }
+   .videoblock.paused #video {
     filter: grayscale(100%);
-}
-.video-overlay {
+   }
+   .video-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -346,13 +350,12 @@
     background-color: rgba(0, 0, 0, 0);
     transition: background-color 125ms ease;
     pointer-events: none;
-}
-.videoblock.paused .video-overlay {
+   }
+   .videoblock.paused .video-overlay {
     background-color: rgba(0, 0, 0, 0.5);
-}
-
-/* Стили для увеличенного плеера */
-.videoblock.enlarged {
+   }
+   
+   .videoblock.enlarged {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -362,33 +365,33 @@
     border-radius: 6px;
     border: 1px solid #8a8a8a;
     transform: translate(-50%, -50%);
-    z-index: 1001; /* Выше, чем у других элементов */
-}
-
-.videoblock.enlarged .video-container {
+    z-index: 1001;
+   }
+   
+   .videoblock.enlarged .video-container {
     width: 547px;
     height: 307px;
     border: none;
-}
-
-.videoblock.enlarged .video-info {
+   }
+   
+   .videoblock.enlarged .video-info {
     width: 547px;
     height: 30px;
     border: none;
-}
-
-.videoblock.enlarged #progressBarContainer{
+   }
+   
+   .videoblock.enlarged #progressBarContainer {
     transform: translateY(-19px);
-}
-
-/* Стили для затеняющего фона */
-.shadow-overlay {
+   }
+   
+   .shadow-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
-    z-index: 1000; /* Ниже, чем у увеличенного плеера */
+    z-index: 1000;
     pointer-events: auto;
-}
+   }
+   
