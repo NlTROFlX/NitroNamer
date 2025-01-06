@@ -165,7 +165,7 @@
     width: 12px;
     height: 12px;
     margin-left: auto;
-    margin-right: 4px;
+    margin-right: 8px;
     cursor: pointer;
     transition: filter 0.125s ease;
    }
@@ -382,6 +382,11 @@
    
    .videoblock.enlarged #progressBarContainer {
     transform: translateY(-19px);
+    width: calc(100% - 18px);
+   }
+   
+   .videoblock.enlarged .scale-up-icon{
+    padding-right: 2px;
    }
    
    .shadow-overlay {
