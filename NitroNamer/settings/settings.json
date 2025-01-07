@@ -5,11 +5,23 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "(LayerName).i",
+        "template": "(LayerName.6_Deep Glow 2, Levels)",
         "briefly": false,
         "brieflyType": 0,
         "modeIndex": 0,
         "modeActive": false,
         "selectedPresetTemplate": ""
+    },
+    "nameApply": {
+        "shapeLayer": true,
+        "textLayer": true,
+        "nullObject": true,
+        "adjustmentLayer": true,
+        "footageLayer": true,
+        "solidLayer": true,
+        "preComp": true,
+        "cameraLayer": true,
+        "lightLayer": true,
+        "audioLayer": true
     }
 }
