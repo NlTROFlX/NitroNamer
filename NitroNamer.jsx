@@ -50,17 +50,13 @@ function buildUI(thisObj) {
 	var btnSave = grpLayerSelection.add("image", undefined, File(scriptFolderPath + "/NitroNamer/img/save.png"));
 	btnSave.size = [24, 24];
 	btnSave.alignment = ["right", "center"];
-	var btnCircleMinus = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/delete.png"), {
-		style: "toolbutton"
-	});
+
+	var btnCircleMinus = grpLayerSelection.add("image", undefined, File(scriptFolderPath + "/NitroNamer/img/delete.png"));
 	btnCircleMinus.size = [24, 24];
-	btnCircleMinus.imageSize = [24, 24];
 	btnCircleMinus.alignment = ["right", "center"];
-	var btnMinimize = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/minimize.png"), {
-		style: "toolbutton"
-	});
+	
+	var btnMinimize = grpLayerSelection.add("image", undefined, File(scriptFolderPath + "/NitroNamer/img/favorites.png"));
 	btnMinimize.size = [24, 24];
-	btnMinimize.imageSize = [24, 24];
 	btnMinimize.alignment = ["right", "center"];
 
 	function handleMouseOverMaximize() {
@@ -604,7 +600,7 @@ function buildUI(thisObj) {
 					presetKeys.push(key);
 				}
 			}
-			var newPresetIndex = presetKeys.indexOf(newPresetKey);
+			var newPresetIndex = arrayIndexOf(presetKeys, newPresetKey);
 			if (newPresetIndex !== -1) {
 				ddLayerMode.selection = newPresetIndex;
 			}
@@ -625,7 +621,7 @@ function buildUI(thisObj) {
 	btnSave.addEventListener("mouseout", function() {
 		btnSave.image = File(scriptFolderPath + "/NitroNamer/img/save.png");
 	});
-	btnCircleMinus.onClick = function() {
+	btnCircleMinus.addEventListener("click", function()	{
 		var selectedItem = ddLayerMode.selection;
 		var selectedPreset = ddLayerMode.selection;
 		if (selectedItem && selectedPreset && selectedPreset.text !== "Save your new preset" && selectedPreset.text !== "Please select a preset to delete") {
@@ -680,8 +676,8 @@ function buildUI(thisObj) {
 		} else {
 			updatePresetsDropdown(loadSettings());
 		}
-	};
-	btnMinimize.onClick = function() {
+	});
+	btnMinimize.addEventListener("click", function() {
 		var settings = loadSettings();
 		var currentSettings = settings.currentSettings || {};
 		var isCompact = !currentSettings.UICompact;
@@ -689,7 +685,7 @@ function buildUI(thisObj) {
 		settings.currentSettings = currentSettings;
 		saveSettings(currentSettings, true);
 		setMinimizeButtonIcon(isCompact);
-	};
+	});
 	btnRename.onClick = function() {
 		if (!btnRename.enabled)
 			return;
