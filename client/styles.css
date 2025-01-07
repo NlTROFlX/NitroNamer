@@ -183,13 +183,12 @@ html {
   opacity: 1;
 }
 .indicator-line {
-  position: absolute;
-  top: 40px;
-  left: -1px;
-  width: 1px;
-  background-color: #2d8ceb;
-  transition: height 125ms, left 125ms;
-  z-index: 999;
+    position:relative;
+    left: -1px!important;
+    width: 1px;
+    background-color: #2d8ceb;
+    transition: height 125ms, left 125ms;
+    z-index: 999;
 }
 .split-container {
   display: flex;
@@ -586,6 +585,7 @@ html {
 }
 .left {
   min-width: 234px;
+  max-width: 234px;
   box-sizing: border-box;
   flex-shrink: 0;
 }
