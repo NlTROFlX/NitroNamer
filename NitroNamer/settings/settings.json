@@ -1,1 +1,15 @@
-{"userPresets":{},"currentSettings":{"UICompact":true,"allLayers":false,"template":"1","briefly":false,"brieflyType":0,"modeIndex":2,"modeActive":false,"selectedPresetTemplate":""}}
+{
+    "userPresets": {
+        
+    },
+    "currentSettings": {
+        "UICompact": false,
+        "allLayers": true,
+        "template": "(LayerName).i",
+        "briefly": false,
+        "brieflyType": 0,
+        "modeIndex": 0,
+        "modeActive": false,
+        "selectedPresetTemplate": ""
+    }
+}

@@ -1,66 +1,73 @@
-function createUI(thisObj) {
-    var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "Выбранные свойства", undefined, {resizeable: true});
-    win.orientation = "column";
-    win.alignChildren = ["fill", "top"];
+// Проверяем, находится ли скрипт в панели (панель или окно)
+(function (thisObj) {
+    function createUI(thisObj) {
+        // Создаем панель (в панели After Effects или отдельное окно)
+        var panel = thisObj instanceof Panel ? thisObj : new Window("palette", "Simple Panel", undefined, {resizeable: true});
 
-    var propertyList = win.add("listbox", undefined, [], {multiselect: false});
-    propertyList.preferredSize = [400, 300];
+        // Путь к иконкам (иконки должны находиться в той же папке, что и скрипт)
+        var scriptFilePath = File($.fileName).path; // Получаем путь к текущему скрипту
+        var iconPath1 = scriptFilePath + "/icon.png"; // Основная иконка
+        var iconPath2 = scriptFilePath + "/icon2.png"; // Иконка при наведении
 
-    var refreshButton = win.add("button", undefined, "Обновить");
-    refreshButton.onClick = function () {
-        updatePropertyList(propertyList);
-    };
+        // Проверяем наличие файлов иконок
+        var iconFile1 = File(iconPath1);
+        var iconFile2 = File(iconPath2);
 
-    win.onResizing = win.onResize = function () {
-        win.layout.resize();
-    };
-
-    return win;
-}
-
-
-function getLastElementName(property) {
-    return property.name; 
-}
-
-function updatePropertyList(propertyList) {
-    propertyList.removeAll();
-
-    if (app.project.activeItem instanceof CompItem) {
-        var comp = app.project.activeItem;
-        var selectedLayers = comp.selectedLayers;
-
-        if (selectedLayers.length > 0) {
-            var layer = selectedLayers[selectedLayers.length - 1]; 
-            var selectedProperties = layer.selectedProperties;
-
-            if (selectedProperties.length === 0) {
-                propertyList.add("item", "Слой: " + layer.name + " - Нет выбранных атрибутов");
-            } else {
-                
-                var lastSelectedProperty = selectedProperties[selectedProperties.length - 1];
-                var lastElementName = getLastElementName(lastSelectedProperty); 
-
-                
-                propertyList.add("item", "Слой: " + layer.name + ", Атрибут: " + lastElementName);
-            }
-        } else {
-            propertyList.add("item", "Нет выбранных слоёв.");
+        if (!iconFile1.exists || !iconFile2.exists) {
+            alert("Одна или обе иконки не найдены:\n" + iconPath1 + "\n" + iconPath2);
+            return panel;
         }
-    } else {
-        propertyList.add("item", "Активный элемент не является композицией.");
-    }
-}
 
-function main(thisObj) {
-    var ui = createUI(thisObj);
-    if (ui instanceof Window) {
-        ui.center();
-        ui.show();
-    } else {
-        ui.layout.layout(true);
-        ui.layout.resize();
-    }
-}
+        // Добавляем изображение как кнопку
+        var buttonImage = panel.add("image", undefined, File(iconPath1)); // Устанавливаем основную иконку
 
-main(this);
+        // Устанавливаем всплывающую подсказку
+        buttonImage.helpTip = "Нажмите, чтобы добавить текстовый слой"; // Текст подсказки
+
+        // Устанавливаем размер изображения (опционально, если нужно изменить размер)
+        buttonImage.size = [32, 32]; // Задайте размер, соответствующий вашей иконке
+
+        // Обработчик наведения мыши (меняем иконку)
+        buttonImage.addEventListener("mouseover", function () {
+            buttonImage.image = File(iconPath2); // Устанавливаем иконку при наведении
+        });
+
+        // Обработчик ухода мыши (возвращаем основную иконку)
+        buttonImage.addEventListener("mouseout", function () {
+            buttonImage.image = File(iconPath1); // Возвращаем основную иконку
+        });
+
+        // Добавляем обработчик клика
+        buttonImage.addEventListener("mousedown", function () {
+            // Получаем активную композицию
+            var activeComp = app.project.activeItem;
+
+            if (activeComp && activeComp instanceof CompItem) {
+                // Начинаем изменять проект
+                app.beginUndoGroup("Добавить текст");
+
+                // Добавляем текстовый слой в композицию
+                activeComp.layers.addText("Привет, мир!");
+
+                // Завершаем изменение проекта
+                app.endUndoGroup();
+            } else {
+                alert("Откройте композицию, чтобы добавить текст.");
+            }
+        });
+
+        // Адаптируем панель под содержимое
+        panel.layout.layout(true);
+
+        return panel;
+    }
+
+    // Создаем интерфейс
+    var myPanel = createUI(thisObj);
+
+    // Если не в панели, показываем окно
+    if (!(myPanel instanceof Panel)) {
+        myPanel.center();
+        myPanel.show();
+    }
+})(this);
