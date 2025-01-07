@@ -1,3 +1,5 @@
+#include "json2.js";
+
 var cycleState = {};
 var incrementValues = {};
 var localIndex = 0;
@@ -1964,6 +1966,15 @@ function buildUI(thisObj) {
 		return false;
 	}
 
+	function arrayIndexOf(arr, item) {
+		for (var i = 0; i < arr.length; i++) {
+			if (arr[i] === item) {
+				return i;
+			}
+		}
+		return -1; // если не найдено
+	}	
+
 	function getLayerParentIndex(layer) {
 		var comp = layer.containingComp;
 		if (!layer.parent && !isParentLayer(layer)) {
@@ -1994,14 +2005,19 @@ function buildUI(thisObj) {
 					allBelow = false;
 				}
 			}
+			
+			// Вместо childLayers.indexOf(layer) пишем arrayIndexOf(childLayers, layer)
+			var layerIdx = arrayIndexOf(childLayers, layer);
+	
 			var relativeIndex;
 			if (allAbove) {
-				relativeIndex = childLayers.length - childLayers.indexOf(layer);
+				relativeIndex = childLayers.length - layerIdx;
 			} else if (allBelow) {
-				relativeIndex = childLayers.indexOf(layer) + 1;
+				relativeIndex = layerIdx + 1;
 			} else {
-				relativeIndex = childLayers.indexOf(layer) + 1;
+				relativeIndex = layerIdx + 1;
 			}
+	
 			return relativeIndex.toString();
 		}
 		return layer.name;
