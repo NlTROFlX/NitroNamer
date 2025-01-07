@@ -1,16 +1,42 @@
 {
     "userPresets": {
-        
+        "preset_3": {
+            "allLayers": true,
+            "template": "2",
+            "briefly": false,
+            "brieflyType": 0,
+            "creationDate": 1736291050802,
+            "usageFrequency": 0,
+            "favoritesTemplate": false
+        },
+        "preset_2": {
+            "allLayers": true,
+            "template": "1",
+            "briefly": false,
+            "brieflyType": 0,
+            "creationDate": 1736288160955,
+            "usageFrequency": 2,
+            "favoritesTemplate": true
+        },
+        "preset_1": {
+            "allLayers": true,
+            "template": "(LayerName.6_Deep Glow 2, Levels)",
+            "briefly": false,
+            "brieflyType": 0,
+            "creationDate": 1736286766983,
+            "usageFrequency": 2,
+            "favoritesTemplate": false
+        }
     },
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "(LayerName.6_Deep Glow 2, Levels)",
+        "template": "2",
         "briefly": false,
         "brieflyType": 0,
         "modeIndex": 0,
         "modeActive": false,
-        "selectedPresetTemplate": ""
+        "selectedPresetTemplate": "1"
     },
     "nameApply": {
         "shapeLayer": true,

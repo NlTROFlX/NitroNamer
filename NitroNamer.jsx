@@ -39,23 +39,16 @@ function buildUI(thisObj) {
 	txtSelectedLayersCount.maximumSize = [50, txtSelectedLayersCount.maximumSize.height];
 	var scriptFile = new File($.fileName);
 	var scriptFolderPath = scriptFile.path;
-	var btnCopy = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/copy.png"), {
-		style: "toolbutton"
-	}, 0);
+	var btnCopy = grpLayerSelection.add("image", undefined, File(scriptFolderPath + "/NitroNamer/img/copy.png"));
 	btnCopy.size = [24, 24];
-	btnCopy.imageSize = [24, 24];
 	btnCopy.alignment = ["right", "center"];
-	var btnFavorites = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/favorites.png"), {
-		style: "toolbutton"
-	});
+
+	var btnFavorites = grpLayerSelection.add("image", undefined, File(scriptFolderPath + "/NitroNamer/img/favorites.png"));
 	btnFavorites.size = [24, 24];
-	btnFavorites.imageSize = [24, 24];
 	btnFavorites.alignment = ["right", "center"];
-	var btnSave = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/save.png"), {
-		style: "toolbutton"
-	});
+	
+	var btnSave = grpLayerSelection.add("image", undefined, File(scriptFolderPath + "/NitroNamer/img/save.png"));
 	btnSave.size = [24, 24];
-	btnSave.imageSize = [24, 24];
 	btnSave.alignment = ["right", "center"];
 	var btnCircleMinus = grpLayerSelection.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/delete.png"), {
 		style: "toolbutton"
@@ -496,7 +489,7 @@ function buildUI(thisObj) {
 			alert("Script file not found: " + scriptFilePath.fsName, scriptMessageHead_1);
 		}
 	};
-	btnCopy.onClick = function() {
+	btnCopy.addEventListener("click", function() {
 		var proj = app.project;
 		if (proj && proj.activeItem instanceof CompItem) {
 			var comp = proj.activeItem;
@@ -524,8 +517,8 @@ function buildUI(thisObj) {
 		} else {
 			alert("Please select a valid composition.", scriptMessageHead_1);
 		}
-	};
-	btnFavorites.onClick = function() {
+	});
+	btnFavorites.addEventListener("click", function() {
 		var selectedPreset = ddLayerMode.selection;
 		if (selectedPreset && selectedPreset.preset) {
 			var presetTemplate = selectedPreset.preset.template;
@@ -541,7 +534,7 @@ function buildUI(thisObj) {
 				}
 			}
 		}
-	};
+	});
 	btnFavorites.addEventListener("mouseover", function() {
 		btnFavorites.isMouseOver = true;
 		updateFavoritesButtonIcon();
@@ -568,7 +561,7 @@ function buildUI(thisObj) {
 		}
 		btnFavorites.imageSize = [24, 24];
 	}
-	btnSave.onClick = function() {
+	btnSave.addEventListener("click", function() {
 		var settings = {
 			allLayers: rdoAllLayers.value,
 			template: txtTemplate.text,
@@ -621,7 +614,7 @@ function buildUI(thisObj) {
 				updateFavoritesButtonIcon(newPreset.favoritesTemplate);
 			}
 		}
-	};
+	});
 	btnSave.addEventListener("mouseover", function() {
 		if (ScriptUI.environment.keyboardState.shiftKey) {
 			btnSave.image = File(scriptFolderPath + "/NitroNamer/img/refreshHover.png");
