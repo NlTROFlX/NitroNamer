@@ -1,3 +1,24 @@
+.right,
+.split-container,
+.top-bar,
+body,
+html {
+  display: flex;
+}
+.indicator-line,
+.right,
+.split-container,
+.spoiler.active,
+.top-bar {
+  position: relative;
+}
+.bottom-bar,
+.language-selector .language-dropdown,
+.left,
+.right,
+.top-bar {
+  box-sizing: border-box;
+}
 .title-thin-italic,
 body,
 html {
@@ -122,7 +143,6 @@ body,
 html {
   padding: 0;
   background-color: #232323;
-  display: flex;
   flex-direction: column;
   align-items: center;
   color: #fff;
@@ -135,14 +155,11 @@ html {
   height: 40px;
   background-color: #1d1d1d;
   border-bottom: 1px solid #313131;
-  box-sizing: border-box;
-  display: flex;
   align-items: center;
   justify-content: flex-start;
   padding-right: 8px;
   padding-left: 8px;
   color: #b9b9b9;
-  position: relative;
   cursor: pointer;
 }
 .left,
@@ -183,16 +200,11 @@ html {
   opacity: 1;
 }
 .indicator-line {
-    position:relative;
-    left: -1px!important;
-    width: 1px;
-    background-color: #2d8ceb;
-    transition: height 125ms, left 125ms;
-    z-index: 999;
-}
-.split-container {
-  display: flex;
-  position: relative;
+  left: -1px !important;
+  width: 1px;
+  background-color: #2d8ceb;
+  transition: height 125ms, left 125ms;
+  z-index: 999;
 }
 .left {
   border-right: 1px solid #313131;
@@ -215,8 +227,6 @@ html {
 .right {
   padding: 0;
   overflow-x: hidden;
-  position: relative;
-  display: flex;
   flex-direction: column;
 }
 .variable-example-block,
@@ -329,7 +339,6 @@ html {
 .spoiler.active {
   background-color: #2a2a2a;
   padding: 8px;
-  position: relative;
 }
 .spoiler.active .spoiler-title {
   color: #2d8ceb;
@@ -340,6 +349,9 @@ html {
 }
 .active-indicator,
 .bottom-bar,
+.home-page-text-block,
+.language-selector .language-option,
+.language-selector .selected-language,
 .spoiler.active .spoiler-content {
   font-family: "Fira Sans", sans-serif;
   font-size: 12px;
@@ -434,7 +446,6 @@ html {
   min-height: 40px;
   background-color: #1d1d1d;
   border-top: 1px solid #313131;
-  box-sizing: border-box;
   margin-top: auto;
   align-self: flex-start;
   display: flex;
@@ -463,12 +474,6 @@ html {
   font-style: italic;
   font-size: 24px;
   color: #b9b9b9;
-}
-.home-page-text-block,
-.language-selector .language-option,
-.language-selector .selected-language {
-  font-family: "Fira Sans", sans-serif;
-  font-size: 12px;
 }
 .home-page-text-block {
   padding-left: 18.65px;
@@ -544,7 +549,6 @@ html {
   border-radius: 1.5px;
   padding: 4px;
   z-index: 1000;
-  box-sizing: border-box;
   text-align: center;
 }
 .language-selector .language-option {
@@ -586,13 +590,11 @@ html {
 .left {
   min-width: 234px;
   max-width: 234px;
-  box-sizing: border-box;
   flex-shrink: 0;
 }
 .right {
   flex: 1 1 auto;
   min-width: 351px;
-  box-sizing: border-box;
 }
 .home-page-text-block,
 .variable-example-block-text,
