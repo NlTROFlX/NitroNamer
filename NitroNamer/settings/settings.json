@@ -15,14 +15,14 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1736338840849,
-            "usageFrequency": 13,
+            "usageFrequency": 14,
             "favoritesTemplate": false
         }
     },
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "(LayerName).i",
+        "template": "T(shape)",
         "briefly": false,
         "brieflyType": 0,
         "modeIndex": 5,

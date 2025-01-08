@@ -17,12 +17,13 @@ function buildUI(thisObj) {
 	win.orientation = "column";
 	win.alignChildren = ["fill", "top"];
 	win.active = true;
-	win.margins = [4, 4, 4, 4];
+	win.margins = [0, 0, 0, 0];
 	win.layout.layout(true);
 	var grpLayerSelection = win.add("group", undefined);
 	grpLayerSelection.orientation = "row";
 	grpLayerSelection.maximumSize.width = globalWidthSizeElements;
 	grpLayerSelection.alignChildren = ["fill", "left"];
+	grpLayerSelection.margins = [4, 0, 0, 0];
 	grpLayerSelection.spacing = 0;
 	var rdoAllLayers = grpLayerSelection.add("radiobutton", undefined, "Total: ");
 	rdoAllLayers.value = true;
