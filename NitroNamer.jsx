@@ -526,13 +526,13 @@ function buildUI(thisObj) {
 		var iconPath = scriptFolderPath + "/NitroNamer/img/";
 		if (btnFavorites.isMouseOver) {
 			if (btnFavorites.isFavorite) {
-				btnFavorites.image = File(iconPath + "favoritesModeHover.png");
+				btnFavorites.image = File(iconPath + "favoritesHoverTemplateDelete.png");
 			} else {
-				btnFavorites.image = File(iconPath + "favoritesHover.png");
+				btnFavorites.image = File(iconPath + "favoritesHoverTemplateAdd.png");
 			}
 		} else {
 			if (btnFavorites.isFavorite) {
-				btnFavorites.image = File(iconPath + "favoritesHover.png");
+				btnFavorites.image = File(iconPath + "favoritesHoverTemplateAdd.png");
 			} else {
 				btnFavorites.image = File(iconPath + "favorites.png");
 			}

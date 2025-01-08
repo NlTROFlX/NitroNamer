@@ -6,7 +6,7 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1736338846973,
-            "usageFrequency": 5,
+            "usageFrequency": 6,
             "favoritesTemplate": false
         },
         "preset_1": {
@@ -15,8 +15,8 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1736338840849,
-            "usageFrequency": 9,
-            "favoritesTemplate": true
+            "usageFrequency": 13,
+            "favoritesTemplate": false
         }
     },
     "currentSettings": {
@@ -25,7 +25,7 @@
         "template": "(LayerName).i",
         "briefly": false,
         "brieflyType": 0,
-        "modeIndex": 0,
+        "modeIndex": 5,
         "modeActive": false,
         "selectedPresetTemplate": "(LayerName).i"
     },
