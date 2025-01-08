@@ -8,9 +8,9 @@
         "template": "456",
         "briefly": false,
         "brieflyType": 0,
-        "modeIndex": 0,
+        "modeIndex": 5,
         "modeActive": false,
-        "selectedPresetTemplate": "4"
+        "selectedPresetTemplate": ""
     },
     "nameApply": {
         "shapeLayer": true,

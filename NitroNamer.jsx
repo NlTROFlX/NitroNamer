@@ -91,11 +91,8 @@ function buildUI(thisObj) {
 	grpDropdownAndButtons.alignment = ["fill", "top"];
 	grpDropdownAndButtons.margins = [0, -10, 0, 0];
 	grpDropdownAndButtons.spacing = globalSpacingElements;
-	var btnModeSwitch = grpDropdownAndButtons.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/" + modes[0] + ".png"), {
-		style: "toolbutton"
-	});
+	var btnModeSwitch = grpDropdownAndButtons.add("image", undefined, File(scriptFolderPath + "/NitroNamer/img/" + modes[0] + ".png"));
 	btnModeSwitch.size = [24, 24];
-	btnModeSwitch.imageSize = [24, 24];
 	btnModeSwitch.alignment = ["left", "center"];
 
 	function updateModeSwitchTooltip() {
@@ -149,7 +146,7 @@ function buildUI(thisObj) {
 			}
 		}
 	};
-	btnModeSwitch.onClick = function() {
+	btnModeSwitch.addEventListener("click", function()	{
 		var isAltPressed = ScriptUI.environment.keyboardState.altKey;
 		var isCtrlPressed = ScriptUI.environment.keyboardState.ctrlKey;
 		if (isAltPressed) {
@@ -169,7 +166,7 @@ function buildUI(thisObj) {
 		updateModeSwitchTooltip();
 		saveCurrentSettings();
 		updatePresetsDropdown(loadSettings());
-	};
+	});
 	btnModeSwitch.addEventListener("mouseover", function() {
 		isMouseOverButton = true;
 		updateModeButtonIcon();
