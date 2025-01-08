@@ -365,13 +365,10 @@ function buildUI(thisObj) {
 	grpBriefly.alignChildren = ["right", "center"];
 	grpBriefly.spacing = grpTextFields;
 	grpBriefly.margins = [0, 0, 0, 0];
-	var btnRename = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/renameIcon.png"), {
-		style: "toolbutton"
-	});
+	var btnRename = grpBriefly.add("image", undefined, File(scriptFolderPath + "/NitroNamer/img/renameIcon.png"));
 	var warningIcon = File(scriptFolderPath + "/NitroNamer/img/warning.png");
 	var warningIconHover = File(scriptFolderPath + "/NitroNamer/img/warningHover.png");
 	btnRename.size = [24, 24];
-	btnRename.imageSize = [24, 24];
 	btnRename.alignment = ["left", "center"];
 	var btnVariables = grpBriefly.add("image", undefined, File(scriptFolderPath + "/NitroNamer/img/variablesIcon.png"));
 	btnVariables.size = [24, 24];
@@ -382,11 +379,8 @@ function buildUI(thisObj) {
 	var btnReset = grpBriefly.add("image", undefined, File(scriptFolderPath + "/NitroNamer/img/resetIcon.png"));
 	btnReset.size = [24, 24];
 	btnReset.alignment = ["left", "center"];
-	var btnSettings = grpBriefly.add("iconbutton", undefined, File(scriptFolderPath + "/NitroNamer/img/settings.png"), {
-		style: "toolbutton"
-	});
+	var btnSettings = grpBriefly.add("image", undefined, File(scriptFolderPath + "/NitroNamer/img/settings.png"));
 	btnSettings.size = [24, 24];
-	btnSettings.imageSize = [24, 24];
 	btnSettings.alignment = ["left", "center"];
 	var chkBriefly = grpBriefly.add("checkbox", undefined);
 	var ddBrieflyType = grpBriefly.add("dropdownlist", undefined, ["Camel Case", "Pascal Case", "Snake Case", "Kebab Case", "Screaming Snake Case"]);
@@ -674,7 +668,7 @@ function buildUI(thisObj) {
 		saveSettings(currentSettings, true);
 		setMinimizeButtonIcon(isCompact);
 	});
-	btnRename.onClick = function() {
+	btnRename.addEventListener("click", function() {
 		if (!btnRename.enabled)
 			return;
 		var allLayers = rdoAllLayers.value;
@@ -692,7 +686,7 @@ function buildUI(thisObj) {
 		updatePreview();
 		btnRename.image = File(scriptFolderPath + "/NitroNamer/img/doneIcon.png");
 		btnRename.imageSize = [24, 24];
-	};
+	});
 	btnHelp.addEventListener("click", function() {
 		updateLayerCounts();
 		var helpScriptPath = scriptFolderPath + "/NitroNamer/scripts/NNHelp.jsx";
@@ -708,10 +702,10 @@ function buildUI(thisObj) {
 		updatePreview();
 		resetRenameButtonIcon();
 	});
-	btnSettings.onClick = function() {
+	btnSettings.addEventListener("click", function() {
 		var settingsScriptPath = scriptFolderPath + "/NitroNamer/scripts/NNSettings.jsx";
 		$.evalFile(settingsScriptPath);
-	};
+	});
 
 	function setMinimizeButtonIcon(isCompact) {
 		btnMinimize.removeEventListener("mouseover", handleMouseOverMaximize);

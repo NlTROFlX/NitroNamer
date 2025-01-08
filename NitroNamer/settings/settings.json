@@ -1,16 +1,33 @@
 {
     "userPresets": {
-        
+        "preset_2": {
+            "allLayers": true,
+            "template": "1",
+            "briefly": false,
+            "brieflyType": 0,
+            "creationDate": 1736338846973,
+            "usageFrequency": 5,
+            "favoritesTemplate": false
+        },
+        "preset_1": {
+            "allLayers": true,
+            "template": "(LayerName).i",
+            "briefly": false,
+            "brieflyType": 0,
+            "creationDate": 1736338840849,
+            "usageFrequency": 9,
+            "favoritesTemplate": true
+        }
     },
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "456",
+        "template": "(LayerName).i",
         "briefly": false,
         "brieflyType": 0,
         "modeIndex": 0,
         "modeActive": false,
-        "selectedPresetTemplate": ""
+        "selectedPresetTemplate": "(LayerName).i"
     },
     "nameApply": {
         "shapeLayer": true,
