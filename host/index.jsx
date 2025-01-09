@@ -1,3 +1,9 @@
+if (typeof String.prototype.trim !== 'function') {
+    String.prototype.trim = function() {
+        return this.replace(/^\s+|\s+$/g, '');
+    };
+}
+
 function saveSelectedLanguage(selectedLanguage, extensionPath) {
 	extensionPath = extensionPath.replace(/\\/g, '/');
 	var settingsFolderPath = extensionPath + '/client/settings';
