@@ -1,5 +1,11 @@
 #include "json2.js";
 
+if (typeof String.prototype.trim !== 'function') {
+    String.prototype.trim = function() {
+        return this.replace(/^\s+|\s+$/g, '');
+    };
+}
+
 var cycleState = {};
 var incrementValues = {};
 var localIndex = 0;
