@@ -21,8 +21,8 @@
     },
     "currentSettings": {
         "UICompact": false,
-        "allLayers": false,
-        "template": "I(10, r)",
+        "allLayers": true,
+        "template": "(LayerName).i | I | I(10, r)",
         "briefly": false,
         "brieflyType": 0,
         "modeIndex": 5,

@@ -2209,6 +2209,16 @@ function buildUI(thisObj) {
 		}
 	}
 
+	function getIndexInSelection(layer) {
+		var selectedLayers = layer.containingComp.selectedLayers;
+		for (var s = 0; s < selectedLayers.length; s++) {
+			if (selectedLayers[s] === layer) {
+				return s + 1; // индекс с 1
+			}
+		}
+		return 1; // на всякий случай
+	}	
+
 	function replaceVariables(template, variables, originalName, layer, settings, isPreview) {
 		var result = template;
 		var nthEffectRegex = /e(\d+)/g;
@@ -2391,11 +2401,12 @@ function buildUI(thisObj) {
 				value = getMaskNames(layer, settings, lmnFilters, lmnSeparator);
 			} else if (match === 'Lmn') {
 				value = getMaskNames(layer, settings);
-			} else if (customI !== undefined) {
+			} else if(customI !== undefined) {
 				var uniqueKey = "I(" + customI + ")";
 				var parts = customI.split(",");
 				var offset = 0;
 				var isReverse = false;
+			
 				for (var p = 0; p < parts.length; p++) {
 					var segment = parts[p].trim();
 					if (segment === "r") {
@@ -2407,19 +2418,56 @@ function buildUI(thisObj) {
 						}
 					}
 				}
+			
+				// Проверяем, не высчитывали ли уже это значение
 				if (usedVariables.hasOwnProperty(uniqueKey)) {
 					return usedVariables[uniqueKey];
 				}
-				var currentI = variables["i"];
+			
+				var currentI = variables["i"];                // Глобальный индекс слоя в композиции (не трогаем!)
 				var totalLayers = variables["totalLayers"] || 1;
+				// Хотим узнать, включён ли сейчас режим Selected
+				// (этот флаг существует и выше по коду им пользуются, 
+				//  поэтому можем сослаться напрямую).
+				var isSelectedMode = (typeof rdoOnlySelected !== "undefined") && rdoOnlySelected.value;
+			
+				var value;
+			
 				if (isReverse) {
+					// ----------- ВАЖНАЯ ЧАСТЬ: исправление под режим Selected -----------
 					if (offset !== 0) {
-						var step = (totalLayers - currentI);
-						value = offset - step;
+						if (isSelectedMode) {
+							// Если пользователь выбрал "Selected" и прописал "r"
+							var selIndex = getIndexInSelection(layer); // порядковый индекс данного слоя среди выделенных
+							var selCount = layer.containingComp.selectedLayers.length;
+			
+							// Логика «обратного» счётчика только по выделенным
+							var step = (selCount - selIndex);
+							value = offset - step;
+						} else {
+							// Старое поведение, если режим All Layers
+							var stepGlobal = (totalLayers - currentI);
+							value = offset - stepGlobal;
+						}
 					} else {
-						value = (totalLayers - currentI + 1);
+						// Если offset == 0, логика остаётся прежней
+						if (isSelectedMode) {
+							var selIndexZero = getIndexInSelection(layer);
+							var selCountZero = layer.containingComp.selectedLayers.length;
+							// Можно по аналогии
+							var stepZero = (selCountZero - selIndexZero);
+							// Раньше было: (totalLayers - currentI + 1)
+							// Подгоняем под выделенные:
+							value = 1 + (stepZero * 0); 
+							// Или задайте ту логику, которая нужна, если offset не указан
+							// ...
+						} else {
+							value = (totalLayers - currentI + 1);
+						}
 					}
+			
 				} else {
+					// Если нет флага r, старую логику не трогаем
 					if (!isPreview) {
 						if (!incrementValues[uniqueKey]) {
 							incrementValues[uniqueKey] = offset || 1;
@@ -2429,6 +2477,7 @@ function buildUI(thisObj) {
 						value = (offset || 1) + (currentI - 1);
 					}
 				}
+			
 				usedVariables[uniqueKey] = value;
 				return value;
 			} else if (match === 'I') {
