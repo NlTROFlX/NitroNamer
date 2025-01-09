@@ -1,9 +1,5 @@
 #include "json2.js";
-if (typeof String.prototype.trim !== 'function') {
-    String.prototype.trim = function() {
-        return this.replace(/^\s+|\s+$/g, '')
-    }
-}
+
 var cycleState = {};
 var incrementValues = {};
 var localIndex = 0;
@@ -845,6 +841,7 @@ function buildUI(thisObj) {
         var scriptFile = new File($.fileName);
         var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
         var settingsFile = new File(scriptFolderPath + "/settings.json");
+    
         if (!settingsFile.exists) {
             var initialData = {
                 "userPresets": {},
@@ -852,12 +849,15 @@ function buildUI(thisObj) {
                     "UICompact": false
                 }
             };
+    
             settingsFile.encoding = "UTF-8";
             if (settingsFile.open("w")) {
-                settingsFile.write(JSON.stringify(initialData, null, 4));
-                settingsFile.close()
+                // Теперь JSON.stringify должно работать
+                var jsonStr = JSON.stringify(initialData, null, 4);
+                settingsFile.write(jsonStr);
+                settingsFile.close();
             } else {
-                alert("Error: Unable to create settings.json file.", scriptMessageHead_1)
+                alert("Error: Unable to create settings.json file.");
             }
         }
     }
