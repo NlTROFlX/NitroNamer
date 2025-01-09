@@ -2032,35 +2032,54 @@ function buildUI(thisObj) {
 
     function getSelectedPropertyGroupNamesForLayer(layer, propertyPaths) {
         var propNames = [];
+    
         if (!propertyPaths || propertyPaths.length === 0) {
-            return propNames
+            return propNames;
         }
+    
         for (var p = 0; p < propertyPaths.length; p++) {
             var propertyPath = propertyPaths[p];
             var propGroup = layer;
             var pathExists = true;
+    
+            // Проходимся по элементам пути (Effects, Delay, ...)
             for (var i = 0; i < propertyPath.length; i++) {
                 var propName = propertyPath[i];
                 if (propGroup.property(propName)) {
-                    propGroup = propGroup.property(propName)
+                    propGroup = propGroup.property(propName);
                 } else {
                     pathExists = false;
-                    break
+                    break;
                 }
             }
+    
+            // Если весь путь существует
             if (pathExists) {
+                // Если это PropGroup, ищем имя группы
                 if ((propGroup instanceof PropertyGroup || propGroup instanceof MaskPropertyGroup) && propGroup.numProperties > 0) {
-                    propNames.push(propGroup.name)
-                } else if (propGroup instanceof Property && propGroup.parentProperty instanceof PropertyGroup && propGroup.parentProperty.numProperties > 0) {
-                    propNames.push(propGroup.parentProperty.name)
+                    propNames.push(propGroup.name);
+                }
+                // Если это Property, берём родителя
+                else if (propGroup instanceof Property && 
+                         propGroup.parentProperty instanceof PropertyGroup && 
+                         propGroup.parentProperty.numProperties > 0) 
+                {
+                    propNames.push(propGroup.parentProperty.name);
                 }
             }
         }
-        propNames = propNames.filter(function(item, pos) {
-            return propNames.indexOf(item) === pos
-        });
-        return propNames
-    }
+    
+        // Удаляем дубликаты "по-старинке", без filter()
+        var uniquePropNames = [];
+        for (var j = 0; j < propNames.length; j++) {
+            if (uniquePropNames.indexOf(propNames[j]) < 0) {
+                uniquePropNames.push(propNames[j]);
+            }
+        }
+        propNames = uniquePropNames;
+    
+        return propNames;
+    }    
 
     function getSelectedPropertyName() {
         var proj = app.project;
