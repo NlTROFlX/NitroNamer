@@ -21,13 +21,13 @@
     },
     "currentSettings": {
         "UICompact": false,
-        "allLayers": true,
-        "template": "T(shape)",
+        "allLayers": false,
+        "template": "I(10, r)",
         "briefly": false,
         "brieflyType": 0,
         "modeIndex": 5,
         "modeActive": false,
-        "selectedPresetTemplate": "(LayerName).i"
+        "selectedPresetTemplate": "1"
     },
     "nameApply": {
         "shapeLayer": true,

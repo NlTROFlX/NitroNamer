@@ -2483,7 +2483,6 @@ function buildUI(thisObj) {
 			if (activeComp.numLayers > 0) {
 				var settings = loadSettings();
 				var nameApplySettings = settings.nameApply || {};
-				var globalI = altKey ? totalLayersInComp : 1;
 				var layerTypeMap = {
 					"Shape": "shapeLayer",
 					"Text": "textLayer",
@@ -2515,12 +2514,6 @@ function buildUI(thisObj) {
 				localIndex = 1;
 				for (var idx = 0; idx < orderedLayers.length; idx++) {
 					var currentLayer = orderedLayers[idx];
-					var currentI = globalI;
-					if (altKey) {
-						globalI--;
-					} else {
-						globalI++;
-					}
 					var layerType = getLayerType(currentLayer);
 					var typeIndex = getTypeIndexInComp(currentLayer);
 					var totalTypeLayers = typeTotals[layerType] || 1;
@@ -2550,7 +2543,7 @@ function buildUI(thisObj) {
 						var templateData = {
 							totalLayers: totalLayersInComp,
 							T: layerType,
-							i: currentI,
+							i: currentLayer.index,
 							I: localIndex,
 							it: it,
 							O: currentLayer.name,
