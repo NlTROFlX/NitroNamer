@@ -1,3 +1,4 @@
+#include "json2.js";
 if (typeof String.prototype.trim !== 'function') {
     String.prototype.trim = function() {
         return this.replace(/^\s+|\s+$/g, '')
@@ -1451,7 +1452,8 @@ function buildUI(thisObj) {
         if (briefly && !isNaN(parseFloat(variables.F))) {
             variables.F = parseFloat(variables.F).toFixed(2)
         }
-        var newName = replaceVariables(template, variables, layer.name, layer, settings, isPreview) if (briefly) {
+        var newName = replaceVariables(template, variables, layer.name, layer, settings, isPreview);
+		if (briefly) {
             newName = toBrieflyCase(newName, brieflyType)
         } localIndex = oldLocalIndex;
         return newName
