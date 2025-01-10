@@ -852,7 +852,7 @@ function buildUI(thisObj) {
     
             settingsFile.encoding = "UTF-8";
             if (settingsFile.open("w")) {
-                // Теперь JSON.stringify должно работать
+                
                 var jsonStr = JSON.stringify(initialData, null, 4);
                 settingsFile.write(jsonStr);
                 settingsFile.close();
@@ -1341,58 +1341,86 @@ function buildUI(thisObj) {
     function updatePreview() {
         var settings = loadSettings();
         var isCompact = settings.currentSettings && settings.currentSettings.UICompact;
-        checkAndUpdateSettings();
+    
+        checkAndUpdateSettings(); // актуализация variableSettings, если нужно
+    
         var proj = app.project;
         if (proj) {
             var comp = proj.activeItem;
             if (comp && comp instanceof CompItem && comp.numLayers > 0) {
-                var layer = null;
-                if (rdoAllLayers.value) {
-                    layer = comp.selectedLayers.length > 0 ? comp.selectedLayers[0] : comp.layer(1)
-                } else if (rdoOnlySelected.value) {
-                    layer = comp.selectedLayers.length > 0 ? comp.selectedLayers[0] : comp.layer(1)
+    
+                // 1. Попробуем найти слой среди выделенных:
+                var selectedLayers = comp.selectedLayers;
+                var targetLayer = null;
+    
+                // Если есть выделенные слои — берем последний
+                if (selectedLayers.length > 0) {
+                    targetLayer = selectedLayers[selectedLayers.length - 1];
                 }
-                if (layer) {
-                    var originalName = layer.name;
+                else {
+                    // 2. Иначе ищем первый «доступный» слой
+                    for (var i = 1; i <= comp.numLayers; i++) {
+                        var layer = comp.layer(i);
+                        if (!layer.locked && !layer.shy) {
+                            targetLayer = layer;
+                            break;
+                        }
+                    }
+                }
+    
+                // 3. Проверяем, нашли ли мы такой слой
+                if (targetLayer) {
+                    var originalName = targetLayer.name;
+    
                     var template = txtTemplate.text;
                     var briefly = chkBriefly.value;
                     var brieflyType = ddBrieflyType.selection.text;
-                    var newName = generateNewName(layer, template, briefly, brieflyType, variableSettings, true);
+    
+                    var newName = generateNewName(targetLayer, template, briefly, brieflyType, variableSettings, true);
+    
+                    // Выводим значения
                     if (!isCompact) {
                         txtOriginal.text = originalName;
-                        txtRenamed.text = newName
+                        txtRenamed.text = newName;
                     }
                     if (txtRenamed) {
-                        txtRenamed.text = newName
+                        txtRenamed.text = newName;
                     }
-                } else {
+                } 
+                else {
+                    // Нет выделенных и нет доступных слоёв
                     if (!isCompact) {
-                        txtOriginal.text = "No layers in composition.";
-                        txtRenamed.text = "No layers in composition."
+                        txtOriginal.text = "No available layers";
+                        txtRenamed.text = "No available layers";
                     }
                     if (txtRenamed) {
-                        txtRenamed.text = "No layers in composition."
+                        txtRenamed.text = "No available layers";
                     }
                 }
-            } else {
+            }
+            else {
+                // comp нет или оно пустое
                 if (!isCompact) {
-                    txtOriginal.text = "No composition selected.";
-                    txtRenamed.text = "No composition selected."
+                    txtOriginal.text = "No composition selected (or empty).";
+                    txtRenamed.text = "No composition selected (or empty).";
                 }
                 if (txtRenamed) {
-                    txtRenamed.text = "No composition selected."
+                    txtRenamed.text = "No composition selected (or empty).";
                 }
             }
-        } else {
+        }
+        else {
+            // project не открыт
             if (!isCompact) {
                 txtOriginal.text = "No project open.";
-                txtRenamed.text = "No project open."
+                txtRenamed.text = "No project open.";
             }
             if (txtRenamed) {
-                txtRenamed.text = "No project open."
+                txtRenamed.text = "No project open.";
             }
         }
     }
+    
 
     function checkAndUpdateSettings() {
         var scriptFile = new File($.fileName);
@@ -2042,7 +2070,7 @@ function buildUI(thisObj) {
             var propGroup = layer;
             var pathExists = true;
     
-            // Проходимся по элементам пути (Effects, Delay, ...)
+            
             for (var i = 0; i < propertyPath.length; i++) {
                 var propName = propertyPath[i];
                 if (propGroup.property(propName)) {
@@ -2053,13 +2081,13 @@ function buildUI(thisObj) {
                 }
             }
     
-            // Если весь путь существует
+            
             if (pathExists) {
-                // Если это PropGroup, ищем имя группы
+                
                 if ((propGroup instanceof PropertyGroup || propGroup instanceof MaskPropertyGroup) && propGroup.numProperties > 0) {
                     propNames.push(propGroup.name);
                 }
-                // Если это Property, берём родителя
+                
                 else if (propGroup instanceof Property && 
                          propGroup.parentProperty instanceof PropertyGroup && 
                          propGroup.parentProperty.numProperties > 0) 
@@ -2069,7 +2097,7 @@ function buildUI(thisObj) {
             }
         }
     
-        // Удаляем дубликаты "по-старинке", без filter()
+        
         var uniquePropNames = [];
         for (var j = 0; j < propNames.length; j++) {
             if (uniquePropNames.indexOf(propNames[j]) < 0) {
@@ -2245,14 +2273,22 @@ function buildUI(thisObj) {
                 })
             }
             if (eEffects !== undefined) {
+                // Если есть логика по nthEffectRegex / nthMaskRegex — она должна остаться
                 eEffects = eEffects.replace(nthEffectRegex, function(fullMatch, number) {
                     var effectNumber = parseInt(number, 10);
-                    return getNthEffectName(layer, effectNumber, settings)
+                    return getNthEffectName(layer, effectNumber, settings);
                 }).replace(nthMaskRegex, function(fullMatch, number) {
                     var maskNumber = parseInt(number, 10);
-                    return getNthMaskName(layer, maskNumber, settings)
-                })
+                    return getNthMaskName(layer, maskNumber, settings);
+                });
+            
+                // Добавляем строчку, которая "подменяет" prop на содержимое variables.prop
+                eEffects = eEffects.replace(/prop/g, variables.prop);
+            
+                // Далее вызываем функцию получения списка эффектов
+                value = getEffectNames(layer, settings, eEffects, eSeparator);
             }
+            
             if (anProps !== undefined) {
                 anProps = anProps.replace(nthEffectRegex, function(fullMatch, number) {
                     var effectNumber = parseInt(number, 10);
