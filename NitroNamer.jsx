@@ -99,6 +99,7 @@ function buildUI(thisObj) {
     }
     updateModeSwitchTooltip();
     var ddLayerMode = grpDropdownAndButtons.add("dropdownlist", undefined, presetTemplates);
+    ddLayerMode.minimumSize.width = globalWidthSizeElements - 42;
     ddLayerMode.maximumSize.width = globalWidthSizeElements - 42;
     ddLayerMode.selection = 0;
     ddLayerMode.onChange = function() {

@@ -21,7 +21,7 @@ function showLayerInfoPanel(thisObj) {
     grpButtons.margins = [0, -10, 0, 0];
 
     
-    var btnRefresh = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/refresh.png"), {style: "toolbutton"});
+    var btnRefresh = grpButtons.add("image", undefined, File(scriptFolderPath + "/refresh.png"), {style: "toolbutton"});
     btnRefresh.size = [24, 24];
     btnRefresh.imageSize = [24, 24];
     btnRefresh.alignment = ["center", "center"];
@@ -36,12 +36,12 @@ function showLayerInfoPanel(thisObj) {
         btnRefresh.imageSize = [24, 24];
     });
 
-    btnRefresh.onClick = function () {
+    btnRefresh.addEventListener("click", function() {
         updateLayerInfo();
-    };
+    });
 
     
-    var btnArrowDown = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/arrowDown.png"), {style: "toolbutton"});
+    var btnArrowDown = grpButtons.add("image", undefined, File(scriptFolderPath + "/arrowDown.png"), {style: "toolbutton"});
     btnArrowDown.size = [24, 24];
     btnArrowDown.imageSize = [24, 24];
     btnArrowDown.alignment = ["center", "center"];
@@ -56,12 +56,12 @@ function showLayerInfoPanel(thisObj) {
         btnArrowDown.imageSize = [24, 24];
     });
 
-    btnArrowDown.onClick = function () {
+    btnArrowDown.addEventListener("click", function() {
         switchToNextLayer();
-    };
+    });
 
     
-    var btnArrowUp = grpButtons.add("iconbutton", undefined, File(scriptFolderPath + "/arrowUp.png"), {style: "toolbutton"});
+    var btnArrowUp = grpButtons.add("image", undefined, File(scriptFolderPath + "/arrowUp.png"), {style: "toolbutton"});
     btnArrowUp.size = [24, 24];
     btnArrowUp.imageSize = [24, 24];
     btnArrowUp.alignment = ["center", "center"];
@@ -76,9 +76,9 @@ function showLayerInfoPanel(thisObj) {
         btnArrowUp.imageSize = [24, 24];
     });
 
-    btnArrowUp.onClick = function () {
+    btnArrowUp.addEventListener("click", function() {
         switchToPreviousLayer();
-    };
+    });
 
     
     var btnClose = grpButtons.add("button", undefined, "Close layer info panel");

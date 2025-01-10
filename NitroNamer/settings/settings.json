@@ -40,12 +40,12 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "Lpnt(i)",
+        "template": "Ar",
         "briefly": false,
         "brieflyType": 3,
-        "modeIndex": 5,
+        "modeIndex": 3,
         "modeActive": false,
-        "selectedPresetTemplate": "T.i | I(r) | I(10, r) | I(10, r)"
+        "selectedPresetTemplate": "(LayerName).i"
     },
     "nameApply": {
         "shapeLayer": true,

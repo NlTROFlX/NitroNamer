@@ -48,7 +48,7 @@ function buildNewUI(thisObj) {
     win.orientation = "column";
     win.alignChildren = ["fill", "top"];
     win.preferredSize.height = 50;
-    win.margins = [4, 4, 4, 4];
+    win.margins = [0, 0, 0, 0];
 
     
     var grpDropdownAndInput = win.add("group", undefined);
@@ -100,7 +100,7 @@ function buildNewUI(thisObj) {
     
     var inputFieldVariableValue = grpInputAndButton.add("edittext", undefined, "");
     inputFieldVariableValue.characters = 20; 
-    inputFieldVariableValue.size = [150, 24]; 
+    inputFieldVariableValue.size = [180, 24]; 
     inputFieldVariableValue.margins = [0,-10,0,0];
 
     function filterDropdownList() {
@@ -136,7 +136,7 @@ function buildNewUI(thisObj) {
     var warningIconHoverFile = new File(scriptFolderPath + "/warningHover.png");
     var doneIconFile = new File(scriptFolderPath + "/doneIcon.png");
 
-    var btnSave = grpInputAndButton.add("iconbutton", undefined, saveIconFile, {style: "toolbutton"});
+    var btnSave = grpInputAndButton.add("image", undefined, saveIconFile, {style: "toolbutton"});
     btnSave.size = [24, 24]; 
     btnSave.imageSize = [24, 24]; 
 
@@ -145,7 +145,7 @@ function buildNewUI(thisObj) {
     grpRadioButtons.orientation = "row"; 
     grpRadioButtons.alignChildren = ["center", "center"]; 
     grpRadioButtons.alignment = ["center", "bottom"]; 
-    grpRadioButtons.margins = [0,-10,0,0];
+    grpRadioButtons.margins = [4,-10,0,0];
 
     
     var rdoDefault = grpRadioButtons.add("radiobutton", undefined, "Default value");
@@ -243,7 +243,7 @@ function buildNewUI(thisObj) {
     });
 
     
-    btnSave.onClick = function() {
+    btnSave.addEventListener("click", function() {
         var scriptFile = new File($.fileName);
         var variablesFilePath = scriptFile.path.replace("/scripts", "/scripts/variables.json");
         var variablesFile = new File(variablesFilePath);
@@ -339,7 +339,7 @@ function buildNewUI(thisObj) {
                 }
             }
         }
-    };
+    });
 
     
     rdoDefault.onClick = function() {
