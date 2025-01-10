@@ -433,26 +433,24 @@ function buildUI(thisObj) {
     addHoverEffect(btnVariables, scriptFolderPath + "/NitroNamer/img/variablesIcon");
     addHoverEffect(btnReset, scriptFolderPath + "/NitroNamer/img/resetIcon");
     addHoverEffect(btnSettings, scriptFolderPath + "/NitroNamer/img/settings");
-    btnRename.addEventListener("mouseover", function() {
+    btnRename.addEventListener("mouseover", function(){
         checkAndUpdateSettings();
         updatePreview();
         updateLayerCounts();
         var isCtrlPressed = ScriptUI.environment.keyboardState.ctrlKey;
         var isShiftPressed = ScriptUI.environment.keyboardState.shiftKey;
-        var isAltPressed = ScriptUI.environment.keyboardState.altKey;
-        if (trim(txtTemplate.text) === "") {
-            btnRename.image = warningIconHover
-        } else if (isAltPressed) {
-            btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHoverReverse.png")
-        } else if (isCtrlPressed) {
-            btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHoverAfter.png")
-        } else if (isShiftPressed) {
-            btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHoverBefore.png")
+        if(trim(txtTemplate.text) === ""){
+            btnRename.image = warningIconHover;
+        } else if(isCtrlPressed){
+            btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHoverAfter.png");
+        } else if(isShiftPressed){
+            btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHoverBefore.png");
         } else {
-            btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHover.png")
+            btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHover.png");
         }
-        btnRename.imageSize = [24, 24]
+        btnRename.imageSize = [24, 24];
     });
+    
     btnRename.addEventListener("mouseout", function() {
         updateRenameButtonIcon()
     });
@@ -665,24 +663,24 @@ function buildUI(thisObj) {
         saveSettings(currentSettings, true);
         setMinimizeButtonIcon(isCompact)
     });
-    btnRename.addEventListener("click", function() {
-        if (!btnRename.enabled) return;
+    btnRename.addEventListener("click", function(){
+        if(!btnRename.enabled) return;
         var allLayers = rdoAllLayers.value;
         var template = txtTemplate.text;
         var briefly = chkBriefly.value;
         var brieflyType = ddBrieflyType.selection.text;
-        var isAltPressed = ScriptUI.environment.keyboardState.altKey;
         var isCtrlPressed = ScriptUI.environment.keyboardState.ctrlKey;
         var isShiftPressed = ScriptUI.environment.keyboardState.shiftKey;
         var isCtrlShiftPressed = isCtrlPressed && isShiftPressed;
         var includeShyLayers = isCtrlShiftPressed;
-        var reverseOrder = isAltPressed;
-        renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed, isShiftPressed, isAltPressed, isCtrlShiftPressed);
+        var reverseOrder = false; // Убираем инвертацию
+        renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed, isShiftPressed, false, false); // Убираем передачу isAltPressed
         updateLayerCounts();
         updatePreview();
         btnRename.image = File(scriptFolderPath + "/NitroNamer/img/doneIcon.png");
-        btnRename.imageSize = [24, 24]
+        btnRename.imageSize = [24, 24];
     });
+    
     btnHelp.addEventListener("click", function() {
         updateLayerCounts();
         var helpScriptPath = scriptFolderPath + "/NitroNamer/scripts/NNHelp.jsx";
