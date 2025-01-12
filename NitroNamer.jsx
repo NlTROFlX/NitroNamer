@@ -2775,6 +2775,9 @@ function buildUI(thisObj) {
                 if (tooltips.buttons.btnCopy) {
                     btnCopy.helpTip = tooltips.buttons.btnCopy
                 }
+                if(tooltips.buttons.btnFavorites){
+                    btnFavorites.helpTip = tooltips.buttons.btnFavorites;
+                }
                 if (tooltips.buttons.btnSave) {
                     btnSave.helpTip = tooltips.buttons.btnSave
                 }

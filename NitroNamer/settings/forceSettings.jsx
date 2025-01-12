@@ -8,6 +8,7 @@
             "tooltips": {
                 "buttons": {
                     "btnCopy": "Copies the name of the selected layer, if no layer is selected,\nthe value of the first available one is copied",
+                    "btnFavorites": "Add or remove a preset from favorites",
                     "btnSave": "Saves the value from the name template input field to the presets.\nShift + Click - Updates the values of the selected preset",
                     "btnCircleMinus": "Delete the currently selected template in the preset list.",
                     "btnMinimize": "Switching UI operating modes.",

@@ -40,12 +40,12 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "Ar",
+        "template": "Lexp(attr) | Lmn",
         "briefly": false,
         "brieflyType": 3,
-        "modeIndex": 3,
+        "modeIndex": 0,
         "modeActive": false,
-        "selectedPresetTemplate": "(LayerName).i"
+        "selectedPresetTemplate": "T.i | I(r) | I(10, r) | I(10, r)"
     },
     "nameApply": {
         "shapeLayer": true,
@@ -58,5 +58,6 @@
         "cameraLayer": true,
         "lightLayer": true,
         "audioLayer": true
-    }
+    },
+    "selectedLanguage": "English"
 }

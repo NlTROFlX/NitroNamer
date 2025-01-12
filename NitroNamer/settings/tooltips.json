@@ -2,35 +2,36 @@
     "NitroNamer": {
         "tooltips": {
             "buttons": {
-                "btnCopy": "Копирует имя выбранного слоя, если слой не выбран,\nкопируется значение первого доступного",
-                "btnSave": "Сохранение значения из поля для ввода шаблона имени в пресеты.\nShift + Click - Обновляет значения выбранного пресета",
-                "btnCircleMinus": "Удаление текущего выбранного шаблона в списке пресетов.",
-                "btnMinimize": "Переключение режимов работы UI.",
-                "btnRename": "Click - Применить шаблон.\nShift + Click - добавление значения шаблона к началу имени слоя.\nCtrl + Click - добавление значения к концу имени слоя\nAlt+Click - режим инвертирования всех переменных `I`",
-                "btnVariables": "Открыть панель значений переменных для слоя.",
-                "btnHelp": "Открыть библиотеку всех переменных и их режимов.",
-                "btnReset": "Сбросить все значения.\n(Не удаляет пресеты и настройки переменных)",
-                "btnSettings": "Открыть панель настроек переменных.",
-                "btnModeSwitch_chart": "По частоте использования (по убыванию).\nClick - вперед\nCtrl + Click - назад\nAlt + Click - активировать",
-                "btnModeSwitch_date": "По дате добавления (по возрастанию).\nClick - вперед\nCtrl + Click - назад\nAlt + Click - активировать",
-                "btnModeSwitch_longArrowDown": "По количеству символов (по убыванию).\nClick - вперед\nCtrl + Click - назад\nAlt + Click - активировать",
-                "btnModeSwitch_longArrowUp": "По количеству символов (по возрастанию).\nClick - вперед\nCtrl + Click - назад\nAlt + Click - активировать",
-                "btnModeSwitch_favorites": "Только избранное.\nClick - вперед\nCtrl + Click - назад\nAlt + Click - активировать",
-                "btnModeSwitch_search": "Поиск подходящего значения.\nClick - вперед\nCtrl + Click - назад\nAlt + Click - активировать"
+                "btnCopy": "Copies the name of the selected layer, if no layer is selected,\nthe value of the first available one is copied",
+                "btnFavorites": "Add or remove a preset from favorites",
+                "btnSave": "Saves the value from the name template input field to the presets.\nShift + Click - Updates the values of the selected preset",
+                "btnCircleMinus": "Delete the currently selected template in the preset list.",
+                "btnMinimize": "Switching UI operating modes.",
+                "btnRename": "Click - Apply template.\nShift + Click - Add template value to the beginning of layer name.\nCtrl + Click - Add value to the end of layer name.\nAlt+Click - Invert all variables mode \"I\"",
+                "btnVariables": "Open the variable values panel for the layer.",
+                "btnHelp": "Open the library of all variables and their modes.",
+                "btnReset": "Reset all values.\n(Does not delete presets and variable settings)",
+                "btnSettings": "Open the variable settings panel.\nClick - forward.\nCtrl + Click - back.\nAlt + Click - activate.",
+                "btnModeSwitch_chart": "By frequency of use (descending).\nClick - forward.\nCtrl + Click - back.\nAlt + Click - activate.",
+                "btnModeSwitch_date": "By date of addition (ascending).\nClick - forward.\nCtrl + Click - back.\nAlt + Click - activate.",
+                "btnModeSwitch_longArrowDown": "By number of characters (descending).\nClick - forward.\nCtrl + Click - back.\nAlt + Click - activate.",
+                "btnModeSwitch_longArrowUp": "By number of characters (ascending).\nClick - forward.\nCtrl + Click - back.\nAlt + Click - activate.",
+                "btnModeSwitch_favorites": "Favorites only.\nClick - forward.\nCtrl + Click - back.\nAlt + Click - activate.",
+                "btnModeSwitch_search": "Finding the right value.\nClick - forward.\nCtrl + Click - back.\nAlt + Click - activate."
             },
             "radioButtons": {
-                "rdoAllLayers": "Будут задействованы все доступные слои в этой композиции.",
-                "rdoOnlySelected": "Будут задействованы только выбранные вами слои."
+                "rdoAllLayers": "All available layers in this composition will be used.",
+                "rdoOnlySelected": "Only the layers you select will be affected."
             },
             "textFields": {
-                "txtTemplate": "Поле для ввода шаблона."
+                "txtTemplate": "Template input field."
             },
             "checkboxes": {
-                "chkBriefly": "Включить/Выключить режим форматирования текста."
+                "chkBriefly": "Enable/Disable text formatting mode."
             },
             "dropdowns": {
-                "ddLayerMode": "Выбор шаблона имени из сохраненных пресетов.",
-                "ddBrieflyType": "Режимы форматирования текста."
+                "ddLayerMode": "Select a name template from saved presets.",
+                "ddBrieflyType": "Text formatting modes."
             }
         }
     }

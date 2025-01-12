@@ -9,6 +9,7 @@
             "tooltips": {
                 "buttons": {
                     "btnCopy": "Копирует имя выбранного слоя, если слой не выбран,\nкопируется значение первого доступного",
+                    "btnFavorites": "Add or remove a preset from favorites",
                     "btnSave": "Сохранение значения из поля для ввода шаблона имени в пресеты.\nShift + Click - Обновляет значения выбранного пресета",
                     "btnCircleMinus": "Удаление текущего выбранного шаблона в списке пресетов.",
                     "btnMinimize": "Переключение режимов работы UI.",
@@ -47,6 +48,7 @@
             "tooltips": {
                 "buttons": {
                     "btnCopy": "Copies the name of the selected layer, if no layer is selected,\nthe value of the first available one is copied",
+                    "btnFavorites": "Add or remove a preset from favorites",
                     "btnSave": "Saves the value from the name template input field to the presets.\nShift + Click - Updates the values of the selected preset",
                     "btnCircleMinus": "Delete the currently selected template in the preset list.",
                     "btnMinimize": "Switching UI operating modes.",
