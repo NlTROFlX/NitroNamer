@@ -1,3 +1,5 @@
+var scriptVersion = "2025.1";
+
 (function (thisObj) {
     // Функция для построения пользовательского интерфейса
     function buildUI(thisObj) {
@@ -83,11 +85,15 @@
             }
         }
 
+        var checkUpdateNotFoundFile = loadImage("aboutPanel_checkUpdateNotFound.png");   // иконка, когда обновление не найдено
+        var checkUpdateWasFoundFile = loadImage("aboutPanel_checkUpdateWasFound.png");   // иконка, когда обновление найдено
+
         // 3. Третья картинка (aboutPanel_checkUpdate.png) – 205x27px
         var checkUpdateFile = loadImage("aboutPanel_checkUpdate.png");
         if (checkUpdateFile) {
             var aboutCheckUpdate = leftGroup.add("image", undefined, checkUpdateFile);
             aboutCheckUpdate.size = [205, 27];
+            aboutCheckUpdate.hasUpdate = false;
 
             // Загружаем изображение hover-эффекта для aboutCheckUpdate
             var checkUpdateHoverFile = loadImage("aboutPanel_checkUpdate_Hover.png");
@@ -104,6 +110,41 @@
                 });
             }
         }
+
+        aboutCheckUpdate.addEventListener("click", function() {
+            // Если пока не было найдено обновление, делаем тихую проверку
+            if (!this.hasUpdate) {
+                var result = checkForUpdatesQuietly(); // { newer: bool, latestVersion: "..." }
+        
+                if (result.newer) {
+                    // Новая версия есть
+                    this.hasUpdate = true;
+                    // Меняем иконку на "нашли обновление"
+                    if (checkUpdateWasFoundFile) {
+                        this.image = checkUpdateWasFoundFile;
+                        panel.layout.layout(true);
+                    }
+                } else {
+                    // Обновление не найдено
+                    this.hasUpdate = false;
+                    if (checkUpdateNotFoundFile) {
+                        this.image = checkUpdateNotFoundFile;
+                        panel.layout.layout(true);
+                    }
+                }
+            } else {
+                // Если обновление уже найдено (this.hasUpdate === true)
+                // То при повторном клике открываем URL (например, страницу релизов)
+                openURL("https://github.com/NlTROFlX/NitroNamer/releases");
+        
+                // Возвращаем иконку на исходную (aboutPanel_checkUpdate.png)
+                this.image = this.originalFile;
+                panel.layout.layout(true);
+        
+                // Сбрасываем флаг
+                this.hasUpdate = false;
+            }
+        });        
 
         // =========================
         // Правая часть: вертикальная группа, содержащая сверху 4 кнопки и снизу иконку лицензии
@@ -186,6 +227,11 @@
                     panel.layout.layout(true);
                 });
             }
+            
+            // Обработчик клика для открытия заданного URL
+            licenseIcon.addEventListener("click", function () {
+                openURL("https://github.com/NlTROFlX/NitroNamer?tab=MIT-1-ov-file#readme");
+            });
         }
 
         return panel;
@@ -216,4 +262,49 @@ function openURL(url) {
     } catch (e) {
         alert("Error opening URL: " + e.message);
     }
+}
+
+function checkForUpdatesQuietly() {
+    var githubApiUrl = "https://api.github.com/repos/NlTROFlX/NitroNamer/releases/latest";
+    var result = { newer: false, latestVersion: null };
+
+    try {
+        // Формируем команду curl
+        var curlCmd = 'curl -s -H "User-Agent: NitroNamer" "' + githubApiUrl + '"';
+        var response = system.callSystem(curlCmd);
+
+        // Если ответ не пустой, пытаемся вытащить версию из поля tag_name
+        if (response) {
+            var tagNameMatch = response.match(/"tag_name":\s*"v?([0-9.]+)"/);
+            if (tagNameMatch) {
+                var latestVersion = tagNameMatch[1];
+                result.latestVersion = latestVersion;
+
+                if (compareVersions(latestVersion, scriptVersion) > 0) {
+                    // Если latestVersion больше, чем локальный scriptVersion
+                    result.newer = true;
+                }
+            }
+        }
+    } catch (e) {
+        // Можно залогировать ошибку или проигнорировать
+        // alert("Ошибка при тихой проверке: " + e.toString());
+    }
+
+    return result;
+}
+
+function compareVersions(a, b) {
+    var aParts = a.split(".");
+    var bParts = b.split(".");
+    var maxLen = Math.max(aParts.length, bParts.length);
+
+    for (var i = 0; i < maxLen; i++) {
+        var aNum = parseInt(aParts[i]) || 0;
+        var bNum = parseInt(bParts[i]) || 0;
+        
+        if (aNum > bNum) return 1;
+        if (aNum < bNum) return -1;
+    }
+    return 0; // версии равны
 }
