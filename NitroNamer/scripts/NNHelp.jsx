@@ -7,7 +7,7 @@ var scriptVersion = "2025.1";
         // Задаём немного большую высоту панели, чтобы вместить вертикальное расположение элементов
         var panel = (thisObj instanceof Panel) 
             ? thisObj 
-            : new Window("palette", "Custom Panel", undefined, { resizeable: true });
+            : new Window("palette", "About NitroNamer", undefined, { resizeable: true });
         panel.margins = [4, 4, 4, 4];
         panel.spacing = 4;
         
@@ -90,61 +90,72 @@ var scriptVersion = "2025.1";
 
         // 3. Третья картинка (aboutPanel_checkUpdate.png) – 205x27px
         var checkUpdateFile = loadImage("aboutPanel_checkUpdate.png");
-        if (checkUpdateFile) {
-            var aboutCheckUpdate = leftGroup.add("image", undefined, checkUpdateFile);
-            aboutCheckUpdate.size = [205, 27];
-            aboutCheckUpdate.hasUpdate = false;
+if (checkUpdateFile) {
+    var aboutCheckUpdate = leftGroup.add("image", undefined, checkUpdateFile);
+    aboutCheckUpdate.size = [205, 27];
 
-            // Загружаем изображение hover-эффекта для aboutCheckUpdate
-            var checkUpdateHoverFile = loadImage("aboutPanel_checkUpdate_Hover.png");
-            if (checkUpdateHoverFile) {
-                aboutCheckUpdate.originalFile = checkUpdateFile;
-                aboutCheckUpdate.hoverFile = checkUpdateHoverFile;
-                aboutCheckUpdate.addEventListener("mouseover", function() {
-                    this.image = this.hoverFile;
-                    panel.layout.layout(true);
-                });
-                aboutCheckUpdate.addEventListener("mouseout", function() {
-                    this.image = this.originalFile;
-                    panel.layout.layout(true);
-                });
-            }
-        }
+    // Загружаем изображение hover-эффекта
+    var checkUpdateHoverFile = loadImage("aboutPanel_checkUpdate_Hover.png");
+    if (checkUpdateHoverFile) {
+        aboutCheckUpdate.originalFile = checkUpdateFile;
+        aboutCheckUpdate.hoverFile = checkUpdateHoverFile;
+        
+        // Предположим, что флаг hasUpdate изначально false
+        aboutCheckUpdate.hasUpdate = false;
 
-        aboutCheckUpdate.addEventListener("click", function() {
-            // Если пока не было найдено обновление, делаем тихую проверку
+        // При наведении мыши
+        aboutCheckUpdate.addEventListener("mouseover", function() {
+            // Меняем иконку на hoverFile ТОЛЬКО если не найдено обновление
             if (!this.hasUpdate) {
-                var result = checkForUpdatesQuietly(); // { newer: bool, latestVersion: "..." }
-        
-                if (result.newer) {
-                    // Новая версия есть
-                    this.hasUpdate = true;
-                    // Меняем иконку на "нашли обновление"
-                    if (checkUpdateWasFoundFile) {
-                        this.image = checkUpdateWasFoundFile;
-                        panel.layout.layout(true);
-                    }
-                } else {
-                    // Обновление не найдено
-                    this.hasUpdate = false;
-                    if (checkUpdateNotFoundFile) {
-                        this.image = checkUpdateNotFoundFile;
-                        panel.layout.layout(true);
-                    }
-                }
-            } else {
-                // Если обновление уже найдено (this.hasUpdate === true)
-                // То при повторном клике открываем URL (например, страницу релизов)
-                openURL("https://github.com/NlTROFlX/NitroNamer/releases");
-        
-                // Возвращаем иконку на исходную (aboutPanel_checkUpdate.png)
+                this.image = this.hoverFile;
+                panel.layout.layout(true);
+            }
+        });
+
+        // При уходе мыши
+        aboutCheckUpdate.addEventListener("mouseout", function() {
+            // Возвращаем исходную иконку ТОЛЬКО если не найдено обновление
+            if (!this.hasUpdate) {
                 this.image = this.originalFile;
                 panel.layout.layout(true);
-        
-                // Сбрасываем флаг
-                this.hasUpdate = false;
             }
-        });        
+        });
+    }
+}
+
+aboutCheckUpdate.addEventListener("click", function() {
+    if (!this.hasUpdate) {
+        // Первый клик: выполняем тихую проверку
+        var result = checkForUpdatesQuietly(); // { newer: bool, latestVersion: "..." }
+
+        if (result.newer) {
+            // Новая версия есть
+            this.hasUpdate = true; // ставим флаг, чтобы иконка больше не менялась ховером
+            if (checkUpdateWasFoundFile) {
+                this.image = checkUpdateWasFoundFile;  // aboutPanel_checkUpdateWasFound.png
+                panel.layout.layout(true);
+            }
+        } else {
+            // Обновление не найдено
+            this.hasUpdate = false;
+            if (checkUpdateNotFoundFile) {
+                this.image = checkUpdateNotFoundFile;  // aboutPanel_checkUpdateNotFound.png
+                panel.layout.layout(true);
+            }
+        }
+    } else {
+        // Если уже найдено обновление (hasUpdate === true),
+        // тогда при клике открываем нужную ссылку на релизы:
+        openURL("https://github.com/NlTROFlX/NitroNamer/releases");
+
+        // Здесь можно решить, нужно ли сбрасывать иконку назад
+        // или оставлять. Если хотим, чтобы она ВСЕГДА оставалась,
+        // то ничего не делаем. Если хотим сбросить:
+        // this.image = this.originalFile;
+        // this.hasUpdate = false;
+    }
+});
+ 
 
         // =========================
         // Правая часть: вертикальная группа, содержащая сверху 4 кнопки и снизу иконку лицензии
@@ -265,15 +276,13 @@ function openURL(url) {
 }
 
 function checkForUpdatesQuietly() {
-    var githubApiUrl = "https://api.github.com/repos/NlTROFlX/NitroNamer/releases/latest";
     var result = { newer: false, latestVersion: null };
+    var githubApiUrl = "https://api.github.com/repos/NlTROFlX/NitroNamer/releases/latest";
 
     try {
-        // Формируем команду curl
         var curlCmd = 'curl -s -H "User-Agent: NitroNamer" "' + githubApiUrl + '"';
         var response = system.callSystem(curlCmd);
 
-        // Если ответ не пустой, пытаемся вытащить версию из поля tag_name
         if (response) {
             var tagNameMatch = response.match(/"tag_name":\s*"v?([0-9.]+)"/);
             if (tagNameMatch) {
@@ -281,14 +290,12 @@ function checkForUpdatesQuietly() {
                 result.latestVersion = latestVersion;
 
                 if (compareVersions(latestVersion, scriptVersion) > 0) {
-                    // Если latestVersion больше, чем локальный scriptVersion
                     result.newer = true;
                 }
             }
         }
     } catch (e) {
-        // Можно залогировать ошибку или проигнорировать
-        // alert("Ошибка при тихой проверке: " + e.toString());
+        // Тут можно обработать ошибку
     }
 
     return result;
@@ -302,9 +309,9 @@ function compareVersions(a, b) {
     for (var i = 0; i < maxLen; i++) {
         var aNum = parseInt(aParts[i]) || 0;
         var bNum = parseInt(bParts[i]) || 0;
-        
         if (aNum > bNum) return 1;
         if (aNum < bNum) return -1;
     }
-    return 0; // версии равны
+    return 0;
 }
+
