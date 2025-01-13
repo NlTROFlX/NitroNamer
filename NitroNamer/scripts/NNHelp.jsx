@@ -63,6 +63,24 @@
         if (getLibraryFile) {
             var aboutGetLibrary = leftGroup.add("image", undefined, getLibraryFile);
             aboutGetLibrary.size = [205, 27];
+
+            // Загружаем изображение hover-эффекта для aboutGetLibrary
+            var getLibraryHoverFile = loadImage("aboutPanel_getNitroNamerLibrary_Hover.png");
+            if (getLibraryHoverFile) {
+                // Сохраняем ссылки на исходное и hover-изображения
+                aboutGetLibrary.originalFile = getLibraryFile;
+                aboutGetLibrary.hoverFile = getLibraryHoverFile;
+                // При наведении курсора – смена изображения на hover-версию
+                aboutGetLibrary.addEventListener("mouseover", function() {
+                    this.image = this.hoverFile;
+                    panel.layout.layout(true);
+                });
+                // При уходе курсора – возвращаем исходное изображение
+                aboutGetLibrary.addEventListener("mouseout", function() {
+                    this.image = this.originalFile;
+                    panel.layout.layout(true);
+                });
+            }
         }
 
         // 3. Третья картинка (aboutPanel_checkUpdate.png) – 205x27px
@@ -70,6 +88,21 @@
         if (checkUpdateFile) {
             var aboutCheckUpdate = leftGroup.add("image", undefined, checkUpdateFile);
             aboutCheckUpdate.size = [205, 27];
+
+            // Загружаем изображение hover-эффекта для aboutCheckUpdate
+            var checkUpdateHoverFile = loadImage("aboutPanel_checkUpdate_Hover.png");
+            if (checkUpdateHoverFile) {
+                aboutCheckUpdate.originalFile = checkUpdateFile;
+                aboutCheckUpdate.hoverFile = checkUpdateHoverFile;
+                aboutCheckUpdate.addEventListener("mouseover", function() {
+                    this.image = this.hoverFile;
+                    panel.layout.layout(true);
+                });
+                aboutCheckUpdate.addEventListener("mouseout", function() {
+                    this.image = this.originalFile;
+                    panel.layout.layout(true);
+                });
+            }
         }
 
         // =========================
@@ -138,6 +171,21 @@
         if (licenseFile) {
             var licenseIcon = rightGroup.add("image", undefined, licenseFile);
             licenseIcon.size = [50, 50];
+
+            // Загружаем изображение hover-эффекта для лицензии
+            var licenseHoverFile = loadImage("aboutPanel_LicenseHover.png");
+            if (licenseHoverFile) {
+                licenseIcon.originalFile = licenseFile;
+                licenseIcon.hoverFile = licenseHoverFile;
+                licenseIcon.addEventListener("mouseover", function() {
+                    this.image = this.hoverFile;
+                    panel.layout.layout(true);
+                });
+                licenseIcon.addEventListener("mouseout", function() {
+                    this.image = this.originalFile;
+                    panel.layout.layout(true);
+                });
+            }
         }
 
         return panel;
