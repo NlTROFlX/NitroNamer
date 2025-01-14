@@ -54,11 +54,51 @@ var scriptVersion = "2025.1";
         leftGroup.margins = 0;
 
         // 1. Первая картинка (aboutPanel_logo.png) – 205x27px
-        var logoFile = loadImage("aboutPanel_logo.png");
-        if (logoFile) {
-            var aboutLogo = leftGroup.add("image", undefined, logoFile);
-            aboutLogo.size = [205, 27];
+        // 1. Первая картинка (aboutPanel_logo.png) – 205x27px
+var logoFile = loadImage("aboutPanel_logo.png");
+if (logoFile) {
+    var aboutLogo = leftGroup.add("image", undefined, logoFile);
+    aboutLogo.size = [205, 27];
+
+    // Массив имён файлов для циклической смены изображений
+    var logoCycleNames = [
+        "aboutPanel_logo1.png",
+        "aboutPanel_logo2.png",
+        "aboutPanel_logo3.png"
+    ];
+
+    // Загружаем картинки для смены и сохраняем в массиве
+    aboutLogo.cycleImages = [];
+    for (var i = 0; i < logoCycleNames.length; i++) {
+        var cycleImg = loadImage(logoCycleNames[i]);
+        if (cycleImg) {
+            aboutLogo.cycleImages.push(cycleImg);
         }
+    }
+
+    // Счётчик для определения, какое изображение подставлять
+    // Начинаем с 0, чтобы при первом наведении показать aboutPanel_logo1.png
+    aboutLogo.currentIndex = 0;
+
+    // При наведении курсора – меняем изображение на следующее в очереди
+    aboutLogo.addEventListener("mouseover", function () {
+        if (this.cycleImages.length > 0) {
+            if (this.currentIndex < this.cycleImages.length) {
+                this.image = this.cycleImages[this.currentIndex];
+                this.currentIndex++;
+            } else {
+                // Если достигли конца очереди, возвращаем исходное изображение и сбрасываем индекс
+                this.image = logoFile;
+                this.currentIndex = 0;
+            }
+            panel.layout.layout(true);
+        }
+    });
+
+    // При уходе курсора ничего не меняем – оставляем последнее показанное изображение
+    // Если поведение нужно изменить, можно добавить обработчик "mouseout".
+}
+
 
         // 2. Вторая картинка (aboutPanel_getNitroNamerLibrary.png) – 205x27px
         var getLibraryFile = loadImage("aboutPanel_getNitroNamerLibrary.png");
