@@ -602,7 +602,7 @@ function buildUI(thisObj) {
     btnCircleMinus.addEventListener("click", function() {
         var selectedItem = ddLayerMode.selection;
         var selectedPreset = ddLayerMode.selection;
-        if (selectedItem && selectedPreset && selectedPreset.text !== "Save your new preset" && selectedPreset.text !== "Please select a preset to delete") {
+        if (selectedItem && selectedPreset && selectedPreset.text !== "No presets saved or suitable presets.") {
             var presetTemplate = selectedItem.preset.template;
             var currentTemplateText = txtTemplate.text;
             var settings = loadSettings();
