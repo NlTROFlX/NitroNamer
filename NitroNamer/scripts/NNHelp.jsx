@@ -65,7 +65,7 @@ var scriptVersion = "2025.1";
         if (getLibraryFile) {
             var aboutGetLibrary = leftGroup.add("image", undefined, getLibraryFile);
             aboutGetLibrary.size = [205, 27];
-
+        
             // Загружаем изображение hover-эффекта для aboutGetLibrary
             var getLibraryHoverFile = loadImage("aboutPanel_getNitroNamerLibrary_Hover.png");
             if (getLibraryHoverFile) {
@@ -83,6 +83,11 @@ var scriptVersion = "2025.1";
                     panel.layout.layout(true);
                 });
             }
+            
+            // **Новый обработчик клика для открытия URL**
+            aboutGetLibrary.addEventListener("click", function() {
+                openURL("https://example.com/getLibrary");
+            });
         }
 
         var checkUpdateNotFoundFile = loadImage("aboutPanel_checkUpdateNotFound.png");   // иконка, когда обновление не найдено
