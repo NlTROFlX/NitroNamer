@@ -78,6 +78,8 @@
     "leftBlock_spoilerLayerProperties_12": "[4] Lexp - Свойства слоя с выражениями.",
     "leftBlock_spoilerLayerProperties_13": "[4] Lmn - Список масок слоев.",
     "leftBlock_spoilerLayerProperties_14": "[4] Lmс - Количество масок слоев.",
+    "leftBlock_spoilerOperators_1": "Операторы",
+    "leftBlock_spoilerOperators_2": "@cycle - оператор цикла",
     "leftBlock_spoilerOther_1": "Другие",
     "leftBlock_spoilerOther_2": "[1] O - Имя текущего слоя.",
     "leftBlock_spoilerOther_3": "[1] Lpnt - Имя родительского слоя.",

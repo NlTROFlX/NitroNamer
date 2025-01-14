@@ -78,6 +78,8 @@
     "leftBlock_spoilerLayerProperties_12": "[4] Lexp - Layer properties with expressions.",
     "leftBlock_spoilerLayerProperties_13": "[4] Lmn - List of layer masks.",
     "leftBlock_spoilerLayerProperties_14": "[4] Lmс - Number of layer masks.",
+    "leftBlock_spoilerOperators_1": "Operators",
+    "leftBlock_spoilerOperators_2": "@cycle - loop operator",
     "leftBlock_spoilerOther_1": "Other",
     "leftBlock_spoilerOther_2": "[1] O - Current layer name.",
     "leftBlock_spoilerOther_3": "[1] Lpnt - Parent layer name.",
