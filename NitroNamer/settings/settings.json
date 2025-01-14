@@ -1,0 +1,63 @@
+{
+    "userPresets": {
+        "preset_4": {
+            "allLayers": true,
+            "template": "T.i | I(r) | I(10, r) | I(10, r)",
+            "briefly": false,
+            "brieflyType": 3,
+            "creationDate": 1736514929562,
+            "usageFrequency": 2,
+            "favoritesTemplate": false
+        },
+        "preset_3": {
+            "allLayers": true,
+            "template": "E(prop [ # ]) | An(attr [ # ]) | E(levels)",
+            "briefly": false,
+            "brieflyType": 3,
+            "creationDate": 1736512201097,
+            "usageFrequency": 1,
+            "favoritesTemplate": false
+        },
+        "preset_2": {
+            "allLayers": true,
+            "template": "1",
+            "briefly": false,
+            "brieflyType": 0,
+            "creationDate": 1736338846973,
+            "usageFrequency": 6,
+            "favoritesTemplate": false
+        },
+        "preset_1": {
+            "allLayers": true,
+            "template": "(LayerName).i",
+            "briefly": false,
+            "brieflyType": 0,
+            "creationDate": 1736338840849,
+            "usageFrequency": 14,
+            "favoritesTemplate": false
+        }
+    },
+    "currentSettings": {
+        "UICompact": false,
+        "allLayers": true,
+        "template": "Lexp(attr) | Lmn",
+        "briefly": false,
+        "brieflyType": 3,
+        "modeIndex": 0,
+        "modeActive": false,
+        "selectedPresetTemplate": "T.i | I(r) | I(10, r) | I(10, r)"
+    },
+    "nameApply": {
+        "shapeLayer": true,
+        "textLayer": true,
+        "nullObject": true,
+        "adjustmentLayer": true,
+        "footageLayer": true,
+        "solidLayer": true,
+        "preComp": true,
+        "cameraLayer": true,
+        "lightLayer": true,
+        "audioLayer": true
+    },
+    "selectedLanguage": "English"
+}
