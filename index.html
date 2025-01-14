@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        border: none;
+      }
+
+      :root {
+        --tooltip-offset: 10px;
+      }
+
+      .videoblock {
+        position: relative;
+        background-color: rgba(255, 255, 255, 1);
+        overflow: hidden;
+        display: inline-block;
+      }
+
+      .video-container {
+        position: relative;
+        overflow: visible;
+        width: 314.552px;
+        height: 176px;
+        background-color: rgba(0, 0, 0, 1);
+        border: 1px solid rgba(49, 49, 49, 1);
+        border-radius: 1.5px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+        border-bottom: none;
+        cursor: pointer;
+      }
+
+      .video-container #video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .video-info {
+        position: relative;
+        overflow: visible;
+        width: 314.552px;
+        height: 31px;
+        background-color: rgba(22, 22, 22, 1);
+        border: 1px solid rgba(49, 49, 49, 1);
+        border-bottom-right-radius: 1.5px;
+        border-bottom-left-radius: 1.5px;
+        display: flex;
+        align-items: center;
+        justify-content: left;
+        margin-top: -1px;
+      }
+
+      #currentTime {
+        display: block;
+        position: relative;
+        margin-left: 7px;
+        color: #b9b9b9;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      #titleVideo {
+        display: block;
+        position: relative;
+        margin-left: 2px;
+        color: #b9b9b9;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+      }
+
+      #progressBarContainer {
+        position: absolute;
+        width: 100%;
+        height: 21px;
+        bottom: 0;
+        padding-left: 8px;
+        padding-right: 8px;
+        cursor: pointer;
+        pointer-events: auto;
+        transform: translateY(-20px);
+      }
+
+      #progressBarBackground {
+        position: relative;
+        width: 100%;
+        height: 1px;
+        top: 10px;
+        background-color: #8a8a8a;
+        transition: height 0.125s ease, top 0.125s ease;
+      }
+
+      #progressBarFill {
+        width: 0%;
+        height: 100%;
+        background-color: #2d8ceb;
+        transition: width 0.125s ease, height 0.125s ease, top 0.125s ease;
+      }
+
+      #seekKnob {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        left: 0%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(45, 140, 235, 1);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: left 0.25s linear, width 0.125s ease, height 0.125s ease, border 0.125s ease, background-color 0.125s ease;
+      }
+
+      #seekKnob::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 5px;
+        height: 5px;
+        background-color: #e7e7e7;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: opacity 0.125s ease;
+      }
+
+      #seekKnob:hover::before {
+        opacity: 1;
+      }
+
+      .control-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.125s ease;
+        pointer-events: none;
+      }
+
+      .visible {
+        opacity: 1;
+      }
+
+      #progressBarContainer:hover #progressBarBackground,
+      #progressBarContainer:hover #progressBarFill {
+        height: 3px;
+        top: 8px;
+      }
+
+      #progressBarContainer:hover #seekKnob {
+        width: 14px;
+        height: 14px;
+        border: 1px solid #2d8ceb;
+        background-color: #232323;
+      }
+
+      .no-transition {
+        transition: none !important;
+      }
+
+      #timeTooltip {
+        position: absolute;
+        width: 53px;
+        height: 16px;
+        background-color: #161616;
+        border: 1px solid #313131;
+        color: white;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        text-align: center;
+        line-height: 16px;
+        border-radius: 2px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.125s ease;
+        transform: translateX(-50%);
+      }
+
+      #hoverCircle {
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        margin-top: 9.5px;
+        background-color: #e7e7e7;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        top: 50%;
+      }
+
+      .control-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 125ms ease;
+        pointer-events: none;
+        filter: invert(72%) sepia(2%) saturate(10%) hue-rotate(320deg) brightness(88%) contrast(85%);
+      }
+
+      .visible {
+        opacity: 1;
+      }
+
+      .video-container:hover .control-icon {
+        filter: invert(47%) sepia(74%) saturate(1796%) hue-rotate(192deg) brightness(96%) contrast(100%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="videoblock" id="video1">
+      <!-- Видео плеер -->
+      <div class="video-container" id="videoContainer">
+        <!-- Видео элемент -->
+        <video id="video" width="100%" height="100%" src="client/media/video/var_examples/var_c.webm" type="video/webm"></video>
+        <!-- Иконка Play -->
+        <img src="client/icons/play.svg" id="playIcon" class="control-icon" alt="Play">
+        <!-- Иконка Pause -->
+        <img src="client/icons/pause.svg" id="pauseIcon" class="control-icon" alt="Pause">
+      </div>
+      <!-- Информационная панель о видео -->
+      <div class="video-info" id="videoInfo">
+        <p id="currentTime">00:00:00</p>
+        <p id="titleVideo">video example #1</p>
+      </div>
+      <!-- Прогресс Бар с контейнером для области наведения -->
+      <div id="progressBarContainer">
+        <div id="progressBarBackground">
+          <div id="progressBarFill"></div>
+          <!-- Кнопка перемотки перемещена внутрь progressBarBackground -->
+          <div id="seekKnob"></div>
+          <!-- Временной блок -->
+          <div id="timeTooltip">00:00:00</div>
+          <!-- Белый кружок -->
+          <div id="hoverCircle"></div>
+        </div>
+      </div>
+    </div>
+    <div class="videoblock" id="video2">
+      <div class="video-container" id="videoContainer">
+        <video id="video" width="100%" height="100%" src="client/media/video/var_examples/var_pn.webm" type="video/webm"></video>
+        <img src="client/icons/play.svg" id="playIcon" class="control-icon" alt="Play">
+        <img src="client/icons/pause.svg" id="pauseIcon" class="control-icon" alt="Pause">
+      </div>
+      <div class="video-info" id="videoInfo">
+        <p id="currentTime">00:00:00</p>
+        <p id="titleVideo">video example #2</p>
+      </div>
+      <div id="progressBarContainer">
+        <div id="progressBarBackground">
+          <div id="progressBarFill"></div>
+          <div id="seekKnob"></div>
+          <div id="timeTooltip">00:00:00</div>
+          <div id="hoverCircle"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        var videoblocks = document.querySelectorAll(".videoblock");
+        videoblocks.forEach(function(videoblock) {
+          var video = videoblock.querySelector("#video");
+          var playIcon = videoblock.querySelector("#playIcon");
+          var pauseIcon = videoblock.querySelector("#pauseIcon");
+          var progressBarFill = videoblock.querySelector("#progressBarFill");
+          var progressBarBackground = videoblock.querySelector("#progressBarBackground");
+          var seekKnob = videoblock.querySelector("#seekKnob");
+          var videoContainer = videoblock.querySelector("#videoContainer");
+          var progressBarContainer = videoblock.querySelector("#progressBarContainer");
+          var currentTimeElement = videoblock.querySelector("#currentTime");
+          var timeTooltip = videoblock.querySelector("#timeTooltip");
+          var hoverCircle = videoblock.querySelector("#hoverCircle");
+          var isDragging = false;
+          var lastTime = 0;
+          var isHovering = false;
+          var animationFrameId;
+
+          function updateIconsOnStateChange() {
+            if (video.paused) {
+              playIcon.classList.add("visible");
+              pauseIcon.classList.remove("visible");
+            } else {
+              playIcon.classList.remove("visible");
+              pauseIcon.classList.remove("visible");
+            }
+          }
+
+          function showHoverIcon() {
+            if (!video.paused) {
+              pauseIcon.classList.add("visible");
+            }
+          }
+
+          function hideHoverIcons() {
+            if (!video.paused) {
+              pauseIcon.classList.remove("visible");
+            }
+          }
+
+          function flashIcon(icon) {
+            icon.classList.add("visible");
+            setTimeout(function() {
+              if (video.paused && icon === playIcon) {
+                icon.classList.add("visible");
+              } else {
+                icon.classList.remove("visible");
+              }
+            }, 125);
+          }
+
+          function formatTime(seconds) {
+            var hrs = Math.floor(seconds / 3600);
+            var mins = Math.floor((seconds % 3600) / 60);
+            var secs = Math.floor(seconds % 60);
+            return [hrs, mins, secs].map(function(v) {
+              return v.toString().padStart(2, "0");
+            }).join(":");
+          }
+
+          function updateProgress() {
+            if (!isDragging) {
+              var percent = video.duration > 0 ? (video.currentTime / video.duration) * 100 : 0;
+              progressBarFill.style.width = percent + "%";
+              var knobPosition = (percent / 100) * progressBarBackground.getBoundingClientRect().width;
+              if (video.currentTime < lastTime) {
+                seekKnob.classList.add("no-transition");
+                progressBarFill.classList.add("no-transition");
+                seekKnob.style.left = knobPosition + "px";
+                setTimeout(function() {
+                  seekKnob.classList.remove("no-transition");
+                  progressBarFill.classList.remove("no-transition");
+                }, 50);
+              } else {
+                seekKnob.style.left = knobPosition + "px";
+              }
+              currentTimeElement.textContent = formatTime(video.currentTime);
+              lastTime = video.currentTime;
+              if (isHovering) {
+                var hoverPosition = parseFloat(hoverCircle.style.left) || 0;
+                var delta = Math.abs(hoverPosition - knobPosition);
+                hoverCircle.style.opacity = delta <= 12 ? "0" : "1";
+              }
+            }
+            animationFrameId = requestAnimationFrame(updateProgress);
+          }
+
+          function updateSeekKnob(clientX) {
+            var rect = progressBarBackground.getBoundingClientRect();
+            var x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+            var newTime = (x / rect.width) * video.duration;
+            video.currentTime = newTime;
+            var percent = (video.currentTime / video.duration) * 100;
+            progressBarFill.style.width = percent + "%";
+            seekKnob.style.left = x + "px";
+            currentTimeElement.textContent = formatTime(video.currentTime);
+          }
+
+          function updateTooltip(e) {
+            if (video.duration <= 0) return;
+            var rect = progressBarBackground.getBoundingClientRect();
+            var x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+            var hoverTime = (x / rect.width) * video.duration;
+            timeTooltip.textContent = formatTime(hoverTime);
+            var tooltipOffset = 10;
+            var circleOffset = 8;
+            var tooltipWidth = timeTooltip.offsetWidth;
+            var tooltipX = x;
+            var tooltipY = -timeTooltip.offsetHeight - tooltipOffset;
+            if (tooltipX < tooltipWidth / 2) {
+              tooltipX = tooltipWidth / 2;
+            } else if (tooltipX > rect.width - tooltipWidth / 2) {
+              tooltipX = rect.width - tooltipWidth / 2;
+            }
+            timeTooltip.style.left = tooltipX + "px";
+            timeTooltip.style.top = tooltipY + "px";
+            timeTooltip.style.opacity = "1";
+            hoverCircle.style.left = x + "px";
+            hoverCircle.style.top = -circleOffset + "px";
+          }
+          videoContainer.addEventListener("click", function() {
+            if (video.paused) {
+              video.play();
+              flashIcon(pauseIcon);
+            } else {
+              video.pause();
+              flashIcon(playIcon);
+            }
+            updateIconsOnStateChange();
+          });
+          video.addEventListener("play", updateIconsOnStateChange);
+          video.addEventListener("pause", updateIconsOnStateChange);
+          video.addEventListener("ended", function() {
+            seekKnob.classList.add("no-transition");
+            progressBarFill.classList.add("no-transition");
+            progressBarFill.style.width = "0%";
+            seekKnob.style.left = "0px";
+            currentTimeElement.textContent = formatTime(0);
+            setTimeout(function() {
+              seekKnob.classList.remove("no-transition");
+              progressBarFill.classList.remove("no-transition");
+            }, 50);
+            updateIconsOnStateChange();
+          });
+          seekKnob.addEventListener("mousedown", function(e) {
+            isDragging = true;
+            progressBarBackground.classList.add("no-transition");
+            progressBarFill.classList.add("no-transition");
+            seekKnob.classList.add("no-transition");
+            cancelAnimationFrame(animationFrameId);
+            e.preventDefault();
+          });
+          document.addEventListener("mousemove", function(e) {
+            if (isDragging) {
+              updateSeekKnob(e.clientX);
+            }
+          });
+          document.addEventListener("mouseup", function(e) {
+            if (isDragging) {
+              isDragging = false;
+              progressBarBackground.classList.remove("no-transition");
+              progressBarFill.classList.remove("no-transition");
+              seekKnob.classList.remove("no-transition");
+              animationFrameId = requestAnimationFrame(updateProgress);
+            }
+          });
+          progressBarContainer.addEventListener("click", function(e) {
+            var rect = progressBarBackground.getBoundingClientRect();
+            var x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+            var newTime = (x / rect.width) * video.duration;
+            video.currentTime = newTime;
+            var percent = (video.currentTime / video.duration) * 100;
+            progressBarFill.style.width = percent + "%";
+            seekKnob.style.left = x + "px";
+            currentTimeElement.textContent = formatTime(video.currentTime);
+          });
+          videoContainer.addEventListener("mouseenter", showHoverIcon);
+          videoContainer.addEventListener("mouseleave", hideHoverIcons);
+          window.addEventListener("resize", function() {
+            if (!isDragging) {
+              var percent = (video.currentTime / video.duration) * 100;
+              var knobPosition = (percent / 100) * progressBarBackground.getBoundingClientRect().width;
+              seekKnob.style.left = knobPosition + "px";
+            }
+          });
+          progressBarBackground.addEventListener("mousemove", updateTooltip);
+          progressBarBackground.addEventListener("mouseenter", function() {
+            isHovering = true;
+            timeTooltip.style.opacity = "1";
+            hoverCircle.style.opacity = "1";
+          });
+          progressBarBackground.addEventListener("mouseleave", function() {
+            isHovering = false;
+            timeTooltip.style.opacity = "0";
+            hoverCircle.style.opacity = "0";
+          });
+          updateIconsOnStateChange();
+          currentTimeElement.textContent = formatTime(0);
+          animationFrameId = requestAnimationFrame(updateProgress);
+        });
+      });
+    </script>
+  </body>
+</html>

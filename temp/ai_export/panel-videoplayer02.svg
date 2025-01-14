@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <path d="M804.51,437.06h310.55c.83,0,1.5.67,1.5,1.5v174.5h-313.55v-174.5c0-.83.67-1.5,1.5-1.5Z" style="stroke: #313131; stroke-miterlimit: 10;"/>
+  <path d="M803.01,613.06h313.55v28.5c0,.83-.67,1.5-1.5,1.5h-310.55c-.83,0-1.5-.67-1.5-1.5v-28.5h0Z" style="fill: #161616; stroke: #313131; stroke-miterlimit: 10;"/>
+  <line x1="811.05" y1="613.06" x2="1110" y2="613.06" style="fill: none; stroke: #2d8ceb; stroke-miterlimit: 10;"/>
+  <circle cx="1110" cy="613" r="4" style="fill: #2d8ceb;"/>
+</svg>

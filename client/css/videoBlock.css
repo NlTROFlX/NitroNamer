@@ -1,0 +1,361 @@
+#currentTime,
+#titleVideo {
+  display: block;
+  color: #b9b9b9;
+  font-family: "Fira Sans", sans-serif;
+  font-size: 12px;
+}
+@font-face {
+  font-family: FiraSans;
+  src: url("./fonts/FiraSans-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: FiraSans;
+  src: url("./fonts/FiraSans-BlackItalic.ttf") format("truetype");
+  font-weight: 900;
+  font-style: italic;
+}
+@font-face {
+  font-family: FiraSans;
+  src: url("./fonts/FiraSans-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: FiraSans;
+  src: url("./fonts/FiraSans-BoldItalic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: FiraSans;
+  src: url("./fonts/FiraSans-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: FiraSans;
+  src: url("./fonts/FiraSans-ExtraBoldItalic.ttf") format("truetype");
+  font-weight: 800;
+  font-style: italic;
+}
+@font-face {
+  font-family: FiraSans;
+  src: url("./fonts/FiraSans-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: FiraSans;
+  src: url("./fonts/FiraSans-ExtraLightItalic.ttf") format("truetype");
+  font-weight: 200;
+  font-style: italic;
+}
+@font-face {
+  font-family: FiraSans;
+  src: url("./fonts/FiraSans-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: FiraSans;
+  src: url("./fonts/FiraSans-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: FiraSans;
+  src: url("./fonts/FiraSans-LightItalic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+}
+@font-face {
+  font-family: FiraSans;
+  src: url("./fonts/FiraSans-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: FiraSans;
+  src: url("./fonts/FiraSans-MediumItalic.ttf") format("truetype");
+  font-weight: 500;
+  font-style: italic;
+}
+@font-face {
+  font-family: FiraSans;
+  src: url("./fonts/FiraSans-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: FiraSans;
+  src: url("./fonts/FiraSans-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: FiraSans;
+  src: url("./fonts/FiraSans-SemiBoldItalic.ttf") format("truetype");
+  font-weight: 600;
+  font-style: italic;
+}
+@font-face {
+  font-family: FiraSans;
+  src: url("./fonts/FiraSans-Thin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: FiraSans;
+  src: url("./fonts/FiraSans-ThinItalic.ttf") format("truetype");
+  font-weight: 100;
+  font-style: italic;
+}
+:root {
+  --tooltip-offset: 10px;
+}
+.videoblock {
+  position: relative;
+  padding-left: 18.65px;
+  overflow: hidden;
+  display: inline-block;
+  background-color: #232323;
+}
+.video-container,
+.video-info {
+  overflow: visible;
+  width: 314.552px;
+  position: relative;
+}
+.videoblock:hover .video-container,
+.videoblock:hover .video-info {
+  border-color: #8a8a8a;
+}
+.videoblock:hover .video-info {
+  border-top-color: #313131;
+}
+.video-container {
+  height: 176px;
+  background-color: #000;
+  border: 1px solid #313131;
+  border-radius: 1.5px 1.5px 0 0;
+  border-bottom: none;
+  cursor: pointer;
+  transition: border-color 125ms;
+  transition-timing-function: ease !important;
+}
+.video-container #video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+#hoverCircle,
+#seekKnob::before {
+  width: 5px;
+  background-color: #e7e7e7;
+}
+.video-info {
+  height: 31px;
+  background-color: #1d1d1d;
+  border: 1px solid #313131;
+  border-bottom-right-radius: 1.5px;
+  border-bottom-left-radius: 1.5px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  margin-top: -1px;
+  transition: border-color 125ms;
+  transition-timing-function: ease !important;
+}
+#seekKnob,
+#seekKnob::before {
+  position: absolute;
+  top: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+#video,
+.scale-up-icon {
+  transition: filter 125ms;
+}
+.scale-up-icon {
+  width: 12px;
+  height: 12px;
+  margin-left: auto;
+  margin-right: 8px;
+  cursor: pointer;
+}
+.scale-up-icon:hover,
+.video-container:hover .control-icon {
+  filter: invert(48%) sepia(82%) saturate(2053%) hue-rotate(177deg)
+    brightness(95%) contrast(102%);
+  transition: filter 125ms;
+}
+#currentTime {
+  position: relative;
+  margin-left: 7px;
+  font-variant-numeric: tabular-nums;
+}
+#titleVideo {
+  position: relative;
+  margin-left: 0;
+}
+#progressBarContainer {
+  position: absolute;
+  width: calc(100% - 35px);
+  height: 21px;
+  bottom: 0;
+  padding-left: 8px;
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translateY(-22px);
+}
+#progressBarBackground {
+  position: relative;
+  width: 100%;
+  height: 1px;
+  top: 10px;
+  background-color: #8a8a8a;
+  transition: height 125ms, top 125ms;
+}
+#progressBarFill {
+  width: 0%;
+  height: 100%;
+  background-color: #2d8ceb;
+  transition: width 125ms, height 125ms, top 125ms;
+}
+#seekKnob {
+  width: 8px;
+  height: 8px;
+  left: 0;
+  background-color: #2d8ceb;
+  cursor: pointer;
+  transition: left 125ms, width 125ms, height 125ms, border 125ms,
+    background-color 125ms;
+}
+#seekKnob::before {
+  content: "";
+  left: 50%;
+  height: 5px;
+  opacity: 0;
+  transition: opacity 125ms;
+}
+#seekKnob:hover::before,
+.visible {
+  opacity: 1;
+}
+#progressBarContainer:hover #progressBarBackground,
+#progressBarContainer:hover #progressBarFill {
+  height: 5px;
+  top: 6px;
+}
+#progressBarContainer:hover #seekKnob {
+  width: 14px;
+  height: 14px;
+  border: 1px solid #2d8ceb;
+  background-color: #232323;
+}
+.no-transition {
+  transition: none !important;
+}
+#timeTooltip,
+.control-icon {
+  opacity: 0;
+  transition: opacity 125ms;
+  position: absolute;
+  pointer-events: none;
+}
+#timeTooltip {
+  width: 53px;
+  height: 16px;
+  background-color: #161616;
+  border: 1px solid #313131;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  text-align: center;
+  line-height: 16px;
+  border-radius: 2px;
+  transform: translateX(-50%);
+}
+#hoverCircle,
+.control-icon,
+.videoblock.enlarged {
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+#hoverCircle {
+  position: absolute;
+  height: 5px;
+  margin-top: 11px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.control-icon {
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  z-index: 999;
+  filter: invert(72%) sepia(2%) saturate(10%) hue-rotate(320deg) brightness(88%)
+    contrast(85%);
+}
+.shadow-overlay,
+.video-overlay {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+#video {
+  filter: grayscale(0%);
+}
+.videoblock.paused #video {
+  filter: grayscale(100%);
+}
+.video-overlay {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 125ms;
+  pointer-events: none;
+}
+.videoblock.paused .video-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.videoblock.enlarged {
+  position: fixed;
+  left: 50%;
+  width: 547px;
+  height: 337px;
+  padding-left: 0;
+  border-radius: 6px;
+  border: 1px solid #8a8a8a;
+  z-index: 1001;
+}
+.videoblock.enlarged .video-container {
+  width: 547px;
+  height: 307px;
+  border: none;
+}
+.videoblock.enlarged .video-info {
+  width: 547px;
+  height: 30px;
+  border: none;
+}
+.videoblock.enlarged #progressBarContainer {
+  transform: translateY(-19px);
+  width: calc(100% - 18px);
+}
+.videoblock.enlarged .scale-up-icon {
+  padding-right: 2px;
+}
+.shadow-overlay {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  pointer-events: auto;
+}

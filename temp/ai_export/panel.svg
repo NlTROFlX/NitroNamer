@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 314.55 207">
+  <g id="Layer_2-2" data-name="Layer_2">
+    <rect x=".5" y=".5" width="313.55" height="176" style="stroke: #313131; stroke-miterlimit: 10;"/>
+    <path d="M.5,176.5h313.55v28.5c0,.83-.67,1.5-1.5,1.5H2c-.83,0-1.5-.67-1.5-1.5v-28.5h0Z" style="fill: #161616; stroke: #313131; stroke-miterlimit: 10;"/>
+    <line x1="8.54" y1="176.5" x2="157.02" y2="176.5" style="fill: none; stroke: #2d8ceb; stroke-miterlimit: 10;"/>
+    <circle cx="157.02" cy="176.5" r="4" style="fill: #2d8ceb;"/>
+  </g>
+</svg>
