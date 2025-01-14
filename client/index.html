@@ -13,12 +13,20 @@
     <div id="shadow-overlay" class="shadow-overlay" style="display: none;"></div>
 
     <!-- Верхний блок -->
-    <div class="top-bar"> <span class="title-thin-italic" data-i18n="titleThinItalic">NitroNamer</span> <span
-            class="title-semibold-italic" data-i18n="titleSemiboldItalic"> Library</span> <span
-            class="home-text" data-i18n="homeText"> Home</span>
-        <!-- Обновлённый выпадающий список -->
+    <div class="top-bar">
+        <span class="title-thin-italic" data-i18n="titleThinItalic">NitroNamer</span>
+        <span class="title-semibold-italic" data-i18n="titleSemiboldItalic"> Library</span>
+        <span class="home-text" data-i18n="homeText">Home</span>
+
+        <!-- Блок иконок добавляем перед language-selector -->
+        <div class="file-icons">
+            <img src="icons/icon-file-arrow-down.svg" alt="Download" />
+            <img src="icons/icon-file-arrow-up.svg" alt="Upload" />
+        </div>
+
         <div class="language-selector">
-            <div class="selected-language-container"> <span class="selected-language">EN</span>
+            <div class="selected-language-container">
+                <span class="selected-language">EN</span>
                 <img src="icons/arrow.svg" class="arrow-icon" alt="Arrow">
             </div>
             <div class="language-dropdown">
@@ -157,7 +165,8 @@
                     <div class="spoiler-title" data-i18n="leftBlock_spoilerOperators_1">Operators</div>
                 </div>
                 <div class="spoiler-content">
-                    <p onclick="selectSubItem(this);showContent('content-1')" data-i18n="leftBlock_spoilerOperators_2">cycle</p>
+                    <p onclick="selectSubItem(this);showContent('content-1')" data-i18n="leftBlock_spoilerOperators_2">
+                        cycle</p>
                 </div>
             </div>
             <!-- Other -->
@@ -335,7 +344,8 @@
                 </div>
                 <!-- var Pn -->
                 <div class="content-section" id="content-2">
-                    <div class="variable-name-block" data-value="Pn"> <span class="variable-text-block-span-1">Pn </span>
+                    <div class="variable-name-block" data-value="Pn"> <span
+                            class="variable-text-block-span-1">Pn </span>
                         - variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
                     </div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>

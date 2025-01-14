@@ -33,109 +33,109 @@ html {
 }
 @font-face {
   font-family: FiraSans;
-  src: url("./fonts/FiraSans-Black.ttf") format("truetype");
+  src: url(./fonts/FiraSans-Black.ttf) format("truetype");
   font-weight: 900;
   font-style: normal;
 }
 @font-face {
   font-family: FiraSans;
-  src: url("./fonts/FiraSans-BlackItalic.ttf") format("truetype");
+  src: url(./fonts/FiraSans-BlackItalic.ttf) format("truetype");
   font-weight: 900;
   font-style: italic;
 }
 @font-face {
   font-family: FiraSans;
-  src: url("./fonts/FiraSans-Bold.ttf") format("truetype");
+  src: url(./fonts/FiraSans-Bold.ttf) format("truetype");
   font-weight: 700;
   font-style: normal;
 }
 @font-face {
   font-family: FiraSans;
-  src: url("./fonts/FiraSans-BoldItalic.ttf") format("truetype");
+  src: url(./fonts/FiraSans-BoldItalic.ttf) format("truetype");
   font-weight: 700;
   font-style: italic;
 }
 @font-face {
   font-family: FiraSans;
-  src: url("./fonts/FiraSans-ExtraBold.ttf") format("truetype");
+  src: url(./fonts/FiraSans-ExtraBold.ttf) format("truetype");
   font-weight: 800;
   font-style: normal;
 }
 @font-face {
   font-family: FiraSans;
-  src: url("./fonts/FiraSans-ExtraBoldItalic.ttf") format("truetype");
+  src: url(./fonts/FiraSans-ExtraBoldItalic.ttf) format("truetype");
   font-weight: 800;
   font-style: italic;
 }
 @font-face {
   font-family: FiraSans;
-  src: url("./fonts/FiraSans-ExtraLight.ttf") format("truetype");
+  src: url(./fonts/FiraSans-ExtraLight.ttf) format("truetype");
   font-weight: 200;
   font-style: normal;
 }
 @font-face {
   font-family: FiraSans;
-  src: url("./fonts/FiraSans-ExtraLightItalic.ttf") format("truetype");
+  src: url(./fonts/FiraSans-ExtraLightItalic.ttf) format("truetype");
   font-weight: 200;
   font-style: italic;
 }
 @font-face {
   font-family: FiraSans;
-  src: url("./fonts/FiraSans-Italic.ttf") format("truetype");
+  src: url(./fonts/FiraSans-Italic.ttf) format("truetype");
   font-weight: 400;
   font-style: italic;
 }
 @font-face {
   font-family: FiraSans;
-  src: url("./fonts/FiraSans-Light.ttf") format("truetype");
+  src: url(./fonts/FiraSans-Light.ttf) format("truetype");
   font-weight: 300;
   font-style: normal;
 }
 @font-face {
   font-family: FiraSans;
-  src: url("./fonts/FiraSans-LightItalic.ttf") format("truetype");
+  src: url(./fonts/FiraSans-LightItalic.ttf) format("truetype");
   font-weight: 300;
   font-style: italic;
 }
 @font-face {
   font-family: FiraSans;
-  src: url("./fonts/FiraSans-Medium.ttf") format("truetype");
+  src: url(./fonts/FiraSans-Medium.ttf) format("truetype");
   font-weight: 500;
   font-style: normal;
 }
 @font-face {
   font-family: FiraSans;
-  src: url("./fonts/FiraSans-MediumItalic.ttf") format("truetype");
+  src: url(./fonts/FiraSans-MediumItalic.ttf) format("truetype");
   font-weight: 500;
   font-style: italic;
 }
 @font-face {
   font-family: FiraSans;
-  src: url("./fonts/FiraSans-Regular.ttf") format("truetype");
+  src: url(./fonts/FiraSans-Regular.ttf) format("truetype");
   font-weight: 400;
   font-style: normal;
 }
 @font-face {
   font-family: FiraSans;
-  src: url("./fonts/FiraSans-SemiBold.ttf") format("truetype");
+  src: url(./fonts/FiraSans-SemiBold.ttf) format("truetype");
   font-weight: 600;
   font-style: normal;
 }
 @font-face {
   font-family: FiraSans;
-  src: url("./fonts/FiraSans-SemiBoldItalic.ttf") format("truetype");
+  src: url(./fonts/FiraSans-SemiBoldItalic.ttf) format("truetype");
   font-weight: 600;
   font-style: italic;
 }
 @font-face {
   font-family: FiraSans;
-  src: url("./fonts/FiraSans-Thin.ttf") format("truetype");
+  src: url(./fonts/FiraSans-Thin.ttf) format("truetype");
   font-weight: 100;
   font-style: normal;
 }
 @font-face {
   font-family: FiraSans;
-  src: url("./fonts/FiraSans-ThinItalic.ttf") format("truetype");
+  src: url(./fonts/FiraSans-ThinItalic.ttf) format("truetype");
   font-weight: 100;
   font-style: italic;
 }
@@ -161,6 +161,26 @@ html {
   padding-left: 8px;
   color: #b9b9b9;
   cursor: pointer;
+}
+.file-icons {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 8px;
+}
+.file-icons img {
+  height: 12px;
+  width: auto;
+  margin-right: 4px;
+  cursor: pointer;
+  transition: filter 125ms;
+}
+.file-icons img:last-child {
+  margin-right: 0;
+}
+.file-icons img:hover {
+  filter: invert(48%) sepia(82%) saturate(2053%) hue-rotate(177deg)
+    brightness(95%) contrast(102%);
 }
 .left,
 .right {
@@ -512,7 +532,7 @@ html {
 .language-selector {
   position: relative;
   display: inline-block;
-  margin-left: auto;
+  margin-left: 0;
   margin-right: 8px;
   cursor: pointer;
   user-select: none;
@@ -560,7 +580,7 @@ html {
   transition: color 125ms, font-weight 125ms;
 }
 .language-selector .language-option:hover {
-  background-color: transparent;
+  background-color: #fff0;
   color: #e7e7e7;
   font-weight: 600;
 }
