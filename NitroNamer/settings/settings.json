@@ -1,12 +1,21 @@
 {
     "userPresets": {
+        "preset_5": {
+            "allLayers": false,
+            "template": "(Layer): Lexp(attr)",
+            "briefly": false,
+            "brieflyType": 3,
+            "creationDate": 1736873173832,
+            "usageFrequency": 2,
+            "favoritesTemplate": false
+        },
         "preset_4": {
             "allLayers": true,
             "template": "T.i | I(r) | I(10, r) | I(10, r)",
             "briefly": false,
             "brieflyType": 3,
             "creationDate": 1736514929562,
-            "usageFrequency": 2,
+            "usageFrequency": 3,
             "favoritesTemplate": false
         },
         "preset_3": {
@@ -40,12 +49,12 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "Lexp(attr) | Lmn",
+        "template": "Fext(mp3)Fext(mp4)",
         "briefly": false,
         "brieflyType": 3,
-        "modeIndex": 0,
+        "modeIndex": 4,
         "modeActive": false,
-        "selectedPresetTemplate": "T.i | I(r) | I(10, r) | I(10, r)"
+        "selectedPresetTemplate": ""
     },
     "nameApply": {
         "shapeLayer": true,

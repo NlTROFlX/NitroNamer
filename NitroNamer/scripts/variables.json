@@ -30,7 +30,7 @@
         "active": false
     },
     "Fext": {
-        "defaultValue": "NoExtension",
+        "defaultValue": "",
         "customValue": "Custom{Fext}",
         "active": false
     },
