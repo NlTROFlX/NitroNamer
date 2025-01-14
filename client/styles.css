@@ -220,6 +220,10 @@ html {
 .variable-name-block.show-copied .copied-text {
   opacity: 1;
 }
+.top-bar:has(.file-icons:hover) .home-text,
+.top-bar:has(.language-selector:hover) .home-text {
+    opacity: 0 !important;
+}
 .indicator-line {
   left: -1px !important;
   width: 1px;
