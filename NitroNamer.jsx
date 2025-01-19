@@ -1,6 +1,5 @@
 #include "json2.js";
 
-var cycleState = {};
 var incrementValues = {};
 var localIndex = 0;
 
@@ -674,8 +673,8 @@ function buildUI(thisObj) {
         var isShiftPressed = ScriptUI.environment.keyboardState.shiftKey;
         var isCtrlShiftPressed = isCtrlPressed && isShiftPressed;
         var includeShyLayers = isCtrlShiftPressed;
-        var reverseOrder = false; // Убираем инвертацию
-        renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed, isShiftPressed, false, false); // Убираем передачу isAltPressed
+        var reverseOrder = false; 
+        renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed, isShiftPressed, false, false); 
         updateLayerCounts();
         updatePreview();
         btnRename.image = File(scriptFolderPath + "/NitroNamer/img/doneIcon.png");
@@ -1341,23 +1340,23 @@ function buildUI(thisObj) {
         var settings = loadSettings();
         var isCompact = settings.currentSettings && settings.currentSettings.UICompact;
     
-        checkAndUpdateSettings(); // актуализация variableSettings, если нужно
+        checkAndUpdateSettings(); 
     
         var proj = app.project;
         if (proj) {
             var comp = proj.activeItem;
             if (comp && comp instanceof CompItem && comp.numLayers > 0) {
     
-                // 1. Попробуем найти слой среди выделенных:
+                
                 var selectedLayers = comp.selectedLayers;
                 var targetLayer = null;
     
-                // Если есть выделенные слои — берем последний
+                
                 if (selectedLayers.length > 0) {
                     targetLayer = selectedLayers[selectedLayers.length - 1];
                 }
                 else {
-                    // 2. Иначе ищем первый «доступный» слой
+                    
                     for (var i = 1; i <= comp.numLayers; i++) {
                         var layer = comp.layer(i);
                         if (!layer.locked && !layer.shy) {
@@ -1367,7 +1366,7 @@ function buildUI(thisObj) {
                     }
                 }
     
-                // 3. Проверяем, нашли ли мы такой слой
+                
                 if (targetLayer) {
                     var originalName = targetLayer.name;
     
@@ -1377,7 +1376,7 @@ function buildUI(thisObj) {
     
                     var newName = generateNewName(targetLayer, template, briefly, brieflyType, variableSettings, true);
     
-                    // Выводим значения
+                    
                     if (!isCompact) {
                         txtOriginal.text = originalName;
                         txtRenamed.text = newName;
@@ -1387,7 +1386,7 @@ function buildUI(thisObj) {
                     }
                 } 
                 else {
-                    // Нет выделенных и нет доступных слоёв
+                    
                     if (!isCompact) {
                         txtOriginal.text = "No available layers";
                         txtRenamed.text = "No available layers";
@@ -1398,7 +1397,7 @@ function buildUI(thisObj) {
                 }
             }
             else {
-                // comp нет или оно пустое
+                
                 if (!isCompact) {
                     txtOriginal.text = "No composition selected (or empty).";
                     txtRenamed.text = "No composition selected (or empty).";
@@ -1409,7 +1408,7 @@ function buildUI(thisObj) {
             }
         }
         else {
-            // project не открыт
+            
             if (!isCompact) {
                 txtOriginal.text = "No project open.";
                 txtRenamed.text = "No project open.";
@@ -2272,7 +2271,7 @@ function buildUI(thisObj) {
                 })
             }
             if (eEffects !== undefined) {
-                // Если есть логика по nthEffectRegex / nthMaskRegex — она должна остаться
+                
                 eEffects = eEffects.replace(nthEffectRegex, function(fullMatch, number) {
                     var effectNumber = parseInt(number, 10);
                     return getNthEffectName(layer, effectNumber, settings);
@@ -2281,10 +2280,10 @@ function buildUI(thisObj) {
                     return getNthMaskName(layer, maskNumber, settings);
                 });
             
-                // Добавляем строчку, которая "подменяет" prop на содержимое variables.prop
+                
                 eEffects = eEffects.replace(/prop/g, variables.prop);
             
-                // Далее вызываем функцию получения списка эффектов
+                
                 value = getEffectNames(layer, settings, eEffects, eSeparator);
             }
             
