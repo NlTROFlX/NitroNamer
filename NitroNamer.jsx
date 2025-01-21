@@ -833,6 +833,41 @@ function buildUI(thisObj) {
 		file.close()
 	}
 
+	function checkNitroNamerLibraryFolder() {
+		var baseExtensionsPath;
+		if ($.os.toLowerCase().indexOf("mac") !== -1) {
+			baseExtensionsPath = "~/Library/Application Support/Adobe/CEP/extensions"
+		} else {
+			baseExtensionsPath = $.getenv("APPDATA") + "/Adobe/CEP/extensions"
+		}
+		var nnExtFolder = new Folder(baseExtensionsPath + "/nitronamer.library.ui");
+		if (nnExtFolder.exists) {
+			var nnClientSettingsFolder = new Folder(nnExtFolder.fsName + "/client/settings");
+			if (!nnClientSettingsFolder.exists) {
+				nnClientSettingsFolder.create()
+			}
+			var nnSettingsFile = new File(nnClientSettingsFolder.fsName + "/settings.json");
+			var nnSettingsData = {};
+			if (nnSettingsFile.exists) {
+				nnSettingsFile.open("r");
+				try {
+					nnSettingsData = JSON.parse(nnSettingsFile.read())
+				} catch (e) {
+					nnSettingsData = {}
+				}
+				nnSettingsFile.close()
+			}
+			var scriptFile = new File($.fileName);
+			nnSettingsData.nnAeScriptUIPanelsPath = scriptFile.fsName;
+			nnSettingsFile.open("w");
+			nnSettingsFile.write(JSON.stringify(nnSettingsData, null, 4));
+			nnSettingsFile.close();
+			$.writeln("Папка nitronamer.library.ui обнаружена. Путь к NitroNamer.jsx записан в client/settings/settings.json")
+		} else {
+			$.writeln("Папка nitronamer.library.ui НЕ найдена по пути: " + nnExtFolder.fsName)
+		}
+	}
+
 	function checkAndCreateSettingsFile() {
 		var scriptFile = new File($.fileName);
 		var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
@@ -2719,6 +2754,7 @@ function buildUI(thisObj) {
 	}
 	checkAndCreateSettingsFile();
 	checkAndCreateVariablesFile();
+	checkNitroNamerLibraryFolder();
 	var tooltipsFilePath = scriptFolderPath + "/NitroNamer/settings/tooltips.json";
 
 	function checkAndCreateTooltipsFile() {

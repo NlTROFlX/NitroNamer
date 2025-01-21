@@ -16,7 +16,7 @@
         }
     },
     "currentSettings": {
-        "UICompact": true,
+        "UICompact": false,
         "allLayers": true,
         "template": "@cycle(2, '(A) T.i | I(10)', '(B) T.i | I(100)')",
         "briefly": false,
@@ -37,5 +37,6 @@
         "lightLayer": true,
         "audioLayer": true
     },
-    "selectedLanguage": "English"
+    "selectedLanguage": "English",
+    "nnLib": false
 }
