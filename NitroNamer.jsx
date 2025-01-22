@@ -2276,14 +2276,55 @@ function buildUI(thisObj) {
 		return 1
 	}
 
+	function getChildLayerNames(layer, n, separator) {
+		var comp = layer.containingComp;
+		// Если нет композиции или нет детей, вернём имя самого слоя
+		if (!comp) {
+			return layer.name;
+		}
+	
+		// Собираем всех детей (прямых «child»), у которых parent === layer
+		var children = [];
+		for (var i = 1; i <= comp.numLayers; i++) {
+			var l = comp.layer(i);
+			if (l.parent === layer) {
+				children.push(l);
+			}
+		}
+	
+		// Если детей нет, возвращаем имя самого слоя
+		if (children.length === 0) {
+			return layer.name;
+		}
+	
+		// Если пользователь указал Chld(N)
+		if (typeof n === "number" && !isNaN(n)) {
+			// Проверяем, что N в пределах количества дочерних слоёв
+			if (n >= 1 && n <= children.length) {
+				return children[n - 1].name;
+			} else {
+				// Такого N-го ребёнка нет — вернём текущее имя слоя
+				return layer.name;
+			}
+		} else {
+			// Иначе возвращаем все дочерние слои одним списком с заданным (или дефолтным) разделителем
+			var sep = separator || ", ";
+			var childNames = [];
+			for (var j = 0; j < children.length; j++) {
+				childNames.push(children[j].name);
+			}
+			return childNames.join(sep);
+		}
+	}
+
 	function replaceVariables(template, variables, originalName, layer, settings, isPreview) {
 		var result = template;
 		var nthEffectRegex = /e(\d+)/g;
 		var nthMaskRegex = /m(\d+)/g;
-		var regex = new RegExp(["\\(([^()]+)\\)", "T\\(([^()\\[\\]]+)\\)", "it", "Df", "Ec\\(([^()\\[\\]]+?)\\)", "Ec", "E\\(\\[([^\\[\\]]+)\\]\\)", "E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "E", "An\\(\\[([^\\[\\]]+)\\]\\)", "An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "An", "Lexp\\(\\[([^\\[\\]]+)\\]\\)", "Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lexp", "D\\(([^()\\[\\]]+)\\)", "D", "Fext\\(([^()\\[\\]]+)\\)", "Fext", "Ip", "Op", "Tm", "Ar\\(([^()\\[\\]]+)\\)", "Ar", "Pn", "Lpos", "Lsc", "Lrot", "Lops", "Lpnt\\(([^()\\[\\]]+)\\)", "Lpnt", "Cd\\(([^()\\[\\]]+)\\)", "Cd", "Lmc\\(\\[([^\\[\\]]+)\\]\\)", "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmc", "Lmn\\(\\[([^\\[\\]]+)\\]\\)", "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmn", "I\\(([^()\\[\\]]+)\\)", "I", "attr", "prop", "e(\\d+)", "m(\\d+)", "[A-Z]", "i", "S", "W", "H", "@cycle\\(\\s*(\\d+)\\s*,\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)", "cycle", "@replace\\(\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)"].join("|"), "g");
+		var regex = new RegExp(["\\(([^()]+)\\)", "T\\(([^()\\[\\]]+)\\)", "it", "Df", "Ec\\(([^()\\[\\]]+?)\\)", "Ec", "E\\(\\[([^\\[\\]]+)\\]\\)", "E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "E", "An\\(\\[([^\\[\\]]+)\\]\\)", "An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "An", "Lexp\\(\\[([^\\[\\]]+)\\]\\)", "Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lexp", "D\\(([^()\\[\\]]+)\\)", "D", "Fext\\(([^()\\[\\]]+)\\)", "Fext", "Ip", "Op", "Tm", "Ar\\(([^()\\[\\]]+)\\)", "Ar", "Pn", "Lpos", "Lsc", "Lrot", "Lops", "Lpnt\\(([^()\\[\\]]+)\\)", "Lpnt", "Cd\\(([^()\\[\\]]+)\\)", "Cd", "Lmc\\(\\[([^\\[\\]]+)\\]\\)", "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmc", "Lmn\\(\\[([^\\[\\]]+)\\]\\)", "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmn", "Chld\\(\\[([^\\[\\]]+)\\]\\)", "Chld\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Chld", "I\\(([^()\\[\\]]+)\\)", "I", "attr", "prop", "e(\\d+)", "m(\\d+)", "[A-Z]", "i", "S", "W", "H", "@cycle\\(\\s*(\\d+)\\s*,\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)", "cycle", "@replace\\(\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)"].join("|"), "g");
 		var usedVariables = {};
 		var currentLocalIndex = localIndex;
-		result = result.replace(regex, function(match, group, tFilter, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, customI, nthEffectIndex, nthMaskIndex, cycleCount, cycleA, cycleB, replaceFindStr, replaceWithStr) {
+		result = result.replace(regex, function(match, group, tFilter, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, chldSeparatorOnly, chldN, chldSeparator, customI, nthEffectIndex, nthMaskIndex, cycleCount, cycleA, cycleB, replaceFindStr, replaceWithStr) {
 			var value;
 			if (anSeparatorOnly !== undefined) {
 				anSeparatorOnly = anSeparatorOnly.replace(/attr/g, variables.attr)
@@ -2459,6 +2500,18 @@ function buildUI(thisObj) {
 				value = getMaskNames(layer, settings, lmnFilters, lmnSeparator)
 			} else if (match === 'Lmn') {
 				value = getMaskNames(layer, settings)
+			} else if (chldSeparatorOnly !== undefined) {
+				value = getChildLayerNames(layer, null, chldSeparatorOnly);
+			}
+			// 2) Chld(N[separator]) - если chldN !== undefined
+			else if (chldN !== undefined) {
+				var nParsed = parseInt(chldN, 10);
+				// если пользователь передал Chld(3[; ]), то chldSeparator — "; "
+				value = getChildLayerNames(layer, nParsed, chldSeparator);
+			}
+			// 3) Просто Chld
+			else if (match === "Chld") {
+				value = getChildLayerNames(layer, null, null);
 			} else if (customI !== undefined) {
 				var uniqueKey = "I(" + customI + ")";
 				var parts = customI.split(",");
