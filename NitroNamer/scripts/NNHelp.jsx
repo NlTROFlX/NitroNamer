@@ -224,7 +224,7 @@ aboutCheckUpdate.addEventListener("click", function() {
         var licenseFile = loadImage("aboutPanel_License.png");
         if (licenseFile) {
             var licenseIcon = rightGroup.add("image", undefined, licenseFile);
-            licenseIcon.size = [50, 50];
+            licenseIcon.preferredSize = [100,50];
 
             var licenseHoverFile = loadImage("aboutPanel_LicenseHover.png");
             if (licenseHoverFile) {
@@ -245,6 +245,7 @@ aboutCheckUpdate.addEventListener("click", function() {
             });
         }
 
+        panel.layout.layout(true);
         return panel;
     }
 
