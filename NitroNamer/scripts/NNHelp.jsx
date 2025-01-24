@@ -1,20 +1,17 @@
 var scriptVersion = "2025.1";
 
 (function (thisObj) {
-    // Функция для построения пользовательского интерфейса
+
     function buildUI(thisObj) {
-        // Определяем, панель это или окно
-        // Задаём немного большую высоту панели, чтобы вместить вертикальное расположение элементов
+
         var panel = (thisObj instanceof Panel) 
             ? thisObj 
             : new Window("palette", "About NitroNamer", undefined, { resizeable: true });
         panel.margins = [4, 4, 4, 4];
         panel.spacing = 4;
-        
-        // Задаём предпочтительную высоту панели – можно настроить по необходимости
+
         panel.preferredSize.height = 120;
 
-        // Определяем путь к папке img (на уровень выше от текущего скрипта)
         var scriptFile = new File($.fileName);
         var scriptFolder = scriptFile.parent;
         var parentFolder = scriptFolder.parent;
@@ -25,7 +22,6 @@ var scriptVersion = "2025.1";
             return panel;
         }
 
-        // Функция для загрузки изображения
         function loadImage(filename) {
             var filePath = imgFolder.fsName + "/" + filename;
             var imgFile = new File(filePath);
@@ -36,38 +32,29 @@ var scriptVersion = "2025.1";
             return imgFile;
         }
 
-        // ********************************************************************
-        // Создадим основную группу, которая делит панель на две части (левая и правая)
-        // Основная группа располагается горизонтально
         var mainGroup = panel.add("group");
         mainGroup.orientation = "row";
         mainGroup.alignChildren = ["top", "top"];
         mainGroup.spacing = 10;
         mainGroup.margins = 0;
 
-        // =========================
-        // Левая часть: вертикальная группа для aboutPanel
         var leftGroup = mainGroup.add("group");
         leftGroup.orientation = "column";
         leftGroup.alignChildren = ["left", "top"];
         leftGroup.spacing = 2;
         leftGroup.margins = 0;
 
-        // 1. Первая картинка (aboutPanel_logo.png) – 205x27px
-        // 1. Первая картинка (aboutPanel_logo.png) – 205x27px
 var logoFile = loadImage("aboutPanel_logo.png");
 if (logoFile) {
     var aboutLogo = leftGroup.add("image", undefined, logoFile);
     aboutLogo.size = [205, 27];
 
-    // Массив имён файлов для циклической смены изображений
     var logoCycleNames = [
         "aboutPanel_logo1.png",
         "aboutPanel_logo2.png",
         "aboutPanel_logo3.png"
     ];
 
-    // Загружаем картинки для смены и сохраняем в массиве
     aboutLogo.cycleImages = [];
     for (var i = 0; i < logoCycleNames.length; i++) {
         var cycleImg = loadImage(logoCycleNames[i]);
@@ -76,18 +63,15 @@ if (logoFile) {
         }
     }
 
-    // Счётчик для определения, какое изображение подставлять
-    // Начинаем с 0, чтобы при первом наведении показать aboutPanel_logo1.png
     aboutLogo.currentIndex = 0;
 
-    // При наведении курсора – меняем изображение на следующее в очереди
     aboutLogo.addEventListener("mouseover", function () {
         if (this.cycleImages.length > 0) {
             if (this.currentIndex < this.cycleImages.length) {
                 this.image = this.cycleImages[this.currentIndex];
                 this.currentIndex++;
             } else {
-                // Если достигли конца очереди, возвращаем исходное изображение и сбрасываем индекс
+
                 this.image = logoFile;
                 this.currentIndex = 0;
             }
@@ -95,71 +79,60 @@ if (logoFile) {
         }
     });
 
-    // При уходе курсора ничего не меняем – оставляем последнее показанное изображение
-    // Если поведение нужно изменить, можно добавить обработчик "mouseout".
 }
 
-
-        // 2. Вторая картинка (aboutPanel_getNitroNamerLibrary.png) – 205x27px
         var getLibraryFile = loadImage("aboutPanel_getNitroNamerLibrary.png");
         if (getLibraryFile) {
             var aboutGetLibrary = leftGroup.add("image", undefined, getLibraryFile);
             aboutGetLibrary.size = [205, 27];
-        
-            // Загружаем изображение hover-эффекта для aboutGetLibrary
+
             var getLibraryHoverFile = loadImage("aboutPanel_getNitroNamerLibrary_Hover.png");
             if (getLibraryHoverFile) {
-                // Сохраняем ссылки на исходное и hover-изображения
+
                 aboutGetLibrary.originalFile = getLibraryFile;
                 aboutGetLibrary.hoverFile = getLibraryHoverFile;
-                // При наведении курсора – смена изображения на hover-версию
+
                 aboutGetLibrary.addEventListener("mouseover", function() {
                     this.image = this.hoverFile;
                     panel.layout.layout(true);
                 });
-                // При уходе курсора – возвращаем исходное изображение
+
                 aboutGetLibrary.addEventListener("mouseout", function() {
                     this.image = this.originalFile;
                     panel.layout.layout(true);
                 });
             }
-            
-            // **Новый обработчик клика для открытия URL**
+
             aboutGetLibrary.addEventListener("click", function() {
                 openURL("https://example.com/getLibrary");
             });
         }
 
-        var checkUpdateNotFoundFile = loadImage("aboutPanel_checkUpdateNotFound.png");   // иконка, когда обновление не найдено
-        var checkUpdateWasFoundFile = loadImage("aboutPanel_checkUpdateWasFound.png");   // иконка, когда обновление найдено
+        var checkUpdateNotFoundFile = loadImage("aboutPanel_checkUpdateNotFound.png");   
+        var checkUpdateWasFoundFile = loadImage("aboutPanel_checkUpdateWasFound.png");   
 
-        // 3. Третья картинка (aboutPanel_checkUpdate.png) – 205x27px
         var checkUpdateFile = loadImage("aboutPanel_checkUpdate.png");
 if (checkUpdateFile) {
     var aboutCheckUpdate = leftGroup.add("image", undefined, checkUpdateFile);
     aboutCheckUpdate.size = [205, 27];
 
-    // Загружаем изображение hover-эффекта
     var checkUpdateHoverFile = loadImage("aboutPanel_checkUpdate_Hover.png");
     if (checkUpdateHoverFile) {
         aboutCheckUpdate.originalFile = checkUpdateFile;
         aboutCheckUpdate.hoverFile = checkUpdateHoverFile;
-        
-        // Предположим, что флаг hasUpdate изначально false
+
         aboutCheckUpdate.hasUpdate = false;
 
-        // При наведении мыши
         aboutCheckUpdate.addEventListener("mouseover", function() {
-            // Меняем иконку на hoverFile ТОЛЬКО если не найдено обновление
+
             if (!this.hasUpdate) {
                 this.image = this.hoverFile;
                 panel.layout.layout(true);
             }
         });
 
-        // При уходе мыши
         aboutCheckUpdate.addEventListener("mouseout", function() {
-            // Возвращаем исходную иконку ТОЛЬКО если не найдено обновление
+
             if (!this.hasUpdate) {
                 this.image = this.originalFile;
                 panel.layout.layout(true);
@@ -170,54 +143,43 @@ if (checkUpdateFile) {
 
 aboutCheckUpdate.addEventListener("click", function() {
     if (!this.hasUpdate) {
-        // Первый клик: выполняем тихую проверку
-        var result = checkForUpdatesQuietly(); // { newer: bool, latestVersion: "..." }
+
+        var result = checkForUpdatesQuietly(); 
 
         if (result.newer) {
-            // Новая версия есть
-            this.hasUpdate = true; // ставим флаг, чтобы иконка больше не менялась ховером
+
+            this.hasUpdate = true; 
             if (checkUpdateWasFoundFile) {
-                this.image = checkUpdateWasFoundFile;  // aboutPanel_checkUpdateWasFound.png
+                this.image = checkUpdateWasFoundFile;  
                 panel.layout.layout(true);
             }
         } else {
-            // Обновление не найдено
+
             this.hasUpdate = false;
             if (checkUpdateNotFoundFile) {
-                this.image = checkUpdateNotFoundFile;  // aboutPanel_checkUpdateNotFound.png
+                this.image = checkUpdateNotFoundFile;  
                 panel.layout.layout(true);
             }
         }
     } else {
-        // Если уже найдено обновление (hasUpdate === true),
-        // тогда при клике открываем нужную ссылку на релизы:
+
         openURL("https://github.com/NlTROFlX/NitroNamer/releases");
 
-        // Здесь можно решить, нужно ли сбрасывать иконку назад
-        // или оставлять. Если хотим, чтобы она ВСЕГДА оставалась,
-        // то ничего не делаем. Если хотим сбросить:
-        // this.image = this.originalFile;
-        // this.hasUpdate = false;
     }
 });
- 
 
-        // =========================
-        // Правая часть: вертикальная группа, содержащая сверху 4 кнопки и снизу иконку лицензии
         var rightGroup = mainGroup.add("group");
         rightGroup.orientation = "column";
-        rightGroup.alignChildren = "center"; // Для выравнивания по центру горизонтально
+        rightGroup.alignChildren = "center"; 
         rightGroup.spacing = 4;
         rightGroup.margins = 0;
 
-        // 2.1. Верхняя часть rightGroup: горизонтальная группа для 4 иконок-кнопок
         var iconsGroup = rightGroup.add("group");
         iconsGroup.orientation = "row";
         iconsGroup.alignChildren = ["center", "center"];
         iconsGroup.spacing = 6;
         iconsGroup.margins = 0;
 
-        // Список файлов для иконок и соответствующих им URL
         var iconNames = ["boosty.png", "github.png", "reddit.png", "telegram.png"];
         var urls = {
             "boosty.png": "https://boosty.to/nitrofix",
@@ -226,20 +188,17 @@ aboutCheckUpdate.addEventListener("click", function() {
             "telegram.png": "https://t.me/FixYourVFX"
         };
 
-        // Загружаем файл openWeb.png (иконка для состояния наведения)
         var openWebFile = loadImage("openWeb.png");
 
-        // Создаём кнопки с обработчиками событий для наведения и клика
         for (var i = 0; i < iconNames.length; i++) {
             (function(originalFileName) {
                 var originalIconFile = loadImage(originalFileName);
                 if (originalIconFile) {
                     var icon = iconsGroup.add("image", undefined, originalIconFile);
                     icon.size = [24, 24];
-                    // Сохраняем исходное изображение, чтобы затем вернуть его
+
                     icon.originalFile = originalIconFile;
 
-                    // При наведении курсора – смена изображения на openWeb.png (если найден)
                     if (openWebFile) {
                         icon.addEventListener("mouseover", function () {
                             this.image = openWebFile;
@@ -252,7 +211,6 @@ aboutCheckUpdate.addEventListener("click", function() {
                         });
                     }
 
-                    // Обработка клика – открытие соответствующего URL
                     icon.addEventListener("click", function () {
                         var url = urls[originalFileName];
                         if (url) {
@@ -263,13 +221,11 @@ aboutCheckUpdate.addEventListener("click", function() {
             })(iconNames[i]);
         }
 
-        // 2.2. Нижняя часть rightGroup: иконка лицензии (aboutPanel_License.png) размером 50x50px
         var licenseFile = loadImage("aboutPanel_License.png");
         if (licenseFile) {
             var licenseIcon = rightGroup.add("image", undefined, licenseFile);
             licenseIcon.size = [50, 50];
 
-            // Загружаем изображение hover-эффекта для лицензии
             var licenseHoverFile = loadImage("aboutPanel_LicenseHover.png");
             if (licenseHoverFile) {
                 licenseIcon.originalFile = licenseFile;
@@ -283,8 +239,7 @@ aboutCheckUpdate.addEventListener("click", function() {
                     panel.layout.layout(true);
                 });
             }
-            
-            // Обработчик клика для открытия заданного URL
+
             licenseIcon.addEventListener("click", function () {
                 openURL("https://github.com/NlTROFlX/NitroNamer?tab=MIT-1-ov-file#readme");
             });
@@ -293,10 +248,8 @@ aboutCheckUpdate.addEventListener("click", function() {
         return panel;
     }
 
-    // Создаём интерфейс
     var myPanel = buildUI(thisObj);
 
-    // Отображаем панель или окно
     if (myPanel instanceof Window) {
         myPanel.center();
         myPanel.show();
@@ -305,7 +258,6 @@ aboutCheckUpdate.addEventListener("click", function() {
     }
 })(this);
 
-// Функция для открытия URL в системном браузере
 function openURL(url) {
     try {
         if ($.os.indexOf("Mac") !== -1) {
@@ -340,7 +292,7 @@ function checkForUpdatesQuietly() {
             }
         }
     } catch (e) {
-        // Тут можно обработать ошибку
+
     }
 
     return result;
@@ -359,4 +311,3 @@ function compareVersions(a, b) {
     }
     return 0;
 }
-

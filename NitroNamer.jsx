@@ -2278,12 +2278,11 @@ function buildUI(thisObj) {
 
 	function getChildLayerNames(layer, n, separator) {
 		var comp = layer.containingComp;
-		// Если нет композиции или нет детей, вернём имя самого слоя
+
 		if (!comp) {
 			return layer.name;
 		}
-	
-		// Собираем всех детей (прямых «child»), у которых parent === layer
+
 		var children = [];
 		for (var i = 1; i <= comp.numLayers; i++) {
 			var l = comp.layer(i);
@@ -2291,23 +2290,21 @@ function buildUI(thisObj) {
 				children.push(l);
 			}
 		}
-	
-		// Если детей нет, возвращаем имя самого слоя
+
 		if (children.length === 0) {
 			return layer.name;
 		}
-	
-		// Если пользователь указал Chld(N)
+
 		if (typeof n === "number" && !isNaN(n)) {
-			// Проверяем, что N в пределах количества дочерних слоёв
+
 			if (n >= 1 && n <= children.length) {
 				return children[n - 1].name;
 			} else {
-				// Такого N-го ребёнка нет — вернём текущее имя слоя
+
 				return layer.name;
 			}
 		} else {
-			// Иначе возвращаем все дочерние слои одним списком с заданным (или дефолтным) разделителем
+
 			var sep = separator || ", ";
 			var childNames = [];
 			for (var j = 0; j < children.length; j++) {
@@ -2503,13 +2500,13 @@ function buildUI(thisObj) {
 			} else if (chldSeparatorOnly !== undefined) {
 				value = getChildLayerNames(layer, null, chldSeparatorOnly);
 			}
-			// 2) Chld(N[separator]) - если chldN !== undefined
+
 			else if (chldN !== undefined) {
 				var nParsed = parseInt(chldN, 10);
-				// если пользователь передал Chld(3[; ]), то chldSeparator — "; "
+
 				value = getChildLayerNames(layer, nParsed, chldSeparator);
 			}
-			// 3) Просто Chld
+
 			else if (match === "Chld") {
 				value = getChildLayerNames(layer, null, null);
 			} else if (customI !== undefined) {
