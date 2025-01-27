@@ -285,7 +285,7 @@ html {
 .right::-webkit-scrollbar-button {
   display: none;
   height: 0;
-  z-index: 999;variable-example-block
+  z-index: 999;
 }
 .variable-name-block {
   border-radius: 1.5px;
@@ -662,4 +662,16 @@ html {
   max-width: 100% !important;
   padding-right: 18.65px !important;
   box-sizing: border-box !important;
+}
+
+.export-page-header-1 {
+  position: relative;
+  margin-top: 4px;
+  margin-left: 18px;
+  margin-right: 13px;
+  font-family: "Fira Sans";
+  font-weight: 600;
+  font-style: italic;
+  font-size: 24px;
+  color: #b9b9b9;
 }

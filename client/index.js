@@ -160,6 +160,18 @@ function loadSettings() {
 		}))
 	}))
 }
+
+function initializeExportIconClickHandler() {
+    const exportIcon = document.getElementById("icon-export-down");
+    if (exportIcon) {
+        exportIcon.addEventListener("click", (event) => {
+            event.stopPropagation(); // Предотвращает всплытие события, если необходимо
+            showContent("content-export");
+        });
+    } else {
+        console.error("Иконка с id 'icon-export-down' не найдена.");
+    }
+}
 document.addEventListener("mousemove", (function(e) {
 	let t = document.elementFromPoint(e.clientX, e.clientY);
 	if (t)
@@ -187,5 +199,5 @@ document.addEventListener("mousemove", (function(e) {
 		t && (copyToClipboard(t), e.preventDefault())
 	}
 })), document.addEventListener("DOMContentLoaded", (function() {
-	initializeLanguageSelector(), initializeIconClickHandlers(), loadDefaultTranslations(), loadSettings(), document.querySelector(".top-bar").addEventListener("click", showHomePage)
+	initializeLanguageSelector(), initializeIconClickHandlers(), initializeExportIconClickHandler(), loadDefaultTranslations(), loadSettings(), document.querySelector(".top-bar").addEventListener("click", showHomePage)
 }));
