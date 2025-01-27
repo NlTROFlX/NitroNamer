@@ -180,13 +180,15 @@ aboutCheckUpdate.addEventListener("click", function() {
         iconsGroup.spacing = 6;
         iconsGroup.margins = 0;
 
-        var iconNames = ["boosty.png", "github.png", "reddit.png", "telegram.png"];
+        var iconNames = ["boosty.png", "patreon.png", "github.png", "reddit.png", "telegram.png"];
         var urls = {
             "boosty.png": "https://boosty.to/nitrofix",
             "github.png": "https://github.com/NlTROFlX",
             "reddit.png": "https://www.reddit.com/user/nitrofix/",
-            "telegram.png": "https://t.me/FixYourVFX"
+            "telegram.png": "https://t.me/FixYourVFX",
+            "patreon.png": "https://www.patreon.com/c/NITROFIX"
         };
+        
 
         var openWebFile = loadImage("openWeb.png");
 
