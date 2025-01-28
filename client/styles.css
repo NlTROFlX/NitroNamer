@@ -770,3 +770,37 @@ html {
 .custom-checkbox:hover input:checked ~ .checkbox-text {
   color: #8a8a8a;
 }
+
+.export-button-container {
+  margin-top: 8px; 
+}
+
+.export-button {
+  width: 64px;
+  height: 24px;
+  background-color: #161616;      
+  border: 1px solid #313131;      
+  border-radius: 1.5px;           
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 400;               
+  font-size: 12px;
+  color: #8a8a8a;                 
+  cursor: pointer;                
+  transition: border-color 125ms, color 125ms; 
+  outline: none;                  
+}
+
+.export-button:hover {
+  border-color: #2d8ceb;          
+  color: #e7e7e7;                 
+}
+
+.export-button:active {
+  background-color: #161616; 
+  border-color: #2d8ceb;     
+  color: #e7e7e7;            
+}
+
+.export-button:focus {
+  box-shadow: none;          
+}
