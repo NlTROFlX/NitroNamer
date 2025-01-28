@@ -675,3 +675,99 @@ html {
   font-size: 24px;
   color: #b9b9b9;
 }
+
+ .checkboxes-container {
+  
+  padding-top: 6px;
+  padding-left: 18.65px;
+}
+
+.custom-checkbox {
+  display: flex;            
+  align-items: center;      
+  margin-bottom: 4px;       
+  cursor: pointer;          
+  position: relative;
+  user-select: none;        
+}
+
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.checkbox-icon {
+  width: 12px;
+  height: 12px;
+  background-color: #161616;  
+  border: 1px solid transparent; 
+  border-radius: 1.5px;       
+  margin-right: 2px;          
+  position: relative;         
+  flex-shrink: 0;             
+  transition: background-color 125ms ease, border-color 125ms ease;
+}
+
+.checkbox-text {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 400;           
+  font-size: 12px;
+  color: #8a8a8a;             
+  transition: color 125ms;
+}
+
+.checkbox-icon::before {
+  content: '';
+  display: none;             
+  position: absolute;
+  top: 50%; 
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.custom-checkbox:hover input:not(:checked) + .checkbox-icon {
+  background-color: transparent;       
+  border-color: #2d8ceb;               
+}
+
+.custom-checkbox:hover input:not(:checked) + .checkbox-icon::before {
+  display: block;
+  width: 5px;
+  height: 5px;
+  background-color: #ffffff;
+  border-radius: 0; 
+}
+
+.custom-checkbox:hover input:not(:checked) ~ .checkbox-text {
+  color: #ffffff;
+}
+
+.custom-checkbox input:checked + .checkbox-icon {
+  background-color: transparent;       
+  border-color: #2d8ceb;               
+  border-radius: 1.5px;
+}
+
+.custom-checkbox input:checked + .checkbox-icon::before {
+  display: block;
+  width: 5px;
+  height: 5px;
+  background-color: #2d8ceb;
+  border-radius: 0.625px;
+}
+
+.custom-checkbox input:checked ~ .checkbox-text {
+  color: #ffffff;
+}
+
+.custom-checkbox:hover input:checked + .checkbox-icon::before {
+  width: 5px; 
+  height: 5px;
+  background-color: #8a8a8a;    
+  border-radius: 0.625px;
+}
+
+.custom-checkbox:hover input:checked ~ .checkbox-text {
+  color: #8a8a8a;
+}
