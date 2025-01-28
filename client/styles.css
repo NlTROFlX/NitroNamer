@@ -701,11 +701,11 @@ html {
   width: 12px;
   height: 12px;
   background-color: #161616;  
-  border: 1px solid transparent; 
-  border-radius: 1.5px;       
-  margin-right: 2px;          
+  border: 1px solid transparent;      
+  margin-right: 4px;          
   position: relative;         
-  flex-shrink: 0;             
+  flex-shrink: 0;      
+  border-radius: 1.5px;    
   transition: background-color 125ms ease, border-color 125ms ease;
 }
 
@@ -736,7 +736,7 @@ html {
   width: 5px;
   height: 5px;
   background-color: #ffffff;
-  border-radius: 0; 
+  border-radius: 0.625px; 
 }
 
 .custom-checkbox:hover input:not(:checked) ~ .checkbox-text {
@@ -745,14 +745,13 @@ html {
 
 .custom-checkbox input:checked + .checkbox-icon {
   background-color: transparent;       
-  border-color: #2d8ceb;               
-  border-radius: 1.5px;
+  border-color: #2d8ceb;
 }
 
 .custom-checkbox input:checked + .checkbox-icon::before {
   display: block;
-  width: 5px;
-  height: 5px;
+  width: 7px;
+  height: 7px;
   background-color: #2d8ceb;
   border-radius: 0.625px;
 }
