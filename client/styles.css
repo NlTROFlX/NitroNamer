@@ -772,7 +772,8 @@ html {
 }
 
 .export-button-container {
-  margin-top: 8px; 
+  margin-top: 0px; 
+  margin-left: 18.65px;
 }
 
 .export-button {
@@ -803,4 +804,29 @@ html {
 
 .export-button:focus {
   box-shadow: none;          
+}
+
+.checkboxes-container {
+  display: flex;
+  align-items: flex-start;
+}
+
+.checkboxes {
+  display: flex;
+  flex-direction: column;
+}
+
+.ok-texts {
+  margin-left: 4px;
+  border-left: 1px solid #313131;
+  padding-left: 4px;
+  display: flex;
+  flex-direction: column;
+  font-family: "Fira Sans", sans-serif;
+  font-size: 12px;
+  color: #8a8a8a;
+}
+
+.ok-texts span {
+  margin-bottom: 4px;
 }
