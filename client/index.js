@@ -74,7 +74,6 @@ function showContent(contentId) {
         defaultMessage.style.display = "none";
     }
 
-    // Останавливаем видео в предыдущем блоке
     if (currentContentSection) {
         const previousSection = document.getElementById(currentContentSection);
         if (previousSection) {
@@ -85,35 +84,29 @@ function showContent(contentId) {
         }
     }
 
-    // Прячем все секции
     document.querySelectorAll("#content-sections .content-section").forEach(section => {
         section.style.display = "none";
     });
 
-    // Показываем нужную секцию
     const newSection = document.getElementById(contentId);
     if (newSection) {
         newSection.style.display = "block";
         currentContentSection = contentId;
 
-        // === ВАЖНО: если это content-export, запускаем проверку ===
         if (contentId === "content-export") {
             checkExportRequirements();
         }
-    } else {
-        console.error("Контент с ID " + contentId + " не найден.");
     }
 }
 
 function checkExportRequirements() {
     const cs = new CSInterface();
     const extensionPath = cs.getSystemPath(SystemPath.EXTENSION);
-    
-    // Вызываем нашу ExtendScript-функцию 'checkExportPaths(...)'
+
     cs.evalScript('checkExportPaths("' + extensionPath + '")', function(resultJSON) {
         if (!resultJSON) {
-            // Пустая строка или undefined
-            console.log("Проверка прервана или завершилась неудачно.");
+
+            console.log("Проверка прервана/неудачна");
             return;
         }
 
@@ -121,16 +114,8 @@ function checkExportRequirements() {
         try {
             result = JSON.parse(resultJSON);
         } catch (err) {
-            console.error("Ошибка парсинга ответа от ExtendScript:", err);
             return;
         }
-
-        // Если всё ок, подставляем [OK] / [Undefined] в нужные <span>
-        // Предположим, эти элементы у нас есть в content-export:
-        // <span id="spanPresets"></span>
-        // <span id="spanRenamingOptions"></span>
-        // <span id="spanVariableSettings"></span>
-        // <span id="spanTooltipLanguage"></span>
 
         document.getElementById("spanPresets").textContent         = result.spanPresets;
         document.getElementById("spanRenamingOptions").textContent = result.spanRenamingOptions;
@@ -138,7 +123,6 @@ function checkExportRequirements() {
         document.getElementById("spanTooltipLanguage").textContent = result.spanTooltipLanguage;
     });
 }
-
 
 function updateActiveIndicator(e) {
 	var t = document.getElementById("active-indicator"),
@@ -223,7 +207,7 @@ function initializeExportIconClickHandler() {
     const exportIcon = document.getElementById("icon-export-down");
     if (exportIcon) {
         exportIcon.addEventListener("click", (event) => {
-            event.stopPropagation(); // Предотвращает всплытие события, если необходимо
+            event.stopPropagation(); 
             showContent("content-export");
         });
     } else {
