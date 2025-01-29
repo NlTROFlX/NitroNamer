@@ -68,19 +68,77 @@ function selectSubItem(e) {
 	})), e.classList.add("selected")
 }
 
-function showContent(e) {
-	var t = document.getElementById("default-message");
-	if (t && (t.style.display = "none"), currentContentSection) {
-		var n = document.getElementById(currentContentSection);
-		if (n)
-			for (var o = n.getElementsByTagName("video"), a = 0; a < o.length; a++) o[a].pause()
-	}
-	document.querySelectorAll("#content-sections .content-section").forEach((function(e) {
-		e.style.display = "none"
-	}));
-	var l = document.getElementById(e);
-	l ? (l.style.display = "block", currentContentSection = e) : console.error("Контент с ID " + e + " не найден.")
+function showContent(contentId) {
+    const defaultMessage = document.getElementById("default-message");
+    if (defaultMessage) {
+        defaultMessage.style.display = "none";
+    }
+
+    // Останавливаем видео в предыдущем блоке
+    if (currentContentSection) {
+        const previousSection = document.getElementById(currentContentSection);
+        if (previousSection) {
+            const videos = previousSection.getElementsByTagName("video");
+            for (let i = 0; i < videos.length; i++) {
+                videos[i].pause();
+            }
+        }
+    }
+
+    // Прячем все секции
+    document.querySelectorAll("#content-sections .content-section").forEach(section => {
+        section.style.display = "none";
+    });
+
+    // Показываем нужную секцию
+    const newSection = document.getElementById(contentId);
+    if (newSection) {
+        newSection.style.display = "block";
+        currentContentSection = contentId;
+
+        // === ВАЖНО: если это content-export, запускаем проверку ===
+        if (contentId === "content-export") {
+            checkExportRequirements();
+        }
+    } else {
+        console.error("Контент с ID " + contentId + " не найден.");
+    }
 }
+
+function checkExportRequirements() {
+    const cs = new CSInterface();
+    const extensionPath = cs.getSystemPath(SystemPath.EXTENSION);
+    
+    // Вызываем нашу ExtendScript-функцию 'checkExportPaths(...)'
+    cs.evalScript('checkExportPaths("' + extensionPath + '")', function(resultJSON) {
+        if (!resultJSON) {
+            // Пустая строка или undefined
+            console.log("Проверка прервана или завершилась неудачно.");
+            return;
+        }
+
+        let result;
+        try {
+            result = JSON.parse(resultJSON);
+        } catch (err) {
+            console.error("Ошибка парсинга ответа от ExtendScript:", err);
+            return;
+        }
+
+        // Если всё ок, подставляем [OK] / [Undefined] в нужные <span>
+        // Предположим, эти элементы у нас есть в content-export:
+        // <span id="spanPresets"></span>
+        // <span id="spanRenamingOptions"></span>
+        // <span id="spanVariableSettings"></span>
+        // <span id="spanTooltipLanguage"></span>
+
+        document.getElementById("spanPresets").textContent         = result.spanPresets;
+        document.getElementById("spanRenamingOptions").textContent = result.spanRenamingOptions;
+        document.getElementById("spanVariableSettings").textContent= result.spanVariableSettings;
+        document.getElementById("spanTooltipLanguage").textContent = result.spanTooltipLanguage;
+    });
+}
+
 
 function updateActiveIndicator(e) {
 	var t = document.getElementById("active-indicator"),
