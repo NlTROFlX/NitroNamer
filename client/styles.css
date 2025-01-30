@@ -830,3 +830,37 @@ html {
 .ok-texts span {
   margin-bottom: 4px;
 }
+
+/* Стили для отключённых чекбоксов */
+.custom-checkbox.disabled-checkbox .checkbox-icon {
+  background-color: #2a2a2a;
+  border-color: #313131;
+  cursor: not-allowed;
+}
+
+.custom-checkbox.disabled-checkbox .checkbox-text {
+  color: #8a8a8a;
+}
+
+.custom-checkbox.disabled-checkbox .checkbox-icon::before {
+  display: none;
+}
+
+/* Стили при наведении на отключённые чекбоксы */
+.custom-checkbox.disabled-checkbox:hover .checkbox-icon {
+  background-color: #161616 !important;
+  border-color: #313131 !important;
+}
+
+.custom-checkbox.disabled-checkbox:hover .checkbox-icon::before {
+  display: none !important;
+}
+
+/* Дополнительные стили для обеспечения правильного поведения */
+.custom-checkbox.disabled-checkbox input:disabled + .checkbox-icon {
+  pointer-events: none;
+}
+
+.custom-checkbox.disabled-checkbox:hover .checkbox-text {
+  color: #8a8a8a !important;
+}

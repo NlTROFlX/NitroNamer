@@ -99,29 +99,45 @@ function showContent(contentId) {
     }
 }
 
-function checkExportRequirements() {
-    const cs = new CSInterface();
-    const extensionPath = cs.getSystemPath(SystemPath.EXTENSION);
-
-    cs.evalScript('checkExportPaths("' + extensionPath + '")', function(resultJSON) {
-        if (!resultJSON) {
-
-            console.log("Проверка прервана/неудачна");
+function checkExportRequirements(){
+    const e = new CSInterface,
+          t = e.getSystemPath(SystemPath.EXTENSION);
+    e.evalScript('checkExportPaths("' + t + '")', (function(e){
+        if(!e) return void console.log("Проверка прервана/неудачна");
+        let t;
+        try{
+            t = JSON.parse(e);
+        } catch(e){
             return;
         }
+        document.getElementById("spanPresets").textContent = t.spanPresets;
+        document.getElementById("spanRenamingOptions").textContent = t.spanRenamingOptions;
+        document.getElementById("spanVariableSettings").textContent = t.spanVariableSettings;
+        document.getElementById("spanTooltipLanguage").textContent = t.spanTooltipLanguage;
 
-        let result;
-        try {
-            result = JSON.parse(resultJSON);
-        } catch (err) {
-            return;
-        }
+        // Новая часть: Отключение чекбоксов на основе значений span
+        const checkboxMap = {
+            'presets': 'spanPresets',
+            'renamingOptions': 'spanRenamingOptions',
+            'variableSettings': 'spanVariableSettings',
+            'tooltipLanguage': 'spanTooltipLanguage'
+        };
 
-        document.getElementById("spanPresets").textContent         = result.spanPresets;
-        document.getElementById("spanRenamingOptions").textContent = result.spanRenamingOptions;
-        document.getElementById("spanVariableSettings").textContent= result.spanVariableSettings;
-        document.getElementById("spanTooltipLanguage").textContent = result.spanTooltipLanguage;
-    });
+        Object.keys(checkboxMap).forEach(function(key){
+            const spanId = checkboxMap[key];
+            const spanElement = document.getElementById(spanId);
+            const checkbox = document.querySelector('input[name="exportOptions"][value="' + key + '"]');
+            if(spanElement && checkbox){
+                if(spanElement.textContent.trim() === '[OK]'){
+                    checkbox.disabled = false;
+                    checkbox.parentElement.classList.remove('disabled-checkbox');
+                } else {
+                    checkbox.disabled = true;
+                    checkbox.parentElement.classList.add('disabled-checkbox');
+                }
+            }
+        });
+    }));
 }
 
 function updateActiveIndicator(e) {
@@ -191,16 +207,22 @@ function copyToClipboard(e) {
 activeSpoiler && updateActiveIndicator(activeSpoiler), activeSpoiler && updateActiveIndicator(activeSpoiler);
 let currentHoveredElement = null;
 
-function loadSettings() {
-	var e = new CSInterface,
-		t = e.getSystemPath(SystemPath.EXTENSION);
-	e.evalScript('loadSettings("' + t + '")', (function(e) {
-		var t = JSON.parse(e),
-			n = "EN";
-		t && t.language && (n = t.language.toUpperCase()), document.querySelector(".selected-language").textContent = n, loadDefaultTranslations((function() {
-			loadTranslations(n)
-		}))
-	}))
+function loadSettings(){
+    var e = new CSInterface,
+        t = e.getSystemPath(SystemPath.EXTENSION);
+    e.evalScript('loadSettings("' + t + '")', (function(e){
+        var t = JSON.parse(e),
+            n = "EN";
+        if(t && t.language){
+            n = t.language.toUpperCase();
+        }
+        document.querySelector(".selected-language").textContent = n;
+        loadDefaultTranslations(function(){
+            loadTranslations(n);
+            // После загрузки переводов и настроек, проверяем состояния чекбоксов
+            checkExportRequirements();
+        });
+    }));
 }
 
 function initializeExportIconClickHandler() {
