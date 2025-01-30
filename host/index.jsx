@@ -186,3 +186,26 @@ function checkExportPaths(rootPath) {
 
     return JSON.stringify(result);
 }
+
+// Добавьте эту функцию в конец файла host/index.jsx или в подходящее место
+
+function exportToJson() {
+    var saveFile = File.saveDialog("Сохранить JSON файл", "*.json");
+    if (saveFile) {
+        // Проверяем, что файл имеет расширение .json
+        if (saveFile.name.slice(-5).toLowerCase() !== ".json") {
+            saveFile = new File(saveFile.fsName + ".json");
+        }
+        if (saveFile.open("w")) {
+            saveFile.encoding = "UTF8";
+            saveFile.write("{}"); // Пустой JSON
+            saveFile.close();
+            // Возвращаем путь к сохранённому файлу для подтверждения
+            return "Файл успешно сохранён: " + saveFile.fsName;
+        } else {
+            return "Не удалось открыть файл для записи.";
+        }
+    } else {
+        return "Сохранение отменено пользователем.";
+    }
+}

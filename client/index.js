@@ -286,6 +286,21 @@ function initializeExportIconClickHandler() {
         console.error("Иконка с id 'icon-export-down' не найдена.");
     }
 }
+
+function performExport(){
+    var cs = new CSInterface();
+    cs.evalScript('exportToJson()', function(result){
+        if(result){
+            console.log("Export Result:", result);
+            alert(result); // Выводим сообщение пользователю
+        } else {
+            console.log("Export was canceled or failed.");
+            alert("Экспорт отменён или не выполнен.");
+        }
+    });
+}
+
+
 document.addEventListener("mousemove", (function(e) {
 	let t = document.elementFromPoint(e.clientX, e.clientY);
 	if (t)
