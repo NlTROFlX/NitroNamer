@@ -114,10 +114,10 @@ function updateExportButtonState() {
         spanTooltipLanguage === '[Undefined]'
     ) {
         exportButton.classList.add('disabled-export-button');
-        exportButton.dataset.disabled = "true"; // Индикатор состояния
+        exportButton.dataset.disabled = "true"; 
     } else {
         exportButton.classList.remove('disabled-export-button');
-        exportButton.dataset.disabled = "false"; // Индикатор состояния
+        exportButton.dataset.disabled = "false"; 
     }
 }
 
@@ -126,11 +126,11 @@ function initializeExportButton(){
     if(exportButton){
         exportButton.addEventListener('click', function(){
             if(exportButton.dataset.disabled === "true"){
-                // Кнопка в недоступном состоянии, показываем предупреждение
+
                 alert("Экспорт недоступен, так как некоторые параметры не определены.");
                 return;
             }
-            // Иначе, выполняем экспорт
+
             performExport();
         });
     } else {
@@ -139,10 +139,9 @@ function initializeExportButton(){
 }
 
 function performExport(){
-    // Реализуйте здесь логику экспорта
+
     console.log("Экспорт выполнен");
-    // Пример вызова функции экспорта:
-    // CSInterface.evalScript('yourExportFunction()');
+
 }
 
 function checkExportRequirements(){
@@ -165,7 +164,6 @@ function checkExportRequirements(){
         document.getElementById("spanVariableSettings").textContent = data.spanVariableSettings;
         document.getElementById("spanTooltipLanguage").textContent = data.spanTooltipLanguage;
 
-        // Отключение чекбоксов на основе значений span
         const checkboxMap = {
             'presets': 'spanPresets',
             'renamingOptions': 'spanRenamingOptions',
@@ -188,7 +186,6 @@ function checkExportRequirements(){
             }
         });
 
-        // Обновление состояния кнопки "Export"
         updateExportButtonState();
     }));
 }
@@ -272,7 +269,7 @@ function loadSettings(){
         document.querySelector(".selected-language").textContent = n;
         loadDefaultTranslations(function(){
             loadTranslations(n);
-            // После загрузки переводов и настроек, проверяем состояния чекбоксов
+
             checkExportRequirements();
         });
     }));
@@ -319,7 +316,7 @@ document.addEventListener("mousemove", (function(e) {
     initializeLanguageSelector();
     initializeIconClickHandlers();
     initializeExportIconClickHandler();
-    initializeExportButton(); // Добавлено
+    initializeExportButton(); 
     loadDefaultTranslations();
     loadSettings();
     document.querySelector(".top-bar").addEventListener("click", showHomePage);

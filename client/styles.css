@@ -677,7 +677,7 @@ html {
 }
 
  .checkboxes-container {
-  
+
   padding-top: 6px;
   padding-left: 18.65px;
 }
@@ -776,7 +776,6 @@ html {
   margin-left: 18.65px;
 }
 
-/* Общие стили для кнопки Export */
 .export-button {
   width: 64px;
   height: 24px;
@@ -795,7 +794,7 @@ html {
 .export-button:hover {
   border-color: #2d8ceb;
   color: #e7e7e7;
-  background-color: #161616; /* Убедитесь, что фон не перекрывается */
+  background-color: #161616; 
 }
 
 .export-button:active {
@@ -808,19 +807,18 @@ html {
   box-shadow: none;
 }
 
-/* Стили для отключённой кнопки "Export" */
 .export-button.disabled-export-button {
   background-color: #2a2a2a;
   border-color: #313131;
-  color: #8a8a8a; /* Цвет текста для индикации недоступности */
+  color: #8a8a8a; 
   cursor: not-allowed;
-  pointer-events: auto; /* Разрешаем события клика, но обработчик будет игнорировать */
+  pointer-events: auto; 
 }
 
 .export-button.disabled-export-button:hover {
   background-color: #161616;
   border-color: #313131;
-  color: #8a8a8a; /* Убедитесь, что цвет текста остаётся тусклым */
+  color: #8a8a8a; 
 }
 
 .checkboxes-container {
@@ -848,7 +846,6 @@ html {
   margin-bottom: 4px;
 }
 
-/* Стили для отключённых чекбоксов */
 .custom-checkbox.disabled-checkbox .checkbox-icon {
   background-color: #2a2a2a;
   border-color: #313131;
@@ -863,7 +860,6 @@ html {
   display: none;
 }
 
-/* Стили при наведении на отключённые чекбоксы */
 .custom-checkbox.disabled-checkbox:hover .checkbox-icon {
   background-color: #161616 !important;
   border-color: #313131 !important;
@@ -873,7 +869,6 @@ html {
   display: none !important;
 }
 
-/* Дополнительные стили для обеспечения правильного поведения */
 .custom-checkbox.disabled-checkbox input:disabled + .checkbox-icon {
   pointer-events: none;
 }
