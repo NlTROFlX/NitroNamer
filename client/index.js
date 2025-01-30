@@ -144,51 +144,77 @@ function performExport(){
 
 }
 
-function checkExportRequirements(){
-    const csInterface = new CSInterface(),
-          extensionPath = csInterface.getSystemPath(SystemPath.EXTENSION);
-    csInterface.evalScript('checkExportPaths("' + extensionPath + '")', (function(response){
-        if(!response) {
-            console.log("Проверка прервана/неудачна");
-            return;
+function checkExportRequirements() {
+    const cs = new CSInterface();
+    const extensionPath = cs.getSystemPath(SystemPath.EXTENSION);
+
+    cs.evalScript(`checkExportPaths("${extensionPath}")`, (result) => {
+      if (!result) {
+        console.log("Проверка прервана/неудачна или не вернулся результат");
+        return;
+      }
+
+      let parsed;
+      try {
+        parsed = JSON.parse(result);
+      } catch (jsonErr) {
+        console.error("Ошибка парсинга JSON:", jsonErr);
+        return;
+      }
+
+      document.getElementById("spanPresets").textContent          = parsed.spanPresets;
+      document.getElementById("spanRenamingOptions").textContent  = parsed.spanRenamingOptions;
+      document.getElementById("spanVariableSettings").textContent = parsed.spanVariableSettings;
+      document.getElementById("spanTooltipLanguage").textContent  = parsed.spanTooltipLanguage;
+
+      const mapping = {
+        presets: "spanPresets",
+        renamingOptions: "spanRenamingOptions",
+        variableSettings: "spanVariableSettings",
+        tooltipLanguage: "spanTooltipLanguage"
+      };
+
+      Object.keys(mapping).forEach((key) => {
+        const spanId = mapping[key];
+        const spanEl = document.getElementById(spanId);
+        const checkboxEl = document.querySelector(`input[name="exportOptions"][value="${key}"]`);
+
+        if (spanEl && checkboxEl) {
+          if (spanEl.textContent.trim() === "[OK]") {
+            checkboxEl.disabled = false;
+            checkboxEl.parentElement.classList.remove("disabled-checkbox");
+          } else {
+            checkboxEl.disabled = true;
+            checkboxEl.parentElement.classList.add("disabled-checkbox");
+          }
         }
-        let data;
-        try{
-            data = JSON.parse(response);
-        } catch(error){
-            console.error("Ошибка парсинга JSON:", error);
-            return;
+      });
+
+      const contentExportBlock = document.getElementById("content-export");
+      if (!contentExportBlock) {
+        console.error("Элемент #content-export не найден в DOM");
+        return;
+      }
+
+      function ensureHiddenBlock(blockId, value) {
+        let el = document.getElementById(blockId);
+        if (!el) {
+          el = document.createElement("div");
+          el.id = blockId;
+          el.style.display = "none"; 
+          contentExportBlock.appendChild(el);
         }
-        document.getElementById("spanPresets").textContent = data.spanPresets;
-        document.getElementById("spanRenamingOptions").textContent = data.spanRenamingOptions;
-        document.getElementById("spanVariableSettings").textContent = data.spanVariableSettings;
-        document.getElementById("spanTooltipLanguage").textContent = data.spanTooltipLanguage;
 
-        const checkboxMap = {
-            'presets': 'spanPresets',
-            'renamingOptions': 'spanRenamingOptions',
-            'variableSettings': 'spanVariableSettings',
-            'tooltipLanguage': 'spanTooltipLanguage'
-        };
+        el.textContent = value;
+      }
 
-        Object.keys(checkboxMap).forEach(function(key){
-            const spanId = checkboxMap[key];
-            const spanElement = document.getElementById(spanId);
-            const checkbox = document.querySelector('input[name="exportOptions"][value="' + key + '"]');
-            if(spanElement && checkbox){
-                if(spanElement.textContent.trim() === '[OK]'){
-                    checkbox.disabled = false;
-                    checkbox.parentElement.classList.remove('disabled-checkbox');
-                } else {
-                    checkbox.disabled = true;
-                    checkbox.parentElement.classList.add('disabled-checkbox');
-                }
-            }
-        });
+      ensureHiddenBlock("exportPath1", parsed.exportPath1);
+      ensureHiddenBlock("exportPath2", parsed.exportPath2);
+      ensureHiddenBlock("exportPath3", parsed.exportPath3);
 
-        updateExportButtonState();
-    }));
-}
+      updateExportButtonState();
+    });
+  }  
 
 function updateActiveIndicator(e) {
 	var t = document.getElementById("active-indicator"),
@@ -292,14 +318,13 @@ function performExport(){
     cs.evalScript('exportToJson()', function(result){
         if(result){
             console.log("Export Result:", result);
-            alert(result); // Выводим сообщение пользователю
+            alert(result); 
         } else {
             console.log("Export was canceled or failed.");
             alert("Экспорт отменён или не выполнен.");
         }
     });
 }
-
 
 document.addEventListener("mousemove", (function(e) {
 	let t = document.elementFromPoint(e.clientX, e.clientY);

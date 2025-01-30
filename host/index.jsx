@@ -83,124 +83,103 @@ function readTranslationFile(language, extensionPath) {
 	return content;
 }
 
-function checkExportPaths(rootPath) {
+function checkExportPaths(extensionPath) {
+    extensionPath = extensionPath.replace(/\\/g, "/");
 
-    var result = {
+    var resultData = {
         spanPresets: "[Undefined]",
         spanRenamingOptions: "[Undefined]",
         spanTooltipLanguage: "[Undefined]",
-        spanVariableSettings: "[Undefined]"
+        spanVariableSettings: "[Undefined]",
+        exportPath1: "Undefined",  
+        exportPath2: "Undefined",  
+        exportPath3: "Undefined"   
     };
 
-    var extensionSettingsFile = new File(rootPath + "/client/settings/settings.json");
-    if (extensionSettingsFile.exists) {
-        if (!extensionSettingsFile.open("r")) {
-            alert(
-                "Не удалось открыть файл настроек расширения:\n" + extensionSettingsFile.fsName
-            );
-
-        } else {
-            var extensionSettingsContent;
-            var extensionSettingsJson;
-
-            try {
-                extensionSettingsContent = extensionSettingsFile.read();
-                extensionSettingsJson = JSON.parse(extensionSettingsContent);
-            } catch (err) {
-                alert(
-                    "Не удалось прочитать/распарсить JSON настроек расширения:\n" +
-                        extensionSettingsFile.fsName + "\n" +
-                        err
-                );
-                extensionSettingsFile.close();
-            }
-            extensionSettingsFile.close();
-
-            if (extensionSettingsJson && extensionSettingsJson.nnAeScriptUIPanelsPath) {
-                var nnAeScriptUIPanelsPath = extensionSettingsJson.nnAeScriptUIPanelsPath;
-
-                var nitroNamerSettingsPath = nnAeScriptUIPanelsPath.replace(
-                    /NitroNamer\.jsx$/i,
-                    "NitroNamer\\settings\\settings.json"
-                );
-                var nitroNamerVariablesPath = nnAeScriptUIPanelsPath.replace(
-                    /NitroNamer\.jsx$/i,
-                    "NitroNamer\\scripts\\variables.json"
-                );
-
-                var nitroNamerSettingsFile = new File(nitroNamerSettingsPath);
-                var nitroNamerVariablesFile = new File(nitroNamerVariablesPath);
-
-                var variablesJsonExists = nitroNamerVariablesFile.exists;
-
-                if (nitroNamerSettingsFile.exists) {
-                    if (nitroNamerSettingsFile.open("r")) {
-                        try {
-                            var nitroNamerSettingsContent = nitroNamerSettingsFile.read();
-                            var nitroNamerSettingsJson = JSON.parse(nitroNamerSettingsContent);
-
-                            result.spanPresets = nitroNamerSettingsJson.hasOwnProperty("userPresets")
-                                ? "[OK]"
-                                : "[Undefined]";
-                            result.spanRenamingOptions = nitroNamerSettingsJson.hasOwnProperty("nameApply")
-                                ? "[OK]"
-                                : "[Undefined]";
-                            result.spanTooltipLanguage = nitroNamerSettingsJson.hasOwnProperty("selectedLanguage")
-                                ? "[OK]"
-                                : "[Undefined]";
-
-                            result.spanVariableSettings = variablesJsonExists ? "[OK]" : "[Undefined]";
-                        } catch (err) {
-                            alert(
-                                "Не удалось распарсить JSON из NitroNamer settings:\n" +
-                                    nitroNamerSettingsFile.fsName + "\n" +
-                                    err
-                            );
-                        }
-                        nitroNamerSettingsFile.close();
-                    } else {
-                        alert(
-                            "Не удалось открыть NitroNamer settings.json:\n" + nitroNamerSettingsFile.fsName
-                        );
-                    }
-                } else {
-
-                    alert(
-                        "Этап 2: Не найден файл NitroNamer settings.json:\n" +
-                            nitroNamerSettingsFile.fsName + "\n" +
-                            "Продолжаем проверку без него."
-                    );
-                }
-            } else {
-                alert("Ключ 'nnAeScriptUIPanelsPath' отсутствует или пуст.");
-            }
-        }
-    } else {
-
-        alert(
-            "Не найден файл настроек расширения:\n" +
-            extensionSettingsFile.fsName + "\n" +
-            "Продолжаем проверку без него."
-        );
+    var extensionSettingsFile = new File(extensionPath + "/client/settings/settings.json");
+    if (!extensionSettingsFile.exists) {
+        alert("Не найден файл настроек расширения:\n" + extensionSettingsFile.fsName + "\nПродолжаем проверку без него.");
+        return JSON.stringify(resultData);
     }
 
-    return JSON.stringify(result);
-}
+    if (!extensionSettingsFile.open("r")) {
+        alert("Не удалось открыть файл настроек расширения:\n" + extensionSettingsFile.fsName);
+        return JSON.stringify(resultData);
+    }
 
-// Добавьте эту функцию в конец файла host/index.jsx или в подходящее место
+    var extensionSettingsContent = extensionSettingsFile.read();
+    extensionSettingsFile.close();
+
+    var extensionSettings;
+    try {
+        extensionSettings = JSON.parse(extensionSettingsContent);
+    } catch (errParse) {
+        alert("Не удалось прочитать/распарсить JSON настроек расширения:\n" + extensionSettingsFile.fsName + "\n" + errParse);
+        return JSON.stringify(resultData);
+    }
+
+    if (extensionSettingsFile.exists) {
+        resultData.exportPath1 = extensionSettingsFile.fsName;
+    }
+
+    if (!extensionSettings || !extensionSettings.nnAeScriptUIPanelsPath) {
+        alert("Ключ 'nnAeScriptUIPanelsPath' отсутствует или пуст.");
+        return JSON.stringify(resultData);
+    }
+    var nnAeScriptPath = extensionSettings.nnAeScriptUIPanelsPath;
+
+    var nitroSettingsPath  = nnAeScriptPath.replace(/NitroNamer\.jsx$/i, "NitroNamer/settings/settings.json");
+    var nitroVariablesPath = nnAeScriptPath.replace(/NitroNamer\.jsx$/i, "NitroNamer/scripts/variables.json");
+
+    var nitroSettingsFile  = new File(nitroSettingsPath);
+    var nitroVariablesFile = new File(nitroVariablesPath);
+
+    var nitroSettingsExists  = nitroSettingsFile.exists;
+    var nitroVariablesExists = nitroVariablesFile.exists;
+
+    if (nitroSettingsExists) {
+        resultData.exportPath2 = nitroSettingsFile.fsName;
+    }
+    if (nitroVariablesExists) {
+        resultData.exportPath3 = nitroVariablesFile.fsName;
+    }
+
+    if (nitroSettingsExists) {
+        if (nitroSettingsFile.open("r")) {
+            var nitroSettingsContent = nitroSettingsFile.read();
+            nitroSettingsFile.close();
+            try {
+                var nitroJson = JSON.parse(nitroSettingsContent);
+
+                resultData.spanPresets          = nitroJson.hasOwnProperty("userPresets")      ? "[OK]" : "[Undefined]";
+                resultData.spanRenamingOptions  = nitroJson.hasOwnProperty("nameApply")        ? "[OK]" : "[Undefined]";
+                resultData.spanTooltipLanguage  = nitroJson.hasOwnProperty("selectedLanguage") ? "[OK]" : "[Undefined]";
+                resultData.spanVariableSettings = nitroVariablesExists                         ? "[OK]" : "[Undefined]";
+            } catch (e) {
+                alert("Не удалось распарсить JSON из NitroNamer settings:\n" + nitroSettingsFile.fsName + "\n" + e);
+            }
+        } else {
+            alert("Не удалось открыть NitroNamer settings.json:\n" + nitroSettingsFile.fsName);
+        }
+    } else {
+        alert("Этап 2: Не найден файл NitroNamer settings.json:\n" + nitroSettingsFile.fsName + "\nПродолжаем проверку без него.");
+    }
+
+    return JSON.stringify(resultData);
+}
 
 function exportToJson() {
     var saveFile = File.saveDialog("Сохранить JSON файл", "*.json");
     if (saveFile) {
-        // Проверяем, что файл имеет расширение .json
+
         if (saveFile.name.slice(-5).toLowerCase() !== ".json") {
             saveFile = new File(saveFile.fsName + ".json");
         }
         if (saveFile.open("w")) {
             saveFile.encoding = "UTF8";
-            saveFile.write("{}"); // Пустой JSON
+            saveFile.write("{}"); 
             saveFile.close();
-            // Возвращаем путь к сохранённому файлу для подтверждения
+
             return "Файл успешно сохранён: " + saveFile.fsName;
         } else {
             return "Не удалось открыть файл для записи.";
