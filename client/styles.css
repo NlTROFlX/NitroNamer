@@ -776,34 +776,51 @@ html {
   margin-left: 18.65px;
 }
 
+/* Общие стили для кнопки Export */
 .export-button {
   width: 64px;
   height: 24px;
-  background-color: #161616;      
-  border: 1px solid #313131;      
-  border-radius: 1.5px;           
+  background-color: #161616;
+  border: 1px solid #313131;
+  border-radius: 1.5px;
   font-family: "Fira Sans", sans-serif;
-  font-weight: 400;               
+  font-weight: 400;
   font-size: 12px;
-  color: #8a8a8a;                 
-  cursor: pointer;                
-  transition: border-color 125ms, color 125ms; 
-  outline: none;                  
+  color: #8a8a8a;
+  cursor: pointer;
+  transition: border-color 125ms, color 125ms, background-color 125ms;
+  outline: none;
 }
 
 .export-button:hover {
-  border-color: #2d8ceb;          
-  color: #e7e7e7;                 
+  border-color: #2d8ceb;
+  color: #e7e7e7;
+  background-color: #161616; /* Убедитесь, что фон не перекрывается */
 }
 
 .export-button:active {
-  background-color: #161616; 
-  border-color: #2d8ceb;     
-  color: #e7e7e7;            
+  background-color: #161616;
+  border-color: #2d8ceb;
+  color: #e7e7e7;
 }
 
 .export-button:focus {
-  box-shadow: none;          
+  box-shadow: none;
+}
+
+/* Стили для отключённой кнопки "Export" */
+.export-button.disabled-export-button {
+  background-color: #2a2a2a;
+  border-color: #313131;
+  color: #8a8a8a; /* Цвет текста для индикации недоступности */
+  cursor: not-allowed;
+  pointer-events: auto; /* Разрешаем события клика, но обработчик будет игнорировать */
+}
+
+.export-button.disabled-export-button:hover {
+  background-color: #161616;
+  border-color: #313131;
+  color: #8a8a8a; /* Убедитесь, что цвет текста остаётся тусклым */
 }
 
 .checkboxes-container {

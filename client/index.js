@@ -99,23 +99,73 @@ function showContent(contentId) {
     }
 }
 
+function updateExportButtonState() {
+    const spanPresets = document.getElementById("spanPresets").textContent.trim();
+    const spanRenamingOptions = document.getElementById("spanRenamingOptions").textContent.trim();
+    const spanVariableSettings = document.getElementById("spanVariableSettings").textContent.trim();
+    const spanTooltipLanguage = document.getElementById("spanTooltipLanguage").textContent.trim();
+
+    const exportButton = document.querySelector('.export-button');
+
+    if (
+        spanPresets === '[Undefined]' &&
+        spanRenamingOptions === '[Undefined]' &&
+        spanVariableSettings === '[Undefined]' &&
+        spanTooltipLanguage === '[Undefined]'
+    ) {
+        exportButton.classList.add('disabled-export-button');
+        exportButton.dataset.disabled = "true"; // Индикатор состояния
+    } else {
+        exportButton.classList.remove('disabled-export-button');
+        exportButton.dataset.disabled = "false"; // Индикатор состояния
+    }
+}
+
+function initializeExportButton(){
+    const exportButton = document.querySelector('.export-button');
+    if(exportButton){
+        exportButton.addEventListener('click', function(){
+            if(exportButton.dataset.disabled === "true"){
+                // Кнопка в недоступном состоянии, показываем предупреждение
+                alert("Экспорт недоступен, так как некоторые параметры не определены.");
+                return;
+            }
+            // Иначе, выполняем экспорт
+            performExport();
+        });
+    } else {
+        console.error("Кнопка экспорта не найдена.");
+    }
+}
+
+function performExport(){
+    // Реализуйте здесь логику экспорта
+    console.log("Экспорт выполнен");
+    // Пример вызова функции экспорта:
+    // CSInterface.evalScript('yourExportFunction()');
+}
+
 function checkExportRequirements(){
-    const e = new CSInterface,
-          t = e.getSystemPath(SystemPath.EXTENSION);
-    e.evalScript('checkExportPaths("' + t + '")', (function(e){
-        if(!e) return void console.log("Проверка прервана/неудачна");
-        let t;
-        try{
-            t = JSON.parse(e);
-        } catch(e){
+    const csInterface = new CSInterface(),
+          extensionPath = csInterface.getSystemPath(SystemPath.EXTENSION);
+    csInterface.evalScript('checkExportPaths("' + extensionPath + '")', (function(response){
+        if(!response) {
+            console.log("Проверка прервана/неудачна");
             return;
         }
-        document.getElementById("spanPresets").textContent = t.spanPresets;
-        document.getElementById("spanRenamingOptions").textContent = t.spanRenamingOptions;
-        document.getElementById("spanVariableSettings").textContent = t.spanVariableSettings;
-        document.getElementById("spanTooltipLanguage").textContent = t.spanTooltipLanguage;
+        let data;
+        try{
+            data = JSON.parse(response);
+        } catch(error){
+            console.error("Ошибка парсинга JSON:", error);
+            return;
+        }
+        document.getElementById("spanPresets").textContent = data.spanPresets;
+        document.getElementById("spanRenamingOptions").textContent = data.spanRenamingOptions;
+        document.getElementById("spanVariableSettings").textContent = data.spanVariableSettings;
+        document.getElementById("spanTooltipLanguage").textContent = data.spanTooltipLanguage;
 
-        // Новая часть: Отключение чекбоксов на основе значений span
+        // Отключение чекбоксов на основе значений span
         const checkboxMap = {
             'presets': 'spanPresets',
             'renamingOptions': 'spanRenamingOptions',
@@ -137,6 +187,9 @@ function checkExportRequirements(){
                 }
             }
         });
+
+        // Обновление состояния кнопки "Export"
+        updateExportButtonState();
     }));
 }
 
@@ -262,6 +315,12 @@ document.addEventListener("mousemove", (function(e) {
 		let t = currentHoveredElement.getAttribute("data-value");
 		t && (copyToClipboard(t), e.preventDefault())
 	}
-})), document.addEventListener("DOMContentLoaded", (function() {
-	initializeLanguageSelector(), initializeIconClickHandlers(), initializeExportIconClickHandler(), loadDefaultTranslations(), loadSettings(), document.querySelector(".top-bar").addEventListener("click", showHomePage)
-}));
+})), document.addEventListener("DOMContentLoaded", function(){
+    initializeLanguageSelector();
+    initializeIconClickHandlers();
+    initializeExportIconClickHandler();
+    initializeExportButton(); // Добавлено
+    loadDefaultTranslations();
+    loadSettings();
+    document.querySelector(".top-bar").addEventListener("click", showHomePage);
+});
