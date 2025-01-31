@@ -84,10 +84,9 @@ function readTranslationFile(language, extensionPath) {
 }
 
 function checkExportPaths(extensionPath) {
-    // Приводим слеши к нормальному виду
+
     extensionPath = extensionPath.replace(/\\/g, "/");
 
-    // Объект для возврата информации об экспорте
     var exportInfo = {
         spanPresets: "[Undefined]",
         spanRenamingOptions: "[Undefined]",
@@ -96,14 +95,13 @@ function checkExportPaths(extensionPath) {
         exportPath1: "Undefined",
         exportPath2: "Undefined",
         exportPath3: "Undefined",
-        // Новые поля для сохранения содержимого ключей:
+
         exportUserPresets: "",
         exportNameApply: "",
         exportSelectedLanguage: "",
         exportVariables: ""
     };
 
-    // Открываем файл настроек расширения (client/settings/settings.json)
     var settingsFile = new File(extensionPath + "/client/settings/settings.json");
     if (!settingsFile.exists) {
         alert("Не найден файл настроек расширения:\n" + settingsFile.fsName + "\nПродолжаем проверку без него.");
@@ -123,16 +121,13 @@ function checkExportPaths(extensionPath) {
         return JSON.stringify(exportInfo);
     }
 
-    // Сохраняем путь к файлу настроек расширения
     exportInfo.exportPath1 = settingsFile.fsName;
 
-    // Проверяем наличие ключа nnAeScriptUIPanelsPath
     if (!settingsData || !settingsData.nnAeScriptUIPanelsPath) {
         alert("Ключ 'nnAeScriptUIPanelsPath' отсутствует или пуст.");
         return JSON.stringify(exportInfo);
     }
 
-    // Определяем пути к NitroNamer settings и variables файлам
     var scriptUIPanelsPath = settingsData.nnAeScriptUIPanelsPath;
     var nitroSettingsPath = scriptUIPanelsPath.replace(/NitroNamer\.jsx$/i, "NitroNamer/settings/settings.json");
     var variablesFilePath = scriptUIPanelsPath.replace(/NitroNamer\.jsx$/i, "NitroNamer/scripts/variables.json");
@@ -150,35 +145,34 @@ function checkExportPaths(extensionPath) {
         exportInfo.exportPath3 = variablesFile.fsName;
     }
 
-    // Читаем и обрабатываем файл NitroNamer settings.json
     if (nitroSettingsExists) {
         if (nitroSettingsFile.open("r")) {
             var nitroSettingsContent = nitroSettingsFile.read();
             nitroSettingsFile.close();
             try {
                 var nitroSettings = JSON.parse(nitroSettingsContent);
-                // Проверяем наличие и сохраняем содержимое ключа userPresets
+
                 if (nitroSettings.hasOwnProperty("userPresets")) {
                     exportInfo.spanPresets = "[OK]";
                     exportInfo.exportUserPresets = JSON.stringify(nitroSettings.userPresets, null, 4);
                 } else {
                     exportInfo.spanPresets = "[Undefined]";
                 }
-                // Проверяем наличие и сохраняем содержимое ключа nameApply
+
                 if (nitroSettings.hasOwnProperty("nameApply")) {
                     exportInfo.spanRenamingOptions = "[OK]";
                     exportInfo.exportNameApply = JSON.stringify(nitroSettings.nameApply, null, 4);
                 } else {
                     exportInfo.spanRenamingOptions = "[Undefined]";
                 }
-                // Проверяем наличие и сохраняем содержимое ключа selectedLanguage
+
                 if (nitroSettings.hasOwnProperty("selectedLanguage")) {
                     exportInfo.spanTooltipLanguage = "[OK]";
                     exportInfo.exportSelectedLanguage = nitroSettings.selectedLanguage;
                 } else {
                     exportInfo.spanTooltipLanguage = "[Undefined]";
                 }
-                // Для отображения состояния переменной настроек (variables.json)
+
                 exportInfo.spanVariableSettings = variablesFileExists ? "[OK]" : "[Undefined]";
             } catch (e) {
                 alert("Не удалось распарсить JSON из NitroNamer settings:\n" + nitroSettingsFile.fsName + "\n" + e);
@@ -190,7 +184,6 @@ function checkExportPaths(extensionPath) {
         alert("Этап 2: Не найден файл NitroNamer settings.json:\n" + nitroSettingsFile.fsName + "\nПродолжаем проверку без него.");
     }
 
-    // Читаем и сохраняем содержимое файла variables.json (если найден)
     if (variablesFileExists) {
         if (variablesFile.open("r")) {
             var variablesContent = variablesFile.read();

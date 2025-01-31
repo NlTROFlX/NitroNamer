@@ -159,14 +159,12 @@ function checkExportRequirements() {
             console.error("Ошибка парсинга JSON:", err);
             return;
         }
-        
-        // Обновляем статус в span-элементах
+
         document.getElementById("spanPresets").textContent = exportData.spanPresets;
         document.getElementById("spanRenamingOptions").textContent = exportData.spanRenamingOptions;
         document.getElementById("spanVariableSettings").textContent = exportData.spanVariableSettings;
         document.getElementById("spanTooltipLanguage").textContent = exportData.spanTooltipLanguage;
-        
-        // В зависимости от статуса включаем/выключаем соответствующие checkbox'ы
+
         const mapping = {
             presets: "spanPresets",
             renamingOptions: "spanRenamingOptions",
@@ -187,34 +185,31 @@ function checkExportRequirements() {
                 }
             }
         });
-        
-        // Функция для создания или обновления скрытого блока в разделе экспорта
+
         const exportContainer = document.getElementById("content-export");
         function addHiddenBlock(id, content) {
             let block = document.getElementById(id);
             if (!block) {
                 block = document.createElement("div");
                 block.id = id;
-                //block.style.display = "none";
+
                 exportContainer.appendChild(block);
             }
             block.textContent = content;
         }
-        
+
         if (exportContainer) {
-            // Сохраняем пути
+
             addHiddenBlock("exportPath1", exportData.exportPath1);
             addHiddenBlock("exportPath2", exportData.exportPath2);
             addHiddenBlock("exportPath3", exportData.exportPath3);
-            
-            // Сохраняем содержимое ключей из NitroNamer settings.json
+
             addHiddenBlock("exportUserPresets", exportData.exportUserPresets);
             addHiddenBlock("exportNameApply", exportData.exportNameApply);
             addHiddenBlock("exportSelectedLanguage", exportData.exportSelectedLanguage);
-            
-            // Сохраняем содержимое файла variables.json
+
             addHiddenBlock("exportVariables", exportData.exportVariables);
-            
+
             updateExportButtonState();
         } else {
             console.error("Элемент #content-export не найден в DOM");
