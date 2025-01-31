@@ -357,7 +357,18 @@ document.addEventListener("mousemove", (function(e) {
     initializeLanguageSelector();
     initializeIconClickHandlers();
     initializeExportIconClickHandler();
-    initializeExportButton(); 
+
+    const exportButton = document.querySelector(".export-button");
+    if (exportButton) {
+
+        exportButton.addEventListener("mouseenter", function(e) {
+
+            showContent("content-export");
+        });
+    } else {
+        console.error("Кнопка экспорта не найдена.");
+    }
+
     loadDefaultTranslations();
     loadSettings();
     document.querySelector(".top-bar").addEventListener("click", showHomePage);
