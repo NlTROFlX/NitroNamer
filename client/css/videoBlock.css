@@ -128,6 +128,8 @@
   overflow: visible;
   width: 314.552px;
   position: relative;
+  border-radius: 1.5px;            
+  border: 1px solid #313131;       
 }
 .videoblock:hover .video-container,
 .videoblock:hover .video-info {
@@ -285,6 +287,8 @@
 .videoblock.enlarged {
   top: 50%;
   transform: translate(-50%, -50%);
+  border-radius: 1.5px!important;            
+  border: 1px solid #e7e7e7!important;       
 }
 #hoverCircle {
   position: absolute;
@@ -335,6 +339,7 @@
   border-radius: 6px;
   border: 1px solid #8a8a8a;
   z-index: 1001;
+  border: none;
 }
 .videoblock.enlarged .video-container {
   width: 547px;
