@@ -35,19 +35,60 @@ document.addEventListener("DOMContentLoaded", (function() {
 
 		function w() {
 			if (!f) {
-				var e = n.duration > 0 ? n.currentTime / n.duration * 100 : 0;
-				o.style.width = e + "%";
-				var i = e / 100 * a.getBoundingClientRect().width;
-				if (n.currentTime < p ? (r.classList.add("no-transition"), o.classList.add("no-transition"), r.style.left = i + "px", setTimeout((function() {
-						r.classList.remove("no-transition"), o.classList.remove("no-transition")
-					}), 50)) : r.style.left = i + "px", d.textContent = E(n.currentTime), p = n.currentTime, L) {
+
+				var percent = n.duration > 0 ? (n.currentTime / n.duration * 100) : 0;
+				o.style.width = percent + "%";
+
+				var i = percent / 100 * a.getBoundingClientRect().width;
+
+				if (n.currentTime < p) {
+					r.classList.add("no-transition");
+					o.classList.add("no-transition");
+					r.style.left = i + "px";
+					requestAnimationFrame(function() {
+						r.classList.remove("no-transition");
+						o.classList.remove("no-transition");
+					});
+				} else {
+					r.style.left = i + "px";
+				}
+
+				d.textContent = E(n.currentTime);
+
+				p = n.currentTime;
+
+				if (L) {
 					var s = parseFloat(v.style.left) || 0,
 						l = Math.abs(s - i);
-					v.style.opacity = l <= 12 ? "0" : "1"
+					v.style.opacity = l <= 12 ? "0" : "1";
 				}
+
+				t = requestAnimationFrame(w);
 			}
-			t = requestAnimationFrame(w)
 		}
+		m.addEventListener("click", function(t) {
+			t.stopPropagation();
+
+			r.classList.add("no-transition");
+
+			if (e.classList.contains("enlarged")) {
+				e.classList.remove("enlarged");
+				y.style.display = "none";
+				m.src = "icons/scale-up.svg";
+			} else {
+				e.classList.add("enlarged");
+				y.style.display = "block";
+				m.src = "icons/scale-down.svg";
+			}
+
+			var percent = n.duration > 0 ? (n.currentTime / n.duration * 100) : 0;
+			var newLeft = percent / 100 * a.getBoundingClientRect().width;
+			r.style.left = newLeft + "px";
+
+			requestAnimationFrame(function() {
+				r.classList.remove("no-transition");
+			});
+		});		
 		l.addEventListener("click", (function() {
 			n.paused ? (n.play(), g(s)) : (n.pause(), g(i)), h()
 		})), n.addEventListener("play", h), n.addEventListener("pause", h), n.addEventListener("ended", (function() {
@@ -98,8 +139,6 @@ document.addEventListener("DOMContentLoaded", (function() {
 			L = !0, u.style.opacity = "1", v.style.opacity = "1"
 		})), a.addEventListener("mouseleave", (function() {
 			L = !1, u.style.opacity = "0", v.style.opacity = "0"
-		})), m.addEventListener("click", (function(t) {
-			t.stopPropagation(), e.classList.contains("enlarged") ? (e.classList.remove("enlarged"), y.style.display = "none", m.src = "icons/scale-up.svg") : (e.classList.add("enlarged"), y.style.display = "block", m.src = "icons/scale-down.svg")
 		})), (y = document.getElementById("shadow-overlay")).addEventListener("click", (function() {
 			document.querySelectorAll(".videoblock.enlarged").forEach((function(e) {
 				e.classList.remove("enlarged");
