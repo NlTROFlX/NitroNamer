@@ -126,10 +126,10 @@
 .video-container,
 .video-info {
   overflow: visible;
-  width: 314.552px;
+  width: 314px;
   position: relative;
   border-radius: 1.5px;            
-  border: 1px solid #313131;       
+  border: 1px solid #313131;
 }
 .videoblock:hover .video-container,
 .videoblock:hover .video-info {
@@ -292,9 +292,10 @@
 }
 #hoverCircle {
   position: absolute;
-  height: 5px;
+  height: 7px;
+  width: 7px;
   margin-top: 11px;
-  border-radius: 50%;
+  border-radius: 100%!important;
   opacity: 0;
   transition: opacity 0.3s;
   pointer-events: none;
