@@ -139,17 +139,21 @@ html {
   font-weight: 100;
   font-style: italic;
 }
-body,
-html {
+body, html {
   padding: 0;
+  margin: 0;
   background-color: #232323;
+  display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start; 
+  justify-content: flex-start; 
   color: #fff;
   user-select: none;
-  width: auto !important;
   height: 468px !important;
   overflow: hidden !important;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 .top-bar {
   height: 40px;
@@ -225,7 +229,8 @@ html {
     opacity: 0 !important;
 }
 .indicator-line {
-  left: -1px !important;
+  position: absolute; 
+  left: -1px; 
   width: 1px;
   background-color: #2d8ceb;
   transition: height 125ms, left 125ms;
@@ -642,8 +647,12 @@ html {
   opacity: 1;
 }
 .split-container {
-  height: calc(100% - 80px) !important;
+  position: relative;
+  display: flex;
+  height: calc(100% - 80px)!important;
+  width: 100%!important;
 }
+
 .left,
 .right {
   width: auto !important;
