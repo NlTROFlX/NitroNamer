@@ -358,6 +358,14 @@
 .videoblock.enlarged .scale-up-icon {
   padding-right: 2px;
 }
+
+.videoblock:not(.enlarged).playing .video-container,
+.videoblock:not(.enlarged).playing .video-info {
+    border-color: #2d8ceb;
+}
+.videoblock:not(.enlarged).playing .video-info{
+  border-top-color: #313131;
+}
 .shadow-overlay {
   position: fixed;
   background-color: rgba(0, 0, 0, 0.7);

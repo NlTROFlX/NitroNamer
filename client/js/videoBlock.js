@@ -17,9 +17,24 @@ document.addEventListener("DOMContentLoaded", (function() {
 			p = 0,
 			L = !1;
 
-		function h() {
-			n.paused ? (i.classList.add("visible"), s.classList.remove("visible"), e.classList.add("paused")) : (i.classList.remove("visible"), s.classList.remove("visible"), e.classList.remove("paused"))
-		}
+			function h() {
+				if (n.paused) {
+					// Если видео остановлено (пауза или окончание воспроизведения):
+					i.classList.add("visible");
+					s.classList.remove("visible");
+					e.classList.add("paused");
+					e.classList.remove("playing"); // Убираем класс playing
+				} else {
+					// Если видео воспроизводится:
+					i.classList.remove("visible");
+					s.classList.remove("visible");
+					e.classList.remove("paused");
+					// Добавляем класс playing, только если плеер не развернут
+					if (!e.classList.contains("enlarged")) {
+						e.classList.add("playing");
+					}
+				}
+			}			
 
 		function g(e) {
 			e.classList.add("visible"), setTimeout((function() {
