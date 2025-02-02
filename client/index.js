@@ -327,6 +327,27 @@ function performExport(){
     });
 }
 
+const exportOptionsState = {
+    presets: false,
+    renamingOptions: false,
+    variableSettings: false,
+    tooltipLanguage: false
+  };
+
+  document.querySelectorAll("#content-export input[type='checkbox']").forEach(checkbox => {
+    checkbox.addEventListener("change", function() {
+
+      const isActive = this.checked;
+
+      this.dataset.active = isActive; 
+
+      exportOptionsState[this.value] = isActive;
+
+      console.log(`Чекбокс "${this.value}" активирован: ${isActive}`);
+
+      updateExportButtonState();
+    });
+  });  
 document.addEventListener("mousemove", (function(e) {
 	let t = document.elementFromPoint(e.clientX, e.clientY);
 	if (t)
