@@ -327,6 +327,82 @@ function performExport(){
     });
 }
 
+document.querySelector(".export-button").addEventListener("click", function() {
+
+    var checkboxes = document.querySelectorAll("input[name='exportOptions']");
+
+    var settingsObj = {};
+
+    var variablesContent = "";
+
+    checkboxes.forEach(function(cb) {
+        if (cb.checked) {
+            switch (cb.value) {
+                case "presets":
+                    var elemPresets = document.getElementById("exportUserPresets");
+                    if (elemPresets) {
+                        try {
+                            var jsonPresets = JSON.parse(elemPresets.textContent);
+
+                            settingsObj.userPresets = jsonPresets.userPresets;
+                        } catch (e) {
+                            settingsObj.userPresets = elemPresets.textContent;
+                        }
+                    }
+                    break;
+                case "renamingOptions":
+                    var elemNameApply = document.getElementById("exportNameApply");
+                    if (elemNameApply) {
+                        try {
+                            var jsonNameApply = JSON.parse(elemNameApply.textContent);
+
+                            settingsObj.nameApply = jsonNameApply.nameApply;
+                        } catch (e) {
+                            settingsObj.nameApply = elemNameApply.textContent;
+                        }
+                    }
+                    break;
+                case "tooltipLanguage":
+                    var elemSelectedLanguage = document.getElementById("exportSelectedLanguage");
+                    if (elemSelectedLanguage) {
+                        try {
+                            var jsonSelectedLanguage = JSON.parse(elemSelectedLanguage.textContent);
+
+                            settingsObj.selectedLanguage = jsonSelectedLanguage.selectedLanguage;
+                        } catch (e) {
+                            settingsObj.selectedLanguage = elemSelectedLanguage.textContent;
+                        }
+                    }
+                    break;
+                case "variableSettings":
+                    var elemVariables = document.getElementById("exportVariables");
+                    if (elemVariables) {
+                        variablesContent = elemVariables.textContent;
+                    }
+                    break;
+            }
+        }
+    });
+
+    var settingsData = "";
+    if (Object.keys(settingsObj).length > 0) {
+        settingsData = JSON.stringify(settingsObj, null, 4);
+    }
+
+    function escapeForExtendScript(str) {
+        return str.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\r?\n/g, "\\n");
+    }
+
+    var settingsDataEscaped = escapeForExtendScript(settingsData);
+    var variablesDataEscaped = escapeForExtendScript(variablesContent);
+
+    var csInterface = new CSInterface();
+    var script = 'exportToJson("' + settingsDataEscaped + '", "' + variablesDataEscaped + '")';
+    csInterface.evalScript(script, function(result) {
+        alert(result);
+    });
+});
+
 const exportOptionsState = {
     presets: false,
     renamingOptions: false,
@@ -378,17 +454,6 @@ document.addEventListener("mousemove", (function(e) {
     initializeLanguageSelector();
     initializeIconClickHandlers();
     initializeExportIconClickHandler();
-
-    const exportButton = document.querySelector(".export-button");
-    if (exportButton) {
-
-        exportButton.addEventListener("mouseenter", function(e) {
-
-            showContent("content-export");
-        });
-    } else {
-        console.error("Кнопка экспорта не найдена.");
-    }
 
     loadDefaultTranslations();
     loadSettings();

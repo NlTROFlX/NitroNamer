@@ -198,23 +198,34 @@ function checkExportPaths(extensionPath) {
     return JSON.stringify(exportResult);
 }
 
-function exportToJson() {
-    var saveFile = File.saveDialog("Сохранить JSON файл", "*.json");
-    if (saveFile) {
+function exportToJson(settingsData, variablesData) {
 
-        if (saveFile.name.slice(-5).toLowerCase() !== ".json") {
-            saveFile = new File(saveFile.fsName + ".json");
-        }
-        if (saveFile.open("w")) {
-            saveFile.encoding = "UTF8";
-            saveFile.write("{}"); 
-            saveFile.close();
-
-            return "Файл успешно сохранён: " + saveFile.fsName;
-        } else {
-            return "Не удалось открыть файл для записи.";
-        }
-    } else {
+    var folder = Folder.selectDialog("Select the location where the exported settings will be created\nSelect the location where the exported settings will be created.");
+    if (folder == null) {
         return "Сохранение отменено пользователем.";
     }
+
+    if (settingsData && settingsData.length > 0) {
+        var settingsFile = new File(folder.fsName + "/settings.json");
+        if (settingsFile.open("w")) {
+            settingsFile.encoding = "UTF8";
+            settingsFile.write(settingsData);
+            settingsFile.close();
+        } else {
+            alert("Не удалось открыть файл для записи: " + settingsFile.fsName);
+        }
+    }
+
+    if (variablesData && variablesData.length > 0) {
+        var variablesFile = new File(folder.fsName + "/variables.json");
+        if (variablesFile.open("w")) {
+            variablesFile.encoding = "UTF8";
+            variablesFile.write(variablesData);
+            variablesFile.close();
+        } else {
+            alert("Не удалось открыть файл для записи: " + variablesFile.fsName);
+        }
+    }
+
+    return "Файлы успешно сохранены в: " + folder.fsName;
 }
