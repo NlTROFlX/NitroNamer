@@ -403,6 +403,41 @@ document.querySelector(".export-button").addEventListener("click", function() {
     });
 });
 
+document.querySelector(".export-button").addEventListener("mouseenter", function() {
+
+    document.querySelectorAll("input[name='exportOptions']").forEach(function(cb) {
+        var spanId = "";
+        switch(cb.value) {
+            case "presets":
+                spanId = "spanPresets";
+                break;
+            case "renamingOptions":
+                spanId = "spanRenamingOptions";
+                break;
+            case "variableSettings":
+                spanId = "spanVariableSettings";
+                break;
+            case "tooltipLanguage":
+                spanId = "spanTooltipLanguage";
+                break;
+        }
+        if (spanId) {
+            var spanElem = document.getElementById(spanId);
+            if (spanElem) {
+
+                if (spanElem.textContent.trim() === "[OK]") {
+                    cb.parentElement.classList.remove("disabled-checkbox");
+                    cb.disabled = false;
+                } else {
+
+                    cb.parentElement.classList.add("disabled-checkbox");
+                    cb.disabled = true;
+                }
+            }
+        }
+    });
+});
+
 const exportOptionsState = {
     presets: false,
     renamingOptions: false,
