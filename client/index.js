@@ -144,105 +144,75 @@ function performExport(){
 
 }
 
-function checkExportRequirements() {
+function createOrUpdateBlock(parent, id, text) {
+    let block = document.getElementById(id);
+    if (!block) {
+      block = document.createElement("div");
+      block.id = id;
+      parent.appendChild(block);
+    }
+    block.textContent = text;
+  }
+
+  function checkExportRequirements() {
     const csInterface = new CSInterface();
     const extensionPath = csInterface.getSystemPath(SystemPath.EXTENSION);
+
     csInterface.evalScript(`checkExportPaths("${extensionPath}")`, (result) => {
-        if (!result) {
-            console.log("Проверка прервана/неудачна или не вернулся результат");
-            return;
-        }
-        let exportData;
-        try {
-            exportData = JSON.parse(result);
-        } catch (err) {
-            console.error("Ошибка парсинга JSON:", err);
-            return;
-        }
+      if (!result) {
+        console.log("Проверка прервана/неудачна или не вернулся результат");
+        return;
+      }
+      let data;
+      try {
+        data = JSON.parse(result);
+      } catch (e) {
+        return console.error("Ошибка парсинга JSON:", e);
+      }
 
-        document.getElementById("spanPresets").textContent = exportData.spanPresets;
-        document.getElementById("spanRenamingOptions").textContent = exportData.spanRenamingOptions;
-        document.getElementById("spanVariableSettings").textContent = exportData.spanVariableSettings;
-        document.getElementById("spanTooltipLanguage").textContent = exportData.spanTooltipLanguage;
+      document.getElementById("spanPresets").textContent = data.spanPresets;
+      document.getElementById("spanRenamingOptions").textContent = data.spanRenamingOptions;
+      document.getElementById("spanVariableSettings").textContent = data.spanVariableSettings;
+      document.getElementById("spanTooltipLanguage").textContent = data.spanTooltipLanguage;
 
-        const mapping = {
-            presets: "spanPresets",
-            renamingOptions: "spanRenamingOptions",
-            variableSettings: "spanVariableSettings",
-            tooltipLanguage: "spanTooltipLanguage"
-        };
-        Object.keys(mapping).forEach((key) => {
-            const spanId = mapping[key];
-            const spanEl = document.getElementById(spanId);
-            const checkboxEl = document.querySelector(`input[name="exportOptions"][value="${key}"]`);
-            if (spanEl && checkboxEl) {
-                if (spanEl.textContent.trim() === "[OK]") {
-                    checkboxEl.disabled = false;
-                    checkboxEl.parentElement.classList.remove("disabled-checkbox");
-                } else {
-                    checkboxEl.disabled = true;
-                    checkboxEl.parentElement.classList.add("disabled-checkbox");
-                }
-            }
-        });
-
-        const exportContainer = document.getElementById("content-export");
-        function addHiddenBlock(id, content) {
-            let block = document.getElementById(id);
-            if (!block) {
-                block = document.createElement("div");
-                block.id = id;
-
-                exportContainer.appendChild(block);
-            }
-            block.textContent = content;
-        }
-
-        if (exportContainer) {
-
-            addHiddenBlock("exportPath1", exportData.exportPath1);
-            addHiddenBlock("exportPath2", exportData.exportPath2);
-            addHiddenBlock("exportPath3", exportData.exportPath3);
-
-            addHiddenBlock("exportUserPresets", exportData.exportUserPresets);
-            addHiddenBlock("exportNameApply", exportData.exportNameApply);
-            addHiddenBlock("exportSelectedLanguage", exportData.exportSelectedLanguage);
-
-            addHiddenBlock("exportVariables", exportData.exportVariables);
-
-            updateExportButtonState();
-        } else {
-            console.error("Элемент #content-export не найден в DOM");
-        }
-    });
-
-    const mapping = {
+      const mapping = {
         presets: "spanPresets",
         renamingOptions: "spanRenamingOptions",
         variableSettings: "spanVariableSettings",
         tooltipLanguage: "spanTooltipLanguage"
-    };
+      };
 
-    Object.keys(mapping).forEach((key) => {
-
+      Object.keys(mapping).forEach((key) => {
         const spanEl = document.getElementById(mapping[key]);
-
         const checkbox = document.querySelector(`input[name="exportOptions"][value="${key}"]`);
         if (spanEl && checkbox) {
-
-        if (spanEl.textContent.trim() === "[OK]") {
+          const text = spanEl.textContent.trim();
+          if (text === "[OK]") {
+            checkbox.checked = false; 
             checkbox.disabled = false;
             checkbox.parentElement.classList.remove("disabled-checkbox");
-        } 
-
-        else if (spanEl.textContent.trim() === "[Undefined]") {
+          } else if (text === "[Undefined]") {
+            checkbox.checked = false;
             checkbox.disabled = true;
             checkbox.parentElement.classList.add("disabled-checkbox");
+          }
         }
+      });
 
-        }
-    });  
-}
+      const contentExport = document.getElementById("content-export");
+      if (contentExport) {
+        createOrUpdateBlock(contentExport, "exportPath1", data.exportPath1);
+        createOrUpdateBlock(contentExport, "exportPath2", data.exportPath2);
+        createOrUpdateBlock(contentExport, "exportPath3", data.exportPath3);
+        createOrUpdateBlock(contentExport, "exportUserPresets", data.exportUserPresets);
+        createOrUpdateBlock(contentExport, "exportNameApply", data.exportNameApply);
+        createOrUpdateBlock(contentExport, "exportSelectedLanguage", data.exportSelectedLanguage);
+        createOrUpdateBlock(contentExport, "exportVariables", data.exportVariables);
+      }
+
+      updateExportButtonState();
+    });
+  }
 
 function updateActiveIndicator(e) {
 	var t = document.getElementById("active-indicator"),
@@ -434,41 +404,9 @@ document.querySelector(".export-button").addEventListener("click", function() {
     });
 });
 
-document.querySelector(".export-button").addEventListener("mouseenter", function() {
-    checkExportRequirements()
-
-    document.querySelectorAll("input[name='exportOptions']").forEach(function(cb) {
-        var spanId = "";
-        switch(cb.value) {
-            case "presets":
-                spanId = "spanPresets";
-                break;
-            case "renamingOptions":
-                spanId = "spanRenamingOptions";
-                break;
-            case "variableSettings":
-                spanId = "spanVariableSettings";
-                break;
-            case "tooltipLanguage":
-                spanId = "spanTooltipLanguage";
-                break;
-        }
-        if (spanId) {
-            var spanElem = document.getElementById(spanId);
-            if (spanElem) {
-
-                if (spanElem.textContent.trim() === "[OK]") {
-                    cb.parentElement.classList.remove("disabled-checkbox");
-                    cb.disabled = false;
-                } else {
-
-                    cb.parentElement.classList.add("disabled-checkbox");
-                    cb.disabled = true;
-                }
-            }
-        }
-    });
-});
+document.querySelector(".export-button").addEventListener("mouseenter", function () {
+    checkExportRequirements();
+  });  
 
 const exportOptionsState = {
     presets: false,
