@@ -215,6 +215,33 @@ function checkExportRequirements() {
             console.error("Элемент #content-export не найден в DOM");
         }
     });
+
+    const mapping = {
+        presets: "spanPresets",
+        renamingOptions: "spanRenamingOptions",
+        variableSettings: "spanVariableSettings",
+        tooltipLanguage: "spanTooltipLanguage"
+    };
+
+    Object.keys(mapping).forEach((key) => {
+
+        const spanEl = document.getElementById(mapping[key]);
+
+        const checkbox = document.querySelector(`input[name="exportOptions"][value="${key}"]`);
+        if (spanEl && checkbox) {
+
+        if (spanEl.textContent.trim() === "[OK]") {
+            checkbox.disabled = false;
+            checkbox.parentElement.classList.remove("disabled-checkbox");
+        } 
+
+        else if (spanEl.textContent.trim() === "[Undefined]") {
+            checkbox.disabled = true;
+            checkbox.parentElement.classList.add("disabled-checkbox");
+        }
+
+        }
+    });  
 }
 
 function updateActiveIndicator(e) {
@@ -328,6 +355,10 @@ function performExport(){
 }
 
 document.querySelector(".export-button").addEventListener("click", function() {
+    if (this.classList.contains("disabled-export-button") || this.dataset.disabled === "true") {
+        alert("Экспорт недоступен, так как некоторые параметры не определены.");
+        return; 
+    }
 
     var checkboxes = document.querySelectorAll("input[name='exportOptions']");
 
@@ -404,6 +435,7 @@ document.querySelector(".export-button").addEventListener("click", function() {
 });
 
 document.querySelector(".export-button").addEventListener("mouseenter", function() {
+    checkExportRequirements()
 
     document.querySelectorAll("input[name='exportOptions']").forEach(function(cb) {
         var spanId = "";
