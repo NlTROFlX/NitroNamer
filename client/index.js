@@ -188,14 +188,14 @@ function createOrUpdateBlock(parent, id, text) {
         if (spanEl && checkbox) {
           const text = spanEl.textContent.trim();
           if (text === "[OK]") {
-            checkbox.checked = false; 
+            // Убираем checkbox.checked = false
             checkbox.disabled = false;
             checkbox.parentElement.classList.remove("disabled-checkbox");
           } else if (text === "[Undefined]") {
             checkbox.checked = false;
             checkbox.disabled = true;
             checkbox.parentElement.classList.add("disabled-checkbox");
-          }
+          }          
         }
       });
 
