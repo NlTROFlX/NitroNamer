@@ -1,6 +1,8 @@
 {
     "alertMessage_exprotBlock_01": "Экспорт недоступен, так как некоторые параметры не определены.",
     "defaultCustomAlertMessageButton_01": "OK",
+    "export_cancel": "Сохранение отменено пользователем.",
+    "export_success": "Файлы успешно сохранены в: {0}",
 
     "textbox-copied": "- Скопировано",
     

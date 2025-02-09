@@ -1,6 +1,8 @@
 {
     "alertMessage_exprotBlock_01": "Export is not available because some parameters are not defined.",
     "defaultCustomAlertMessageButton_01": "OK",
+    "export_cancel": "Save cancelled by user.",
+    "export_success": "Files saved successfully to: {0}",
 
     "textbox-copied": "- Copied",
     

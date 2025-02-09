@@ -198,34 +198,20 @@ function checkExportPaths(extensionPath) {
     return JSON.stringify(exportResult);
 }
 
-function exportToJson(settingsData, variablesData) {
+function exportToJson(e, t) {
+    var n = Folder.selectDialog("Select the location where the exported settings will be created\nSelect the location where the exported settings will be created.");
+    if (n == null) {
 
-    var folder = Folder.selectDialog("Select the location where the exported settings will be created\nSelect the location where the exported settings will be created.");
-    if (folder == null) {
-        return "Сохранение отменено пользователем.";
+        return "export_cancel";
+    }
+    if (e && e.length > 0) {
+        var r = new File(n.fsName + "/settings.json");
+        r.open("w") ? (r.encoding = "UTF8", r.write(e), r.close()) : alert("Не удалось открыть файл для записи: " + r.fsName);
+    }
+    if (t && t.length > 0) {
+        var s = new File(n.fsName + "/variables.json");
+        s.open("w") ? (s.encoding = "UTF8", s.write(t), s.close()) : alert("Не удалось открыть файл для записи: " + s.fsName);
     }
 
-    if (settingsData && settingsData.length > 0) {
-        var settingsFile = new File(folder.fsName + "/settings.json");
-        if (settingsFile.open("w")) {
-            settingsFile.encoding = "UTF8";
-            settingsFile.write(settingsData);
-            settingsFile.close();
-        } else {
-            alert("Не удалось открыть файл для записи: " + settingsFile.fsName);
-        }
-    }
-
-    if (variablesData && variablesData.length > 0) {
-        var variablesFile = new File(folder.fsName + "/variables.json");
-        if (variablesFile.open("w")) {
-            variablesFile.encoding = "UTF8";
-            variablesFile.write(variablesData);
-            variablesFile.close();
-        } else {
-            alert("Не удалось открыть файл для записи: " + variablesFile.fsName);
-        }
-    }
-
-    return "Файлы успешно сохранены в: " + folder.fsName;
+    return "export_success|" + n.fsName;
 }

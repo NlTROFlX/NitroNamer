@@ -128,7 +128,7 @@ function initializeExportButton() {
             if (exportButton.classList.contains("disabled-export-button") || "true" === exportButton.dataset.disabled) {
                 showCustomAlert("alertMessage_exprotBlock_01");
             } else {
-                
+
             }
         });
     } else {
@@ -303,8 +303,26 @@ function initializeExportIconClickHandler() {
     }
 }
 
-function showCustomAlert(messageKeyOrHtml) {
-    // Получаем или создаём оверлей для алерта
+function processTranslation(message) {
+
+    if (message.indexOf("|") !== -1) {
+        var parts = message.split("|");
+        var key = parts[0];
+        var param = parts[1];
+
+        var text = (translations && translations[key]) || (defaultTranslations && defaultTranslations[key]);
+        if (text) {
+
+            return text.replace("{0}", param);
+        }
+    }
+    return message;
+}
+
+function showCustomAlert(message) {
+
+    message = processTranslation(message);
+
     let overlay = document.getElementById("custom-alert-overlay");
     if (!overlay) {
         overlay = document.createElement("div");
@@ -312,78 +330,68 @@ function showCustomAlert(messageKeyOrHtml) {
         overlay.style.opacity = 0;
         document.body.appendChild(overlay);
         overlay.addEventListener("click", function(e) {
-            if (e.target === overlay) {
-                hideCustomAlert();
-            }
+            if (e.target === overlay) hideCustomAlert();
         });
     }
     overlay.style.display = "block";
-    requestAnimationFrame(() => { overlay.style.opacity = 1; });
-    
-    // Получаем или создаём блок кастомного алерта
+    requestAnimationFrame(() => {
+        overlay.style.opacity = 1;
+    });
+
     let alertBox = document.getElementById("custom-alert-box");
     if (!alertBox) {
         alertBox = document.createElement("div");
         alertBox.id = "custom-alert-box";
-        
-        // Создаём заголовок
         const header = document.createElement("div");
         header.id = "custom-alert-header";
-        
-        // Спан для названия библиотеки
-        const alertLibrarySpan = document.createElement("span");
-        alertLibrarySpan.className = "alert-library";
-        // Добавляем ключ перевода (ключ должен присутствовать в файлах перевода)
-        alertLibrarySpan.setAttribute("data-i18n", "alertLibrary");
-        alertLibrarySpan.textContent = "NitroNamer Library"; // запасной вариант
-        
-        // Спан для заголовка алерта
-        const alertTitleSpan = document.createElement("span");
-        alertTitleSpan.className = "alert-text";
-        alertTitleSpan.setAttribute("data-i18n", "alertTitle");
-        alertTitleSpan.textContent = "Alert"; // запасной вариант
-        
-        header.appendChild(alertLibrarySpan);
-        header.appendChild(alertTitleSpan);
+        const spanLibrary = document.createElement("span");
+        spanLibrary.className = "alert-library";
+        spanLibrary.setAttribute("data-i18n", "alertLibrary");
+        spanLibrary.textContent = "NitroNamer Library";
+        const spanText = document.createElement("span");
+        spanText.className = "alert-text";
+        spanText.setAttribute("data-i18n", "alertTitle");
+        spanText.textContent = "Alert";
+        header.appendChild(spanLibrary);
+        header.appendChild(spanText);
         alertBox.appendChild(header);
-        
-        // Контейнер для сообщения
-        const messageContainer = document.createElement("div");
-        messageContainer.id = "custom-alert-message";
-        alertBox.appendChild(messageContainer);
-        
+        const messageDiv = document.createElement("div");
+        messageDiv.id = "custom-alert-message";
+        alertBox.appendChild(messageDiv);
         overlay.appendChild(alertBox);
     }
-    
-    // Обновляем сообщение алерта
+
     const messageEl = document.getElementById("custom-alert-message");
-    // Если переданная строка не содержит HTML-тегов кнопки, считаем, что это ключ перевода
-    if (!/<\s*button[^>]*>/i.test(messageKeyOrHtml)) {
-        messageEl.setAttribute("data-i18n", messageKeyOrHtml);
-        messageEl.textContent = ""; // очистка; текст подставится из перевода
-    } else {
-        // Если передан готовый HTML, просто устанавливаем его
+
+    if (/<\s*button[^>]*>/i.test(message)) {
         messageEl.removeAttribute("data-i18n");
-        messageEl.innerHTML = messageKeyOrHtml;
+        messageEl.innerHTML = message;
+    } else {
+
+        if ( (typeof translations === "object" && translations[message] !== undefined) ||
+             (typeof defaultTranslations === "object" && defaultTranslations[message] !== undefined) ) {
+            messageEl.setAttribute("data-i18n", message);
+            messageEl.textContent = "";
+        } else {
+            messageEl.removeAttribute("data-i18n");
+            messageEl.textContent = message;
+        }
     }
-    
-    // Удаляем ранее созданную кнопку закрытия, если она есть
-    const existingCloseBtn = document.getElementById("custom-alert-close");
-    if (existingCloseBtn && existingCloseBtn.parentNode) {
-        existingCloseBtn.parentNode.removeChild(existingCloseBtn);
+
+    const existingClose = document.getElementById("custom-alert-close");
+    if (existingClose && existingClose.parentNode) {
+        existingClose.parentNode.removeChild(existingClose);
     }
-    
-    // Если в сообщении нет встроенной кнопки, создаём её
-    if (!/<\s*button[^>]*>/i.test(messageKeyOrHtml)) {
-        const closeBtn = document.createElement("button");
-        closeBtn.id = "custom-alert-close";
-        closeBtn.setAttribute("data-i18n", "defaultCustomAlertMessageButton_01"); // ключ перевода для кнопки
-        closeBtn.textContent = "Закрыть"; // запасной вариант
-        closeBtn.addEventListener("click", hideCustomAlert);
-        document.getElementById("custom-alert-box").appendChild(closeBtn);
+
+    if (!/<\s*button[^>]*>/i.test(message)) {
+        const btn = document.createElement("button");
+        btn.id = "custom-alert-close";
+        btn.setAttribute("data-i18n", "defaultCustomAlertMessageButton_01");
+        btn.textContent = "Закрыть";
+        btn.addEventListener("click", hideCustomAlert);
+        document.getElementById("custom-alert-box").appendChild(btn);
     }
-    
-    // Применяем переводы ко всем элементам с data-i18n (включая только что созданные)
+
     applyTranslations();
 }
 
@@ -398,84 +406,64 @@ function showCustomAlert(messageKeyOrHtml) {
     }
   }  
 
-document.querySelector(".export-button").addEventListener("click", function() {
-    if (this.classList.contains("disabled-export-button") || this.dataset.disabled === "true") {
+  document.querySelector(".export-button").addEventListener("click", function() {
+    if (this.classList.contains("disabled-export-button") || "true" === this.dataset.disabled) {
         showCustomAlert("alertMessage_exprotBlock_01");
-        return; 
-    }
+    } else {
+        var exportOptions = document.querySelectorAll("input[name='exportOptions']"),
+            exportData = {},
+            variablesData = "";
 
-    var checkboxes = document.querySelectorAll("input[name='exportOptions']");
-
-    var settingsObj = {};
-
-    var variablesContent = "";
-
-    checkboxes.forEach(function(cb) {
-        if (cb.checked) {
-            switch (cb.value) {
-                case "presets":
-                    var elemPresets = document.getElementById("exportUserPresets");
-                    if (elemPresets) {
+        exportOptions.forEach(function(option) {
+            if (option.checked) {
+                switch (option.value) {
+                    case "presets":
+                        var presetsEl = document.getElementById("exportUserPresets");
                         try {
-                            var jsonPresets = JSON.parse(elemPresets.textContent);
-
-                            settingsObj.userPresets = jsonPresets.userPresets;
-                        } catch (e) {
-                            settingsObj.userPresets = elemPresets.textContent;
+                            var presetsObj = JSON.parse(presetsEl.textContent);
+                            exportData.userPresets = presetsObj.userPresets;
+                        } catch (err) {
+                            exportData.userPresets = presetsEl.textContent;
                         }
-                    }
-                    break;
-                case "renamingOptions":
-                    var elemNameApply = document.getElementById("exportNameApply");
-                    if (elemNameApply) {
+                        break;
+                    case "renamingOptions":
+                        var renamingEl = document.getElementById("exportNameApply");
                         try {
-                            var jsonNameApply = JSON.parse(elemNameApply.textContent);
-
-                            settingsObj.nameApply = jsonNameApply.nameApply;
-                        } catch (e) {
-                            settingsObj.nameApply = elemNameApply.textContent;
+                            var renamingObj = JSON.parse(renamingEl.textContent);
+                            exportData.nameApply = renamingObj.nameApply;
+                        } catch (err) {
+                            exportData.nameApply = renamingEl.textContent;
                         }
-                    }
-                    break;
-                case "tooltipLanguage":
-                    var elemSelectedLanguage = document.getElementById("exportSelectedLanguage");
-                    if (elemSelectedLanguage) {
+                        break;
+                    case "tooltipLanguage":
+                        var langEl = document.getElementById("exportSelectedLanguage");
                         try {
-                            var jsonSelectedLanguage = JSON.parse(elemSelectedLanguage.textContent);
-
-                            settingsObj.selectedLanguage = jsonSelectedLanguage.selectedLanguage;
-                        } catch (e) {
-                            settingsObj.selectedLanguage = elemSelectedLanguage.textContent;
+                            var langObj = JSON.parse(langEl.textContent);
+                            exportData.selectedLanguage = langObj.selectedLanguage;
+                        } catch (err) {
+                            exportData.selectedLanguage = langEl.textContent;
                         }
-                    }
-                    break;
-                case "variableSettings":
-                    var elemVariables = document.getElementById("exportVariables");
-                    if (elemVariables) {
-                        variablesContent = elemVariables.textContent;
-                    }
-                    break;
+                        break;
+                    case "variableSettings":
+                        var varsEl = document.getElementById("exportVariables");
+                        if (varsEl) {
+                            variablesData = varsEl.textContent;
+                        }
+                        break;
+                }
             }
-        }
-    });
+        });
 
-    var settingsData = "";
-    if (Object.keys(settingsObj).length > 0) {
-        settingsData = JSON.stringify(settingsObj, null, 4);
+        var exportDataStr = Object.keys(exportData).length > 0 ? JSON.stringify(exportData, null, 4) : "";
+
+        var scriptCall = 'exportToJson(' + JSON.stringify(exportDataStr) + ', ' + JSON.stringify(variablesData) + ')';
+
+        console.log("evalScript строка:", scriptCall); 
+
+        (new CSInterface).evalScript(scriptCall, function(result) {
+            showCustomAlert(result);
+        });
     }
-
-    function escapeForExtendScript(str) {
-        return str.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\r?\n/g, "\\n");
-    }
-
-    var settingsDataEscaped = escapeForExtendScript(settingsData);
-    var variablesDataEscaped = escapeForExtendScript(variablesContent);
-
-    var csInterface = new CSInterface();
-    var script = 'exportToJson("' + settingsDataEscaped + '", "' + variablesDataEscaped + '")';
-    csInterface.evalScript(script, function(result) {
-        alert(result);
-    });
 });
 
 document.querySelector(".export-button").addEventListener("mouseenter", function () {
