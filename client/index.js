@@ -128,7 +128,7 @@ function initializeExportButton() {
             if (exportButton.classList.contains("disabled-export-button") || "true" === exportButton.dataset.disabled) {
                 showCustomAlert("alertMessage_exprotBlock_01");
             } else {
-                performExport();
+                
             }
         });
     } else {
@@ -301,19 +301,6 @@ function initializeExportIconClickHandler() {
     } else {
         console.error("Иконка с id 'icon-export-down' не найдена.");
     }
-}
-
-function performExport(){
-    var cs = new CSInterface();
-    cs.evalScript('exportToJson()', function(result){
-        if(result){
-            console.log("Export Result:", result);
-            alert(result); 
-        } else {
-            console.log("Export was canceled or failed.");
-            alert("Экспорт отменён или не выполнен.");
-        }
-    });
 }
 
 function showCustomAlert(messageKeyOrHtml) {
