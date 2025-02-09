@@ -100,48 +100,42 @@ function showContent(contentId) {
 }
 
 function updateExportButtonState() {
-    const spanPresets = document.getElementById("spanPresets").textContent.trim();
-    const spanRenamingOptions = document.getElementById("spanRenamingOptions").textContent.trim();
-    const spanVariableSettings = document.getElementById("spanVariableSettings").textContent.trim();
-    const spanTooltipLanguage = document.getElementById("spanTooltipLanguage").textContent.trim();
 
-    const exportButton = document.querySelector('.export-button');
+    const exportOptionsState = {
+        presets: document.querySelector("input[name='exportOptions'][value='presets']").checked,
+        renamingOptions: document.querySelector("input[name='exportOptions'][value='renamingOptions']").checked,
+        variableSettings: document.querySelector("input[name='exportOptions'][value='variableSettings']").checked,
+        tooltipLanguage: document.querySelector("input[name='exportOptions'][value='tooltipLanguage']").checked
+    };
 
-    if (
-        spanPresets === '[Undefined]' &&
-        spanRenamingOptions === '[Undefined]' &&
-        spanVariableSettings === '[Undefined]' &&
-        spanTooltipLanguage === '[Undefined]'
-    ) {
-        exportButton.classList.add('disabled-export-button');
-        exportButton.dataset.disabled = "true"; 
+    const exportButton = document.querySelector(".export-button");
+
+    const isAnyOptionSelected = Object.values(exportOptionsState).includes(true);
+
+    if (!isAnyOptionSelected) {
+        exportButton.classList.add("disabled-export-button");
+        exportButton.dataset.disabled = "true";
     } else {
-        exportButton.classList.remove('disabled-export-button');
-        exportButton.dataset.disabled = "false"; 
+        exportButton.classList.remove("disabled-export-button");
+        exportButton.dataset.disabled = "false";
     }
 }
 
-function initializeExportButton(){
-    const exportButton = document.querySelector('.export-button');
-    if(exportButton){
-        exportButton.addEventListener('click', function(){
-            if(exportButton.dataset.disabled === "true"){
+function initializeExportButton() {
+    const exportButton = document.querySelector(".export-button");
+    if (exportButton) {
+        exportButton.addEventListener("click", function() {
+            if (exportButton.classList.contains("disabled-export-button") || "true" === exportButton.dataset.disabled) {
 
-                alert("Экспорт недоступен, так как некоторые параметры не определены.");
-                return;
+                alert("Экспорт недоступен, так как ни один параметр не выбран.");
+            } else {
+
+                performExport();
             }
-
-            performExport();
         });
     } else {
         console.error("Кнопка экспорта не найдена.");
     }
-}
-
-function performExport(){
-
-    console.log("Экспорт выполнен");
-
 }
 
 function createOrUpdateBlock(parent, id, text) {
@@ -188,7 +182,7 @@ function createOrUpdateBlock(parent, id, text) {
         if (spanEl && checkbox) {
           const text = spanEl.textContent.trim();
           if (text === "[OK]") {
-            // Убираем checkbox.checked = false
+
             checkbox.disabled = false;
             checkbox.parentElement.classList.remove("disabled-checkbox");
           } else if (text === "[Undefined]") {
