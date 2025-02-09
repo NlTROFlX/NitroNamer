@@ -127,7 +127,7 @@ function initializeExportButton() {
         exportButton.addEventListener("click", function() {
             if (exportButton.classList.contains("disabled-export-button") || "true" === exportButton.dataset.disabled) {
 
-                alert("Экспорт недоступен, так как ни один параметр не выбран.");
+                showCustomAlert("Экспорт недоступен, так как некоторые параметры не определены.");
             } else {
 
                 performExport();
@@ -318,9 +318,86 @@ function performExport(){
     });
 }
 
+function showCustomAlert(content) {
+
+    let overlay = document.getElementById('custom-alert-overlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'custom-alert-overlay';
+
+      overlay.style.opacity = 0;
+      document.body.appendChild(overlay);
+
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+          hideCustomAlert();
+        }
+      });
+    }
+
+    overlay.style.display = 'block';
+    requestAnimationFrame(() => {
+      overlay.style.opacity = 1;
+    });
+
+    let alertBox = document.getElementById('custom-alert-box');
+    if (!alertBox) {
+      alertBox = document.createElement('div');
+      alertBox.id = 'custom-alert-box';
+
+      const header = document.createElement('div');
+      header.id = 'custom-alert-header';
+      const headerLibrary = document.createElement('span');
+      headerLibrary.className = 'alert-library';
+      headerLibrary.textContent = 'NitroNamer Library';
+      const headerText = document.createElement('span');
+      headerText.className = 'alert-text';
+      headerText.textContent = 'Alert';
+      header.appendChild(headerLibrary);
+      header.appendChild(headerText);
+
+      const messageBlock = document.createElement('div');
+      messageBlock.id = 'custom-alert-message';
+
+      alertBox.appendChild(header);
+      alertBox.appendChild(messageBlock);
+
+      overlay.appendChild(alertBox);
+    }
+
+    const messageBlock = document.getElementById('custom-alert-message');
+    messageBlock.innerHTML = content;
+
+    const existingCloseButton = document.getElementById('custom-alert-close');
+    if (existingCloseButton) {
+      existingCloseButton.parentNode.removeChild(existingCloseButton);
+    }
+
+    if (!/<\s*button[^>]*>/i.test(content)) {
+      const closeButton = document.createElement('button');
+      closeButton.id = 'custom-alert-close';
+      closeButton.textContent = 'Закрыть';
+      closeButton.addEventListener('click', hideCustomAlert);
+
+      const alertBox = document.getElementById('custom-alert-box');
+      alertBox.appendChild(closeButton);
+    }
+  }
+
+  function hideCustomAlert() {
+    const overlay = document.getElementById('custom-alert-overlay');
+    if (overlay) {
+
+      overlay.style.opacity = 0;
+      setTimeout(() => {
+        overlay.style.display = 'none';
+      }, 125);
+    }
+  }  
+
 document.querySelector(".export-button").addEventListener("click", function() {
     if (this.classList.contains("disabled-export-button") || this.dataset.disabled === "true") {
-        alert("Экспорт недоступен, так как некоторые параметры не определены.");
+        showCustomAlert("Экспорт недоступен, так как некоторые параметры не определены.");
         return; 
     }
 
