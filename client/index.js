@@ -126,10 +126,8 @@ function initializeExportButton() {
     if (exportButton) {
         exportButton.addEventListener("click", function() {
             if (exportButton.classList.contains("disabled-export-button") || "true" === exportButton.dataset.disabled) {
-
-                showCustomAlert("Экспорт недоступен, так как некоторые параметры не определены.");
+                showCustomAlert("alertMessage_exprotBlock_01");
             } else {
-
                 performExport();
             }
         });
@@ -318,71 +316,89 @@ function performExport(){
     });
 }
 
-function showCustomAlert(content) {
-
-    let overlay = document.getElementById('custom-alert-overlay');
+function showCustomAlert(messageKeyOrHtml) {
+    // Получаем или создаём оверлей для алерта
+    let overlay = document.getElementById("custom-alert-overlay");
     if (!overlay) {
-      overlay = document.createElement('div');
-      overlay.id = 'custom-alert-overlay';
-
-      overlay.style.opacity = 0;
-      document.body.appendChild(overlay);
-
-      overlay.addEventListener('click', function(e) {
-        if (e.target === overlay) {
-          hideCustomAlert();
-        }
-      });
+        overlay = document.createElement("div");
+        overlay.id = "custom-alert-overlay";
+        overlay.style.opacity = 0;
+        document.body.appendChild(overlay);
+        overlay.addEventListener("click", function(e) {
+            if (e.target === overlay) {
+                hideCustomAlert();
+            }
+        });
     }
-
-    overlay.style.display = 'block';
-    requestAnimationFrame(() => {
-      overlay.style.opacity = 1;
-    });
-
-    let alertBox = document.getElementById('custom-alert-box');
+    overlay.style.display = "block";
+    requestAnimationFrame(() => { overlay.style.opacity = 1; });
+    
+    // Получаем или создаём блок кастомного алерта
+    let alertBox = document.getElementById("custom-alert-box");
     if (!alertBox) {
-      alertBox = document.createElement('div');
-      alertBox.id = 'custom-alert-box';
-
-      const header = document.createElement('div');
-      header.id = 'custom-alert-header';
-      const headerLibrary = document.createElement('span');
-      headerLibrary.className = 'alert-library';
-      headerLibrary.textContent = 'NitroNamer Library';
-      const headerText = document.createElement('span');
-      headerText.className = 'alert-text';
-      headerText.textContent = 'Alert';
-      header.appendChild(headerLibrary);
-      header.appendChild(headerText);
-
-      const messageBlock = document.createElement('div');
-      messageBlock.id = 'custom-alert-message';
-
-      alertBox.appendChild(header);
-      alertBox.appendChild(messageBlock);
-
-      overlay.appendChild(alertBox);
+        alertBox = document.createElement("div");
+        alertBox.id = "custom-alert-box";
+        
+        // Создаём заголовок
+        const header = document.createElement("div");
+        header.id = "custom-alert-header";
+        
+        // Спан для названия библиотеки
+        const alertLibrarySpan = document.createElement("span");
+        alertLibrarySpan.className = "alert-library";
+        // Добавляем ключ перевода (ключ должен присутствовать в файлах перевода)
+        alertLibrarySpan.setAttribute("data-i18n", "alertLibrary");
+        alertLibrarySpan.textContent = "NitroNamer Library"; // запасной вариант
+        
+        // Спан для заголовка алерта
+        const alertTitleSpan = document.createElement("span");
+        alertTitleSpan.className = "alert-text";
+        alertTitleSpan.setAttribute("data-i18n", "alertTitle");
+        alertTitleSpan.textContent = "Alert"; // запасной вариант
+        
+        header.appendChild(alertLibrarySpan);
+        header.appendChild(alertTitleSpan);
+        alertBox.appendChild(header);
+        
+        // Контейнер для сообщения
+        const messageContainer = document.createElement("div");
+        messageContainer.id = "custom-alert-message";
+        alertBox.appendChild(messageContainer);
+        
+        overlay.appendChild(alertBox);
     }
-
-    const messageBlock = document.getElementById('custom-alert-message');
-    messageBlock.innerHTML = content;
-
-    const existingCloseButton = document.getElementById('custom-alert-close');
-    if (existingCloseButton) {
-      existingCloseButton.parentNode.removeChild(existingCloseButton);
+    
+    // Обновляем сообщение алерта
+    const messageEl = document.getElementById("custom-alert-message");
+    // Если переданная строка не содержит HTML-тегов кнопки, считаем, что это ключ перевода
+    if (!/<\s*button[^>]*>/i.test(messageKeyOrHtml)) {
+        messageEl.setAttribute("data-i18n", messageKeyOrHtml);
+        messageEl.textContent = ""; // очистка; текст подставится из перевода
+    } else {
+        // Если передан готовый HTML, просто устанавливаем его
+        messageEl.removeAttribute("data-i18n");
+        messageEl.innerHTML = messageKeyOrHtml;
     }
-
-    if (!/<\s*button[^>]*>/i.test(content)) {
-      const closeButton = document.createElement('button');
-      closeButton.id = 'custom-alert-close';
-      closeButton.textContent = 'Закрыть';
-      closeButton.addEventListener('click', hideCustomAlert);
-
-      const alertBox = document.getElementById('custom-alert-box');
-      alertBox.appendChild(closeButton);
+    
+    // Удаляем ранее созданную кнопку закрытия, если она есть
+    const existingCloseBtn = document.getElementById("custom-alert-close");
+    if (existingCloseBtn && existingCloseBtn.parentNode) {
+        existingCloseBtn.parentNode.removeChild(existingCloseBtn);
     }
-  }
+    
+    // Если в сообщении нет встроенной кнопки, создаём её
+    if (!/<\s*button[^>]*>/i.test(messageKeyOrHtml)) {
+        const closeBtn = document.createElement("button");
+        closeBtn.id = "custom-alert-close";
+        closeBtn.setAttribute("data-i18n", "defaultCustomAlertMessageButton_01"); // ключ перевода для кнопки
+        closeBtn.textContent = "Закрыть"; // запасной вариант
+        closeBtn.addEventListener("click", hideCustomAlert);
+        document.getElementById("custom-alert-box").appendChild(closeBtn);
+    }
+    
+    // Применяем переводы ко всем элементам с data-i18n (включая только что созданные)
+    applyTranslations();
+}
 
   function hideCustomAlert() {
     const overlay = document.getElementById('custom-alert-overlay');
@@ -397,7 +413,7 @@ function showCustomAlert(content) {
 
 document.querySelector(".export-button").addEventListener("click", function() {
     if (this.classList.contains("disabled-export-button") || this.dataset.disabled === "true") {
-        showCustomAlert("Экспорт недоступен, так как некоторые параметры не определены.");
+        showCustomAlert("alertMessage_exprotBlock_01");
         return; 
     }
 

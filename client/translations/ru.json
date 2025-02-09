@@ -1,4 +1,7 @@
 {
+    "alertMessage_exprotBlock_01": "Экспорт недоступен, так как некоторые параметры не определены.",
+    "defaultCustomAlertMessageButton_01": "OK",
+
     "textbox-copied": "- Скопировано",
     
     "globalVarRightBlock_1": "Технические характеристики:",
