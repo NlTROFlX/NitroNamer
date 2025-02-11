@@ -1,52 +1,52 @@
 var translations = {},
-    defaultTranslations = {},
-    currentContentSection = null;
+	defaultTranslations = {},
+	currentContentSection = null;
 
 function loadTranslations(e) {
-    var t = new CSInterface,
-        n = t.getSystemPath(SystemPath.EXTENSION);
-    t.evalScript('readTranslationFile("' + e + '", "' + n + '")', (function (t) {
-        if (t) try {
-            translations = JSON.parse(t), applyTranslations()
-        } catch (t) {
-            console.error("Ошибка парсинга файла перевода:", t), "EN" !== e && loadTranslations("EN")
-        } else console.error("Файл перевода не найден или пустой."), "EN" !== e && loadTranslations("EN")
-    }))
+	var t = new CSInterface,
+		n = t.getSystemPath(SystemPath.EXTENSION);
+	t.evalScript('readTranslationFile("' + e + '", "' + n + '")', (function(t) {
+		if (t) try {
+			translations = JSON.parse(t), applyTranslations()
+		} catch (t) {
+			console.error("Ошибка парсинга файла перевода:", t), "EN" !== e && loadTranslations("EN")
+		} else console.error("Файл перевода не найден или пустой."), "EN" !== e && loadTranslations("EN")
+	}))
 }
 
 function applyTranslations() {
-    document.querySelectorAll("[data-i18n]").forEach((function (e) {
-        var t = e.getAttribute("data-i18n"),
-            n = translations[t];
-        n || (n = defaultTranslations[t] || e.textContent), e.innerHTML = n
-    }))
+	document.querySelectorAll("[data-i18n]").forEach((function(e) {
+		var t = e.getAttribute("data-i18n"),
+			n = translations[t];
+		n || (n = defaultTranslations[t] || e.textContent), e.innerHTML = n
+	}))
 }
 defaultTranslations = {};
 
 function loadDefaultTranslations(e) {
-    var t = new CSInterface,
-        n = t.getSystemPath(SystemPath.EXTENSION);
-    t.evalScript('readTranslationFile("EN", "' + n + '")', (function (t) {
-        if (t) try {
-            defaultTranslations = JSON.parse(t), e && e()
-        } catch (e) {
-            console.error("Ошибка парсинга файла английского перевода:", e)
-        } else console.error("Файл английского перевода не найден или пустой.")
-    }))
+	var t = new CSInterface,
+		n = t.getSystemPath(SystemPath.EXTENSION);
+	t.evalScript('readTranslationFile("EN", "' + n + '")', (function(t) {
+		if (t) try {
+			defaultTranslations = JSON.parse(t), e && e()
+		} catch (e) {
+			console.error("Ошибка парсинга файла английского перевода:", e)
+		} else console.error("Файл английского перевода не найден или пустой.")
+	}))
 }
 
 function initializeIconClickHandlers() {
-    var e = new CSInterface;
-    document.querySelectorAll(".clickable-icon").forEach((function (t) {
-        var n = t.getAttribute("data-url");
-        n ? (t.style.cursor = "pointer", t.addEventListener("click", (function () {
-            try {
-                e.openURLInDefaultBrowser(n)
-            } catch (e) {
-                console.error("Не удалось открыть URL:", e)
-            }
-        }))) : console.error("Для иконки отсутствует атрибут 'data-url'.")
-    }))
+	var e = new CSInterface;
+	document.querySelectorAll(".clickable-icon").forEach((function(t) {
+		var n = t.getAttribute("data-url");
+		n ? (t.style.cursor = "pointer", t.addEventListener("click", (function() {
+			try {
+				e.openURLInDefaultBrowser(n)
+			} catch (e) {
+				console.error("Не удалось открыть URL:", e)
+			}
+		}))) : console.error("Для иконки отсутствует атрибут 'data-url'.")
+	}))
 }
 
 function initializeImportIconClickHandler() {
@@ -54,9 +54,10 @@ function initializeImportIconClickHandler() {
     if (importIcon) {
         importIcon.addEventListener("click", (e) => {
             e.stopPropagation();
-
+            // Показать блок с импортом
             showContent("content-import");
 
+            // Запуск проверки путей
             checkImportPaths();
         });
     } else {
@@ -68,6 +69,7 @@ function checkImportPaths() {
     const csInterface = new CSInterface();
     const systemPath = csInterface.getSystemPath(SystemPath.EXTENSION);
 
+    // Получаем данные из settings.json через существующую функцию checkExportPaths
     csInterface.evalScript(`checkExportPaths("${systemPath}")`, (response) => {
         if (!response) {
             console.log("Проверка прервана или не вернулся результат.");
@@ -81,22 +83,27 @@ function checkImportPaths() {
             return;
         }
 
+        // Путь до файла настроек (settings.json)
         const settingsPath = paths.exportPath1;
-
+        // Значение ключа nnAeScriptUIPanelsPath (из него будем извлекать путь)
         let nnAeScriptUIPanelsPath = paths.exportPath2;
 
-        const settingsPathWindows = settingsPath.replace(/\
-        nnAeScriptUIPanelsPath = nnAeScriptUIPanelsPath.replace(/\
+        // Приводим оба пути к Windows-формату (заменяем "/" на "\")
+        const settingsPathWindows = settingsPath.replace(/\//g, '\\');
+        nnAeScriptUIPanelsPath = nnAeScriptUIPanelsPath.replace(/\//g, '\\');
 
+        // Из nnAeScriptUIPanelsPath отсекаем всё, начиная с папки "NitroNamer"
+        // То есть, ищем позицию, где начинается "\NitroNamer" и берем всё до этой позиции.
         const lowerPath = nnAeScriptUIPanelsPath.toLowerCase();
         const idx = lowerPath.indexOf("\\nitronamer");
         let parentPath = nnAeScriptUIPanelsPath;
         if (idx !== -1) {
             parentPath = nnAeScriptUIPanelsPath.substring(0, idx);
         }
-
+        // Формируем финальный путь: родительская папка + "\NitroNamer.jsx"
         const nnAeFinalPath = parentPath + "\\NitroNamer.jsx";
 
+        // Выводим полученные пути в блоки интерфейса
         updateImportBlock("#importPath1", settingsPathWindows);
         updateImportBlock("#importPath2", nnAeFinalPath);
     });
@@ -106,29 +113,29 @@ function updateImportBlock(selector, value) {
     let block = document.querySelector(selector);
     if (!block) {
         block = document.createElement("div");
-        block.id = selector.substring(1);
+        block.id = selector.substring(1); // убираем символ "#"
         document.getElementById("content-import").appendChild(block);
     }
     block.textContent = value;
 }
 
 function toggleSpoiler(e) {
-    if (e.classList.contains("inactive")) {
-        document.querySelectorAll(".spoiler").forEach((function (t) {
-            t !== e && (t.classList.remove("active"), t.classList.add("inactive"))
-        })), e.classList.remove("inactive"), e.classList.add("active");
-        var t = document.getElementById("active-indicator");
-        t && (t.style.opacity = "1");
-        var n = document.getElementById("indicator-line");
-        n && (n.style.opacity = "1")
-    }
-    updateActiveIndicator(e)
+	if (e.classList.contains("inactive")) {
+		document.querySelectorAll(".spoiler").forEach((function(t) {
+			t !== e && (t.classList.remove("active"), t.classList.add("inactive"))
+		})), e.classList.remove("inactive"), e.classList.add("active");
+		var t = document.getElementById("active-indicator");
+		t && (t.style.opacity = "1");
+		var n = document.getElementById("indicator-line");
+		n && (n.style.opacity = "1")
+	}
+	updateActiveIndicator(e)
 }
 
 function selectSubItem(e) {
-    document.querySelectorAll(".spoiler-content p").forEach((function (e) {
-        e.classList.remove("selected")
-    })), e.classList.add("selected")
+	document.querySelectorAll(".spoiler-content p").forEach((function(e) {
+		e.classList.remove("selected")
+	})), e.classList.add("selected")
 }
 
 function showContent(contentId) {
@@ -187,7 +194,7 @@ function updateExportButtonState() {
 function initializeExportButton() {
     const exportButton = document.querySelector(".export-button");
     if (exportButton) {
-        exportButton.addEventListener("click", function () {
+        exportButton.addEventListener("click", function() {
             if (exportButton.classList.contains("disabled-export-button") || "true" === exportButton.dataset.disabled) {
                 showCustomAlert("alertMessage_exprotBlock_01");
             } else {
@@ -202,151 +209,151 @@ function initializeExportButton() {
 function createOrUpdateBlock(parent, id, text) {
     let block = document.getElementById(id);
     if (!block) {
-        block = document.createElement("div");
-        block.id = id;
-        parent.appendChild(block);
+      block = document.createElement("div");
+      block.id = id;
+      parent.appendChild(block);
     }
     block.textContent = text;
-}
+  }
 
-function checkExportRequirements() {
+  function checkExportRequirements() {
     const csInterface = new CSInterface();
     const extensionPath = csInterface.getSystemPath(SystemPath.EXTENSION);
 
     csInterface.evalScript(`checkExportPaths("${extensionPath}")`, (result) => {
-        if (!result) {
-            console.log("Проверка прервана/неудачна или не вернулся результат");
-            return;
+      if (!result) {
+        console.log("Проверка прервана/неудачна или не вернулся результат");
+        return;
+      }
+      let data;
+      try {
+        data = JSON.parse(result);
+      } catch (e) {
+        return console.error("Ошибка парсинга JSON:", e);
+      }
+
+      document.getElementById("spanPresets").textContent = data.spanPresets;
+      document.getElementById("spanRenamingOptions").textContent = data.spanRenamingOptions;
+      document.getElementById("spanVariableSettings").textContent = data.spanVariableSettings;
+      document.getElementById("spanTooltipLanguage").textContent = data.spanTooltipLanguage;
+
+      const mapping = {
+        presets: "spanPresets",
+        renamingOptions: "spanRenamingOptions",
+        variableSettings: "spanVariableSettings",
+        tooltipLanguage: "spanTooltipLanguage"
+      };
+
+      Object.keys(mapping).forEach((key) => {
+        const spanEl = document.getElementById(mapping[key]);
+        const checkbox = document.querySelector(`input[name="exportOptions"][value="${key}"]`);
+        if (spanEl && checkbox) {
+          const text = spanEl.textContent.trim();
+          if (text === "[OK]") {
+
+            checkbox.disabled = false;
+            checkbox.parentElement.classList.remove("disabled-checkbox");
+          } else if (text === "[Undefined]") {
+            checkbox.checked = false;
+            checkbox.disabled = true;
+            checkbox.parentElement.classList.add("disabled-checkbox");
+          }          
         }
-        let data;
-        try {
-            data = JSON.parse(result);
-        } catch (e) {
-            return console.error("Ошибка парсинга JSON:", e);
-        }
+      });
 
-        document.getElementById("spanPresets").textContent = data.spanPresets;
-        document.getElementById("spanRenamingOptions").textContent = data.spanRenamingOptions;
-        document.getElementById("spanVariableSettings").textContent = data.spanVariableSettings;
-        document.getElementById("spanTooltipLanguage").textContent = data.spanTooltipLanguage;
+      const contentExport = document.getElementById("content-export");
+      if (contentExport) {
+        createOrUpdateBlock(contentExport, "exportPath1", data.exportPath1);
+        createOrUpdateBlock(contentExport, "exportPath2", data.exportPath2);
+        createOrUpdateBlock(contentExport, "exportPath3", data.exportPath3);
+        createOrUpdateBlock(contentExport, "exportUserPresets", data.exportUserPresets);
+        createOrUpdateBlock(contentExport, "exportNameApply", data.exportNameApply);
+        createOrUpdateBlock(contentExport, "exportSelectedLanguage", data.exportSelectedLanguage);
+        createOrUpdateBlock(contentExport, "exportVariables", data.exportVariables);
+      }
 
-        const mapping = {
-            presets: "spanPresets",
-            renamingOptions: "spanRenamingOptions",
-            variableSettings: "spanVariableSettings",
-            tooltipLanguage: "spanTooltipLanguage"
-        };
-
-        Object.keys(mapping).forEach((key) => {
-            const spanEl = document.getElementById(mapping[key]);
-            const checkbox = document.querySelector(`input[name="exportOptions"][value="${key}"]`);
-            if (spanEl && checkbox) {
-                const text = spanEl.textContent.trim();
-                if (text === "[OK]") {
-
-                    checkbox.disabled = false;
-                    checkbox.parentElement.classList.remove("disabled-checkbox");
-                } else if (text === "[Undefined]") {
-                    checkbox.checked = false;
-                    checkbox.disabled = true;
-                    checkbox.parentElement.classList.add("disabled-checkbox");
-                }
-            }
-        });
-
-        const contentExport = document.getElementById("content-export");
-        if (contentExport) {
-            createOrUpdateBlock(contentExport, "exportPath1", data.exportPath1);
-            createOrUpdateBlock(contentExport, "exportPath2", data.exportPath2);
-            createOrUpdateBlock(contentExport, "exportPath3", data.exportPath3);
-            createOrUpdateBlock(contentExport, "exportUserPresets", data.exportUserPresets);
-            createOrUpdateBlock(contentExport, "exportNameApply", data.exportNameApply);
-            createOrUpdateBlock(contentExport, "exportSelectedLanguage", data.exportSelectedLanguage);
-            createOrUpdateBlock(contentExport, "exportVariables", data.exportVariables);
-        }
-
-        updateExportButtonState();
+      updateExportButtonState();
     });
-}
+  }
 
 function updateActiveIndicator(e) {
-    var t = document.getElementById("active-indicator"),
-        n = document.getElementById("indicator-line"),
-        o = e.querySelector(".spoiler-title-container"),
-        a = e.querySelectorAll(".spoiler-content p");
-    if (o) {
-        var l = e.offsetTop + o.offsetTop + o.offsetHeight / 2 - t.offsetHeight / 2,
-            c = t.getBoundingClientRect().left - t.parentElement.getBoundingClientRect().left;
-        t.style.top = l + "px", n.style.height = l + "px", n.style.left = c + t.offsetWidth / 2 + "px", t.textContent = a.length
-    }
+	var t = document.getElementById("active-indicator"),
+		n = document.getElementById("indicator-line"),
+		o = e.querySelector(".spoiler-title-container"),
+		a = e.querySelectorAll(".spoiler-content p");
+	if (o) {
+		var l = e.offsetTop + o.offsetTop + o.offsetHeight / 2 - t.offsetHeight / 2,
+			c = t.getBoundingClientRect().left - t.parentElement.getBoundingClientRect().left;
+		t.style.top = l + "px", n.style.height = l + "px", n.style.left = c + t.offsetWidth / 2 + "px", t.textContent = a.length
+	}
 }
 
 function initializeLanguageSelector() {
-    var e = document.querySelector(".language-selector"),
-        t = e.querySelector(".selected-language"),
-        n = e.querySelector(".language-dropdown").querySelectorAll(".language-option");
-    e.addEventListener("click", (function (t) {
-        t.stopPropagation();
-        var n = e.classList.toggle("active");
-        e.setAttribute("aria-expanded", n)
-    })), n.forEach((function (n) {
-        n.addEventListener("click", (function (n) {
-            n.stopPropagation();
-            var o = this.textContent;
-            t.textContent = o, e.classList.remove("active"), e.setAttribute("aria-expanded", "false");
-            var a = new CSInterface,
-                l = a.getSystemPath(SystemPath.EXTENSION);
-            a.evalScript('saveSelectedLanguage("' + o + '", "' + l + '")'), loadTranslations(o)
-        }))
-    })), document.addEventListener("click", (function () {
-        e.classList.remove("active"), e.setAttribute("aria-expanded", "false")
-    }))
+	var e = document.querySelector(".language-selector"),
+		t = e.querySelector(".selected-language"),
+		n = e.querySelector(".language-dropdown").querySelectorAll(".language-option");
+	e.addEventListener("click", (function(t) {
+		t.stopPropagation();
+		var n = e.classList.toggle("active");
+		e.setAttribute("aria-expanded", n)
+	})), n.forEach((function(n) {
+		n.addEventListener("click", (function(n) {
+			n.stopPropagation();
+			var o = this.textContent;
+			t.textContent = o, e.classList.remove("active"), e.setAttribute("aria-expanded", "false");
+			var a = new CSInterface,
+				l = a.getSystemPath(SystemPath.EXTENSION);
+			a.evalScript('saveSelectedLanguage("' + o + '", "' + l + '")'), loadTranslations(o)
+		}))
+	})), document.addEventListener("click", (function() {
+		e.classList.remove("active"), e.setAttribute("aria-expanded", "false")
+	}))
 }
 
 function showHomePage() {
-    showContent("default-message");
-    var e = document.getElementById("active-indicator");
-    e && (e.style.opacity = "0");
-    var t = document.getElementById("indicator-line");
-    t && (t.style.opacity = "0"), document.querySelectorAll(".spoiler-content p").forEach((function (e) {
-        e.classList.remove("selected")
-    })), document.querySelectorAll(".spoiler.active").forEach((function (e) {
-        e.classList.remove("active"), e.classList.add("inactive")
-    }))
+	showContent("default-message");
+	var e = document.getElementById("active-indicator");
+	e && (e.style.opacity = "0");
+	var t = document.getElementById("indicator-line");
+	t && (t.style.opacity = "0"), document.querySelectorAll(".spoiler-content p").forEach((function(e) {
+		e.classList.remove("selected")
+	})), document.querySelectorAll(".spoiler.active").forEach((function(e) {
+		e.classList.remove("active"), e.classList.add("inactive")
+	}))
 }
 document.querySelector(".top-bar").addEventListener("click", showHomePage);
 var activeSpoiler = document.querySelector(".spoiler.active");
 
 function copyToClipboard(e) {
-    var t = document.createElement("textarea");
-    t.value = e, t.style.position = "fixed", t.style.opacity = "0", document.body.appendChild(t), t.focus(), t.select();
-    try {
-        if (document.execCommand("copy")) {
-            console.log("Текст скопирован в буфер обмена:", e);
-            let t = currentHoveredElement;
-            t && (t.copyTimeout && clearTimeout(t.copyTimeout), t.classList.add("show-copied"), t.copyTimeout = setTimeout((function () {
-                t.classList.remove("show-copied"), delete t.copyTimeout
-            }), 1125))
-        } else console.error("Не удалось скопировать текст")
-    } catch (e) {
-        console.error("Ошибка при попытке скопировать текст:", e)
-    }
-    document.body.removeChild(t)
+	var t = document.createElement("textarea");
+	t.value = e, t.style.position = "fixed", t.style.opacity = "0", document.body.appendChild(t), t.focus(), t.select();
+	try {
+		if (document.execCommand("copy")) {
+			console.log("Текст скопирован в буфер обмена:", e);
+			let t = currentHoveredElement;
+			t && (t.copyTimeout && clearTimeout(t.copyTimeout), t.classList.add("show-copied"), t.copyTimeout = setTimeout((function() {
+				t.classList.remove("show-copied"), delete t.copyTimeout
+			}), 1125))
+		} else console.error("Не удалось скопировать текст")
+	} catch (e) {
+		console.error("Ошибка при попытке скопировать текст:", e)
+	}
+	document.body.removeChild(t)
 }
 activeSpoiler && updateActiveIndicator(activeSpoiler), activeSpoiler && updateActiveIndicator(activeSpoiler);
 let currentHoveredElement = null;
 
-function loadSettings() {
+function loadSettings(){
     var e = new CSInterface,
         t = e.getSystemPath(SystemPath.EXTENSION);
-    e.evalScript('loadSettings("' + t + '")', (function (e) {
+    e.evalScript('loadSettings("' + t + '")', (function(e){
         var t = JSON.parse(e),
             n = "EN";
-        if (t && t.language) {
+        if(t && t.language){
             n = t.language.toUpperCase();
         }
         document.querySelector(".selected-language").textContent = n;
-        loadDefaultTranslations(function () {
+        loadDefaultTranslations(function(){
             loadTranslations(n);
 
             checkExportRequirements();
@@ -358,7 +365,7 @@ function initializeExportIconClickHandler() {
     const exportIcon = document.getElementById("icon-export-down");
     if (exportIcon) {
         exportIcon.addEventListener("click", (event) => {
-            event.stopPropagation();
+            event.stopPropagation(); 
             showContent("content-export");
         });
     } else {
@@ -392,7 +399,7 @@ function showCustomAlert(message) {
         overlay.id = "custom-alert-overlay";
         overlay.style.opacity = 0;
         document.body.appendChild(overlay);
-        overlay.addEventListener("click", function (e) {
+        overlay.addEventListener("click", function(e) {
             if (e.target === overlay) hideCustomAlert();
         });
     }
@@ -431,8 +438,8 @@ function showCustomAlert(message) {
         messageEl.innerHTML = message;
     } else {
 
-        if ((typeof translations === "object" && translations[message] !== undefined) ||
-            (typeof defaultTranslations === "object" && defaultTranslations[message] !== undefined)) {
+        if ( (typeof translations === "object" && translations[message] !== undefined) ||
+             (typeof defaultTranslations === "object" && defaultTranslations[message] !== undefined) ) {
             messageEl.setAttribute("data-i18n", message);
             messageEl.textContent = "";
         } else {
@@ -458,18 +465,18 @@ function showCustomAlert(message) {
     applyTranslations();
 }
 
-function hideCustomAlert() {
+  function hideCustomAlert() {
     const overlay = document.getElementById('custom-alert-overlay');
     if (overlay) {
 
-        overlay.style.opacity = 0;
-        setTimeout(() => {
-            overlay.style.display = 'none';
-        }, 125);
+      overlay.style.opacity = 0;
+      setTimeout(() => {
+        overlay.style.display = 'none';
+      }, 125);
     }
-}
+  }  
 
-document.querySelector(".export-button").addEventListener("click", function () {
+  document.querySelector(".export-button").addEventListener("click", function() {
     if (this.classList.contains("disabled-export-button") || "true" === this.dataset.disabled) {
         showCustomAlert("alertMessage_exprotBlock_01");
     } else {
@@ -477,7 +484,7 @@ document.querySelector(".export-button").addEventListener("click", function () {
             exportData = {},
             variablesData = "";
 
-        exportOptions.forEach(function (option) {
+        exportOptions.forEach(function(option) {
             if (option.checked) {
                 switch (option.value) {
                     case "presets":
@@ -521,9 +528,9 @@ document.querySelector(".export-button").addEventListener("click", function () {
 
         var scriptCall = 'exportToJson(' + JSON.stringify(exportDataStr) + ', ' + JSON.stringify(variablesData) + ')';
 
-        console.log("evalScript строка:", scriptCall);
+        console.log("evalScript строка:", scriptCall); 
 
-        (new CSInterface).evalScript(scriptCall, function (result) {
+        (new CSInterface).evalScript(scriptCall, function(result) {
             showCustomAlert(result);
         });
     }
@@ -531,56 +538,56 @@ document.querySelector(".export-button").addEventListener("click", function () {
 
 document.querySelector(".export-button").addEventListener("mouseenter", function () {
     checkExportRequirements();
-});
+  });  
 
 const exportOptionsState = {
     presets: false,
     renamingOptions: false,
     variableSettings: false,
     tooltipLanguage: false
-};
+  };
 
-document.querySelectorAll("#content-export input[type='checkbox']").forEach(checkbox => {
-    checkbox.addEventListener("change", function () {
+  document.querySelectorAll("#content-export input[type='checkbox']").forEach(checkbox => {
+    checkbox.addEventListener("change", function() {
 
-        const isActive = this.checked;
+      const isActive = this.checked;
 
-        this.dataset.active = isActive;
+      this.dataset.active = isActive; 
 
-        exportOptionsState[this.value] = isActive;
+      exportOptionsState[this.value] = isActive;
 
-        console.log(`Чекбокс "${this.value}" активирован: ${isActive}`);
+      console.log(`Чекбокс "${this.value}" активирован: ${isActive}`);
 
-        updateExportButtonState();
+      updateExportButtonState();
     });
-});
-document.addEventListener("mousemove", (function (e) {
-    let t = document.elementFromPoint(e.clientX, e.clientY);
-    if (t)
-        if (t.classList.contains("variable-name-block") || t.classList.contains("variable-example-block")) currentHoveredElement = t;
-        else {
-            let e = t.closest(".variable-name-block, .variable-example-block");
-            currentHoveredElement = e || null
-        }
-})), document.addEventListener("keydown", (function (e) {
-    if (e.ctrlKey && ("c" === e.key || "C" === e.key) && currentHoveredElement) {
-        let t = currentHoveredElement.getAttribute("data-value");
-        t && (copyToClipboard(t), e.preventDefault())
-    }
-})), document.addEventListener("mousemove", (function (e) {
-    let t = document.elementFromPoint(e.clientX, e.clientY);
-    if (t)
-        if (t.classList.contains("variable-name-block") || t.classList.contains("variable-example-block")) currentHoveredElement = t;
-        else {
-            let e = t.closest(".variable-name-block, .variable-example-block");
-            currentHoveredElement = e || null
-        }
-})), document.addEventListener("keydown", (function (e) {
-    if (e.ctrlKey && ("c" === e.key || "C" === e.key) && currentHoveredElement) {
-        let t = currentHoveredElement.getAttribute("data-value");
-        t && (copyToClipboard(t), e.preventDefault())
-    }
-})), document.addEventListener("DOMContentLoaded", function () {
+  });  
+document.addEventListener("mousemove", (function(e) {
+	let t = document.elementFromPoint(e.clientX, e.clientY);
+	if (t)
+		if (t.classList.contains("variable-name-block") || t.classList.contains("variable-example-block")) currentHoveredElement = t;
+		else {
+			let e = t.closest(".variable-name-block, .variable-example-block");
+			currentHoveredElement = e || null
+		}
+})), document.addEventListener("keydown", (function(e) {
+	if (e.ctrlKey && ("c" === e.key || "C" === e.key) && currentHoveredElement) {
+		let t = currentHoveredElement.getAttribute("data-value");
+		t && (copyToClipboard(t), e.preventDefault())
+	}
+})), document.addEventListener("mousemove", (function(e) {
+	let t = document.elementFromPoint(e.clientX, e.clientY);
+	if (t)
+		if (t.classList.contains("variable-name-block") || t.classList.contains("variable-example-block")) currentHoveredElement = t;
+		else {
+			let e = t.closest(".variable-name-block, .variable-example-block");
+			currentHoveredElement = e || null
+		}
+})), document.addEventListener("keydown", (function(e) {
+	if (e.ctrlKey && ("c" === e.key || "C" === e.key) && currentHoveredElement) {
+		let t = currentHoveredElement.getAttribute("data-value");
+		t && (copyToClipboard(t), e.preventDefault())
+	}
+})), document.addEventListener("DOMContentLoaded", function(){
     initializeLanguageSelector();
     initializeIconClickHandlers();
     initializeExportIconClickHandler();

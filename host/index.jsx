@@ -1,86 +1,86 @@
 if (typeof String.prototype.trim !== 'function') {
-    String.prototype.trim = function () {
+    String.prototype.trim = function() {
         return this.replace(/^\s+|\s+$/g, '');
     };
 }
 
 function saveSelectedLanguage(selectedLanguage, extensionPath) {
-    extensionPath = extensionPath.replace(/\\/g, '/');
-    var settingsFolderPath = extensionPath + '/client/settings';
-    var settingsFolder = new Folder(settingsFolderPath);
-    if (!settingsFolder.exists) {
-        var created = settingsFolder.create();
-        if (!created) {
-            alert("Не удалось создать папку настроек.");
-            return;
-        }
-    }
-    var settingsFilePath = settingsFolderPath + '/settings.json';
-    var settingsFile = new File(settingsFilePath);
-    var settings = {};
-    if (settingsFile.exists) {
-        if (settingsFile.open('r')) {
-            var content = settingsFile.read();
-            settingsFile.close();
-            try {
-                settings = JSON.parse(content);
-            } catch (e) {
+	extensionPath = extensionPath.replace(/\\/g, '/');
+	var settingsFolderPath = extensionPath + '/client/settings';
+	var settingsFolder = new Folder(settingsFolderPath);
+	if (!settingsFolder.exists) {
+		var created = settingsFolder.create();
+		if (!created) {
+			alert("Не удалось создать папку настроек.");
+			return;
+		}
+	}
+	var settingsFilePath = settingsFolderPath + '/settings.json';
+	var settingsFile = new File(settingsFilePath);
+	var settings = {};
+	if (settingsFile.exists) {
+		if (settingsFile.open('r')) {
+			var content = settingsFile.read();
+			settingsFile.close();
+			try {
+				settings = JSON.parse(content);
+			} catch (e) {
 
-                settings = {};
-            }
-        } else {
-            alert("Не удалось открыть файл настроек для чтения.");
-            return;
-        }
-    }
-    settings.language = selectedLanguage;
-    if (settingsFile.open('w')) {
-        settingsFile.write(JSON.stringify(settings, null, 4));
-        settingsFile.close();
-    } else {
-        alert("Не удалось открыть файл настроек для записи.");
-    }
+				settings = {};
+			}
+		} else {
+			alert("Не удалось открыть файл настроек для чтения.");
+			return;
+		}
+	}
+	settings.language = selectedLanguage;
+	if (settingsFile.open('w')) {
+		settingsFile.write(JSON.stringify(settings, null, 4));
+		settingsFile.close();
+	} else {
+		alert("Не удалось открыть файл настроек для записи.");
+	}
 }
 
 function loadSettings(extensionPath) {
-    extensionPath = extensionPath.replace(/\\/g, '/');
-    var settingsFilePath = extensionPath + '/client/settings/settings.json';
-    var settingsFile = new File(settingsFilePath);
-    var settings = {};
-    if (settingsFile.exists) {
-        if (settingsFile.open('r')) {
-            var content = settingsFile.read();
-            settingsFile.close();
-            try {
-                settings = JSON.parse(content);
-            } catch (e) {
+	extensionPath = extensionPath.replace(/\\/g, '/');
+	var settingsFilePath = extensionPath + '/client/settings/settings.json';
+	var settingsFile = new File(settingsFilePath);
+	var settings = {};
+	if (settingsFile.exists) {
+		if (settingsFile.open('r')) {
+			var content = settingsFile.read();
+			settingsFile.close();
+			try {
+				settings = JSON.parse(content);
+			} catch (e) {
 
-                settings = {};
-            }
-        } else {
-            alert("Не удалось открыть файл настроек для чтения.");
-        }
-    }
-    return JSON.stringify(settings);
+				settings = {};
+			}
+		} else {
+			alert("Не удалось открыть файл настроек для чтения.");
+		}
+	}
+	return JSON.stringify(settings);
 }
 
 function readTranslationFile(language, extensionPath) {
-    extensionPath = extensionPath.replace(/\\/g, '/');
-    var translationFilePath = extensionPath + '/client/translations/' + language.toLowerCase() + '.json';
-    var translationFile = new File(translationFilePath);
-    var content = '';
-    if (translationFile.exists) {
-        if (translationFile.open('r')) {
-            translationFile.encoding = 'UTF-8';
-            content = translationFile.read();
-            translationFile.close();
-        } else {
-            content = '';
-        }
-    } else {
-        content = '';
-    }
-    return content;
+	extensionPath = extensionPath.replace(/\\/g, '/');
+	var translationFilePath = extensionPath + '/client/translations/' + language.toLowerCase() + '.json';
+	var translationFile = new File(translationFilePath);
+	var content = '';
+	if (translationFile.exists) {
+		if (translationFile.open('r')) {
+			translationFile.encoding = 'UTF-8';
+			content = translationFile.read();
+			translationFile.close();
+		} else {
+			content = '';
+		}
+	} else {
+		content = '';
+	}
+	return content;
 }
 
 function checkExportPaths(extensionPath) {
@@ -199,7 +199,6 @@ function checkExportPaths(extensionPath) {
 }
 
 function checkImportPaths(e) {
-
     e = e.replace(/\\/g, "/");
     var t = {
         exportPath1: "Undefined",
@@ -221,21 +220,19 @@ function checkImportPaths(e) {
     if (!r || !r.nnAeScriptUIPanelsPath) {
         return alert("Ключ 'nnAeScriptUIPanelsPath' отсутствует или пуст."), JSON.stringify(t);
     }
-
+    
     var originalPath = r.nnAeScriptUIPanelsPath;
-
-    originalPath = originalPath.replace(/\
-
+    originalPath = originalPath.replace(/\//g, '\\');
     var lowerPath = originalPath.toLowerCase();
     var idx = lowerPath.indexOf("\\nitronamer");
     var parentPath = originalPath;
     if (idx !== -1) {
         parentPath = originalPath.substring(0, idx);
     }
-
     t.exportPath2 = parentPath + "\\NitroNamer.jsx";
     return JSON.stringify(t);
 }
+
 
 function exportToJson(e, t) {
     var n = Folder.selectDialog("Select the location where the exported settings will be created\nSelect the location where the exported settings will be created.");
