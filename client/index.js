@@ -49,6 +49,18 @@ function initializeIconClickHandlers() {
 	}))
 }
 
+function initializeImportIconClickHandler() {
+    const importIcon = document.getElementById("icon-import-up");
+    if (importIcon) {
+      importIcon.addEventListener("click", (e) => {
+        e.stopPropagation();
+        showContent("content-import");
+      });
+    } else {
+      console.error("Иконка с id 'icon-import-up' не найдена.");
+    }
+  }  
+
 function toggleSpoiler(e) {
 	if (e.classList.contains("inactive")) {
 		document.querySelectorAll(".spoiler").forEach((function(t) {
@@ -521,6 +533,7 @@ document.addEventListener("mousemove", (function(e) {
     initializeLanguageSelector();
     initializeIconClickHandlers();
     initializeExportIconClickHandler();
+    initializeImportIconClickHandler();
 
     loadDefaultTranslations();
     loadSettings();
