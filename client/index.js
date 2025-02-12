@@ -491,20 +491,41 @@ function showCustomAlert(message) {
 
   function initializeImportButtonHandler() {
     const importButton = document.querySelector(".import-button");
-    const importOptionCheckbox = document.querySelector("input[name='importOptions']");
+    const importOptionsCheckbox = document.getElementById("importOptions");
+    const fileInput = document.getElementById("file-input");
 
     if (importButton) {
-        importButton.addEventListener("click", function () {
-            if (!importOptionCheckbox.checked) {
-                showCustomAlert("importCancel_2");
+        importButton.addEventListener("click", function (e) {
+            // Проверяем, активен ли чекбокс
+            if (importOptionsCheckbox.checked) {
+                // Если чекбокс активирован, показываем диалог выбора файла
+                fileInput.click();
             } else {
-                console.log("Чекбокс активирован, импорт может быть выполнен.");
+                // Если чекбокс не активирован, показываем предупреждение
+                showCustomAlert("importCancel_2");
             }
         });
     } else {
         console.error("Кнопка 'import-button' не найдена.");
     }
+
+    // Обработчик выбора файла
+    fileInput.addEventListener("change", function (e) {
+        const file = e.target.files[0]; // Получаем выбранный файл
+        if (file) {
+            // Проверяем, что файл имеет расширение .json
+            if (file.name.endsWith(".json")) {
+                console.log("Файл выбран:", file.name);
+                // Здесь можно добавить код для обработки файла
+                // Например, отправить файл на сервер или в расширение
+            } else {
+                // Если выбран не .json файл, показываем предупреждение
+                showCustomAlert("alertMessage_invalidFileType");
+            }
+        }
+    });
 }
+
 
   document.querySelector(".export-button").addEventListener("click", function() {
     if (this.classList.contains("disabled-export-button") || "true" === this.dataset.disabled) {
