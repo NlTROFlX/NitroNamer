@@ -491,29 +491,42 @@ function hideCustomAlert() {
 
 function initializeImportButtonHandler() {
     const importButton = document.querySelector(".import-button");
-    const importOptionsCheckbox = document.getElementById("importOptions");
     const fileInput = document.getElementById("file-input");
+    
+    // Обработчик нажатия на кнопку импорта
+    importButton.addEventListener("click", function () {
+        const importOptionChecked = document.getElementById("importOptions").checked;
+        if (importOptionChecked) {
+            fileInput.click(); // Открываем окно выбора файла
+        } else {
+            showCustomAlert("importCancel_2"); // Показываем предупреждение, если опция не выбрана
+        }
+    });
+    
+    // Обработчик выбора файла
+    fileInput.addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        
+        // Проверяем, что файл выбран и имеет правильное имя
+        if (file && file.name === "settings.json") {
+            // Запоминаем путь и название файла
+            const selectedFilePath = file.path.replace(/\\/g, "/"); // Заменяем все обратные слеши на прямые
+            const importPath2 = document.getElementById("importPath2").textContent.trim().replace(/\\/g, "/"); // Путь из #importPath2 с заменой слешей
 
-    if (importButton) {
-        importButton.addEventListener("click", function (e) {
-            if (importOptionsCheckbox.checked) {
-                fileInput.click();
-            } else {
-                showCustomAlert("importCancel_2");
-            }
-        });
-    } else {
-        console.error("Кнопка 'import-button' не найдена.");
-    }
+            // Строим новый путь для замены
+            const newPath = importPath2.replace(/[^/]+$/, "") + "NitroNamer/settings/settings.json";
 
-    fileInput.addEventListener("change", function (e) {
-        const file = e.target.files[0];
-        if (file) {
-            if (file.name.endsWith(".json")) {
-                console.log("Файл выбран:", file.name);
-            } else {
-                showCustomAlert("alertMessage_invalidFileType");
-            }
+            // Передаем данные в ExtendScript для выполнения операции замены
+            const csInterface = new CSInterface();
+            csInterface.evalScript(`replaceSettingsFile("${selectedFilePath}", "${newPath}")`, function(response) {
+                if (response === "success") {
+                    showCustomAlert("importSuccessSettings_1");
+                } else {
+                    showCustomAlert("importFailureSettings_1");
+                }
+            });
+        } else {
+            showCustomAlert("importCancel_3"); // Сообщение для неправильного файла
         }
     });
 }

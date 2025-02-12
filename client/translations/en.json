@@ -7,6 +7,7 @@
     "importCancel_2": "Activate the NitroNamer checkbox.",
     "importCancel_3": "The selected file is not appropriate, you must select (settings.json) or (variables.json) for importing",
     "importSuccessSettings_1": "The file (settings.json) was successfully imported into NitroNamer",
+    "importFailureSettings_1": "Failed to import file (settings.json). `function initializeImportButtonHandler()`",
     "importSuccessVariables_1": "The file (variables.json) was successfully imported into NitroNamer",
 
     "textbox-copied": "- Copied",

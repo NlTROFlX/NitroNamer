@@ -251,3 +251,24 @@ function exportToJson(e, t) {
 
     return "export_success|" + n.fsName;
 }
+
+function replaceSettingsFile(selectedFilePath, newFilePath) {
+    var file = new File(selectedFilePath);
+    var newPath = new File(newFilePath);
+
+    if (file.exists) {
+        // Удаляем старый файл, если он существует
+        if (newPath.exists) {
+            newPath.remove(); // Удаляем старый файл
+        }
+        
+        // Копируем новый файл на нужный путь
+        file.copy(newPath.fsName);
+
+        // Возвращаем успешный результат
+        return "success";
+    } else {
+        // Если файл не найден, возвращаем ошибку
+        return "failure";
+    }
+}
