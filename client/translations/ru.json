@@ -3,6 +3,7 @@
     "defaultCustomAlertMessageButton_01": "OK",
     "export_cancel": "Сохранение отменено пользователем.",
     "export_success": "Файлы успешно сохранены в: {0}",
+    "importCancel_1": "Импорт невозможен так как NitroNamer не установлен или еще ни разу не запускался, вернитесь на эту страницу после установки или запуска NitroNamer.",
 
     "textbox-copied": "- Скопировано",
     

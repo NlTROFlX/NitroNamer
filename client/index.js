@@ -101,6 +101,22 @@ function checkImportPaths(){
         
         updateImportBlock("#importPath1", path1Formatted);
         updateImportBlock("#importPath2", finalImportPath2);
+
+        // Добавляем проверку для кнопки import-button
+        const importButton = document.querySelector(".import-button");
+        if (finalImportPath2 === "Undefined") {
+            // Отключаем кнопку import-button
+            importButton.classList.add("disabled-export-button");
+            importButton.dataset.disabled = "true";
+            // Добавляем обработчик для клика на недоступную кнопку
+            importButton.addEventListener("click", function () {
+                showCustomAlert("importCancel_1");
+            });
+        } else {
+            // Убираем недоступный стиль с кнопки, если путь корректный
+            importButton.classList.remove("disabled-export-button");
+            importButton.dataset.disabled = "false";
+        }
     });
 }
 
