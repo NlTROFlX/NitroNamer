@@ -5,6 +5,9 @@
     "export_success": "Файлы успешно сохранены в: {0}",
     "importCancel_1": "Импорт невозможен так как NitroNamer не установлен или еще ни разу не запускался, вернитесь на эту страницу после установки или запуска NitroNamer.",
     "importCancel_2": "Активируйте чекбокс NitroNamer",
+    "importCancel_3": "Выбранный файл не является подходящим, для импорта необходимо выбрать (settings.json) или (variables.json)",
+    "importSuccessSettings_1": "Файл (settings.json) успешно импортирован в NitroNamer",
+    "importSuccessVariables_1": "Файл (variables.json) успешно импортирован в NitroNamer",
 
     "textbox-copied": "- Скопировано",
     
