@@ -85,18 +85,15 @@ function checkImportPaths(){
         const exportPath1 = settings.exportPath1;
         let exportPath2 = settings.exportPath2;
 
-        // Приводим пути к обратным слэшам
         const path1Formatted = exportPath1.replace(/\//g, "\\");
         exportPath2 = exportPath2.replace(/\//g, "\\");
 
-        // Если в exportPath2 присутствует подстрока "\nitronamer", отсекаем её
         const index = exportPath2.toLowerCase().indexOf("\\nitronamer");
         let basePath = exportPath2;
         if (index !== -1) {
             basePath = exportPath2.substring(0, index);
         }
 
-        // Если значение exportPath2 равно "Undefined", то оставляем его без добавления суффикса
         const finalImportPath2 = (exportPath2 === "Undefined")
             ? "Undefined"
             : basePath + "\\NitroNamer.jsx";
@@ -104,23 +101,18 @@ function checkImportPaths(){
         updateImportBlock("#importPath1", path1Formatted);
         updateImportBlock("#importPath2", finalImportPath2);
 
-        // Добавляем проверку для кнопки import-button
         const importButton = document.querySelector(".import-button");
         if (finalImportPath2 === "Undefined") {
-            // Отключаем кнопку import-button
             importButton.classList.add("disabled-export-button");
             importButton.dataset.disabled = "true";
-            // Добавляем обработчик для клика на недоступную кнопку
             importButton.addEventListener("click", function () {
                 showCustomAlert("importCancel_1");
             });
         } else {
-            // Убираем недоступный стиль с кнопки, если путь корректный
             importButton.classList.remove("disabled-export-button");
             importButton.dataset.disabled = "false";
         }
 
-        // Обновляем название чекбокса
         const importOptionCheckboxLabel = document.querySelector("label[for='importOptions']");
         if (finalImportPath2 === "Undefined") {
             importOptionCheckboxLabel.textContent = "NitroNamer | [Not installed]";
@@ -503,12 +495,9 @@ function showCustomAlert(message) {
 
     if (importButton) {
         importButton.addEventListener("click", function () {
-            // Проверяем, активирован ли чекбокс
             if (!importOptionCheckbox.checked) {
-                // Если чекбокс не активирован, показываем кастомное сообщение
                 showCustomAlert("importCancel_2");
             } else {
-                // Если чекбокс активирован, не делаем ничего
                 console.log("Чекбокс активирован, импорт может быть выполнен.");
             }
         });
