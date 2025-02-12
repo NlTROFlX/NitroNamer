@@ -65,47 +65,42 @@ function initializeImportIconClickHandler() {
     }
 }
 
-function checkImportPaths() {
+function checkImportPaths(){
     const csInterface = new CSInterface();
-    const systemPath = csInterface.getSystemPath(SystemPath.EXTENSION);
-
-    // Получаем данные из settings.json через существующую функцию checkExportPaths
-    csInterface.evalScript(`checkExportPaths("${systemPath}")`, (response) => {
-        if (!response) {
+    const extensionPath = csInterface.getSystemPath(SystemPath.EXTENSION);
+    csInterface.evalScript(`checkExportPaths("${extensionPath}")`, (result) => {
+        if(!result){
             console.log("Проверка прервана или не вернулся результат.");
             return;
         }
-        let paths;
+        let settings;
         try {
-            paths = JSON.parse(response);
-        } catch (error) {
-            console.error("Ошибка парсинга JSON:", error);
+            settings = JSON.parse(result);
+        } catch(e) {
+            console.error("Ошибка парсинга JSON:", e);
             return;
         }
-
-        // Путь до файла настроек (settings.json)
-        const settingsPath = paths.exportPath1;
-        // Значение ключа nnAeScriptUIPanelsPath (из него будем извлекать путь)
-        let nnAeScriptUIPanelsPath = paths.exportPath2;
-
-        // Приводим оба пути к Windows-формату (заменяем "/" на "\")
-        const settingsPathWindows = settingsPath.replace(/\//g, '\\');
-        nnAeScriptUIPanelsPath = nnAeScriptUIPanelsPath.replace(/\//g, '\\');
-
-        // Из nnAeScriptUIPanelsPath отсекаем всё, начиная с папки "NitroNamer"
-        // То есть, ищем позицию, где начинается "\NitroNamer" и берем всё до этой позиции.
-        const lowerPath = nnAeScriptUIPanelsPath.toLowerCase();
-        const idx = lowerPath.indexOf("\\nitronamer");
-        let parentPath = nnAeScriptUIPanelsPath;
-        if (idx !== -1) {
-            parentPath = nnAeScriptUIPanelsPath.substring(0, idx);
+        const exportPath1 = settings.exportPath1;
+        let exportPath2 = settings.exportPath2;
+        
+        // Приводим пути к обратным слэшам
+        const path1Formatted = exportPath1.replace(/\//g, "\\");
+        exportPath2 = exportPath2.replace(/\//g, "\\");
+        
+        // Если в exportPath2 присутствует подстрока "\nitronamer", отсекаем её
+        const index = exportPath2.toLowerCase().indexOf("\\nitronamer");
+        let basePath = exportPath2;
+        if(index !== -1){
+            basePath = exportPath2.substring(0, index);
         }
-        // Формируем финальный путь: родительская папка + "\NitroNamer.jsx"
-        const nnAeFinalPath = parentPath + "\\NitroNamer.jsx";
-
-        // Выводим полученные пути в блоки интерфейса
-        updateImportBlock("#importPath1", settingsPathWindows);
-        updateImportBlock("#importPath2", nnAeFinalPath);
+        
+        // Если значение exportPath2 равно "Undefined", то оставляем его без добавления суффикса
+        const finalImportPath2 = (exportPath2 === "Undefined") 
+                                    ? "Undefined" 
+                                    : basePath + "\\NitroNamer.jsx";
+        
+        updateImportBlock("#importPath1", path1Formatted);
+        updateImportBlock("#importPath2", finalImportPath2);
     });
 }
 
