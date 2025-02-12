@@ -69,36 +69,38 @@ function checkImportPaths(){
     const csInterface = new CSInterface();
     const extensionPath = csInterface.getSystemPath(SystemPath.EXTENSION);
     csInterface.evalScript(`checkExportPaths("${extensionPath}")`, (result) => {
-        if(!result){
+        if (!result) {
             console.log("Проверка прервана или не вернулся результат.");
             return;
         }
+
         let settings;
         try {
             settings = JSON.parse(result);
-        } catch(e) {
+        } catch (e) {
             console.error("Ошибка парсинга JSON:", e);
             return;
         }
+
         const exportPath1 = settings.exportPath1;
         let exportPath2 = settings.exportPath2;
-        
+
         // Приводим пути к обратным слэшам
         const path1Formatted = exportPath1.replace(/\//g, "\\");
         exportPath2 = exportPath2.replace(/\//g, "\\");
-        
+
         // Если в exportPath2 присутствует подстрока "\nitronamer", отсекаем её
         const index = exportPath2.toLowerCase().indexOf("\\nitronamer");
         let basePath = exportPath2;
-        if(index !== -1){
+        if (index !== -1) {
             basePath = exportPath2.substring(0, index);
         }
-        
+
         // Если значение exportPath2 равно "Undefined", то оставляем его без добавления суффикса
-        const finalImportPath2 = (exportPath2 === "Undefined") 
-                                    ? "Undefined" 
-                                    : basePath + "\\NitroNamer.jsx";
-        
+        const finalImportPath2 = (exportPath2 === "Undefined")
+            ? "Undefined"
+            : basePath + "\\NitroNamer.jsx";
+
         updateImportBlock("#importPath1", path1Formatted);
         updateImportBlock("#importPath2", finalImportPath2);
 
@@ -116,6 +118,14 @@ function checkImportPaths(){
             // Убираем недоступный стиль с кнопки, если путь корректный
             importButton.classList.remove("disabled-export-button");
             importButton.dataset.disabled = "false";
+        }
+
+        // Обновляем название чекбокса
+        const importOptionCheckboxLabel = document.querySelector("label[for='importOptions']");
+        if (finalImportPath2 === "Undefined") {
+            importOptionCheckboxLabel.textContent = "NitroNamer | [Not installed]";
+        } else {
+            importOptionCheckboxLabel.textContent = "NitroNamer | [Installed]";
         }
     });
 }
@@ -487,6 +497,26 @@ function showCustomAlert(message) {
     }
   }  
 
+  function initializeImportButtonHandler() {
+    const importButton = document.querySelector(".import-button");
+    const importOptionCheckbox = document.querySelector("input[name='importOptions']");
+
+    if (importButton) {
+        importButton.addEventListener("click", function () {
+            // Проверяем, активирован ли чекбокс
+            if (!importOptionCheckbox.checked) {
+                // Если чекбокс не активирован, показываем кастомное сообщение
+                showCustomAlert("importCancel_2");
+            } else {
+                // Если чекбокс активирован, не делаем ничего
+                console.log("Чекбокс активирован, импорт может быть выполнен.");
+            }
+        });
+    } else {
+        console.error("Кнопка 'import-button' не найдена.");
+    }
+}
+
   document.querySelector(".export-button").addEventListener("click", function() {
     if (this.classList.contains("disabled-export-button") || "true" === this.dataset.disabled) {
         showCustomAlert("alertMessage_exprotBlock_01");
@@ -547,6 +577,7 @@ function showCustomAlert(message) {
     }
 });
 
+
 document.querySelector(".export-button").addEventListener("mouseenter", function () {
     checkExportRequirements();
   });  
@@ -603,6 +634,7 @@ document.addEventListener("mousemove", (function(e) {
     initializeIconClickHandlers();
     initializeExportIconClickHandler();
     initializeImportIconClickHandler();
+    initializeImportButtonHandler();
 
     loadDefaultTranslations();
     loadSettings();

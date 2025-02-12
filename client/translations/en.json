@@ -4,6 +4,7 @@
     "export_cancel": "Save cancelled by user.",
     "export_success": "Files saved successfully to: {0}",
     "importCancel_1": "Import is not possible because NitroNamer is not installed or has never been run yet, return to this page after installing or running NitroNamer.",
+    "importCancel_2": "Activate the NitroNamer checkbox.",
 
     "textbox-copied": "- Copied",
     
