@@ -257,18 +257,14 @@ function replaceSettingsFile(selectedFilePath, newFilePath) {
     var newPath = new File(newFilePath);
 
     if (file.exists) {
-        // Удаляем старый файл, если он существует
         if (newPath.exists) {
-            newPath.remove(); // Удаляем старый файл
+            newPath.remove();
         }
-        
-        // Копируем новый файл на нужный путь
+
         file.copy(newPath.fsName);
 
-        // Возвращаем успешный результат
         return "success";
     } else {
-        // Если файл не найден, возвращаем ошибку
         return "failure";
     }
 }

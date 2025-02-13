@@ -492,33 +492,27 @@ function hideCustomAlert() {
 function initializeImportButtonHandler() {
     const importButton = document.querySelector(".import-button");
     const fileInput = document.getElementById("file-input");
-    
-    // Обработчик нажатия на кнопку импорта
+
     importButton.addEventListener("click", function () {
         const importOptionChecked = document.getElementById("importOptions").checked;
         if (importOptionChecked) {
-            fileInput.click(); // Открываем окно выбора файла
+            fileInput.click();
         } else {
-            showCustomAlert("importCancel_2"); // Показываем предупреждение, если опция не выбрана
+            showCustomAlert("importCancel_2");
         }
     });
-    
-    // Обработчик выбора файла
+
     fileInput.addEventListener("change", function (event) {
         const file = event.target.files[0];
-        
-        // Проверяем, что файл выбран и имеет правильное имя
-        if (file && file.name === "settings.json") {
-            // Запоминаем путь и название файла
-            const selectedFilePath = file.path.replace(/\\/g, "/"); // Заменяем все обратные слеши на прямые
-            const importPath2 = document.getElementById("importPath2").textContent.trim().replace(/\\/g, "/"); // Путь из #importPath2 с заменой слешей
 
-            // Строим новый путь для замены
+        if (file && file.name === "settings.json") {
+            const selectedFilePath = file.path.replace(/\\/g, "/");
+            const importPath2 = document.getElementById("importPath2").textContent.trim().replace(/\\/g, "/");
+
             const newPath = importPath2.replace(/[^/]+$/, "") + "NitroNamer/settings/settings.json";
 
-            // Передаем данные в ExtendScript для выполнения операции замены
             const csInterface = new CSInterface();
-            csInterface.evalScript(`replaceSettingsFile("${selectedFilePath}", "${newPath}")`, function(response) {
+            csInterface.evalScript(`replaceSettingsFile("${selectedFilePath}", "${newPath}")`, function (response) {
                 if (response === "success") {
                     showCustomAlert("importSuccessSettings_1");
                 } else {
