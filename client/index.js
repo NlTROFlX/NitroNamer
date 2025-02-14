@@ -492,7 +492,7 @@ function hideCustomAlert() {
 function initializeImportButtonHandler() {
     const importButton = document.querySelector('.import-button');
     const fileInput = document.getElementById('file-input');
-    
+
     importButton.addEventListener('click', () => {
         if (document.getElementById('importOptions').checked) {
             fileInput.click();
@@ -513,7 +513,6 @@ function initializeImportButtonHandler() {
             csInterface.evalScript(`replaceSettingsFile("${sourcePath}", "${targetPath}")`, (result) => {
                 if (result === 'success') {
                     showCustomAlert('importSuccessSettings_1');
-                    // Обновляем отображение после импорта
                     setTimeout(() => checkExportRequirements(), 500);
                 } else {
                     showCustomAlert('importFailureSettings_1');
