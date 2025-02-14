@@ -825,8 +825,20 @@ body, html {
   cursor: not-allowed;
   pointer-events: auto; 
 }
+.import-button.disabled-import-button {
+  background-color: #2a2a2a;
+  border-color: #313131;
+  color: #8a8a8a; 
+  cursor: not-allowed;
+  pointer-events: auto; 
+}
 
 .export-button.disabled-export-button:hover {
+  background-color: #161616;
+  border-color: #313131;
+  color: #8a8a8a; 
+}
+.import-button.disabled-import-button:hover {
   background-color: #161616;
   border-color: #313131;
   color: #8a8a8a; 

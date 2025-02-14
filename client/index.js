@@ -492,9 +492,29 @@ function hideCustomAlert() {
 function initializeImportButtonHandler() {
     const importButton = document.querySelector(".import-button");
     const fileInput = document.getElementById("file-input");
+    const importCheckbox = document.getElementById("importOptions");
+
+    function updateImportButtonState() {
+        if (importCheckbox.checked) {
+            importButton.classList.remove("disabled-import-button");
+            importButton.dataset.disabled = "false";
+        } else {
+            importButton.classList.add("disabled-import-button");
+            importButton.dataset.disabled = "true";
+        }
+    }
+
+    updateImportButtonState();
+    importCheckbox.addEventListener("change", updateImportButtonState);
+
     importButton.addEventListener("click", () => {
-        document.getElementById("importOptions").checked ? fileInput.click() : showCustomAlert("importCancel_2");
+        if (importCheckbox.checked) {
+            fileInput.click();
+        } else {
+            showCustomAlert("importCancel_2");
+        }
     });
+    
     fileInput.addEventListener("change", (e) => {
         const file = e.target.files[0];
         if (file && file.name === "settings.json") {
