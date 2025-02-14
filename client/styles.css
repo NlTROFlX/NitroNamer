@@ -537,7 +537,6 @@ body, html {
 
 .bottom-bar .icon:hover {
   transition: filter 0.125s ease;
-  filter: invert(48%) sepia(82%) saturate(2053%) hue-rotate(177deg) brightness(95%) contrast(102%);
 }
 
 .bottom-bar .icon:hover {
