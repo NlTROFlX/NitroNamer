@@ -5,29 +5,29 @@
             "template": "T.I | I(r) | I(10) | I(10,r)",
             "briefly": false,
             "brieflyType": 3,
-            "usageFrequency": 1
+            "usageFrequency": 4
         },
         "preset_1": {
             "allLayers": true,
             "template": "@cycle(2, '(A) T.i | I(10)', '(B) T.i | I(100)')",
             "briefly": false,
             "brieflyType": 3,
-            "usageFrequency": 2
+            "usageFrequency": 6
         }
     },
     "currentSettings": {
-        "UICompact": false,
+        "UICompact": true,
         "allLayers": true,
-        "template": "Chl",
+        "template": "001TRUE",
         "briefly": false,
         "brieflyType": 3,
         "modeIndex": 4,
         "modeActive": false,
-        "selectedPresetTemplate": "@cycle(2, '(A) T.i | I(10)', '(B) T.i | I(100)')"
+        "selectedPresetTemplate": "T.I | I(r) | I(10) | I(10,r)"
     },
     "nameApply": {
-        "shapeLayer": true,
-        "textLayer": true,
+        "shapeLayer": false,
+        "textLayer": false,
         "nullObject": true,
         "adjustmentLayer": true,
         "footageLayer": true,
@@ -38,5 +38,6 @@
         "audioLayer": true
     },
     "selectedLanguage": "English",
+    "needGlobalUiReload": false,
     "nnLib": false
 }

@@ -1392,13 +1392,17 @@ function buildUI(thisObj) {
 					var template = txtTemplate.text;
 					var briefly = chkBriefly.value;
 					var brieflyType = ddBrieflyType.selection.text;
-					var newName = generateNewName(targetLayer, template, briefly, brieflyType, variableSettings, !0);
+					var newName = generateNewName(targetLayer, template, briefly, brieflyType, variableSettings, true);
 					if (!isCompact) {
-						txtOriginal.text = originalName;
-						txtRenamed.text = newName
+						if (txtOriginal) {
+							txtOriginal.text = originalName;
+						}
+						if (txtRenamed) {
+							txtRenamed.text = newName;
+						}
 					}
 					if (txtRenamed) {
-						txtRenamed.text = newName
+						txtRenamed.text = newName;
 					}
 				} else {
 					if (!isCompact) {
@@ -2912,6 +2916,22 @@ function buildUI(thisObj) {
 			}
 		}
 	}
+
+
+	win.addEventListener("mouseover", function() {
+		var settingsData = loadSettings();
+		if (settingsData.needGlobalUiReload === true) {
+			settingsData.needGlobalUiReload = false;
+			var settingsFilePath = new File($.fileName).path + "/NitroNamer/settings/settings.json";
+			writeJSONFile(settingsFilePath, settingsData);
+
+			applySettings(settingsData);
+			updatePresetsDropdown(settingsData);
+			updateLayerCounts();
+			updatePreview();
+			updateRenameButtonIcon();
+		}
+	});
 	applyTooltips(tooltipsData);
 	var settings = loadSettings();
 	applySettings(settings);
