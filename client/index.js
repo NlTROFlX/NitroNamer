@@ -490,12 +490,12 @@ function hideCustomAlert() {
 }
 
 function initializeImportButtonHandler() {
-    const importButton = document.querySelector(".import-button");
-    const fileInput = document.getElementById("file-input");
-    const importCheckbox = document.getElementById("importOptions");
+    var importButton = document.querySelector(".import-button");
+    var fileInput = document.getElementById("file-input");
+    var importOption = document.getElementById("importOptions");
 
-    function updateImportButtonState() {
-        if (importCheckbox.checked) {
+    function updateImportButton() {
+        if (importOption.checked) {
             importButton.classList.remove("disabled-import-button");
             importButton.dataset.disabled = "false";
         } else {
@@ -503,40 +503,41 @@ function initializeImportButtonHandler() {
             importButton.dataset.disabled = "true";
         }
     }
+    updateImportButton();
+    importOption.addEventListener("change", updateImportButton);
 
-    updateImportButtonState();
-    importCheckbox.addEventListener("change", updateImportButtonState);
-
-    importButton.addEventListener("click", () => {
-        if (importCheckbox.checked) {
+    importButton.addEventListener("click", function() {
+        if (importOption.checked) {
             fileInput.click();
         } else {
             showCustomAlert("importCancel_2");
         }
     });
-    
-    fileInput.addEventListener("change", (e) => {
-        const file = e.target.files[0];
+
+    fileInput.addEventListener("change", function(event) {
+        var file = event.target.files[0];
         if (file && file.name === "settings.json") {
-            const filePath = file.path.replace(/\\/g, "/");
-            const targetPath = document.getElementById("importPath2").textContent.trim().replace(/\\/g, "/").replace(/[^/]+$/, "") + "NitroNamer/settings/settings.json";
-            (new CSInterface).evalScript(`replaceSettingsFile("${filePath}", "${targetPath}")`, (result) => {
+            var filePath = file.path.replace(/\\/g, "/");
+            var targetPath = document.getElementById("importPath2").textContent.trim().replace(/\\/g, "/").replace(/[^/]+$/, "") + "NitroNamer/settings/settings.json";
+            new CSInterface().evalScript('replaceSettingsFile("' + filePath + '", "' + targetPath + '")', function(result) {
                 if (result === "success") {
                     showCustomAlert("importSuccessSettings_1");
-                    setTimeout(() => { checkExportRequirements(); }, 500);
+                    resetImportCheckboxes();
+                    setTimeout(function() { checkExportRequirements(); }, 500);
                 } else {
                     showCustomAlert("importFailureSettings_1");
                 }
             });
         } else if (file && file.name === "variables.json") {
-            const filePath = file.path.replace(/\\/g, "/");
-            let basePath = document.getElementById("importPath2").textContent.trim().replace(/\\/g, "/").replace(/[^/]+$/, "");
-            basePath = basePath.replace("settings", "scripts");
-            const targetPath = basePath + "NitroNamer/scripts/variables.json";
-            (new CSInterface).evalScript(`mergeVariablesFile("${filePath}", "${targetPath}")`, (result) => {
+            var filePath = file.path.replace(/\\/g, "/");
+            var targetFolder = document.getElementById("importPath2").textContent.trim().replace(/\\/g, "/").replace(/[^/]+$/, "");
+            targetFolder = targetFolder.replace("settings", "scripts");
+            var targetPath = targetFolder + "NitroNamer/scripts/variables.json";
+            new CSInterface().evalScript('mergeVariablesFile("' + filePath + '", "' + targetPath + '")', function(result) {
                 if (result === "success") {
                     showCustomAlert("importSuccessVariables_1");
-                    setTimeout(() => { checkExportRequirements(); }, 500);
+                    resetImportCheckboxes();
+                    setTimeout(function() { checkExportRequirements(); }, 500);
                 } else {
                     showCustomAlert("importFailureVariables_1");
                 }
@@ -548,66 +549,71 @@ function initializeImportButtonHandler() {
     });
 }
 
+function resetImportCheckboxes() {
+    var importCheckbox = document.getElementById("importOptions");
+    if (importCheckbox) {
+        importCheckbox.checked = false;
+        importCheckbox.disabled = false;
+    }
+}
 
-document.querySelector(".export-button").addEventListener("click", function () {
-    if (this.classList.contains("disabled-export-button") || "true" === this.dataset.disabled) {
+document.querySelector(".export-button").addEventListener("click", function() {
+    if (this.classList.contains("disabled-export-button") || this.dataset.disabled === "true") {
         showCustomAlert("alertMessage_exprotBlock_01");
     } else {
-        var exportOptions = document.querySelectorAll("input[name='exportOptions']"),
-            exportData = {},
-            variablesData = "";
-
-        exportOptions.forEach(function (option) {
+        var exportOptions = document.querySelectorAll("input[name='exportOptions']");
+        var exportData = {};
+        var variablesData = "";
+        exportOptions.forEach(function(option) {
             if (option.checked) {
-                switch (option.value) {
-                    case "presets":
-                        var presetsEl = document.getElementById("exportUserPresets");
-                        try {
-                            var presetsObj = JSON.parse(presetsEl.textContent);
-                            exportData.userPresets = presetsObj.userPresets;
-                        } catch (err) {
-                            exportData.userPresets = presetsEl.textContent;
-                        }
-                        break;
-                    case "renamingOptions":
-                        var renamingEl = document.getElementById("exportNameApply");
-                        try {
-                            var renamingObj = JSON.parse(renamingEl.textContent);
-                            exportData.nameApply = renamingObj.nameApply;
-                        } catch (err) {
-                            exportData.nameApply = renamingEl.textContent;
-                        }
-                        break;
-                    case "tooltipLanguage":
-                        var langEl = document.getElementById("exportSelectedLanguage");
-                        try {
-                            var langObj = JSON.parse(langEl.textContent);
-                            exportData.selectedLanguage = langObj.selectedLanguage;
-                        } catch (err) {
-                            exportData.selectedLanguage = langEl.textContent;
-                        }
-                        break;
-                    case "variableSettings":
-                        var varsEl = document.getElementById("exportVariables");
-                        if (varsEl) {
-                            variablesData = varsEl.textContent;
-                        }
-                        break;
+                if (option.value === "presets") {
+                    var presetsElement = document.getElementById("exportUserPresets");
+                    try {
+                        exportData.userPresets = JSON.parse(presetsElement.textContent).userPresets;
+                    } catch (error) {
+                        exportData.userPresets = presetsElement.textContent;
+                    }
+                } else if (option.value === "renamingOptions") {
+                    var renamingElement = document.getElementById("exportNameApply");
+                    try {
+                        exportData.nameApply = JSON.parse(renamingElement.textContent).nameApply;
+                    } catch (error) {
+                        exportData.nameApply = renamingElement.textContent;
+                    }
+                } else if (option.value === "tooltipLanguage") {
+                    var languageElement = document.getElementById("exportSelectedLanguage");
+                    try {
+                        exportData.selectedLanguage = JSON.parse(languageElement.textContent).selectedLanguage;
+                    } catch (error) {
+                        exportData.selectedLanguage = languageElement.textContent;
+                    }
+                } else if (option.value === "variableSettings") {
+                    var variableElement = document.getElementById("exportVariables");
+                    if (variableElement) {
+                        variablesData = variableElement.textContent;
+                    }
                 }
             }
         });
-
-        var exportDataStr = Object.keys(exportData).length > 0 ? JSON.stringify(exportData, null, 4) : "";
-
-        var scriptCall = 'exportToJson(' + JSON.stringify(exportDataStr) + ', ' + JSON.stringify(variablesData) + ')';
-
-        console.log("evalScript строка:", scriptCall);
-
-        (new CSInterface).evalScript(scriptCall, function (result) {
+        var exportJson = Object.keys(exportData).length > 0 ? JSON.stringify(exportData, null, 4) : "";
+        var scriptCommand = "exportToJson(" + JSON.stringify(exportJson) + ", " + JSON.stringify(variablesData) + ")";
+        new CSInterface().evalScript(scriptCommand, function(result) {
             showCustomAlert(result);
+            if (result.indexOf("export_success") !== -1) {
+                resetExportCheckboxes();
+            }
         });
     }
 });
+
+function resetExportCheckboxes() {
+    var checkboxes = document.querySelectorAll("#content-export input[type='checkbox']");
+    checkboxes.forEach(function(checkbox) {
+        checkbox.checked = false;
+        checkbox.disabled = true;
+    });
+    updateExportButtonState();
+}
 
 
 document.querySelector(".export-button").addEventListener("mouseenter", function () {
