@@ -490,37 +490,37 @@ function hideCustomAlert() {
 }
 
 function initializeImportButtonHandler() {
-    const importButton = document.querySelector(".import-button");
-    const fileInput = document.getElementById("file-input");
-
-    importButton.addEventListener("click", function () {
-        const importOptionChecked = document.getElementById("importOptions").checked;
-        if (importOptionChecked) {
+    const importButton = document.querySelector('.import-button');
+    const fileInput = document.getElementById('file-input');
+    
+    importButton.addEventListener('click', () => {
+        if (document.getElementById('importOptions').checked) {
             fileInput.click();
         } else {
-            showCustomAlert("importCancel_2");
+            showCustomAlert('importCancel_2');
         }
     });
 
-    fileInput.addEventListener("change", function (event) {
-        const file = event.target.files[0];
-
-        if (file && file.name === "settings.json") {
-            const selectedFilePath = file.path.replace(/\\/g, "/");
-            const importPath2 = document.getElementById("importPath2").textContent.trim().replace(/\\/g, "/");
-
-            const newPath = importPath2.replace(/[^/]+$/, "") + "NitroNamer/settings/settings.json";
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file && file.name === 'settings.json') {
+            const sourcePath = file.path.replace(/\\/g, '/');
+            const targetPath = document.getElementById('importPath2').textContent.trim()
+                .replace(/\\/g, '/')
+                .replace(/[^/]+$/, '') + 'NitroNamer/settings/settings.json';
 
             const csInterface = new CSInterface();
-            csInterface.evalScript(`replaceSettingsFile("${selectedFilePath}", "${newPath}")`, function (response) {
-                if (response === "success") {
-                    showCustomAlert("importSuccessSettings_1");
+            csInterface.evalScript(`replaceSettingsFile("${sourcePath}", "${targetPath}")`, (result) => {
+                if (result === 'success') {
+                    showCustomAlert('importSuccessSettings_1');
+                    // Обновляем отображение после импорта
+                    setTimeout(() => checkExportRequirements(), 500);
                 } else {
-                    showCustomAlert("importFailureSettings_1");
+                    showCustomAlert('importFailureSettings_1');
                 }
             });
         } else {
-            showCustomAlert("importCancel_3"); // Сообщение для неправильного файла
+            showCustomAlert('importCancel_3');
         }
     });
 }

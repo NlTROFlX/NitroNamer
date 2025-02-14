@@ -268,3 +268,77 @@ function replaceSettingsFile(selectedFilePath, newFilePath) {
         return "failure";
     }
 }
+
+function mergeSettings(existingContent, importedContent) {
+    try {
+        var existing = JSON.parse(existingContent);
+        var imported = JSON.parse(importedContent);
+        
+        // Merge userPresets with index renaming
+        if (imported.userPresets) {
+            if (!existing.userPresets) existing.userPresets = {};
+            
+            // Find max preset index in existing
+            var maxIndex = 0;
+            for (var key in existing.userPresets) {
+                var num = parseInt(key.split('_')[1]);
+                if (num > maxIndex) maxIndex = num;
+            }
+            
+            // Import presets with new indexes
+            for (var key in imported.userPresets) {
+                maxIndex++;
+                var newKey = 'preset_' + maxIndex;
+                existing.userPresets[newKey] = imported.userPresets[key];
+            }
+        }
+        
+        // Merge other keys (overwrite or add new)
+        for (var key in imported) {
+            if (key !== 'userPresets') {
+                existing[key] = imported[key];
+            }
+        }
+        
+        return JSON.stringify(existing, null, 4);
+        
+    } catch(e) {
+        return 'error';
+    }
+}
+
+function replaceSettingsFile(sourcePath, targetPath) {
+    try {
+        var sourceFile = new File(sourcePath);
+        var targetFile = new File(targetPath);
+        
+        if (!sourceFile.exists) return "failure";
+        
+        // Read existing target content if exists
+        var existingContent = '';
+        if (targetFile.exists) {
+            targetFile.open('r');
+            existingContent = targetFile.read();
+            targetFile.close();
+        }
+        
+        // Read imported content
+        sourceFile.open('r');
+        var importedContent = sourceFile.read();
+        sourceFile.close();
+        
+        // Merge settings
+        var mergedContent = mergeSettings(existingContent, importedContent);
+        if (mergedContent === 'error') return "failure";
+        
+        // Save merged content
+        targetFile.open('w');
+        targetFile.write(mergedContent);
+        targetFile.close();
+        
+        return "success";
+        
+    } catch(e) {
+        return "failure";
+    }
+}
