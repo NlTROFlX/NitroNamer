@@ -303,37 +303,34 @@ function mergeSettings(existingContent, importedContent) {
     }
 }
 
-function replaceSettingsFile(sourcePath, targetPath) {
+function replaceSettingsFile(inputPath, outputPath) {
     try {
-        var sourceFile = new File(sourcePath);
-        var targetFile = new File(targetPath);
-
-        if (!sourceFile.exists) return "failure";
-
-        var existingContent = '';
-        if (targetFile.exists) {
-            targetFile.open('r');
-            existingContent = targetFile.read();
-            targetFile.close();
+        var inputFile = new File(inputPath);
+        var outputFile = new File(outputPath);
+        if (!inputFile.exists) return "failure";
+        var outputContent = "";
+        if (outputFile.exists) {
+            outputFile.open("r");
+            outputContent = outputFile.read();
+            outputFile.close();
         }
-
-        sourceFile.open('r');
-        var importedContent = sourceFile.read();
-        sourceFile.close();
-
-        var mergedContent = mergeSettings(existingContent, importedContent);
-        if (mergedContent === 'error') return "failure";
-
-        targetFile.open('w');
-        targetFile.write(mergedContent);
-        targetFile.close();
-
+        inputFile.open("r");
+        var inputContent = inputFile.read();
+        inputFile.close();
+        var mergedContent = mergeSettings(outputContent, inputContent);
+        if (mergedContent === "error") return "failure";
+        var resultObject = JSON.parse(mergedContent);
+        resultObject.needGlobalUiReload = true;
+        var finalContent = JSON.stringify(resultObject, null, 4);
+        outputFile.open("w");
+        outputFile.write(finalContent);
+        outputFile.close();
         return "success";
-
-    } catch (e) {
+    } catch (error) {
         return "failure";
     }
 }
+
 
 function mergeVariables(importedJson, targetJson) {
     try {
