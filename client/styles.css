@@ -530,6 +530,19 @@ body, html {
   margin-left: 8px;
   cursor: pointer;
 }
+.license-by:hover, .license-nitrofix:hover {
+  color: #e7e7e7;
+  cursor: pointer; /* Укажем, что элемент кликабелен */
+}
+
+.bottom-bar .icon:hover {
+  transition: filter 0.125s ease;
+  filter: invert(48%) sepia(82%) saturate(2053%) hue-rotate(177deg) brightness(95%) contrast(102%);
+}
+
+.bottom-bar .icon:hover {
+  content: url('icons/icon_browser.svg'); /* Заменяем иконку при наведении */
+}
 .home-page-header-1 {
   position: relative;
   margin-top: 4px;
@@ -842,6 +855,10 @@ body, html {
   background-color: #161616;
   border-color: #313131;
   color: #8a8a8a; 
+}
+
+#exportPath1, #exportPath2, #exportPath3, #exportUserPresets, #exportNameApply, #exportSelectedLanguage, #exportVariables, #importPath1, #importPath2{
+  display: none;
 }
 
 .checkboxes-container {
