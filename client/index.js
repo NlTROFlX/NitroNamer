@@ -386,6 +386,37 @@ function initializeExportIconClickHandler() {
     }
 }
 
+function initializeLicenseClickHandlers() {
+    const licenseBy = document.querySelector(".license-by");
+    const licenseNitrofix = document.querySelector(".license-nitrofix");
+
+    const licenseUrl = "https://github.com/NlTROFlX/NitroNamer?tab=MIT-1-ov-file#readme";
+
+    if (licenseBy) {
+        licenseBy.style.cursor = "pointer";
+        licenseBy.addEventListener("click", function() {
+            openLinkInBrowser(licenseUrl);
+        });
+    }
+
+    if (licenseNitrofix) {
+        licenseNitrofix.style.cursor = "pointer";
+        licenseNitrofix.addEventListener("click", function() {
+            openLinkInBrowser(licenseUrl);
+        });
+    }
+}
+
+function openLinkInBrowser(url) {
+    const csInterface = new CSInterface();
+    csInterface.openURLInDefaultBrowser(url);
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    initializeLicenseClickHandlers();
+});
+
+
 function processTranslation(message) {
 
     if (message.indexOf("|") !== -1) {
