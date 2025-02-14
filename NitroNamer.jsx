@@ -720,11 +720,13 @@ function buildUI(thisObj) {
 			txtRenamedLabel = null;
 			grpTextFields.margins = [0, -10, 0, -10];
 			if (txtRenamedCompact) {
-				txtRenamedCompact.visible = !0
+				txtRenamedCompact.visible = true;
 			}
 			updatePreview();
 			win.minimumSize.height = globalHeightSizeElementsMin;
-			win.maximumSize.height = globalHeightSizeElementsMin
+			win.maximumSize.height = globalHeightSizeElementsMin;
+			win.layout.layout(true);
+			win.layout.resize();
 		} else {
 			btnMinimize.image = File(scriptFolderPath + "/NitroNamer/img/minimize.png");
 			btnMinimize.addEventListener("mouseover", handleMouseOverMinimize);
