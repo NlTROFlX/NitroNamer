@@ -524,6 +524,7 @@ function initializeImportButtonHandler() {
         } else {
             showCustomAlert("importCancel_3");
         }
+        fileInput.value = "";
     });
 }
 
