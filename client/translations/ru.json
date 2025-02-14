@@ -1,5 +1,5 @@
 {
-    "alertMessage_exprotBlock_01": "Экспорт недоступен, так как некоторые параметры не определены.",
+    "alertMessage_exprotBlock_01": "Экспорт недоступен, так вы не выбрали какие параметры необходимо экспортировать.",
     "defaultCustomAlertMessageButton_01": "OK",
     "export_cancel": "Вы отменили экспорт.",
     "export_success": "Файлы успешно сохранены в: {0}",
