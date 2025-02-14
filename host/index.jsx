@@ -334,3 +334,61 @@ function replaceSettingsFile(sourcePath, targetPath) {
         return "failure";
     }
 }
+
+function mergeVariables(importedJson, targetJson) {
+    try {
+        var targetData = {};
+        if (targetJson && targetJson.length > 0) {
+            targetData = JSON.parse(targetJson);
+        }
+        var importedData = JSON.parse(importedJson);
+        for (var key in importedData) {
+            targetData[key] = importedData[key];
+        }
+        return JSON.stringify(targetData, null, 4);
+    } catch (e) {
+        return "error";
+    }
+}
+
+function mergeVariablesFile(userFilePath, targetFilePath) {
+    var sourceFile = new File(userFilePath);
+    var targetFile = new File(targetFilePath);
+    if (!sourceFile.exists) {
+        alert("Файл " + userFilePath + " не существует.");
+        return "failure";
+    }
+    var sourceData = "";
+    if (sourceFile.open("r")) {
+        sourceData = sourceFile.read();
+        sourceFile.close();
+    } else {
+        alert("Не удалось открыть импортируемый файл переменных: " + sourceFile.fsName);
+        return "failure";
+    }
+    var targetData = "";
+    if (targetFile.exists) {
+        if (targetFile.open("r")) {
+            targetData = targetFile.read();
+            targetFile.close();
+        } else {
+            alert("Не удалось открыть файл переменных NitroNamer для чтения: " + targetFile.fsName);
+            return "failure";
+        }
+    } else {
+        targetData = "{}";
+    }
+    var merged = mergeVariables(sourceData, targetData);
+    if (merged === "error") {
+        alert("Ошибка при слиянии файлов переменных.");
+        return "failure";
+    }
+    if (targetFile.open("w")) {
+        targetFile.write(merged);
+        targetFile.close();
+        return "success";
+    } else {
+        alert("Не удалось записать файл переменных: " + targetFile.fsName);
+        return "failure";
+    }
+}

@@ -490,36 +490,39 @@ function hideCustomAlert() {
 }
 
 function initializeImportButtonHandler() {
-    const importButton = document.querySelector('.import-button');
-    const fileInput = document.getElementById('file-input');
-
-    importButton.addEventListener('click', () => {
-        if (document.getElementById('importOptions').checked) {
-            fileInput.click();
-        } else {
-            showCustomAlert('importCancel_2');
-        }
+    const importButton = document.querySelector(".import-button");
+    const fileInput = document.getElementById("file-input");
+    importButton.addEventListener("click", () => {
+        document.getElementById("importOptions").checked ? fileInput.click() : showCustomAlert("importCancel_2");
     });
-
-    fileInput.addEventListener('change', (e) => {
+    fileInput.addEventListener("change", (e) => {
         const file = e.target.files[0];
-        if (file && file.name === 'settings.json') {
-            const sourcePath = file.path.replace(/\\/g, '/');
-            const targetPath = document.getElementById('importPath2').textContent.trim()
-                .replace(/\\/g, '/')
-                .replace(/[^/]+$/, '') + 'NitroNamer/settings/settings.json';
-
-            const csInterface = new CSInterface();
-            csInterface.evalScript(`replaceSettingsFile("${sourcePath}", "${targetPath}")`, (result) => {
-                if (result === 'success') {
-                    showCustomAlert('importSuccessSettings_1');
-                    setTimeout(() => checkExportRequirements(), 500);
+        if (file && file.name === "settings.json") {
+            const filePath = file.path.replace(/\\/g, "/");
+            const targetPath = document.getElementById("importPath2").textContent.trim().replace(/\\/g, "/").replace(/[^/]+$/, "") + "NitroNamer/settings/settings.json";
+            (new CSInterface).evalScript(`replaceSettingsFile("${filePath}", "${targetPath}")`, (result) => {
+                if (result === "success") {
+                    showCustomAlert("importSuccessSettings_1");
+                    setTimeout(() => { checkExportRequirements(); }, 500);
                 } else {
-                    showCustomAlert('importFailureSettings_1');
+                    showCustomAlert("importFailureSettings_1");
+                }
+            });
+        } else if (file && file.name === "variables.json") {
+            const filePath = file.path.replace(/\\/g, "/");
+            let basePath = document.getElementById("importPath2").textContent.trim().replace(/\\/g, "/").replace(/[^/]+$/, "");
+            basePath = basePath.replace("settings", "scripts");
+            const targetPath = basePath + "NitroNamer/scripts/variables.json";
+            (new CSInterface).evalScript(`mergeVariablesFile("${filePath}", "${targetPath}")`, (result) => {
+                if (result === "success") {
+                    showCustomAlert("importSuccessVariables_1");
+                    setTimeout(() => { checkExportRequirements(); }, 500);
+                } else {
+                    showCustomAlert("importFailureVariables_1");
                 }
             });
         } else {
-            showCustomAlert('importCancel_3');
+            showCustomAlert("importCancel_3");
         }
     });
 }
