@@ -1,7 +1,7 @@
 {
     "alertMessage_exprotBlock_01": "Экспорт недоступен, так как некоторые параметры не определены.",
     "defaultCustomAlertMessageButton_01": "OK",
-    "export_cancel": "Сохранение отменено пользователем.",
+    "export_cancel": "Вы отменили экспорт.",
     "export_success": "Файлы успешно сохранены в: {0}",
     "importCancel_1": "Импорт невозможен так как NitroNamer не установлен или еще ни разу не запускался, вернитесь на эту страницу после установки или запуска NitroNamer.",
     "importCancel_2": "Активируйте чекбокс NitroNamer",
