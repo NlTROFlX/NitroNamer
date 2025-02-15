@@ -96,11 +96,15 @@
     "leftBlock_spoilerOther_3": "[1] Lpnt - Имя родительского слоя.",
     "leftBlock_spoilerOther_4": "[2] Fext - Тип расширения.",
 
-    "cVarPage_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Прекомпозиция</span><br>",
-    "cVarPage_2": "Переменная <span class=\"variable-text-block-span-1\">C</span> это имя текущей композиции, в которой находится обрабатываемый слой.",
+    "cVarPage_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Строка</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Прекомпозиция</span><br>",
+    "cVarPage_2": "<span class=\"variable-text-block-span-1\">C</span> это имя текущей композиции, в которой находится обрабатываемый слой.",
     "varC_videoExample_1": " | Демонстрация работы переменной C ",
 
-    "pnVarPage_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Текущий проект</span><br>",
-    "pnVarPage_2": "Переменная <span class=\"variable-text-block-span-1\">Pn</span> — возвращает имя текущего проекта AE.",
-    "varPn_videoExample_1": " | Демонстрация работы переменной Pn "
+    "pnVarPage_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Строка</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Текущий проект</span><br>",
+    "pnVarPage_2": "<span class=\"variable-text-block-span-1\">Pn</span> — возвращает имя текущего проекта AE.",
+    "varPn_videoExample_1": " | Демонстрация работы переменной Pn ",
+
+    "fVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Да</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Число, Строка</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Кадровая частота</span><br>",
+    "fVarSection_2": "<span class=\"variable-text-block-span-1\">F</span> — возвращает частоту кадров для прекомпозиций и для футажей по типу (mp4, mov, avi и тому подобные).",
+    "varF_videoExample_1": " | Демонстрация работы переменной F"
 }

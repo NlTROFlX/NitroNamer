@@ -346,11 +346,27 @@ body, html {
   background-color: #5163b1;
   border-radius: 1.5px;
 }
+.aeUiElementsLayerLabel.FootageVideo{
+  background-color: #85a09d;
+}
+.aeUiElementsLayerLabel.FootageImage{
+  background-color: #85859f;
+}
+.aeUiElementsLayerLabel.Precomp{
+  background-color: #85765e;
+}
 .aeUiElementsLayerShapeIcon{
-  display: inline-block;
+  display: inline-flex;
   position: relative;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
   height: 12px;
   width: 12px;
+}
+.aeUiElementsLayerShapeIcon img{
+  display: inline-block;
+  height: 12px;
 }
 .aeUiElementsLayerName{
   display: inline-block;

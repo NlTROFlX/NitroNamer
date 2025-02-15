@@ -96,11 +96,15 @@
     "leftBlock_spoilerOther_3": "[1] Lpnt - Parent layer name.",
     "leftBlock_spoilerOther_4": "[2] Fext - Extension type.",
 
-    "cVarPage_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Source of data: <span class=\"variable-text-block-span-1\">Pre-comp</span><br>",
+    "cVarPage_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Pre-comp</span><br>",
     "cVarPage_2": "The variable <span class=\"variable-text-block-span-1\">C</span> is the name of the current composition in which the layer being processed is located.",
     "varC_videoExample_1": " | Demonstration of the C variable",
 
-    "pnVarPage_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Source of data: <span class=\"variable-text-block-span-1\">Current project</span><br>",
+    "pnVarPage_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Current project</span><br>",
     "pnVarPage_2": "The variable <span class=\"variable-text-block-span-1\">Pn</span> provides the name of the current project in Adobe After Effects without the file extension.",
-    "varPn_videoExample_1": " | Demonstration of the Pn variable"
+    "varPn_videoExample_1": " | Demonstration of the Pn variable",
+
+    "fVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">Yes</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number, String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Frame rate</span><br>",
+    "fVarSection_2": "The variable <span class=\"variable-text-block-span-1\">F</span> returns frame rate for precompositions and for futages by type (mp4, mov, avi and the like).",
+    "varF_videoExample_1": " | Demonstration of the F variable"
 }
