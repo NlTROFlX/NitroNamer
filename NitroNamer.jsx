@@ -383,18 +383,12 @@ function buildUI(thisObj) {
 	var ddBrieflyType = grpBriefly.add("dropdownlist", undefined, ["Camel Case", "Pascal Case", "Snake Case", "Kebab Case", "Screaming Snake Case"]);
 	ddBrieflyType.maximumSize.width = 150;
 	ddBrieflyType.selection = 0;
-	chkBriefly.onClick = function() {
-		var currentSettings = {
-			allLayers: rdoAllLayers.value,
-			template: txtTemplate.text,
-			briefly: chkBriefly.value,
-			brieflyType: ddBrieflyType.selection.index
-		};
-		saveSettings(currentSettings, !0);
+	chkBriefly.onClick = function(){
+		saveSettings({ allLayers: rdoAllLayers.value, template: txtTemplate.text, briefly: chkBriefly.value, brieflyType: ddBrieflyType.selection.index }, !0);
 		updatePreview();
 		updateLayerCounts();
-		resetRenameButtonIcon()
-	};
+		updateRenameButtonIcon();
+	}	
 	ddBrieflyType.onChange = function() {
 		var currentSettings = {
 			allLayers: rdoAllLayers.value,
