@@ -71,7 +71,7 @@
                         data-i18n="leftBlock_spoilerComposition_3">[1] Pn - Current project name.</p>
                     <p onclick="selectSubItem(this);showContent('content-3')"
                         data-i18n="leftBlock_spoilerComposition_4">[1] F - Frame rate.</p>
-                    <p onclick="selectSubItem(this);showContent('content-1')"
+                    <p onclick="selectSubItem(this);showContent('content-4')"
                         data-i18n="leftBlock_spoilerComposition_5">[1] R - Resolution of the layer.</p>
                     <p onclick="selectSubItem(this);showContent('content-1')"
                         data-i18n="leftBlock_spoilerComposition_6">[2] Ar - Aspect ratio.</p>
@@ -508,7 +508,7 @@
                     </div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_2">Description:</div>
                     <div class="variable-text-block" data-i18n="fVarSection_2">The variable <span
-                            class="variable-text-block-span-1">F</span> returns frame rate for precompositions and for futages by type (mp4, mov, avi and the like)</div>
+                            class="variable-text-block-span-1">F</span> returns frame rate for precompositions and for footages by type (mp4, mov, avi and the like)</div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_3">Features:</div>
                     <div class="variable-text-block" data-i18n="globalVarRightBlock_3_1">Not available.</div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_4">Video examples with results:
@@ -577,6 +577,93 @@
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Footage_frameRate:<span class="variable-text-block-span-2">60</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- var R -->
+                <div class="content-section" id="content-4">
+                    <div class="variable-name-block" data-value="Pn"> <span
+                            class="variable-text-block-span-1">R&nbsp;</span>- variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
+                    <div class="variable-text-block" data-i18n="rVarSection_1">Number of available modes: <span
+                            class="variable-text-block-span-1">1</span>
+                        <br>Customizing the return value: <span class="variable-text-block-span-1">Yes</span>
+                        <br>Customizing the separator: <span class="variable-text-block-span-1">No</span>
+                        <br>Returned data type: <span class="variable-text-block-span-1">String</span>
+                        <br>Source of data: <span class="variable-text-block-span-1">Initial futage parameters</span>
+                        <br>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_2">Description:</div>
+                    <div class="variable-text-block" data-i18n="rVarSection_2">The variable <span
+                            class="variable-text-block-span-1">R</span> returns a string of the form "width*height" of the source footage or pre-composition.</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_3">Features:</div>
+                    <div class="variable-text-block" data-i18n="globalVarRightBlock_3_1">Not available.</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_4">Video examples with results:
+                    </div>
+                    <div class="videoblock" id="video1">
+                        <div class="video-container" id="videoContainer">
+                            <video id="video" width="100%" height="100%" src="media/video/var_examples/var_pn.webm"
+                                type="video/webm"></video>
+                            <img src="icons/play.svg" id="playIcon" class="control-icon" alt="Play">
+                            <img src="icons/pause.svg" id="pauseIcon" class="control-icon" alt="Pause">
+                            <div class="video-overlay"></div>
+                        </div>
+                        <div class="video-info" id="videoInfo">
+                            <p id="currentTime">00:00:00</p>
+                            <p id="titleVideo" data-i18n="varR_videoExample_1">| Demonstration of the R variable</p>
+                            <img src="icons/scale-up.svg" class="scale-up-icon" alt="Scale Up">
+                        </div>
+                        <div id="progressBarContainer">
+                            <div id="progressBarBackground">
+                                <div id="progressBarFill"></div>
+                                <div id="seekKnob"></div>
+                                <div id="timeTooltip">00:00:00</div>
+                                <div id="hoverCircle"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_5">Text examples with results:
+                    </div>
+                    <div class="variable-example-block" data-value="(frameRateOfFootage):F"> <span
+                            class="variable-text-block-span-0">MODE 1: </span> <span>T | <span class="variable-text-block-span-2">R</span>.Fext</span><span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Shape" id=""></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                Shape |<span class="variable-text-block-span-2">NoResolution</span>.NoExtension
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel FootageVideo"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-video-file.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                Footage |<span class="variable-text-block-span-2">1920*1080</span>.mp4
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel FootageImage"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-image-file.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                Footage |<span class="variable-text-block-span-2">512*512</span>.png
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Precomp"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-precomp.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                Pre-comp |<span class="variable-text-block-span-2">256*1080</span>.NoExtension
                             </div>
                         </div>
                     </div>

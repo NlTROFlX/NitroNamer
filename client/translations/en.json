@@ -106,5 +106,9 @@
 
     "fVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">Yes</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number, String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Frame rate</span><br>",
     "fVarSection_2": "The variable <span class=\"variable-text-block-span-1\">F</span> returns frame rate for precompositions and for futages by type (mp4, mov, avi and the like).",
-    "varF_videoExample_1": " | Demonstration of the F variable"
+    "varF_videoExample_1": " | Demonstration of the F variable",
+    
+    "rVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">Yes</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number, String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Footage, Pre-comp</span><br>",
+    "rVarSection_2": "<span class=\"variable-text-block-span-1\">R</span> — Returns a string of the form \"width*height\" of the source footage or precomposition.",
+    "varR_videoExample_1": " | Demonstration of the R variable"
 }

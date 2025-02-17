@@ -106,5 +106,9 @@
 
     "fVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Да</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Число, Строка</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Кадровая частота</span><br>",
     "fVarSection_2": "<span class=\"variable-text-block-span-1\">F</span> — возвращает частоту кадров для прекомпозиций и для футажей по типу (mp4, mov, avi и тому подобные).",
-    "varF_videoExample_1": " | Демонстрация работы переменной F"
+    "varF_videoExample_1": " | Демонстрация работы переменной F",
+
+    "rVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Да</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Строка</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Футаж, Прекомпозиция</span><br>",
+    "rVarSection_2": "<span class=\"variable-text-block-span-1\">R</span> — возвращает строку вида «ширина*высота» исходного футажа или прекомпозиции.",
+    "varR_videoExample_1": " | Демонстрация работы переменной R"
 }
