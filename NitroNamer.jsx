@@ -1338,35 +1338,38 @@ function buildUI(thisObj) {
 		ddLayerMode.onChange = dropdownChangeHandler
 	}
 
-	function updateLayerCounts() {
+	function updateLayerCounts(){
 		var proj = app.project;
 		if (proj) {
-			var comp = proj.activeItem;
+			var comp = (app.activeViewer && app.activeViewer.type === ViewerType.COMPOSITION)
+					   ? app.activeViewer.comp
+					   : proj.activeItem;
 			if (comp && comp instanceof CompItem) {
-				var totalLayerCount = 0;
-				var selectedLayerCount = 0;
+				var totalLayers = 0,
+					selectedLayers = 0;
 				for (var i = 1; i <= comp.numLayers; i++) {
 					var layer = comp.layer(i);
 					if (!layer.locked && !layer.shy) {
-						totalLayerCount++;
+						totalLayers++;
 						if (layer.selected) {
-							selectedLayerCount++
+							selectedLayers++;
 						}
 					}
 				}
-				txtAllLayersCount.text = totalLayerCount.toString();
-				txtSelectedLayersCount.text = selectedLayerCount.toString();
+				txtAllLayersCount.text = totalLayers.toString();
+				txtSelectedLayersCount.text = selectedLayers.toString();
 				txtAllLayersCount.visible = rdoAllLayers.value;
-				txtSelectedLayersCount.visible = rdoOnlySelected.value
+				txtSelectedLayersCount.visible = rdoOnlySelected.value;
 			} else {
 				txtAllLayersCount.text = "0";
-				txtSelectedLayersCount.text = "0"
+				txtSelectedLayersCount.text = "0";
 			}
 		} else {
 			txtAllLayersCount.text = "0";
-			txtSelectedLayersCount.text = "0"
+			txtSelectedLayersCount.text = "0";
 		}
 	}
+	
 
 	function updatePreview() {
 		var settings = loadSettings();
@@ -1374,7 +1377,9 @@ function buildUI(thisObj) {
 		checkAndUpdateSettings();
 		var proj = app.project;
 		if (proj) {
-			var comp = proj.activeItem;
+			var comp = (app.activeViewer && app.activeViewer.type === ViewerType.COMPOSITION)
+				? app.activeViewer.comp
+				: proj.activeItem;
 			if (comp && comp instanceof CompItem && comp.numLayers > 0) {
 				var selectedLayers = comp.selectedLayers;
 				var targetLayer = null;
@@ -2158,36 +2163,38 @@ function buildUI(thisObj) {
 		}
 	}
 
-	function getSelectedPropertyPaths() {
-		var proj = app.project;
-		var paths = [];
-		if (proj && proj.activeItem instanceof CompItem) {
-			var comp = proj.activeItem;
-			var selectedLayers = comp.selectedLayers;
-			if (selectedLayers.length > 0) {
-				var layer = selectedLayers[selectedLayers.length - 1];
-				var selectedProperties = layer.selectedProperties;
-				if (selectedProperties.length > 0) {
-					for (var i = 0; i < selectedProperties.length; i++) {
-						var prop = selectedProperties[i];
-						if (prop instanceof Property || prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup) {
-							var path = [];
-							var currentProp = prop;
-							while (currentProp && currentProp !== layer) {
-								path.unshift(currentProp.name);
-								currentProp = currentProp.parentProperty
+	function getSelectedPropertyPaths(){
+		var proj = app.project,
+			paths = [];
+		if(proj) {
+			var comp = (app.activeViewer && app.activeViewer.type === ViewerType.COMPOSITION)
+					   ? app.activeViewer.comp
+					   : proj.activeItem;
+			if(comp instanceof CompItem){
+				var selectedLayers = comp.selectedLayers;
+				if(selectedLayers.length > 0){
+					var lastLayer = selectedLayers[selectedLayers.length - 1],
+						selectedProperties = lastLayer.selectedProperties;
+					if(selectedProperties.length > 0){
+						for(var i = 0; i < selectedProperties.length; i++){
+							var prop = selectedProperties[i];
+							if(prop instanceof Property || prop instanceof PropertyGroup || prop instanceof MaskPropertyGroup){
+								var path = [];
+								for(var p = prop; p && p !== lastLayer; p = p.parentProperty){
+									path.unshift(p.name);
+								}
+								paths.push(path);
 							}
-							paths.push(path)
 						}
-					}
-					if (paths.length > 0) {
-						return paths
+						if(paths.length > 0){
+							return paths;
+						}
 					}
 				}
 			}
 		}
-		return null
-	}
+		return null;
+	}	
 
 	function getAttributeNamesForLayer(layer, propertyPaths) {
 		var attrNames = [];
@@ -2617,11 +2624,12 @@ function buildUI(thisObj) {
 	function renameLayersByTemplate(allLayers, template, briefly, brieflyCase, showShyLocked, reverseOrder, ctrlKey, shiftKey, altKey, ctrlShift) {
 		checkAndUpdateSettings();
 		resetIncrementValues();
-		var project = app.project;
-		if (project && project.activeItem instanceof CompItem) {
-			var activeComp = project.activeItem;
-			var totalLayersInComp = activeComp.numLayers;
-			if (activeComp.numLayers > 0) {
+		var proj = app.project;
+		var comp = (app.activeViewer && app.activeViewer.type === ViewerType.COMPOSITION)
+			? app.activeViewer.comp
+			: proj.activeItem;
+		if (comp && comp instanceof CompItem) {
+			if (comp.numLayers > 0) {
 				var settings = loadSettings();
 				var nameApplySettings = settings.nameApply || {};
 				var layerTypeMap = {
@@ -2637,10 +2645,10 @@ function buildUI(thisObj) {
 					"Audio": "audioLayer"
 				};
 				app.beginUndoGroup("Rename Layers by Template");
-				var orderedLayers = getLayerOrder(activeComp, allLayers, !1);
+				var orderedLayers = getLayerOrder(comp, allLayers, false);
 				var typeTotals = {};
-				for (var i = 1; i <= activeComp.numLayers; i++) {
-					var ly = activeComp.layer(i);
+				for (var i = 1; i <= comp.numLayers; i++) {
+					var ly = comp.layer(i);
 					var lt = getLayerType(ly);
 					if (!typeTotals[lt]) {
 						typeTotals[lt] = 0
@@ -2648,7 +2656,7 @@ function buildUI(thisObj) {
 					typeTotals[lt]++
 				}
 				var typeCounter = {};
-				var totalLayersInComp = activeComp.numLayers;
+				var totalLayersInComp = comp.numLayers;
 				var globalI = altKey ? totalLayersInComp : 1;
 				var propertyPaths = getSelectedPropertyPaths();
 				var layersToRename = [];
@@ -2694,7 +2702,7 @@ function buildUI(thisObj) {
 							R: getResolution(currentLayer, variableSettings),
 							D: getDuration(currentLayer),
 							Df: getDurationInFrames(currentLayer),
-							C: activeComp.name,
+							C: comp.name,
 							Ip: currentLayer.inPoint.toFixed(2),
 							Op: currentLayer.outPoint.toFixed(2),
 							S: getSourceName(currentLayer),

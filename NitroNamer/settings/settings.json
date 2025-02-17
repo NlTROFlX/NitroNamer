@@ -5,29 +5,29 @@
             "template": "T.I | I(r) | I(10) | I(10,r)",
             "briefly": false,
             "brieflyType": 3,
-            "usageFrequency": 4
+            "usageFrequency": 5
         },
         "preset_1": {
             "allLayers": true,
             "template": "@cycle(2, '(A) T.i | I(10)', '(B) T.i | I(100)')",
             "briefly": false,
             "brieflyType": 3,
-            "usageFrequency": 6
+            "usageFrequency": 7
         }
     },
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "001TRUE",
+        "template": "@cycle(2, '(A) T.i | I(10)', '(B) T.i | I(100)')",
         "briefly": false,
         "brieflyType": 3,
         "modeIndex": 4,
         "modeActive": false,
-        "selectedPresetTemplate": "T.I | I(r) | I(10) | I(10,r)"
+        "selectedPresetTemplate": "@cycle(2, '(A) T.i | I(10)', '(B) T.i | I(100)')"
     },
     "nameApply": {
-        "shapeLayer": false,
-        "textLayer": false,
+        "shapeLayer": true,
+        "textLayer": true,
         "nullObject": true,
         "adjustmentLayer": true,
         "footageLayer": true,
