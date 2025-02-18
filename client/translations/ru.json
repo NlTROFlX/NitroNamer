@@ -89,6 +89,12 @@
     "leftBlock_spoilerLayerProperties_12": "[4] Lexp - Свойства слоя с выражениями.",
     "leftBlock_spoilerLayerProperties_13": "[4] Lmn - Список масок слоев.",
     "leftBlock_spoilerLayerProperties_14": "[4] Lmс - Количество масок слоев.",
+    "leftBlock_spoilerSpecial_1": "Специальные",
+    "leftBlock_spoilerSpecial_2": "[2] attr - выбранные атрибуты",
+    "leftBlock_spoilerSpecial_3": "[1] prop - выбранные свойства",
+    "leftBlock_spoilerSupporting_1": "Вспомогательные",
+    "leftBlock_spoilerSupporting_2": "[1] eNumber - номер эффекта",
+    "leftBlock_spoilerSupporting_3": "[1] mNumber - номер маски",
     "leftBlock_spoilerOperators_1": "Операторы",
     "leftBlock_spoilerOperators_2": "@cycle - оператор цикла",
     "leftBlock_spoilerOther_1": "Другие",
@@ -110,5 +116,9 @@
 
     "rVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Да</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Строка</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Футаж, Прекомпозиция</span><br>",
     "rVarSection_2": "<span class=\"variable-text-block-span-1\">R</span> — возвращает строку вида «ширина*высота» исходного футажа или прекомпозиции.",
-    "varR_videoExample_1": " | Демонстрация работы переменной R"
+    "varR_videoExample_1": " | Демонстрация работы переменной R",
+
+    "arVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Да</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Строка</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Источник в проекте</span><br>",
+    "arVarSection_2": "<span class=\"variable-text-block-span-1\">Ar</span> — возвращает соотношение сторон в виде строки \"value:value\" для: футажей, solid layer, прекомпозиций.",
+    "varAr_videoExample_1": " | Демонстрация работы переменной Ar"
 }

@@ -109,6 +109,10 @@
     "varF_videoExample_1": " | Demonstration of the F variable",
     
     "rVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">Yes</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number, String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Footage, Pre-comp</span><br>",
-    "rVarSection_2": "<span class=\"variable-text-block-span-1\">R</span> — Returns a string of the form \"width*height\" of the source footage or precomposition.",
-    "varR_videoExample_1": " | Demonstration of the R variable"
+    "rVarSection_2": "<span class=\"variable-text-block-span-1\">R</span> — returns a string of the form \"width*height\" of the source footage or precomposition.",
+    "varR_videoExample_1": " | Demonstration of the R variable",
+
+    "arVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">Yes</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number, String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Project source</span><br>",
+    "arVarSection_2": "<span class=\"variable-text-block-span-1\">Ar</span> — returns the aspect ratio as a \"value:value\" string for: footage, solid layer, pre-comps.",
+    "varAr_videoExample_1": " | Demonstration of the Ar variable"
 }
