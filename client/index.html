@@ -107,7 +107,7 @@
                     <div class="spoiler-title" data-i18n="leftBlock_spoilerEffects_1">Effects</div>
                 </div>
                 <div class="spoiler-content">
-                    <p onclick="selectSubItem(this);showContent('content-1')" data-i18n="leftBlock_spoilerEffects_2">[4]
+                    <p onclick="selectSubItem(this);showContent('content-11')" data-i18n="leftBlock_spoilerEffects_2">[3]
                         E - Names of the effects.</p>
                     <p onclick="selectSubItem(this);showContent('content-1')" data-i18n="leftBlock_spoilerEffects_3">[1]
                         Ec - Number of effects per layer.</p>
@@ -1121,6 +1121,122 @@
                             </div>
                             <div class="aeUiElementsLayerName">
                                 (MONTH:YEAR) - <span class="variable-text-block-span-2">25</span>/<span class="variable-text-block-span-2">2024</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--== Effects ==-->
+                <!-- var E -->
+                <div class="content-section" id="content-11">
+                    <div class="variable-name-block" data-value="E"> <span class="variable-text-block-span-1">E&nbsp;</span> -
+                        variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
+                    <div class="variable-text-block" data-i18n="eVarSection_1">Number of available modes: <span class="variable-text-block-span-1">3</span>
+                        <br>Customizing the return value: <span class="variable-text-block-span-1">Yes</span>
+                        <br>Customizing the separator: <span class="variable-text-block-span-1">Yes</span>
+                        <br>Returned data type: <span class="variable-text-block-span-1">String</span>
+                        <br>Source of data: <span class="variable-text-block-span-1">Effects Controls</span>
+                        <br>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_2">Description:</div>
+                    <div class="variable-text-block" data-i18n="eVarSection_2">&nbsp;The <span class="variable-text-block-span-1">E</span> variable can return either all or only the named effects present on the layer. <span class="variable-text-block-span-1">E</span> returns all the effects present on the layer. The syntax <span class="variable-text-block-span-1">E(effectName)</span> will return only those effects whose names match the specified one, and the number of listed effects is unlimited. The separator symbol is replaced using this syntax: <span class="variable-text-block-span-1">E([#])</span>. Available syntax types: <span class="variable-text-block-span-1">E</span>, <span class="variable-text-block-span-1">E([#])</span>, <span class="variable-text-block-span-1">E(effectName1, effectName2)</span>, <span class="variable-text-block-span-1">E(effectName1 [#])</span>.</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_3">Features:</div>
+                    <div class="variable-text-block" data-i18n="eVarSection_3">* When writing and searching for an effect by name, letter case is not considered. There is no difference between such
+                    syntax: <span class="variable-text-block-span-1">E(DEEP Glow)</span> and such: <span
+                        class="variable-text-block-span-1">E(deep glow)</span>.<br><br>
+                    * This variable has its own auxiliary variables <span class="variable-text-block-span-1">eNumber</span>. These variables
+                    can be used in place of the effect name, for example: <span class="variable-text-block-span-1">E(e1, e2, e3, [ /
+                        ])</span>. This syntax will return the first, second, and third effect names. If, for example, the third effect is
+                    not present on the layer, an empty value will be returned instead.<br><br>
+                    * This variable supports a special variable <span class="variable-text-block-span-1">prop</span>. Instead of specifying
+                    effect numbers or names, you can simply select them on the desired layer, for example: <span
+                        class="variable-text-block-span-1">E(prop, [ / ])</span>.<br>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_4">Video examples with results:
+                    </div>
+                    <div class="videoblock" id="video1">
+                        <div class="video-container" id="videoContainer">
+                            <video id="video" width="100%" height="100%" src="media/video/var_examples/var_c.webm"
+                                type="video/webm"></video>
+                            <img src="icons/play.svg" id="playIcon" class="control-icon" alt="Play">
+                            <img src="icons/pause.svg" id="pauseIcon" class="control-icon" alt="Pause">
+                            <div class="video-overlay"></div>
+                        </div>
+                        <div class="video-info" id="videoInfo">
+                            <p id="currentTime">00:00:00</p>
+                            <p id="titleVideo" data-i18n="varCd_videoExample_1">| Demonstration of the Df variable</p>
+                            <img src="icons/scale-up.svg" class="scale-up-icon" alt="Scale Up">
+                        </div>
+                        <div id="progressBarContainer">
+                            <div id="progressBarBackground">
+                                <div id="progressBarFill"></div>
+                                <div id="seekKnob"></div>
+                                <div id="timeTooltip">00:00:00</div>
+                                <div id="hoverCircle"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_5">Text examples with results:
+                    </div>
+                    <div class="variable-example-block" data-value="(All layer effects): E">
+                        <span class="variable-text-block-span-0">MODE 1:&nbsp;</span>(All layer effects):&nbsp;<span class="variable-text-block-span-2">E</span>
+                        <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                All layer effects:&nbsp;<span class="variable-text-block-span-2">levels, glow, echo</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-example-block" data-value="(With custom divider) - E([ ** ])">
+                        <span class="variable-text-block-span-0">MODE 2:&nbsp;</span>(With custom divider) -&nbsp;<span class="variable-text-block-span-2">E([ ** ])</span>
+                        <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                With custom divider - <span class="variable-text-block-span-2">levels ** glow ** echo</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-example-block" data-value="(names + separator) - E(levels, echo, [ ** ])">
+                        <span class="variable-text-block-span-0">MODE 3:&nbsp;</span>(names + separator) -&nbsp;<span class="variable-text-block-span-2">E(levels, echo, [ ** ])</span>
+                        <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                names + separator - <span class="variable-text-block-span-2">levels ** echo</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-example-block" data-value="(Auxiliary variable) - E(e2, e3)">
+                        <span class="variable-text-block-span-0">MODE 3:&nbsp;</span>(Auxiliary variable) -&nbsp;<span class="variable-text-block-span-2">E(e2, e3)</span>
+                        <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                Auxiliary variable - <span class="variable-text-block-span-2">glow # echo</span>
                             </div>
                         </div>
                     </div>
