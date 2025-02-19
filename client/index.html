@@ -1006,7 +1006,7 @@
                         <br>
                     </div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_2">Description:</div>
-                    <div class="variable-text-block" data-i18n="dfVarSection_2">The variable <span class="variable-text-block-span-1">Df</span> Returns the duration of the layer in frames.</div>
+                    <div class="variable-text-block" data-i18n="dfVarSection_2">The variable <span class="variable-text-block-span-1">Df</span> returns the duration of the layer in frames.</div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_3">Features:</div>
                     <div class="variable-text-block" data-i18n="globalVarRightBlock_3_1">Not available.</div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_4">Video examples with results:
@@ -1047,6 +1047,80 @@
                             </div>
                             <div class="aeUiElementsLayerName">
                                 frameDuration:<span class="variable-text-block-span-2">40</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- var Cd -->
+                <div class="content-section" id="content-10">
+                    <div class="variable-name-block" data-value="Cd"> <span class="variable-text-block-span-1">Cd&nbsp;</span> -
+                        variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
+                    <div class="variable-text-block" data-i18n="cdVarSection_1">Number of available modes: <span class="variable-text-block-span-1">2</span>
+                        <br>Customizing the return value: <span class="variable-text-block-span-1">No</span>
+                        <br>Customizing the separator: <span class="variable-text-block-span-1">No</span>
+                        <br>Returned data type: <span class="variable-text-block-span-1">String</span>
+                        <br>Source of data: <span class="variable-text-block-span-1">Date</span>
+                        <br>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_2">Description:</div>
+                    <div class="variable-text-block" data-i18n="cdVarSection_2">The variable <span class="variable-text-block-span-1">Cd</span> returns the current date, the return format is "DAY:MONTH:YEAR". You can specify which time value to return: only day, only month, only year, using the syntax <span class="variable-text-block-span-1">Cd(N)</span>, where <span class="variable-text-block-span-1">N</span> is a value in the range from 1 to 3.</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_3">Features:</div>
+                    <div class="variable-text-block" data-i18n="globalVarRightBlock_3_1">Not available.</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_4">Video examples with results:
+                    </div>
+                    <div class="videoblock" id="video1">
+                        <div class="video-container" id="videoContainer">
+                            <video id="video" width="100%" height="100%" src="media/video/var_examples/var_c.webm"
+                                type="video/webm"></video>
+                            <img src="icons/play.svg" id="playIcon" class="control-icon" alt="Play">
+                            <img src="icons/pause.svg" id="pauseIcon" class="control-icon" alt="Pause">
+                            <div class="video-overlay"></div>
+                        </div>
+                        <div class="video-info" id="videoInfo">
+                            <p id="currentTime">00:00:00</p>
+                            <p id="titleVideo" data-i18n="varCd_videoExample_1">| Demonstration of the Df variable</p>
+                            <img src="icons/scale-up.svg" class="scale-up-icon" alt="Scale Up">
+                        </div>
+                        <div id="progressBarContainer">
+                            <div id="progressBarBackground">
+                                <div id="progressBarFill"></div>
+                                <div id="seekKnob"></div>
+                                <div id="timeTooltip">00:00:00</div>
+                                <div id="hoverCircle"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_5">Text examples with results:
+                    </div>
+                    <div class="variable-example-block" data-value="(Full current date:) Cd">
+                        <span class="variable-text-block-span-0">MODE 1:&nbsp;</span>(Full current date:)&nbsp;<span class="variable-text-block-span-2">Cd</span>
+                        <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                Full current date:<span class="variable-text-block-span-2">21.25.2024</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-example-block" data-value="(MONTH:YEAR) - C(2)/C(3)">
+                        <span class="variable-text-block-span-0">MODE 2:&nbsp;</span>MONTH:YEAR -&nbsp;<span class="variable-text-block-span-2">С(2)</span>/<span class="variable-text-block-span-2">С(3)</span>
+                        <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                (MONTH:YEAR) - <span class="variable-text-block-span-2">25</span>/<span class="variable-text-block-span-2">2024</span>
                             </div>
                         </div>
                     </div>
