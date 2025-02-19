@@ -90,14 +90,12 @@
                         data-i18n="leftBlock_spoilerTimeAndDuration_2">[1] Ip - Entry point of the layer.</p>
                     <p onclick="selectSubItem(this);showContent('content-7')"
                         data-i18n="leftBlock_spoilerTimeAndDuration_3">[1] Op - Exit point of the layer.</p>
-                    <p onclick="selectSubItem(this);showContent('content-1')"
-                        data-i18n="leftBlock_spoilerTimeAndDuration_3">[4] D - Duration of the layer.</p>
-                    <p onclick="selectSubItem(this);showContent('content-1')"
-                        data-i18n="leftBlock_spoilerTimeAndDuration_4">[1] Df - Time duration of the layer.</p>
-                    <p onclick="selectSubItem(this);showContent('content-1')"
-                        data-i18n="leftBlock_spoilerTimeAndDuration_5">[1] D - Duration in frames.</p>
-                    <p onclick="selectSubItem(this);showContent('content-1')"
-                        data-i18n="leftBlock_spoilerTimeAndDuration_6">[4] Cd - Duration in frames.</p>
+                    <p onclick="selectSubItem(this);showContent('content-8')"
+                        data-i18n="leftBlock_spoilerTimeAndDuration_4">[4] D - Duration of the layer.</p>
+                    <p onclick="selectSubItem(this);showContent('content-9')"
+                        data-i18n="leftBlock_spoilerTimeAndDuration_5">[1] Df - Time duration of the layer.</p>
+                    <p onclick="selectSubItem(this);showContent('content-10')"
+                        data-i18n="leftBlock_spoilerTimeAndDuration_7">[4] Cd - Duration in frames.</p>
                 </div>
             </div>
             <!-- Effects -->
@@ -916,6 +914,80 @@
                             </div>
                             <div class="aeUiElementsLayerName">
                                 FrameDuration:100 - Out:<span class="variable-text-block-span-2">0.39</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- var D -->
+                <div class="content-section" id="content-8">
+                    <div class="variable-name-block" data-value="D"> <span class="variable-text-block-span-1">D&nbsp;</span> -
+                        variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
+                    <div class="variable-text-block" data-i18n="dVarSection_1">Number of available modes: <span class="variable-text-block-span-1">2</span>
+                        <br>Customizing the return value: <span class="variable-text-block-span-1">No</span>
+                        <br>Customizing the separator: <span class="variable-text-block-span-1">No</span>
+                        <br>Returned data type: <span class="variable-text-block-span-1">String</span>
+                        <br>Source of data: <span class="variable-text-block-span-1">Timeline</span>
+                        <br>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_2">Description:</div>
+                    <div class="variable-text-block" data-i18n="dVarSection_2">The variable <span class="variable-text-block-span-1">D</span> returns the duration of a layer in the timeline, the returned format is "HOURS:MINUTES:SECONDS". You can specify what time value to return: only hours, only minutes, only seconds, using the syntax <span class="variable-text-block-span-1">D(N)</span>, where  <span class="variable-text-block-span-1">N</span> is a value in the range from 1 to 3.</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_3">Features:</div>
+                    <div class="variable-text-block" data-i18n="globalVarRightBlock_3_1">Not available.</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_4">Video examples with results:
+                    </div>
+                    <div class="videoblock" id="video1">
+                        <div class="video-container" id="videoContainer">
+                            <video id="video" width="100%" height="100%" src="media/video/var_examples/var_c.webm"
+                                type="video/webm"></video>
+                            <img src="icons/play.svg" id="playIcon" class="control-icon" alt="Play">
+                            <img src="icons/pause.svg" id="pauseIcon" class="control-icon" alt="Pause">
+                            <div class="video-overlay"></div>
+                        </div>
+                        <div class="video-info" id="videoInfo">
+                            <p id="currentTime">00:00:00</p>
+                            <p id="titleVideo" data-i18n="varD_videoExample_1">| Demonstration of the D variable</p>
+                            <img src="icons/scale-up.svg" class="scale-up-icon" alt="Scale Up">
+                        </div>
+                        <div id="progressBarContainer">
+                            <div id="progressBarBackground">
+                                <div id="progressBarFill"></div>
+                                <div id="seekKnob"></div>
+                                <div id="timeTooltip">00:00:00</div>
+                                <div id="hoverCircle"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_5">Text examples with results:
+                    </div>
+                    <div class="variable-example-block" data-value="(Total layer duration:) D">
+                        <span class="variable-text-block-span-0">MODE 1:&nbsp;</span>(Total layer duration:)&nbsp;<span class="variable-text-block-span-2">D</span>
+                        <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                Total layer duration: <span class="variable-text-block-span-2">00:02:15</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-example-block" data-value="(MINUTES:SECONDS) - D(2)_D(3)">
+                        <span class="variable-text-block-span-0">MODE 2:&nbsp;</span>MINUTES:SECONDS -&nbsp;<span class="variable-text-block-span-2">D(2)</span>_<span class="variable-text-block-span-2">D(3)</span>
+                        <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                (MINUTES:SECONDS) - <span class="variable-text-block-span-2">02</span>_<span class="variable-text-block-span-2">15</span>
                             </div>
                         </div>
                     </div>

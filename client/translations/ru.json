@@ -65,7 +65,7 @@
     "leftBlock_spoilerTimeAndDuration_1": "Время и длительность",
     "leftBlock_spoilerTimeAndDuration_2": "[1] Ip - Точка входа.",
     "leftBlock_spoilerTimeAndDuration_3": "[1] Op - Точка выхода.",
-    "leftBlock_spoilerTimeAndDuration_4": "[4] D - Продолжительность.",
+    "leftBlock_spoilerTimeAndDuration_4": "[2] D - Продолжительность.",
     "leftBlock_spoilerTimeAndDuration_5": "[1] Df - Продолжительность в кадрах.",
     "leftBlock_spoilerTimeAndDuration_6": "[4] Cd - Текущая дата.",
     "leftBlock_spoilerEffects_1": "Эффекты",
@@ -127,6 +127,10 @@
     "varIp_videoExample_1": " | Демонстрация работы переменной Ip",
 
     "opVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Число</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Таймлайн</span><br>",
-    "opVarSection_2": "<span class=\"variable-text-block-span-1\">Op</span> — выходная точка слоя на таймлайне, значение возвращается в секундах.",
-    "varOp_videoExample_1": " | Демонстрация работы переменной Op"
+    "opVarSection_2": "<span class=\"variable-text-block-span-1\">Op</span> — выходная точка слоя на таймлайнеleftBlock_spoilerTimeAndDuration_3, значение возвращается в секундах.",
+    "varOp_videoExample_1": " | Демонстрация работы переменной Op",
+
+    "dVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">2</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Число</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Таймлайн</span><br>",
+    "dVarSection_2": "<span class=\"variable-text-block-span-1\">D</span> возвращает продолжительность слоя на таймлайне, возвращаемый формат \"ЧАСЫ:МИНУТЫ:СЕКУНДЫ\". Можно указать какое именно значение времени вернуть: только часы, только минуты, только секунды, с помощью такого синтаксиса <span class=\"variable-text-block-span-1\">D(N)</span>, где <span class=\"variable-text-block-span-1\">N</span> это значение в диапазоне от 1 до 3.",
+    "varD_videoExample_1": " | Демонстрация работы переменной D"
 }
