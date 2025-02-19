@@ -132,5 +132,9 @@
 
     "dVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">2</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Число</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Таймлайн</span><br>",
     "dVarSection_2": "<span class=\"variable-text-block-span-1\">D</span> возвращает продолжительность слоя на таймлайне, возвращаемый формат \"ЧАСЫ:МИНУТЫ:СЕКУНДЫ\". Можно указать какое именно значение времени вернуть: только часы, только минуты, только секунды, с помощью такого синтаксиса <span class=\"variable-text-block-span-1\">D(N)</span>, где <span class=\"variable-text-block-span-1\">N</span> это значение в диапазоне от 1 до 3.",
-    "varD_videoExample_1": " | Демонстрация работы переменной D"
+    "varD_videoExample_1": " | Демонстрация работы переменной D",
+
+    "dfVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Число</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Таймлайн</span><br>",
+    "dfVarSection_2": "<span class=\"variable-text-block-span-1\">Df</span> возвращает продолжительность слоя в кадрах.",
+    "varDf_videoExample_1": " | Демонстрация работы переменной Df"
 }

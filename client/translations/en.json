@@ -126,5 +126,9 @@
 
     "dVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">2</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number</span><br>Source of data: <span class=\"variable-text-block-span-1\">Timeline</span><br>",
     "dVarSection_2": "The variable <span class=\"variable-text-block-span-1\">D</span> returns the duration of a layer in the timeline, the returned format is \"HOURS:MINUTES:SECONDS\". You can specify what time value to return: only hours, only minutes, only seconds, using the syntax <span class=\"variable-text-block-span-1\">D(N)</span>, where  <span class=\"variable-text-block-span-1\">N</span> is a value in the range from 1 to 3.",
-    "varD_videoExample_1": " | Demonstration of the D variable"
+    "varD_videoExample_1": " | Demonstration of the D variable",
+
+    "dfVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number</span><br>Source of data: <span class=\"variable-text-block-span-1\">Timeline</span><br>",
+    "dfVarSection_2": "The variable <span class=\"variable-text-block-span-1\">Df</span> returns the duration of the layer in frames.",
+    "varDf_videoExample_1": " | Demonstration of the Df variable"
 }
