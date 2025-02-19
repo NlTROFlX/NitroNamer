@@ -88,7 +88,7 @@
                 <div class="spoiler-content">
                     <p onclick="selectSubItem(this);showContent('content-6')"
                         data-i18n="leftBlock_spoilerTimeAndDuration_2">[1] Ip - Entry point of the layer.</p>
-                    <p onclick="selectSubItem(this);showContent('content-1')"
+                    <p onclick="selectSubItem(this);showContent('content-7')"
                         data-i18n="leftBlock_spoilerTimeAndDuration_3">[1] Op - Exit point of the layer.</p>
                     <p onclick="selectSubItem(this);showContent('content-1')"
                         data-i18n="leftBlock_spoilerTimeAndDuration_3">[4] D - Duration of the layer.</p>
@@ -825,10 +825,9 @@
                     </div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_5">Text examples with results:
                     </div>
-                    <div class="variable-example-block" data-value="C(_renderDate_)_Cd"> <span
-                            class="variable-text-block-span-0">MODE 1: </span> <span
-                            class="variable-text-block-span-2">C</span><span>(_renderDate_)_Cd</span> <span
-                            class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    <div class="variable-example-block" data-value="(FrameDuration:)F - (In:)Ip">
+                        <span class="variable-text-block-span-0">MODE 1:&nbsp;</span>(FrameDuration:)F - (In:)<span class="variable-text-block-span-2">Ip</span>
+                        <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -837,7 +836,86 @@
                                 <img src="icons/layer-star.svg" alt="Download" />
                             </div>
                             <div class="aeUiElementsLayerName">
-                                <span class="variable-text-block-span-2">FirstSequence</span>_renderDate_20.01.2025
+                                FrameDuration:250 - In:<span class="variable-text-block-span-2">1.25</span>
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Precomp"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-precomp.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                FrameDuration:650 - In:<span class="variable-text-block-span-2">2.05</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- var Op -->
+                <div class="content-section" id="content-7">
+                    <div class="variable-name-block" data-value="Op"> <span class="variable-text-block-span-1">Op&nbsp;</span> -
+                        variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
+                    <div class="variable-text-block" data-i18n="opVarSection_1">Number of available modes: <span
+                            class="variable-text-block-span-1">1</span>
+                        <br>Customizing the return value: <span class="variable-text-block-span-1">No</span>
+                        <br>Customizing the separator: <span class="variable-text-block-span-1">No</span>
+                        <br>Returned data type: <span class="variable-text-block-span-1">Number</span>
+                        <br>Source of data: <span class="variable-text-block-span-1">Timeline</span>
+                        <br>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_2">Description:</div>
+                    <div class="variable-text-block" data-i18n="opVarSection_2">The variable <span
+                            class="variable-text-block-span-1">Op</span> layer output point on the timeline, value returned in seconds.</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_3">Features:</div>
+                    <div class="variable-text-block" data-i18n="globalVarRightBlock_3_1">Not available.</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_4">Video examples with results:
+                    </div>
+                    <div class="videoblock" id="video1">
+                        <div class="video-container" id="videoContainer">
+                            <video id="video" width="100%" height="100%" src="media/video/var_examples/var_c.webm"
+                                type="video/webm"></video>
+                            <img src="icons/play.svg" id="playIcon" class="control-icon" alt="Play">
+                            <img src="icons/pause.svg" id="pauseIcon" class="control-icon" alt="Pause">
+                            <div class="video-overlay"></div>
+                        </div>
+                        <div class="video-info" id="videoInfo">
+                            <p id="currentTime">00:00:00</p>
+                            <p id="titleVideo" data-i18n="varOp_videoExample_1">| Demonstration of the Op variable</p>
+                            <img src="icons/scale-up.svg" class="scale-up-icon" alt="Scale Up">
+                        </div>
+                        <div id="progressBarContainer">
+                            <div id="progressBarBackground">
+                                <div id="progressBarFill"></div>
+                                <div id="seekKnob"></div>
+                                <div id="timeTooltip">00:00:00</div>
+                                <div id="hoverCircle"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_5">Text examples with results:
+                    </div>
+                    <div class="variable-example-block" data-value="(FrameDuration:)F - (Out:)Op">
+                        <span class="variable-text-block-span-0">MODE 1:&nbsp;</span>(FrameDuration:)F - (Out:)<span class="variable-text-block-span-2">Op</span>
+                        <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                FrameDuration:300 - Out:<span class="variable-text-block-span-2">0.5</span>
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Precomp"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-precomp.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                FrameDuration:100 - Out:<span class="variable-text-block-span-2">0.39</span>
                             </div>
                         </div>
                     </div>

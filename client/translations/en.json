@@ -117,6 +117,10 @@
     "varAr_videoExample_1": " | Demonstration of the Ar variable",
 
     "ipVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number</span><br>Source of data: <span class=\"variable-text-block-span-1\">Timeline</span><br>",
-    "ipVarSection_2": "<span class=\"variable-text-block-span-1\">Ip</span> — the layer's input point on the Timeline, the value returned is in seconds.",
-    "varIp_videoExample_1": " | Demonstration of the Ip variable"
+    "ipVarSection_2": "<span class=\"variable-text-block-span-1\">Ip</span> — the layer's input point on the timeline, the value returned is in seconds.",
+    "varIp_videoExample_1": " | Demonstration of the Ip variable",
+
+    "opVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number</span><br>Source of data: <span class=\"variable-text-block-span-1\">Timeline</span><br>",
+    "opVarSection_2": "<span class=\"variable-text-block-span-1\">Op</span> — layer output point on the timeline, value returned in seconds.",
+    "varOp_videoExample_1": " | Demonstration of the Op variable"
 }
