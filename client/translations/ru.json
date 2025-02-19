@@ -61,7 +61,7 @@
     "leftBlock_spoilerComposition_3": "[1] Pn - Название текущего проекта.",
     "leftBlock_spoilerComposition_4": "[1] F - Кадровая частота.",
     "leftBlock_spoilerComposition_5": "[1] R - Разрешение.",
-    "leftBlock_spoilerComposition_6": "[2] Ar - Соотношение сторон.",
+    "leftBlock_spoilerComposition_6": "[1] Ar - Соотношение сторон.",
     "leftBlock_spoilerTimeAndDuration_1": "Время и длительность",
     "leftBlock_spoilerTimeAndDuration_2": "[1] Ip - Точка входа.",
     "leftBlock_spoilerTimeAndDuration_3": "[1] Op - Точка выхода.",
@@ -120,5 +120,9 @@
 
     "arVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Да</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Строка</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Источник в проекте</span><br>",
     "arVarSection_2": "<span class=\"variable-text-block-span-1\">Ar</span> — возвращает соотношение сторон в виде строки \"value:value\" для: футажей, solid layer, прекомпозиций.",
-    "varAr_videoExample_1": " | Демонстрация работы переменной Ar"
+    "varAr_videoExample_1": " | Демонстрация работы переменной Ar",
+
+    "ipVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Число</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Таймлайн</span><br>",
+    "ipVarSection_2": "<span class=\"variable-text-block-span-1\">Ip</span> — входная точка слоя на Timeline, значение возвращается в секундах.",
+    "varIp_videoExample_1": " | Демонстрация работы переменной Ip"
 }

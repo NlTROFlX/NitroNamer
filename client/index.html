@@ -74,7 +74,7 @@
                     <p onclick="selectSubItem(this);showContent('content-4')"
                         data-i18n="leftBlock_spoilerComposition_5">[1] R - Resolution of the layer.</p>
                     <p onclick="selectSubItem(this);showContent('content-5')"
-                        data-i18n="leftBlock_spoilerComposition_6">[2] Ar - Aspect ratio.</p>
+                        data-i18n="leftBlock_spoilerComposition_6">[1] Ar - Aspect ratio.</p>
                 </div>
             </div>
             <!-- Time and duration -->
@@ -86,7 +86,7 @@
                     <div class="spoiler-title" data-i18n="leftBlock_spoilerTimeAndDuration_1">Time and duration</div>
                 </div>
                 <div class="spoiler-content">
-                    <p onclick="selectSubItem(this);showContent('content-1')"
+                    <p onclick="selectSubItem(this);showContent('content-6')"
                         data-i18n="leftBlock_spoilerTimeAndDuration_2">[1] Ip - Entry point of the layer.</p>
                     <p onclick="selectSubItem(this);showContent('content-1')"
                         data-i18n="leftBlock_spoilerTimeAndDuration_3">[1] Op - Exit point of the layer.</p>
@@ -365,6 +365,7 @@
                     </div>
                 </div>
 
+                <!--== Composition information ==-->
                 <div class="content-section" id="content-import">
                     <!-- Первые два текстовых блока: заголовок и описание -->
                     <div class="export-page-header-1" data-i18n="">IMPORT</div>
@@ -518,7 +519,7 @@
                 </div>
                 <!-- var F -->
                 <div class="content-section" id="content-3">
-                    <div class="variable-name-block" data-value="Pn"> <span
+                    <div class="variable-name-block" data-value="F"> <span
                             class="variable-text-block-span-1">F&nbsp;</span>- variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
                     </div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
@@ -605,7 +606,7 @@
                 </div>
                 <!-- var R -->
                 <div class="content-section" id="content-4">
-                    <div class="variable-name-block" data-value="Pn"> <span
+                    <div class="variable-name-block" data-value="R"> <span
                             class="variable-text-block-span-1">R&nbsp;</span>- variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
                     </div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
@@ -692,7 +693,7 @@
                 </div>
                 <!-- var Ar -->
                 <div class="content-section" id="content-5">
-                    <div class="variable-name-block" data-value="Pn"> <span
+                    <div class="variable-name-block" data-value="Ar"> <span
                             class="variable-text-block-span-1">Ar&nbsp;</span>- variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
                     </div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
@@ -773,6 +774,70 @@
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Pre-comp.<span class="variable-text-block-span-2">32:135</span> | 256*1080
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--== Composition information ==-->
+                <!-- var Ip -->
+                <div class="content-section" id="content-6">
+                    <div class="variable-name-block" data-value="Ip"> <span class="variable-text-block-span-1">Ip&nbsp;</span> -
+                        variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
+                    <div class="variable-text-block" data-i18n="ipVarSection_1">Number of available modes: <span
+                            class="variable-text-block-span-1">1</span>
+                        <br>Customizing the return value: <span class="variable-text-block-span-1">No</span>
+                        <br>Customizing the separator: <span class="variable-text-block-span-1">No</span>
+                        <br>Returned data type: <span class="variable-text-block-span-1">Number</span>
+                        <br>Source of data: <span class="variable-text-block-span-1">Timeline</span>
+                        <br>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_2">Description:</div>
+                    <div class="variable-text-block" data-i18n="ipVarSection_2">The variable <span
+                            class="variable-text-block-span-1">Ip</span> The layer's input point on the Timeline, the value returned is in seconds.</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_3">Features:</div>
+                    <div class="variable-text-block" data-i18n="globalVarRightBlock_3_1">Not available.</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_4">Video examples with results:
+                    </div>
+                    <div class="videoblock" id="video1">
+                        <div class="video-container" id="videoContainer">
+                            <video id="video" width="100%" height="100%" src="media/video/var_examples/var_c.webm"
+                                type="video/webm"></video>
+                            <img src="icons/play.svg" id="playIcon" class="control-icon" alt="Play">
+                            <img src="icons/pause.svg" id="pauseIcon" class="control-icon" alt="Pause">
+                            <div class="video-overlay"></div>
+                        </div>
+                        <div class="video-info" id="videoInfo">
+                            <p id="currentTime">00:00:00</p>
+                            <p id="titleVideo" data-i18n="varIp_videoExample_1">| Demonstration of the Ip variable</p>
+                            <img src="icons/scale-up.svg" class="scale-up-icon" alt="Scale Up">
+                        </div>
+                        <div id="progressBarContainer">
+                            <div id="progressBarBackground">
+                                <div id="progressBarFill"></div>
+                                <div id="seekKnob"></div>
+                                <div id="timeTooltip">00:00:00</div>
+                                <div id="hoverCircle"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_5">Text examples with results:
+                    </div>
+                    <div class="variable-example-block" data-value="C(_renderDate_)_Cd"> <span
+                            class="variable-text-block-span-0">MODE 1: </span> <span
+                            class="variable-text-block-span-2">C</span><span>(_renderDate_)_Cd</span> <span
+                            class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                <span class="variable-text-block-span-2">FirstSequence</span>_renderDate_20.01.2025
                             </div>
                         </div>
                     </div>

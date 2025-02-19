@@ -61,7 +61,7 @@
     "leftBlock_spoilerComposition_3": "[1] Pn - Current project name.",
     "leftBlock_spoilerComposition_4": "[1] F - Frame rate.",
     "leftBlock_spoilerComposition_5": "[1] R - Resolution of the layer.",
-    "leftBlock_spoilerComposition_6": "[2] Ar - Aspect ratio.",
+    "leftBlock_spoilerComposition_6": "[1] Ar - Aspect ratio.",
     "leftBlock_spoilerTimeAndDuration_1": "Time and duration",
     "leftBlock_spoilerTimeAndDuration_2": "[1] Ip - Entry point of the layer.",
     "leftBlock_spoilerTimeAndDuration_3": "[1] Op - Exit point of the layer.",
@@ -114,5 +114,9 @@
 
     "arVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">Yes</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number, String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Project source</span><br>",
     "arVarSection_2": "<span class=\"variable-text-block-span-1\">Ar</span> — returns the aspect ratio as a \"value:value\" string for: footage, solid layer, pre-comps.",
-    "varAr_videoExample_1": " | Demonstration of the Ar variable"
+    "varAr_videoExample_1": " | Demonstration of the Ar variable",
+
+    "ipVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number</span><br>Source of data: <span class=\"variable-text-block-span-1\">Timeline</span><br>",
+    "ipVarSection_2": "<span class=\"variable-text-block-span-1\">Ip</span> — the layer's input point on the Timeline, the value returned is in seconds.",
+    "varIp_videoExample_1": " | Demonstration of the Ip variable"
 }
