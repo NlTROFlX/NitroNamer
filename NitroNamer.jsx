@@ -2425,10 +2425,11 @@ function buildUI(thisObj) {
 				var layerType = variables.T;
 				value = filterLayerType(layerType, tFilter);
 				return value
-			} else if (ecFilters !== undefined) {
-				value = getEffectsCount(layer, settings, ecFilters)
-			} else if (match === 'Ec') {
-				value = getEffectsCount(layer, settings)
+			} else if(ecFilters!==undefined){
+				ecFilters = ecFilters.replace(/prop/g, variables.prop);
+				value = getEffectsCount(layer, settings, ecFilters);
+			} else if(match==='Ec'){
+				value = getEffectsCount(layer, settings);
 			} else if (eSeparatorOnly !== undefined) {
 				value = getEffectNames(layer, settings, null, eSeparatorOnly)
 			} else if (eEffects !== undefined) {
