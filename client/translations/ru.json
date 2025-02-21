@@ -74,7 +74,8 @@
     "leftBlock_spoilerIndexesAndIndetifiers_1": "Индексы и идентификаторы",
     "leftBlock_spoilerIndexesAndIndetifiers_2": "[2] i - Глобальный индекс слоя.",
     "leftBlock_spoilerIndexesAndIndetifiers_3": "[3] I - Локальный индекс слоя.",
-    "leftBlock_spoilerIndexesAndIndetifiers_4": "[1] Lpnt(i) - Индекс от родительского слоя.",
+    "leftBlock_spoilerIndexesAndIndetifiers_4": "[4] it - Порядковый номер среди слоёв одного типа.",
+    "leftBlock_spoilerIndexesAndIndetifiers_5": "[5] Lpnt(i) - Индекс от родительского слоя.",
     "leftBlock_spoilerLayerProperties_1": "Свойства слоя",
     "leftBlock_spoilerLayerProperties_2": "[1] T - Тип слоя.",
     "leftBlock_spoilerLayerProperties_3": "[1] S - Имя исходного.",
@@ -148,7 +149,11 @@
     "varE_videoExample_1": " | Демонстрация работы переменной E",
 
     "ecVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">2</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Да</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Число</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Effects Controls</span><br>",
-    "ecVarSection_2": "Переменная <span class=\"variable-text-block-span-1\">Ec</span> возвращает общее количество эффектов или количество эффектов, перечисленных по имени.<br><br>",
+    "ecVarSection_2": "<span class=\"variable-text-block-span-1\">Ec</span> - возвращает общее количество эффектов или количество эффектов, перечисленных по имени.<br><br>",
     "ecVarSection_3": "Поддерживается специальная переменная <span class=\"variable-text-block-span-1\">prop</span>: <span class=\"variable-text-block-span-1\">E(prop)</span>.<br><br>Поддерживается вспомогательная переменная <span class=\"variable-text-block-span-1\">eNumber</span>: <span class=\"variable-text-block-span-1\">E(e1, e2)</span>.<br><br>",
-    "varEc_videoExample_1": " | Демонстрация работы переменной Ec"
+    "varEc_videoExample_1": " | Демонстрация работы переменной Ec",
+
+    "iVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">2</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Число</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Индекс слоя</span><br>",
+    "iVarSection_2": "<span class=\"variable-text-block-span-1\">i</span> - возвращает глобальный индекс слоя. При подсчете учитываются абсолютно все слои, которые есть в текущей композиции на таймлайне.<br><br>",
+    "vari_videoExample_1": " | Демонстрация работы переменной i"
 }

@@ -74,7 +74,8 @@
     "leftBlock_spoilerIndexesAndIndetifiers_1": "Indexes and identifiers",
     "leftBlock_spoilerIndexesAndIndetifiers_2": "[2] i - Global index of the layer.",
     "leftBlock_spoilerIndexesAndIndetifiers_3": "[3] I - Local index of the layer.",
-    "leftBlock_spoilerIndexesAndIndetifiers_4": "[1] Lpnt(i) - Index from parent layer.",
+    "leftBlock_spoilerIndexesAndIndetifiers_4": "[4] it - The ordinal number among layers of the same type.",
+    "leftBlock_spoilerIndexesAndIndetifiers_5": "[5] Lpnt(i) - Index from parent layer.",
     "leftBlock_spoilerLayerProperties_1": "Layer properties",
     "leftBlock_spoilerLayerProperties_2": "[1] T - Type of layer.",
     "leftBlock_spoilerLayerProperties_3": "[1] S - Name of the source layer.",
@@ -140,5 +141,9 @@
     "ecVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">2</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">Yes</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Effects Controls</span><br>",
     "ecVarSection_2": "The variable <span class=\"variable-text-block-span-1\">Ec</span> returns the total number of effects or the number of effects listed by name.<br><br>",
     "ecVarSection_3": "• The special variable <span class=\"variable-text-block-span-1\">prop</span> is supported: <span class=\"variable-text-block-span-1\">E(prop)</span>.<br><br>• The auxiliary variable <span class=\"variable-text-block-span-1\">eNumber</span> is supported: <span class=\"variable-text-block-span-1\">E(e1, e2)</span>.",
-    "varEc_videoExample_1": " | Demonstration of the Ec variable"
+    "varEc_videoExample_1": " | Demonstration of the Ec variable",
+
+    "iVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number</span><br>Source of data: <span class=\"variable-text-block-span-1\">Layer index</span><br>",
+    "iVarSection_2": "The variable <span class=\"variable-text-block-span-1\">i</span> returns the global index of the layer. When counting, all layers present in the current composition on the timeline are taken into account.<br><br>",
+    "vari_videoExample_1": " | Demonstration of the i variable"
 }
