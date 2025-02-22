@@ -1321,7 +1321,7 @@
                         variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
                     </div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
-                    <div class="variable-text-block" data-i18n="iVarSection_1">Number of available modes: <span class="variable-text-block-span-1">1</span>
+                    <div class="variable-text-block" data-i18n="iGlobalVarSection_1">Number of available modes: <span class="variable-text-block-span-1">1</span>
                         <br>Customizing the return value: <span class="variable-text-block-span-1">No</span>
                         <br>Customizing the separator: <span class="variable-text-block-span-1">No</span>
                         <br>Returned data type: <span class="variable-text-block-span-1">Number</span>
@@ -1329,7 +1329,7 @@
                         <br>
                     </div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_2">Description:</div>
-                    <div class="variable-text-block" data-i18n="iVarSection_2">The variable <span class="variable-text-block-span-1">i</span> returns the global index of the layer. When counting, all layers present in the current composition on the timeline are taken into account.<br><br></div>
+                    <div class="variable-text-block" data-i18n="iGlobalVarSection_2">The variable <span class="variable-text-block-span-1">i</span> returns the global index of the layer. When counting, all layers present in the current composition on the timeline are taken into account.<br><br></div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_3">Features:</div>
                     <div class="variable-text-block">Not available.</div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_4">Video examples with results:
@@ -1344,7 +1344,7 @@
                         </div>
                         <div class="video-info" id="videoInfo">
                             <p id="currentTime">00:00:00</p>
-                            <p id="titleVideo" data-i18n="vari_videoExample_1">| Demonstration of the i variable</p>
+                            <p id="titleVideo" data-i18n="variGlobal_videoExample_1">| Demonstration of the i variable</p>
                             <img src="icons/scale-up.svg" class="scale-up-icon" alt="Scale Up">
                         </div>
                         <div id="progressBarContainer">
@@ -1388,6 +1388,83 @@
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Procomp-layerIndex:&nbsp;<span class="variable-text-block-span-2">3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- var I -->
+                <div class="content-section" id="content-14">
+                    <div class="variable-name-block" data-value="I"> <span class="variable-text-block-span-1">I&nbsp;</span> -
+                        variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
+                    <div class="variable-text-block" data-i18n="iLocalVarSection_1">Number of available modes: <span class="variable-text-block-span-1">4</span>
+                        <br>Customizing the return value: <span class="variable-text-block-span-1">No</span>
+                        <br>Customizing the separator: <span class="variable-text-block-span-1">No</span>
+                        <br>Returned data type: <span class="variable-text-block-span-1">Number</span>
+                        <br>Source of data: <span class="variable-text-block-span-1">Layer index</span>
+                        <br>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_2">Description:</div>
+                    <div class="variable-text-block" data-i18n="iLocalVarSection_2">The variable <span class="variable-text-block-span-1">I</span> is the local index of the layer, returning the current counter value during sequential renaming. When counting, layers that are locked or hidden are not taken into account. In <span class="variable-text-block-span-1">Selected</span> mode, only the selected layers are considered. There is an inversion mode for counting: syntax <span class="variable-text-block-span-1">I(r)</span>. In the template, an unlimited number of variable instances can be created, which will count independently of each other using the syntax <span class="variable-text-block-span-1">I(number)</span>. Examples: <span class="variable-text-block-span-1">I(1)</span>, <span class="variable-text-block-span-1">I(5)</span>, <span class="variable-text-block-span-1">I(10,r)</span>.</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_3">Features:</div>
+                    <div class="variable-text-block" data-i18n="iLocalVarSection_3">Not available.</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_4">Video examples with results:
+                    </div>
+                    <div class="videoblock" id="video1">
+                        <div class="video-container" id="videoContainer">
+                            <video id="video" width="100%" height="100%" src="media/video/var_examples/var_c.webm"
+                                type="video/webm"></video>
+                            <img src="icons/play.svg" id="playIcon" class="control-icon" alt="Play">
+                            <img src="icons/pause.svg" id="pauseIcon" class="control-icon" alt="Pause">
+                            <div class="video-overlay"></div>
+                        </div>
+                        <div class="video-info" id="videoInfo">
+                            <p id="currentTime">00:00:00</p>
+                            <p id="titleVideo" data-i18n="variLocal_videoExample_1">| Demonstration of the I variable</p>
+                            <img src="icons/scale-up.svg" class="scale-up-icon" alt="Scale Up">
+                        </div>
+                        <div id="progressBarContainer">
+                            <div id="progressBarBackground">
+                                <div id="progressBarFill"></div>
+                                <div id="seekKnob"></div>
+                                <div id="timeTooltip">00:00:00</div>
+                                <div id="hoverCircle"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_5">Text examples with results:
+                    </div>
+                    <div class="variable-example-block" data-value="T-(localLayerIndex): I | I(r) | I(10) | I(100, r)">
+                        <span class="variable-text-block-span-0">MODE 1:&nbsp;</span>T-(localLayerIndex):&nbsp;<span class="variable-text-block-span-2">I</span>&nbsp;|&nbsp;<span class="variable-text-block-span-2">I(r)</span>&nbsp;|&nbsp;<span class="variable-text-block-span-2">I(10)</span>&nbsp;|&nbsp;<span class="variable-text-block-span-2">I(100, r)</span>
+                        <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                Shape-localLayerIndex:&nbsp;<span class="variable-text-block-span-2">1 | 3 | 10 | 98</span>
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                Shape-localLayerIndex:&nbsp;<span class="variable-text-block-span-2">2 | 2 | 11 | 99</span>
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                Shape-localLayerIndex:&nbsp;<span class="variable-text-block-span-2">3 | 1 | 12 | 100</span>
                             </div>
                         </div>
                     </div>
