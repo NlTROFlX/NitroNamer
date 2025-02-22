@@ -1568,21 +1568,21 @@
                 <!--== Layer properties ==-->
                 <!-- var T -->
                 <div class="content-section" id="content-16">
-                    <div class="variable-name-block" data-value="i"> <span class="variable-text-block-span-1">i&nbsp;</span> -
+                    <div class="variable-name-block" data-value="T"> <span class="variable-text-block-span-1">T&nbsp;</span> -
                         variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
                     </div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
-                    <div class="variable-text-block" data-i18n="iGlobalVarSection_1">Number of available modes: <span class="variable-text-block-span-1">1</span>
+                    <div class="variable-text-block" data-i18n="tVarSection_1">Number of available modes: <span class="variable-text-block-span-1">1</span>
                         <br>Customizing the return value: <span class="variable-text-block-span-1">No</span>
                         <br>Customizing the separator: <span class="variable-text-block-span-1">No</span>
-                        <br>Returned data type: <span class="variable-text-block-span-1">Number</span>
-                        <br>Source of data: <span class="variable-text-block-span-1">Layer index</span>
+                        <br>Returned data type: <span class="variable-text-block-span-1">String</span>
+                        <br>Source of data: <span class="variable-text-block-span-1">Layer</span>
                         <br>
                     </div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_2">Description:</div>
-                    <div class="variable-text-block" data-i18n="iGlobalVarSection_2">The variable <span class="variable-text-block-span-1">i</span> returns the global index of the layer. When counting, all layers present in the current composition on the timeline are taken into account.<br><br></div>
+                    <div class="variable-text-block" data-i18n="tVarSection_2">The variable <span class="variable-text-block-span-1">T</span> returns the layer type. You can set a filtering mode, in which case names are returned only for layers whose type matches the specified one. Values that can be used for filtering: <span class="variable-text-block-span-1">shape</span>, <span class="variable-text-block-span-1">text</span>, <span class="variable-text-block-span-1">pre-comp</span>, <span class="variable-text-block-span-1">null</span>, <span class="variable-text-block-span-1">adjustment</span>, <span class="variable-text-block-span-1">footage</span>, <span class="variable-text-block-span-1">solid</span>, <span class="variable-text-block-span-1">light</span>, <span class="variable-text-block-span-1">camera</span>, <span class="variable-text-block-span-1">audio</span>. You can use an enumeration in filtering mode, for example: <span class="variable-text-block-span-1">T(solid, shape)</span>. In this case, names will be returned/changed only for layers that match the filtering values, while others will remain unchanged.</div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_3">Features:</div>
-                    <div class="variable-text-block">Not available.</div>
+                    <div class="variable-text-block" >Not available.</div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_4">Video examples with results:
                     </div>
                     <div class="videoblock" id="video1">
@@ -1595,7 +1595,7 @@
                         </div>
                         <div class="video-info" id="videoInfo">
                             <p id="currentTime">00:00:00</p>
-                            <p id="titleVideo" data-i18n="variGlobal_videoExample_1">| Demonstration of the i variable</p>
+                            <p id="titleVideo" data-i18n="varT_videoExample_1">| Demonstration of the i variable</p>
                             <img src="icons/scale-up.svg" class="scale-up-icon" alt="Scale Up">
                         </div>
                         <div id="progressBarContainer">
@@ -1609,8 +1609,8 @@
                     </div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_5">Text examples with results:
                     </div>
-                    <div class="variable-example-block" data-value="T-(layerIndex): I">
-                        <span class="variable-text-block-span-0">MODE 1:&nbsp;</span>T-(layerIndex):&nbsp;<span class="variable-text-block-span-2">i</span>
+                    <div class="variable-example-block" data-value="T.i">
+                        <span class="variable-text-block-span-0">MODE 1:&nbsp;<span class="variable-text-block-span-2">T</span>.i
                         <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
                     </div>
                     <div class="variable-example-block-result">
@@ -1620,16 +1620,52 @@
                                 <img src="icons/layer-star.svg" alt="Download" />
                             </div>
                             <div class="aeUiElementsLayerName">
-                                Shape-layerIndex:&nbsp;<span class="variable-text-block-span-2">1</span>
+                                <span class="variable-text-block-span-2">Shape</span>.1
                             </div>
                         </div>
                         <div class="aeUiElementsLayerBlock">
-                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerLabel Text"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-text.svg" alt="Download" />
                             </div>
                             <div class="aeUiElementsLayerName">
-                                Shape-layerIndex:&nbsp;<span class="variable-text-block-span-2">2</span>
+                                <span class="variable-text-block-span-2">Text</span>.2
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Null"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-null.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                <span class="variable-text-block-span-2">Null</span>.3
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Adjustment"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-solid-adjustment.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                <span class="variable-text-block-span-2">Adjustment</span>.4
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel FootageImage"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-image-file.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                <span class="variable-text-block-span-2">Footage</span>.5
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Solid"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-solid-adjustment.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                <span class="variable-text-block-span-2">Solid</span>.6
                             </div>
                         </div>
                         <div class="aeUiElementsLayerBlock">
@@ -1638,7 +1674,34 @@
                                 <img src="icons/layer-precomp.svg" alt="Download" />
                             </div>
                             <div class="aeUiElementsLayerName">
-                                Procomp-layerIndex:&nbsp;<span class="variable-text-block-span-2">3</span>
+                                <span class="variable-text-block-span-2">Pre-comp</span>.7
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Camera"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-camera.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                <span class="variable-text-block-span-2">Camera</span>.8
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Light"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-light.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                <span class="variable-text-block-span-2">Light</span>.9
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Audio"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-audio.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                <span class="variable-text-block-span-2">Audio</span>.10
                             </div>
                         </div>
                     </div>

@@ -2249,7 +2249,6 @@ function buildUI(thisObj) {
 			return item.trim();
 		});
 		
-		// Проверяем, содержится ли тип слоя в списке фильтров
 		if (filterTypes.indexOf(layerTypeLower) !== -1) {
 			return layerType;
 		} else {

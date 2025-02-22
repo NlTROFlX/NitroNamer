@@ -355,6 +355,27 @@ body, html {
 .aeUiElementsLayerLabel.Precomp{
   background-color: #85765e;
 }
+.aeUiElementsLayerLabel.Null{
+  background-color: #85a09d;
+}
+.aeUiElementsLayerLabel.Text{
+  background-color: #8f2c2c;
+}
+.aeUiElementsLayerLabel.Camera{
+  background-color: #b5949f;
+}
+.aeUiElementsLayerLabel.Solid{
+  background-color: #8f2c2c;
+}
+.aeUiElementsLayerLabel.Adjustment{
+  background-color: #85859f;
+}
+.aeUiElementsLayerLabel.Light{
+  background-color: #b6987d;
+}
+.aeUiElementsLayerLabel.Audio{
+  background-color: #8d9d8d;
+}
 .aeUiElementsLayerShapeIcon{
   display: inline-flex;
   position: relative;
@@ -367,6 +388,10 @@ body, html {
 .aeUiElementsLayerShapeIcon img{
   display: inline-block;
   height: 12px;
+}
+.Camera .aeUiElementsLayerShapeIcon img{
+  height: 4px!important;
+  width: 4px!important;
 }
 .aeUiElementsLayerName{
   display: inline-block;
