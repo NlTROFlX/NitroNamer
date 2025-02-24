@@ -18,7 +18,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "T(shape, solid, footage)",
+        "template": "T.i | Lpnt(i)",
         "briefly": false,
         "brieflyType": 3,
         "modeIndex": 4,

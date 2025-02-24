@@ -1994,47 +1994,41 @@ function buildUI(thisObj) {
 	}
 
 	function getLayerParentIndex(layer) {
+		if (!layer.parent) {
+			return "0";
+		}
 		var comp = layer.containingComp;
-		if (!layer.parent && !isParentLayer(layer)) {
-			return layer.name
-		}
-		if (isParentLayer(layer) && !layer.parent) {
-			return layer.name
-		}
-		if (layer.parent) {
-			var parentLayer = layer.parent;
-			var childLayers = [];
-			for (var i = 1; i <= comp.numLayers; i++) {
-				var currentLayer = comp.layer(i);
-				if (currentLayer.parent === parentLayer) {
-					childLayers.push(currentLayer)
-				}
+		var parentLayer = layer.parent;
+		var childLayers = [];
+		for (var i = 1; i <= comp.numLayers; i++) {
+			var currentLayer = comp.layer(i);
+			if (currentLayer.parent === parentLayer) {
+				childLayers.push(currentLayer);
 			}
-			childLayers.sort(function(a, b) {
-				return a.index - b.index
-			});
-			var allAbove = !0;
-			var allBelow = !0;
-			for (var i = 0; i < childLayers.length; i++) {
-				if (childLayers[i].index > parentLayer.index) {
-					allAbove = !1
-				}
-				if (childLayers[i].index < parentLayer.index) {
-					allBelow = !1
-				}
-			}
-			var layerIdx = arrayIndexOf(childLayers, layer);
-			var relativeIndex;
-			if (allAbove) {
-				relativeIndex = childLayers.length - layerIdx
-			} else if (allBelow) {
-				relativeIndex = layerIdx + 1
-			} else {
-				relativeIndex = layerIdx + 1
-			}
-			return relativeIndex.toString()
 		}
-		return layer.name
+		childLayers.sort(function(a, b) {
+			return a.index - b.index;
+		});
+		var allAbove = true;
+		var allBelow = true;
+		for (var i = 0; i < childLayers.length; i++) {
+			if (childLayers[i].index > parentLayer.index) {
+				allAbove = false;
+			}
+			if (childLayers[i].index < parentLayer.index) {
+				allBelow = false;
+			}
+		}
+		var layerIdx = arrayIndexOf(childLayers, layer);
+		var relativeIndex;
+		if (allAbove) {
+			relativeIndex = childLayers.length - layerIdx;
+		} else if (allBelow) {
+			relativeIndex = layerIdx + 1;
+		} else {
+			relativeIndex = layerIdx + 1;
+		}
+		return relativeIndex.toString();
 	}
 
 	function getCurrentDate(format) {
