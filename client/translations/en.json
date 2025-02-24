@@ -190,5 +190,9 @@
 
     "lopsVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number</span><br>Source of data: <span class=\"variable-text-block-span-1\">Layer</span><br>",
     "lopsVarSection_2": "The <span class=\"variable-text-block-span-1\">Lrot</span> variable returns the current scale value of the layer. If the layer is not a 3D object, only one rotation value will be returned; otherwise, <span class=\"variable-text-block-span-1\">x</span>, <span class=\"variable-text-block-span-1\">y</span>, <span class=\"variable-text-block-span-1\">z</span> will be returned.",
-    "varLops_videoExample_1": " | Demonstration of the Lops variable"
+    "varLops_videoExample_1": " | Demonstration of the Lops variable",
+
+    "tmVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">Yes</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number</span><br>Source of data: <span class=\"variable-text-block-span-1\">Layer</span><br>",
+    "tmVarSection_2": "The <span class=\"variable-text-block-span-1\">Tm</span> variable returns the <span class=\"variable-text-block-span-1\">Track Mate</span> type for the layer(s), both for the source layer and the conditionally child layer. It returns a value in the <span class=\"variable-text-block-span-1\">TM:value</span> format. The values that can be returned by this variable are: <span class=\"variable-text-block-span-1\">alpha</span>, <span class=\"variable-text-block-span-1\">luma</span>, <span class=\"variable-text-block-span-1\">alpha inverted</span>, <span class=\"variable-text-block-span-1\">luma inverted</span>.",
+    "varTm_videoExample_1": " | Demonstration of the Tm variable"
 }
