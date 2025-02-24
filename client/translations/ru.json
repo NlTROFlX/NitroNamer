@@ -201,5 +201,9 @@
 
     "lrotVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Строка</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Слой</span><br>",
     "lrotVarSection_2": "Переменная <span class=\"variable-text-block-span-1\">Lrot</span> возвращает текущее значение масштаба слоя. Если слой не является 3D-объектом, то вернется только одно значение вращения, иначе — <span class=\"variable-text-block-span-1\">x</span>, <span class=\"variable-text-block-span-1\">y</span>, <span class=\"variable-text-block-span-1\">z</span>.",
-    "varLrot_videoExample_1": " | Демонстрация работы переменной Lrot"
+    "varLrot_videoExample_1": " | Демонстрация работы переменной Lrot",
+
+    "lopsVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Число</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Слой</span><br>",
+    "lopsVarSection_2": "Переменная <span class=\"variable-text-block-span-1\">Lops</span> возвращает текущее значение непрозрачности слоя.",
+    "varLops_videoExample_1": " | Демонстрация работы переменной Lops"
 }

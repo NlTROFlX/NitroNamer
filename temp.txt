@@ -1,1 +1,1 @@
-The <span class=\"variable-text-block-span-1\">Lrot</span> variable returns the current scale value of the layer. If the layer is not a 3D object, only one rotation value will be returned; otherwise, <span class=\"variable-text-block-span-1\">x</span>, <span class=\"variable-text-block-span-1\">y</span>, <span class=\"variable-text-block-span-1\">z</span> will be returned.
+The variable <span class=\"variable-text-block-span-1\">Lops</span> returns the current opacity value of the layer.
