@@ -90,6 +90,7 @@
     "leftBlock_spoilerLayerProperties_12": "[4] Lexp - Layer properties with expressions.",
     "leftBlock_spoilerLayerProperties_13": "[4] Lmn - List of layer masks.",
     "leftBlock_spoilerLayerProperties_14": "[4] Lmс - Number of layer masks.",
+    "leftBlock_spoilerLayerProperties_15": "[3] Lpnt - Имя родительского слоя",
     "leftBlock_spoilerOperators_1": "Operators",
     "leftBlock_spoilerOperators_2": "@cycle - loop operator",
     "leftBlock_spoilerOther_1": "Other",
@@ -168,5 +169,10 @@
     "hVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number, String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Project source</span><br>",
     "hVarSection_2": "The variable <span class=\"variable-text-block-span-1\">H</span> returns the height of the source in pixels.",
     "hVarSection_3": "• Unavailable for layers of type <span class=\"variable-text-block-span-1\">spahe</span>, <span class=\"variable-text-block-span-1\">text</span>, <span class=\"variable-text-block-span-1\">audio</span>, <span class=\"variable-text-block-span-1\">camera</span>, <span class=\"variable-text-block-span-1\">null</span>.",
-    "varH_videoExample_1": " | Demonstration of the H variable"
+    "varH_videoExample_1": " | Demonstration of the H variable",
+
+    "lpntVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">3</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number, String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Layer</span><br>",
+    "lpntVarSection_2": "The variable <span class=\"variable-text-block-span-1\">Lpnt</span> returns the name of the final layer to which a layer is attached (if there is a parent). You can set a depth value <span class=\"variable-text-block-span-1\">Lpnt(number)</span>, in which case the name of the parent layer at the specified depth will be returned for each layer. For example, if <span class=\"variable-text-block-span-1\">Lpnt(2)</span> is specified, the name of the second encountered parent layer will be returned for each layer that has a parent. There is an indexing mode <span class=\"variable-text-block-span-1\">Lpnt(i)</span>, in which the variable returns the ordinal number for child layers depending on where the child layer is located in the layer hierarchy on the timeline.",
+    "lpntVarSection_3": "• In the indexing mode, numbers are assigned in increasing order (<span class=\"variable-text-block-span-1\">top to bottom</span>) from the parent layer, provided that the parent layer is located above all the child layers. If the parent layer is located below all the child layers, the numbers are assigned in increasing order (<span class=\"variable-text-block-span-1\">bottom to top</span>). If the parent layer is located somewhere between the child layers, the first condition for the numbering order (<span class=\"variable-text-block-span-1\">increasing from top to bottom</span>) is applied.",
+    "varLpnt_videoExample_1": " | Demonstration of the Lpnt variable"
 }

@@ -18,7 +18,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "T.i | Lpnt(i)",
+        "template": "T.i | Lpnt(i) / Lpnt",
         "briefly": false,
         "brieflyType": 3,
         "modeIndex": 4,

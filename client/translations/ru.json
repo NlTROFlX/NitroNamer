@@ -90,6 +90,7 @@
     "leftBlock_spoilerLayerProperties_12": "[4] Lexp - Свойства слоя с выражениями.",
     "leftBlock_spoilerLayerProperties_13": "[4] Lmn - Список масок слоев.",
     "leftBlock_spoilerLayerProperties_14": "[4] Lmс - Количество масок слоев.",
+    "leftBlock_spoilerLayerProperties_15": "[3] Lpnt - Имя родительского слоя",
     "leftBlock_spoilerSpecial_1": "Специальные",
     "leftBlock_spoilerSpecial_2": "[2] attr - выбранные атрибуты",
     "leftBlock_spoilerSpecial_3": "[1] prop - выбранные свойства",
@@ -183,5 +184,10 @@
     "hVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Число, Строка</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Источник в проекте</span><br>",
     "hVarSection_2": "Переменная <span class=\"variable-text-block-span-1\">H</span> возвращает высоту источника слоя в пикселях.",
     "hVarSection_3": "• Недоступно для слоёв типа <span class=\"variable-text-block-span-1\">spahe</span>, <span class=\"variable-text-block-span-1\">text</span>, <span class=\"variable-text-block-span-1\">audio</span>, <span class=\"variable-text-block-span-1\">camera</span>, <span class=\"variable-text-block-span-1\">null</span>.",
-    "varH_videoExample_1": " | Демонстрация работы переменной H"
+    "varH_videoExample_1": " | Демонстрация работы переменной H",
+
+    "lpntVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">3</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Число, Строка</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Слой</span><br>",
+    "lpntVarSection_2": "Переменная <span class=\"variable-text-block-span-1\">Lpnt</span> возвращает название конечного слоя, к которому привязан слой (если есть родитель). Можно задать значение глубины <span class=\"variable-text-block-span-1\">Lpnt(number)</span>, в таком случае для каждого слоя будет возвращено имя родителя, который находится на указанной глубине. То есть, если задано, к примеру, <span class=\"variable-text-block-span-1\">Lpnt(2)</span>, то для каждого слоя, у которого есть родитель, будет возвращено имя второго попавшегося родительского слоя. Есть режим индексации <span class=\"variable-text-block-span-1\">Lpnt(i)</span>, в этом режиме переменная возвращает порядковый номер для дочерних слоев в зависимости от того, где находится дочерний слой в иерархии слоев на таймлайне.",
+    "lpntVarSection_3": "• В режиме индексации номера задаются в порядке возрастания (<span class=\"variable-text-block-span-1\">сверху вниз</span>) от родительского слоя, при условии, что родительский слой находится выше всех дочерних. Если родительский слой находится ниже всех дочерних, то номера задаются в порядке возрастания (<span class=\"variable-text-block-span-1\">снизу вверх</span>). Если родительский слой находится где-то между дочерними слоями, то применяется первое условие порядка номеров (<span class=\"variable-text-block-span-1\">возрастание сверху вниз</span>).",
+    "varLpnt_videoExample_1": " | Демонстрация работы переменной Lpnt"
 }
