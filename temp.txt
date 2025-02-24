@@ -1,1 +1,1 @@
-The variable <span class=\"variable-text-block-span-1\">S</span> returns the name of the source (e.g., a file).
+Переменная <span class=\"variable-text-block-span-1\">W</span> возвращает ширину источника в пикселях.

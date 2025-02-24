@@ -173,5 +173,10 @@
 
     "sVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Строка</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Источник в проекте</span><br>",
     "sVarSection_2": "Переменная <span class=\"variable-text-block-span-1\">S</span> возвращает имя источника (например, файла).",
-    "varS_videoExample_1": " | Демонстрация работы переменной S"
+    "varS_videoExample_1": " | Демонстрация работы переменной S",
+
+    "wVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Число, Строка</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Источник в проекте</span><br>",
+    "wVarSection_2": "Переменная <span class=\"variable-text-block-span-1\">W</span> возвращает ширину источника слоя в пикселях.",
+    "wVarSection_3": "• Недоступно для слоёв типа <span class=\"variable-text-block-span-1\">spahe</span>, <span class=\"variable-text-block-span-1\">text</span>, <span class=\"variable-text-block-span-1\">audio</span>, <span class=\"variable-text-block-span-1\">camera</span>, <span class=\"variable-text-block-span-1\">null</span>.",
+    "varW_videoExample_1": " | Демонстрация работы переменной W"
 }

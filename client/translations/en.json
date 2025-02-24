@@ -158,5 +158,10 @@
 
     "sVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Project source</span><br>",
     "sVarSection_2": "The variable <span class=\"variable-text-block-span-1\">S</span> returns the name of the source (e.g., a file).",
-    "varS_videoExample_1": " | Demonstration of the S variable"
+    "varS_videoExample_1": " | Demonstration of the S variable",
+
+    "wVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number, String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Project source</span><br>",
+    "wVarSection_2": "The variable <span class=\"variable-text-block-span-1\">W</span> returns the width of the source in pixels.",
+    "wVarSection_3": "• Unavailable for layers of type <span class=\"variable-text-block-span-1\">spahe</span>, <span class=\"variable-text-block-span-1\">text</span>, <span class=\"variable-text-block-span-1\">audio</span>, <span class=\"variable-text-block-span-1\">camera</span>, <span class=\"variable-text-block-span-1\">null</span>.",
+    "varW_videoExample_1": " | Demonstration of the W variable"
 }
