@@ -182,5 +182,9 @@
 
     "lscVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number</span><br>Source of data: <span class=\"variable-text-block-span-1\">Layer</span><br>",
     "lscVarSection_2": "The variable <span class=\"variable-text-block-span-1\">Lsc</span> returns the current scale value of the layer. If the layer is not a 3D object, it will return a value in the <span class=\"variable-text-block-span-1\">x, y</span> format, otherwise — in the <span class=\"variable-text-block-span-1\">x, y, z</span> format.",
-    "varLsc_videoExample_1": " | Demonstration of the Lsc variable"
+    "varLsc_videoExample_1": " | Demonstration of the Lsc variable",
+
+    "lrotVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number</span><br>Source of data: <span class=\"variable-text-block-span-1\">Layer</span><br>",
+    "lrotVarSection_2": "The <span class=\"variable-text-block-span-1\">Lrot</span> variable returns the current scale value of the layer. If the layer is not a 3D object, only one rotation value will be returned; otherwise, <span class=\"variable-text-block-span-1\">x</span>, <span class=\"variable-text-block-span-1\">y</span>, <span class=\"variable-text-block-span-1\">z</span> will be returned.",
+    "varLrot_videoExample_1": " | Demonstration of the Lrot variable"
 }
