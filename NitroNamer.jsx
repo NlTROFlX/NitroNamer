@@ -2372,16 +2372,20 @@ function buildUI(thisObj) {
 				})
 			}
 			if (lmcFilters !== undefined) {
-				lmcFilters = lmcFilters.replace(nthMaskRegex, function(fullMatch, number) {
+				lmcFilters = lmcFilters.replace(/m(\d+)/g, function(fullMatch, number) {
 					var maskNumber = parseInt(number, 10);
-					return getNthMaskName(layer, maskNumber, settings)
-				})
+					return getNthMaskName(layer, maskNumber, settings);
+				});
+				lmcFilters = lmcFilters.replace(/prop/g, variables.prop);
+				value = getMaskCount(layer, settings, lmcFilters, lmcSeparator);
 			}
 			if (lmnFilters !== undefined) {
-				lmnFilters = lmnFilters.replace(nthMaskRegex, function(fullMatch, number) {
+				lmnFilters = lmnFilters.replace(/m(\d+)/g, function(fullMatch, number) {
 					var maskNumber = parseInt(number, 10);
-					return getNthMaskName(layer, maskNumber, settings)
-				})
+					return getNthMaskName(layer, maskNumber, settings);
+				});
+				lmnFilters = lmnFilters.replace(/prop/g, variables.prop);
+				value = getMaskNames(layer, settings, lmnFilters, lmnSeparator);
 			}
 			if (lmnSeparatorOnly !== undefined) {
 				lmnSeparatorOnly = lmnSeparatorOnly.replace(nthMaskRegex, function(fullMatch, number) {
