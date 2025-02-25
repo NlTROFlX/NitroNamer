@@ -1,5 +1,21 @@
 {
     "userPresets": {
+        "preset_4": {
+            "allLayers": true,
+            "template": "[TAn] | T_S:W | [EEc @cycle(a, b, '1', '2')]",
+            "briefly": false,
+            "brieflyType": 3,
+            "usageFrequency": 2
+        },
+        "preset_3": {
+            "allLayers": true,
+            "template": "Lmc(prop) | E(prop)",
+            "briefly": false,
+            "brieflyType": 3,
+            "creationDate": 1740501421743,
+            "usageFrequency": 1,
+            "favoritesTemplate": false
+        },
         "preset_2": {
             "allLayers": true,
             "template": "T.I | I(r) | I(10) | I(10,r)",
@@ -18,12 +34,12 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "Lmc(prop)",
+        "template": "",
         "briefly": false,
         "brieflyType": 3,
         "modeIndex": 4,
         "modeActive": false,
-        "selectedPresetTemplate": "@cycle(2, '(A) T.i | I(10)', '(B) T.i | I(100)')"
+        "selectedPresetTemplate": "[TAn] | T_S:W | [EEc @cycle(a, b, '1', '2')]"
     },
     "nameApply": {
         "shapeLayer": true,
