@@ -285,51 +285,71 @@ function buildUI(thisObj) {
 	};
 	txtTemplate.addEventListener("keydown", function(event) {
 		if (event.keyName === "Enter") {
-			var selectedPresetItem = ddLayerMode.selection;
-			if (selectedPresetItem && selectedPresetItem.preset) {
-				var preset = selectedPresetItem.preset;
-				txtTemplate.text = preset.template;
-				if (preset.hasOwnProperty('usageFrequency')) {
-					preset.usageFrequency += 1
-				} else {
-					preset.usageFrequency = 1
-				}
-				var settings = loadSettings();
-				var userPresets = settings.userPresets || {};
-				for (var key in userPresets) {
-					if (userPresets.hasOwnProperty(key) && userPresets[key].template === preset.template) {
-						userPresets[key] = preset;
-						break
-					}
-				}
-				settings.userPresets = userPresets;
-				var scriptFile = new File($.fileName);
-				var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
-				var settingsFile = new File(scriptFolderPath + "/settings.json");
-				writeJSONFile(settingsFile, settings);
-				rdoAllLayers.value = preset.allLayers;
-				rdoOnlySelected.value = !preset.allLayers;
-				chkBriefly.value = preset.briefly;
-				ddBrieflyType.selection = preset.brieflyType || 0;
+			if (event.altKey) {
+				if (!btnRename.enabled) return;
+				var allLayers = rdoAllLayers.value;
+				var template = txtTemplate.text;
+				var briefly = chkBriefly.value;
+				var brieflyType = ddBrieflyType.selection.text;
+				var isCtrlPressed = ScriptUI.environment.keyboardState.ctrlKey;
+				var isShiftPressed = ScriptUI.environment.keyboardState.shiftKey;
+				var includeShyLayers = isCtrlPressed && isShiftPressed;
+				var reverseOrder = false;
+				renameLayersByTemplate(allLayers, template, briefly, brieflyType, includeShyLayers, reverseOrder, isCtrlPressed, isShiftPressed, false, false);
 				updateLayerCounts();
 				updatePreview();
-				resetRenameButtonIcon();
-				updateRenameButtonIcon();
-				var currentSettings = {
-					allLayers: rdoAllLayers.value,
-					template: txtTemplate.text,
-					briefly: chkBriefly.value,
-					brieflyType: ddBrieflyType.selection.index,
-					selectedPresetTemplate: preset.template
-				};
-				saveSettings(currentSettings, !0);
-				updateFavoritesButtonIcon(preset.favoritesTemplate);
-				updatePresetsDropdown(settings)
+				var scriptFile = new File($.fileName);
+				var scriptFolderPath = scriptFile.path;
+				btnRename.image = File(scriptFolderPath + "/NitroNamer/img/doneIcon.png");
+				btnRename.imageSize = [24, 24];
 			} else {
-				alert("Нет выбранного пресета для применения.", "NitroNamer 2025.1 - dev")
+				var selectedPresetItem = ddLayerMode.selection;
+				if (selectedPresetItem && selectedPresetItem.preset) {
+					var preset = selectedPresetItem.preset;
+					txtTemplate.text = preset.template;
+					if (preset.hasOwnProperty('usageFrequency')) {
+						preset.usageFrequency += 1;
+					} else {
+						preset.usageFrequency = 1;
+					}
+					var settings = loadSettings();
+					var userPresets = settings.userPresets || {};
+					for (var key in userPresets) {
+						if (userPresets.hasOwnProperty(key) && userPresets[key].template === preset.template) {
+							userPresets[key] = preset;
+							break;
+						}
+					}
+					settings.userPresets = userPresets;
+					var scriptFile = new File($.fileName);
+					var scriptFolderPath = scriptFile.path + "/NitroNamer/settings";
+					var settingsFile = new File(scriptFolderPath + "/settings.json");
+					writeJSONFile(settingsFile, settings);
+					rdoAllLayers.value = preset.allLayers;
+					rdoOnlySelected.value = !preset.allLayers;
+					chkBriefly.value = preset.briefly;
+					ddBrieflyType.selection = preset.brieflyType || 0;
+					updateLayerCounts();
+					updatePreview();
+					resetRenameButtonIcon();
+					updateRenameButtonIcon();
+					var currentSettings = {
+						allLayers: rdoAllLayers.value,
+						template: txtTemplate.text,
+						briefly: chkBriefly.value,
+						brieflyType: ddBrieflyType.selection.index,
+						selectedPresetTemplate: preset.template
+					};
+					saveSettings(currentSettings, true);
+					updateFavoritesButtonIcon(preset.favoritesTemplate);
+					updatePresetsDropdown(settings);
+				} else {
+					alert("Нет выбранного пресета для применения.", scriptMessageHead_1);
+				}
 			}
 		}
-	});
+	});	
+	
 	win.onShow = function() {
 		ddLayerMode.size = [txtTemplate.size[0], ddLayerMode.size[1]]
 	};
