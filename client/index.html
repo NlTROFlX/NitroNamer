@@ -198,9 +198,11 @@
                     <div class="spoiler-title" data-i18n="leftBlock_spoilerSupporting_1">Supporting</div>
                 </div>
                 <div class="spoiler-content">
-                    <p onclick="selectSubItem(this);showContent('content-32')" data-i18n="leftBlock_spoilerSupporting_2">
+                    <p onclick="selectSubItem(this);showContent('content-32')"
+                        data-i18n="leftBlock_spoilerSupporting_2">
                         [1] eNumber - effect number</p>
-                    <p onclick="selectSubItem(this);showContent('content-1')" data-i18n="leftBlock_spoilerSupporting_3">
+                    <p onclick="selectSubItem(this);showContent('content-33')"
+                        data-i18n="leftBlock_spoilerSupporting_3">
                         [1] mNumber - mask number</p>
                 </div>
             </div>
@@ -3188,7 +3190,7 @@
                 <!--== Auxiliary ==-->
                 <!-- var eNumber -->
                 <div class="content-section" id="content-32">
-                    <div class="variable-name-block" data-value="m1"> <span class="variable-text-block-span-1">m1, m2, m3&nbsp;</span> -
+                    <div class="variable-name-block" data-value="e1, e2, e3"> <span class="variable-text-block-span-1">e1, e2, e3&nbsp;</span> -
                         variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
                     </div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
@@ -3217,7 +3219,8 @@
                         </div>
                         <div class="video-info" id="videoInfo">
                             <p id="currentTime">00:00:00</p>
-                            <p id="titleVideo" data-i18n="vareNumber_videoExample_1">| Demonstration of the eNumber variable
+                            <p id="titleVideo" data-i18n="vareNumber_videoExample_1">| Demonstration of the eNumber
+                                variable
                             </p>
                             <img src="icons/scale-up.svg" class="scale-up-icon" alt="Scale Up">
                         </div>
@@ -3234,7 +3237,8 @@
                     </div>
                     <!-- e: MODE 1 -->
                     <div class="variable-example-block" data-value="[Layer effects]: e1, e2 ,e3">
-                        <span class="variable-text-block-span-0">MODE 1:&nbsp;</span>[Layer effects]:&nbsp;<span class="variable-text-block-span-2">e1, e2 ,e3</span>
+                        <span class="variable-text-block-span-0">MODE 1:&nbsp;</span>[Layer effects]:&nbsp;<span
+                            class="variable-text-block-span-2">e1, e2 ,e3</span>
                         <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
                     </div>
                     <div class="variable-example-block-result">
@@ -3244,12 +3248,14 @@
                                 <img src="icons/layer-star.svg" alt="Download" />
                             </div>
                             <div class="aeUiElementsLayerName">
-                                Layer effects:&nbsp;<span class="variable-text-block-span-2">Deep Glow 2, Levels, Warp</span>
+                                Layer effects:&nbsp;<span class="variable-text-block-span-2">Deep Glow 2, Levels,
+                                    Warp</span>
                             </div>
                         </div>
                     </div>
                     <div class="variable-example-block" data-value="[As an auxiliary]: An(attr [ / ])">
-                        <span class="variable-text-block-span-0">MODE 2:&nbsp;</span>[As an auxiliary]:&nbsp;<span class="variable-text-block-span-2">E(e1, e3 [ / ])</span>
+                        <span class="variable-text-block-span-0">MODE 2:&nbsp;</span>[As an auxiliary]:&nbsp;<span
+                            class="variable-text-block-span-2">E(e1, e3 [ / ])</span>
                         <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
                     </div>
                     <div class="variable-example-block-result">
@@ -3260,6 +3266,84 @@
                             </div>
                             <div class="aeUiElementsLayerName">
                                 As an auxiliary: <span class="variable-text-block-span-2">Deep Glow 2 / Warp</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- var mNumber -->
+                <div class="content-section" id="content-33">
+                    <div class="variable-name-block" data-value="m1, m2, m3"> <span class="variable-text-block-span-1">m1, m2, m3&nbsp;</span> -
+                        variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
+                    <div class="variable-text-block" data-i18n="mNumberVarSection_1">Number of available modes: <span
+                            class="variable-text-block-span-1">2</span>
+                        <br>Customizing the return value: <span class="variable-text-block-span-1">-</span>
+                        <br>Customizing the separator: <span class="variable-text-block-span-1">-</span>
+                        <br>Returned data type: <span class="variable-text-block-span-1">-</span>
+                        <br>Source of data: <span class="variable-text-block-span-1">-</span>
+                        <br>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_2">Description:</div>
+                    <div class="variable-text-block" data-i18n="mNumberVarSection_2">The variable <span
+                            class="variable-text-block-span-1">-</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_3">Features:</div>
+                    <div class="variable-text-block" data-i18n="mNumberVarSection_3">-</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_4">Video examples with results:
+                    </div>
+                    <div class="videoblock" id="video1">
+                        <div class="video-container" id="videoContainer">
+                            <video id="video" width="100%" height="100%" src="media/video/var_examples/var_c.webm"
+                                type="video/webm"></video>
+                            <img src="icons/play.svg" id="playIcon" class="control-icon" alt="Play">
+                            <img src="icons/pause.svg" id="pauseIcon" class="control-icon" alt="Pause">
+                            <div class="video-overlay"></div>
+                        </div>
+                        <div class="video-info" id="videoInfo">
+                            <p id="currentTime">00:00:00</p>
+                            <p id="titleVideo" data-i18n="varmNumber_videoExample_1">-</p>
+                            <img src="icons/scale-up.svg" class="scale-up-icon" alt="Scale Up">
+                        </div>
+                        <div id="progressBarContainer">
+                            <div id="progressBarBackground">
+                                <div id="progressBarFill"></div>
+                                <div id="seekKnob"></div>
+                                <div id="timeTooltip">00:00:00</div>
+                                <div id="hoverCircle"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_5">Text examples with results:
+                    </div>
+                    <!-- m: MODE 1 -->
+                    <div class="variable-example-block" data-value="[Layer masks]: m1, m2 ,m3">
+                        <span class="variable-text-block-span-0">MODE 1:&nbsp;</span>[Layer masks]:&nbsp;<span
+                            class="variable-text-block-span-2">m1, m2 ,m3</span>
+                        <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                Layer masks:&nbsp;<span class="variable-text-block-span-2">mask 1, mask 2, mask 3</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-example-block" data-value="[As an auxiliary]: Lmn(m1, m3 [ / ])">
+                        <span class="variable-text-block-span-0">MODE 2:&nbsp;</span>[As an auxiliary]:&nbsp;<span class="variable-text-block-span-2">Lmn(m1, m3 [ / ])</span>
+                        <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                As an auxiliary: <span class="variable-text-block-span-2">mask 1 / mask 3</span>
                             </div>
                         </div>
                     </div>

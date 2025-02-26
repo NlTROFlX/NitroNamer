@@ -1,1 +1,1 @@
-Эта переменная является вспомогательной для таких переменных, как <span class=\"variable-text-block-span-1\">E</span>, <span class=\"variable-text-block-span-1\">Ec</span>. Чтобы узнать, как они могут работать вместе, смотрите соответствующий раздел с этими переменными.
+This variable serves as an auxiliary for variables such as <span class=\"variable-text-block-span-1\">Lmn</span>, <span class=\"variable-text-block-span-1\">Lmc</span>. To learn how they can work together, refer to the relevant section containing these variables.
