@@ -71,7 +71,7 @@
     "leftBlock_spoilerEffects_1": "Эффекты",
     "leftBlock_spoilerEffects_2": "[4] E - Названия эффектов.",
     "leftBlock_spoilerEffects_3": "[1] Ec - Количество эффектов на слое.",
-    "leftBlock_spoilerIndexesAndIndetifiers_1": "Индексы и идентификаторы",
+    "leftBlock_spoilerIndexesAndIndetifiers_1": "Индексы",
     "leftBlock_spoilerIndexesAndIndetifiers_2": "[2] i - Глобальный индекс слоя.",
     "leftBlock_spoilerIndexesAndIndetifiers_3": "[3] I - Локальный индекс слоя.",
     "leftBlock_spoilerIndexesAndIndetifiers_4": "[4] it - Порядковый номер среди слоёв одного типа.",
