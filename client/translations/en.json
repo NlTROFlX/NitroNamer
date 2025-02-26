@@ -62,7 +62,7 @@
     "leftBlock_spoilerComposition_4": "[1] F - Frame rate.",
     "leftBlock_spoilerComposition_5": "[1] R - Resolution of the layer.",
     "leftBlock_spoilerComposition_6": "[1] Ar - Aspect ratio.",
-    "leftBlock_spoilerTimeAndDuration_1": "Time and duration",
+    "leftBlock_spoilerTimeAndDuration_1": "Time",
     "leftBlock_spoilerTimeAndDuration_2": "[1] Ip - Entry point of the layer.",
     "leftBlock_spoilerTimeAndDuration_3": "[1] Op - Exit point of the layer.",
     "leftBlock_spoilerTimeAndDuration_4": "[4] D - Duration of the layer.",
@@ -71,12 +71,12 @@
     "leftBlock_spoilerEffects_1": "Effects",
     "leftBlock_spoilerEffects_2": "[4] E - Names of the effects.",
     "leftBlock_spoilerEffects_3": "[1] Ec - Number of effects per layer.",
-    "leftBlock_spoilerIndexesAndIndetifiers_1": "Indexes and identifiers",
+    "leftBlock_spoilerIndexesAndIndetifiers_1": "Indexes",
     "leftBlock_spoilerIndexesAndIndetifiers_2": "[2] i - Global index of the layer.",
     "leftBlock_spoilerIndexesAndIndetifiers_3": "[3] I - Local index of the layer.",
     "leftBlock_spoilerIndexesAndIndetifiers_4": "[4] it - The ordinal number among layers of the same type.",
     "leftBlock_spoilerIndexesAndIndetifiers_5": "[5] Lpnt(i) - Index from parent layer.",
-    "leftBlock_spoilerLayerProperties_1": "Layer properties",
+    "leftBlock_spoilerLayerProperties_1": "Layer",
     "leftBlock_spoilerLayerProperties_2": "[1] T - Type of layer.",
     "leftBlock_spoilerLayerProperties_3": "[1] S - Name of the source layer.",
     "leftBlock_spoilerLayerProperties_4": "[1] W - Width of the layer in pixels.",
@@ -220,5 +220,10 @@
     "lmcVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">2</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">Yes</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">Yes</span><br>Returned data type: <span class=\"variable-text-block-span-1\">String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Layer</span><br>",
     "lmcVarSection_2": "The variable <span class=\"variable-text-block-span-1\">Lmc</span> returns the number of masks present on the layer. You can set the filter mode <span class=\"variable-text-block-span-1\">Lmc(nameMask1, nameMask2)</span>, in which case the variable sums only the names of the masks present on the layer. The number of listed mask names is unlimited. Some syntax examples for use: <span class=\"variable-text-block-span-1\">Lmc</span>, <span class=\"variable-text-block-span-1\">Lmc(nameMask1, nameMask2)</span>, <span class=\"variable-text-block-span-1\">Lmc(prop, m1, nameMask3)</span>.",
     "lmcVarSection_3": "• When writing and searching for properties, the case of the entered characters is not considered. There is no difference between the syntax <span class=\"variable-text-block-span-1\">Lmc(MASK 1)</span> and <span class=\"variable-text-block-span-1\">Lmc(mask 1)</span>.<br><br>• This variable has its own auxiliary variables <span class=\"variable-text-block-span-1\">mNumber</span>. These variables can be used instead of the mask name, for example: <span class=\"variable-text-block-span-1\">Lmn(m1, m2, m3)</span>. This syntax will return the first, second, and third mask names. If the third mask, for example, is not present on the layer, then an empty value will be returned instead of its name.<br><br>",
-    "varLmc_videoExample_1": " | Demonstration of the Lmn variable"
+    "varLmc_videoExample_1": " | Demonstration of the Lmn variable",
+
+    "attrVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">2</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Selection</span><br>",
+    "attrVarSection_2": "The variable <span class=\"variable-text-block-span-1\">attr</span> returns the names of any selected layer properties that were highlighted on the selected layer in the timeline panel. Multiple selection of layers and properties will not return all selected properties on all selected layers but only for the last selected one.",
+    "attrVarSection_3": "• This variable is auxiliary for such variables as <span class=\"variable-text-block-span-1\">An</span>, <span class=\"variable-text-block-span-1\">Lexp</span>. To learn how they can work together, refer to the corresponding section of these variables.",
+    "varAttr_videoExample_1": " | Demonstration of the attr variable"
 }

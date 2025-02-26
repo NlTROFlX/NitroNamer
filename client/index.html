@@ -183,10 +183,8 @@
                     <div class="spoiler-title" data-i18n="leftBlock_spoilerSpecial_1">Special</div>
                 </div>
                 <div class="spoiler-content">
-                    <p onclick="selectSubItem(this);showContent('content-1')" data-i18n="leftBlock_spoilerSpecial_2">[2]
-                        attr - selected attributes</p>
-                    <p onclick="selectSubItem(this);showContent('content-1')" data-i18n="leftBlock_spoilerSpecial_3">[1]
-                        prop - selected properties</p>
+                    <p onclick="selectSubItem(this);showContent('content-30')" data-i18n="leftBlock_spoilerSpecial_2">[2] attr - selected attributes</p>
+                    <p onclick="selectSubItem(this);showContent('content-31')" data-i18n="leftBlock_spoilerSpecial_3">[1] prop - selected properties</p>
                 </div>
             </div>
             <!-- Supporting -->
@@ -3019,6 +3017,82 @@
                 </div>
 
                 <!--== Special ==-->
+                <!-- var attr -->
+                <div class="content-section" id="content-30">
+                    <div class="variable-name-block" data-value="attr"> <span class="variable-text-block-span-1">attr&nbsp;</span> -
+                        variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
+                    <div class="variable-text-block" data-i18n="attrVarSection_1">Number of available modes: <span class="variable-text-block-span-1">2</span>
+                        <br>Customizing the return value: <span class="variable-text-block-span-1">Yes</span>
+                        <br>Customizing the separator: <span class="variable-text-block-span-1">Yes</span>
+                        <br>Returned data type: <span class="variable-text-block-span-1">Number</span>
+                        <br>Source of data: <span class="variable-text-block-span-1">Layer</span>
+                        <br>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_2">Description:</div>
+                    <div class="variable-text-block" data-i18n="attrVarSection_2">The variable <span
+                            class="variable-text-block-span-1">-</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_3">Features:</div>
+                    <div class="variable-text-block" data-i18n="attrVarSection_3">-</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_4">Video examples with results:
+                    </div>
+                    <div class="videoblock" id="video1">
+                        <div class="video-container" id="videoContainer">
+                            <video id="video" width="100%" height="100%" src="media/video/var_examples/var_c.webm"
+                                type="video/webm"></video>
+                            <img src="icons/play.svg" id="playIcon" class="control-icon" alt="Play">
+                            <img src="icons/pause.svg" id="pauseIcon" class="control-icon" alt="Pause">
+                            <div class="video-overlay"></div>
+                        </div>
+                        <div class="video-info" id="videoInfo">
+                            <p id="currentTime">00:00:00</p>
+                            <p id="titleVideo" data-i18n="varAttr_videoExample_1">| Demonstration of the Attr variable</p>
+                            <img src="icons/scale-up.svg" class="scale-up-icon" alt="Scale Up">
+                        </div>
+                        <div id="progressBarContainer">
+                            <div id="progressBarBackground">
+                                <div id="progressBarFill"></div>
+                                <div id="seekKnob"></div>
+                                <div id="timeTooltip">00:00:00</div>
+                                <div id="hoverCircle"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_5">Text examples with results:
+                    </div>
+                    <!-- attr: MODE 1 -->
+                    <div class="variable-example-block" data-value="[Selected layer properties]: attr">
+                        <span class="variable-text-block-span-0">MODE 1:&nbsp;</span>[Selected layer properties]:&nbsp;<span class="variable-text-block-span-2">attr</span>
+                        <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                Selected layer properties:&nbsp;<span class="variable-text-block-span-2">position, scale, opacity</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-example-block" data-value="[As an auxiliary]: An(attr [ / ])">
+                        <span class="variable-text-block-span-0">MODE 3:&nbsp;</span>[As an auxiliary]:&nbsp;<span class="variable-text-block-span-2">An(attr [ / ])</span>
+                        <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                As an auxiliary: <span class="variable-text-block-span-2">position, scale, opacity</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- Нижний блок -->
             <div class="bottom-bar"> <span class="license-by">LICENSE BY </span> <span
