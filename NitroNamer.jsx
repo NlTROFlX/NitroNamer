@@ -2366,11 +2366,10 @@ function buildUI(thisObj) {
 
 	function getChildLayerNames(layer, n, separator) {
 		var comp = layer.containingComp;
-
 		if (!comp) {
-			return layer.name;
+			return "";
 		}
-
+	
 		var children = [];
 		for (var i = 1; i <= comp.numLayers; i++) {
 			var l = comp.layer(i);
@@ -2378,21 +2377,18 @@ function buildUI(thisObj) {
 				children.push(l);
 			}
 		}
-
+	
 		if (children.length === 0) {
-			return layer.name;
+			return "";
 		}
-
+	
 		if (typeof n === "number" && !isNaN(n)) {
-
 			if (n >= 1 && n <= children.length) {
 				return children[n - 1].name;
 			} else {
-
-				return layer.name;
+				return "";
 			}
 		} else {
-
 			var sep = separator || ", ";
 			var childNames = [];
 			for (var j = 0; j < children.length; j++) {
@@ -2592,6 +2588,25 @@ function buildUI(thisObj) {
 				value = getMaskNames(layer, settings)
 			} else if (chldSeparatorOnly !== undefined) {
 				value = getChildLayerNames(layer, null, chldSeparatorOnly);
+			} else if (chldN !== undefined) {
+				if (chldN.trim() === "") {
+					value = getChildLayerNames(layer, null, chldSeparator || ", ");
+				} else {
+					var indicesStr = chldN.split(',').map(function(item) { return item.trim(); });
+					var names = [];
+					for (var k = 0; k < indicesStr.length; k++) {
+						var index = parseInt(indicesStr[k], 10);
+						if (!isNaN(index)) {
+							var name = getChildLayerNames(layer, index, null);
+							if (name !== "") {
+								names.push(name);
+							}
+						}
+					}
+					value = names.join(chldSeparator || ", ");
+				}
+			} else if (match === "Chld") {
+				value = getChildLayerNames(layer, null, null);
 			}
 
 			else if (chldN !== undefined) {

@@ -34,7 +34,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "T(shape) | T",
+        "template": "Chld(2, 3 [ % ]) | Chld([ # ])",
         "briefly": false,
         "brieflyType": 3,
         "modeIndex": 4,

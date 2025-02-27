@@ -151,6 +151,8 @@
                         data-i18n="leftBlock_spoilerLayerProperties_4">[1] W - Width of the layer in pixels.</p>
                     <p onclick="selectSubItem(this);showContent('content-19')"
                         data-i18n="leftBlock_spoilerLayerProperties_5">[1] H - Height of the layer in pixels.</p>
+                    <p onclick="selectSubItem(this);showContent('content-34')"
+                        data-i18n="leftBlock_spoilerLayerProperties_15">[1] Chld - Opacity of the layer.</p>
                     <p onclick="selectSubItem(this);showContent('content-20')"
                         data-i18n="leftBlock_spoilerLayerProperties_15">[1] Lpnt - Opacity of the layer.</p>
                     <p onclick="selectSubItem(this);showContent('content-21')"
@@ -2241,6 +2243,161 @@
                         </div>
                     </div>
                 </div>
+                <!-- var Chld -->
+                <div class="content-section" id="content-34">
+                    <div class="variable-name-block" data-value="Lpnt"> <span
+                            class="variable-text-block-span-1">Lpnt&nbsp;</span> -
+                        variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
+                    <div class="variable-text-block" data-i18n="lpntVarSection_1">Number of available modes: <span
+                            class="variable-text-block-span-1">3</span>
+                        <br>Customizing the return value: <span class="variable-text-block-span-1">No</span>
+                        <br>Customizing the separator: <span class="variable-text-block-span-1">No</span>
+                        <br>Returned data type: <span class="variable-text-block-span-1">Number, String</span>
+                        <br>Source of data: <span class="variable-text-block-span-1">Layer</span>
+                        <br>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_2">Description:</div>
+                    <div class="variable-text-block" data-i18n="lpntVarSection_2">The variable <span
+                            class="variable-text-block-span-1">W</span> returns the width of the source in pixels.</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_3">Features:</div>
+                    <div class="variable-text-block" data-i18n="lpntVarSection_3">Not available.</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_4">Video examples with results:
+                    </div>
+                    <div class="videoblock" id="video1">
+                        <div class="video-container" id="videoContainer">
+                            <video id="video" width="100%" height="100%" src="media/video/var_examples/var_c.webm"
+                                type="video/webm"></video>
+                            <img src="icons/play.svg" id="playIcon" class="control-icon" alt="Play">
+                            <img src="icons/pause.svg" id="pauseIcon" class="control-icon" alt="Pause">
+                            <div class="video-overlay"></div>
+                        </div>
+                        <div class="video-info" id="videoInfo">
+                            <p id="currentTime">00:00:00</p>
+                            <p id="titleVideo" data-i18n="varLpnt_videoExample_1">| Demonstration of the Lpnt variable
+                            </p>
+                            <img src="icons/scale-up.svg" class="scale-up-icon" alt="Scale Up">
+                        </div>
+                        <div id="progressBarContainer">
+                            <div id="progressBarBackground">
+                                <div id="progressBarFill"></div>
+                                <div id="seekKnob"></div>
+                                <div id="timeTooltip">00:00:00</div>
+                                <div id="hoverCircle"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_5">Text examples with results:
+                    </div>
+                    <!-- Lpnt: MODE 1 -->
+                    <div class="variable-example-block" data-value="O | Lpnt">
+                        <span class="variable-text-block-span-0">MODE 1:&nbsp;O |&nbsp;<span
+                                class="variable-text-block-span-2">Lpnt</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Shape"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                Layer.1
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Shape"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                Shape.2 |<span class="variable-text-block-span-2"> Layer.1</span>
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Shape"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                Shape.3 |<span class="variable-text-block-span-2"> Layer.1</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Lpnt: MODE 2 -->
+                    <div class="variable-example-block" data-value="O | Lpnt(1)">
+                        <span class="variable-text-block-span-0">MODE 1:&nbsp;O |&nbsp;<span
+                                class="variable-text-block-span-2">Lpnt(1)</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Shape"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                Layer.1
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Shape"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                (Subsidiary for Layer.1) Shape.1 |<span class="variable-text-block-span-2">
+                                    Layer.1</span>
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Shape"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                (Subsidiary for Shape.1) Shape.2 |<span class="variable-text-block-span-2">
+                                    Shape.1</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Lpnt: MODE 2 -->
+                    <div class="variable-example-block" data-value="O | Lpnt(i)">
+                        <span class="variable-text-block-span-0">MODE 1:&nbsp;O |&nbsp;<span
+                                class="variable-text-block-span-2">Lpnt(i)</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Shape"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                Layer.1
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Shape"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                (Subsidiary for Layer.1) Shape.1 |<span class="variable-text-block-span-2"> 1</span>
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Shape"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" alt="Download" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                (Subsidiary for Layer.1) Shape.2 |<span class="variable-text-block-span-2"> 2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- var Lpos -->
                 <div class="content-section" id="content-21">
                     <div class="variable-name-block" data-value="Lpnt"> <span
@@ -3190,7 +3347,8 @@
                 <!--== Auxiliary ==-->
                 <!-- var eNumber -->
                 <div class="content-section" id="content-32">
-                    <div class="variable-name-block" data-value="e1, e2, e3"> <span class="variable-text-block-span-1">e1, e2, e3&nbsp;</span> -
+                    <div class="variable-name-block" data-value="e1, e2, e3"> <span
+                            class="variable-text-block-span-1">e1, e2, e3&nbsp;</span> -
                         variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
                     </div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
@@ -3272,7 +3430,8 @@
                 </div>
                 <!-- var mNumber -->
                 <div class="content-section" id="content-33">
-                    <div class="variable-name-block" data-value="m1, m2, m3"> <span class="variable-text-block-span-1">m1, m2, m3&nbsp;</span> -
+                    <div class="variable-name-block" data-value="m1, m2, m3"> <span
+                            class="variable-text-block-span-1">m1, m2, m3&nbsp;</span> -
                         variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
                     </div>
                     <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
@@ -3333,7 +3492,8 @@
                         </div>
                     </div>
                     <div class="variable-example-block" data-value="[As an auxiliary]: Lmn(m1, m3 [ / ])">
-                        <span class="variable-text-block-span-0">MODE 2:&nbsp;</span>[As an auxiliary]:&nbsp;<span class="variable-text-block-span-2">Lmn(m1, m3 [ / ])</span>
+                        <span class="variable-text-block-span-0">MODE 2:&nbsp;</span>[As an auxiliary]:&nbsp;<span
+                            class="variable-text-block-span-2">Lmn(m1, m3 [ / ])</span>
                         <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
                     </div>
                     <div class="variable-example-block-result">
