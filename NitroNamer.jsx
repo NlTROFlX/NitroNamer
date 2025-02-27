@@ -2589,34 +2589,35 @@ function buildUI(thisObj) {
 			} else if (chldSeparatorOnly !== undefined) {
 				value = getChildLayerNames(layer, null, chldSeparatorOnly);
 			} else if (chldN !== undefined) {
-				if (chldN.trim() === "") {
-					value = getChildLayerNames(layer, null, chldSeparator || ", ");
-				} else {
-					var indicesStr = chldN.split(',').map(function(item) { return item.trim(); });
-					var names = [];
-					for (var k = 0; k < indicesStr.length; k++) {
-						var index = parseInt(indicesStr[k], 10);
-						if (!isNaN(index)) {
-							var name = getChildLayerNames(layer, index, null);
-							if (name !== "") {
-								names.push(name);
-							}
+				var comp = layer.containingComp;
+				var children = [];
+				if (comp) {
+					for (var i = 1; i <= comp.numLayers; i++) {
+						var l = comp.layer(i);
+						if (l.parent === layer) {
+							children.push(l);
 						}
 					}
-					value = names.join(chldSeparator || ", ");
+				}
+				if (children.length === 0) {
+					value = layer.name;
+				} else {
+					if (chldN.trim() === "") {
+						value = getChildLayerNames(layer, null, chldSeparator || ", ");
+					} else {
+						var indicesStr = chldN.split(',').map(function(item) { return item.trim(); });
+						var names = [];
+						for (var k = 0; k < indicesStr.length; k++) {
+							var index = parseInt(indicesStr[k], 10);
+							if (!isNaN(index) && index >= 1 && index <= children.length) {
+								names.push(children[index - 1].name);
+							}
+						}
+						value = names.join(chldSeparator || ", ");
+					}
 				}
 			} else if (match === "Chld") {
-				value = getChildLayerNames(layer, null, null);
-			}
-
-			else if (chldN !== undefined) {
-				var nParsed = parseInt(chldN, 10);
-
-				value = getChildLayerNames(layer, nParsed, chldSeparator);
-			}
-
-			else if (match === "Chld") {
-				value = getChildLayerNames(layer, null, null);
+				value = getChildLayerNames(layer, null, null); // Все дочерние с дефолтным разделителем
 			} else if (customI !== undefined) {
 				var uniqueKey = "I(" + customI + ")";
 				var parts = customI.split(",");

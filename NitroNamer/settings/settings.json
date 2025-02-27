@@ -1,5 +1,14 @@
 {
     "userPresets": {
+        "preset_5": {
+            "allLayers": true,
+            "template": "Chld(1, 2, 3 [ # ]) | Chld([ $ ])",
+            "briefly": false,
+            "brieflyType": 3,
+            "creationDate": 1740663938499,
+            "usageFrequency": 2,
+            "favoritesTemplate": false
+        },
         "preset_4": {
             "allLayers": true,
             "template": "[TAn] | T_S:W | [EEc @cycle(a, b, '1', '2')]",
@@ -34,12 +43,12 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "Chld(2, 3 [ % ]) | Chld([ # ])",
+        "template": "Chld(1, 2, 3 [ # ]) | Chld([ $ ])",
         "briefly": false,
         "brieflyType": 3,
         "modeIndex": 4,
         "modeActive": false,
-        "selectedPresetTemplate": "[TAn] | T_S:W | [EEc @cycle(a, b, '1', '2')]"
+        "selectedPresetTemplate": "Chld(1, 2, 3 [ # ]) | Chld([ $ ])"
     },
     "nameApply": {
         "shapeLayer": true,
