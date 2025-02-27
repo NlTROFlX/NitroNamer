@@ -2311,20 +2311,25 @@ function buildUI(thisObj) {
 
 	function filterLayerType(layerType, filter) {
 		if (!layerType) return "";
-
 		var filterLower = filter.toLowerCase().trim();
-		var layerTypeLower = layerType.toLowerCase();
-
-		var filterTypes = filterLower.split(',').map(function (item) {
-			return item.trim();
+		var parts = layerType.split(",").map(function(item) {
+			return item.toLowerCase().trim();
 		});
-
-		if (filterTypes.indexOf(layerTypeLower) !== -1) {
-			return layerType;
-		} else {
-			return "";
+		for (var i = 0; i < parts.length; i++) {
+			if (parts[i] === filterLower) {
+				return filter.charAt(0).toUpperCase() + filter.slice(1);
+			}
 		}
-	}
+		if (filterLower === "shape") {
+			var shapeKeywords = ["rectangle", "ellipse", "polystar", "shape"];
+			for (var i = 0; i < parts.length; i++) {
+				if (shapeKeywords.indexOf(parts[i]) !== -1) {
+					return "Shape";
+				}
+			}
+		}
+		return "";
+	}	
 
 	function getIndexInSelection(layer) {
 		var selectedLayers = layer.containingComp.selectedLayers;

@@ -34,7 +34,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "T",
+        "template": "T(shape) | T",
         "briefly": false,
         "brieflyType": 3,
         "modeIndex": 4,
