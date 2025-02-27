@@ -5,6 +5,7 @@ var localIndex = 0;
 
 function buildUI(thisObj) {
 	var scriptMessageHead_1 = "NitroNamer 2025.1 - dev";
+	var defaultTemplatePreset1 = "[LayerName].i"
 	var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", scriptMessageHead_1, undefined, {
 		resizeable: !0
 	});
@@ -247,7 +248,7 @@ function buildUI(thisObj) {
 	grpTemplate.orientation = "column";
 	grpTemplate.margins = [0, -10, 0, 0];
 	grpTemplate.spacing = globalSpacingElements;
-	var txtTemplate = grpTemplate.add("edittext", undefined, "(LayerName).i", {
+	var txtTemplate = grpTemplate.add("edittext", undefined, defaultTemplatePreset1, {
 		multiline: !1,
 		scrolling: !1
 	});
@@ -701,7 +702,7 @@ function buildUI(thisObj) {
 	btnReset.addEventListener("click", function() {
 		rdoAllLayers.value = !0;
 		rdoOnlySelected.value = !1;
-		txtTemplate.text = "(LayerName).i";
+		txtTemplate.text = defaultTemplatePreset1;
 		chkBriefly.value = !1;
 		ddBrieflyType.selection = 0;
 		updateLayerCounts();
@@ -1145,7 +1146,7 @@ function buildUI(thisObj) {
 		if (settings && settings.currentSettings) {
 			rdoAllLayers.value = settings.currentSettings.allLayers;
 			rdoOnlySelected.value = !settings.currentSettings.allLayers;
-			txtTemplate.text = settings.currentSettings.template || "(LayerName).i";
+			txtTemplate.text = settings.currentSettings.template || defaultTemplatePreset1;
 			chkBriefly.value = settings.currentSettings.briefly;
 			ddBrieflyType.selection = settings.currentSettings.brieflyType || 0;
 			currentModeIndex = settings.currentSettings.modeIndex !== undefined ? settings.currentSettings.modeIndex : 0;
@@ -1158,7 +1159,7 @@ function buildUI(thisObj) {
 			var lastPreset = settings.userPresets[lastPresetKey];
 			rdoAllLayers.value = lastPreset.allLayers;
 			rdoOnlySelected.value = !lastPreset.allLayers;
-			txtTemplate.text = lastPreset.template || "(LayerName).i";
+			txtTemplate.text = lastPreset.template || defaultTemplatePreset1;
 			chkBriefly.value = lastPreset.briefly;
 			ddBrieflyType.selection = lastPreset.brieflyType || 0;
 			currentModeIndex = 0;
@@ -1187,7 +1188,7 @@ function buildUI(thisObj) {
 		} else {
 			ddLayerMode.selection = 0
 		}
-		txtTemplate.text = settings.currentSettings.template || "(LayerName).i";
+		txtTemplate.text = settings.currentSettings.template || defaultTemplatePreset1;
 		ddLayerMode.onChange = dropdownChangeHandler;
 		if (settings && settings.userPresets && ddLayerMode.selection && ddLayerMode.selection.preset) {
 			btnFavorites.isFavorite = ddLayerMode.selection.preset.favoritesTemplate;
