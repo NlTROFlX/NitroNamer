@@ -1,5 +1,101 @@
 #include "json2.js";
 
+// Polyfill для Array.prototype.map
+if (!Array.prototype.map) {
+    Array.prototype.map = function(callback, thisArg) {
+        if (this === null || this === undefined) {
+            throw new TypeError('Array.prototype.map called on null or undefined');
+        }
+        var O = Object(this);
+        var len = O.length >>> 0;
+        if (typeof callback !== "function") {
+            throw new TypeError(callback + " is not a function");
+        }
+        var T = thisArg || undefined;
+        var A = new Array(len);
+        for (var i = 0; i < len; i++) {
+            if (i in O) {
+                A[i] = callback.call(T, O[i], i, O);
+            }
+        }
+        return A;
+    };
+}
+
+// Polyfill для Array.prototype.filter
+if (!Array.prototype.filter) {
+    Array.prototype.filter = function(callback, thisArg) {
+        if (this === null || this === undefined) {
+            throw new TypeError('Array.prototype.filter called on null or undefined');
+        }
+        var O = Object(this);
+        var len = O.length >>> 0;
+        if (typeof callback !== "function") {
+            throw new TypeError(callback + " is not a function");
+        }
+        var T = thisArg || undefined;
+        var res = [];
+        for (var i = 0; i < len; i++) {
+            if (i in O) {
+                var val = O[i];
+                if (callback.call(T, val, i, O)) {
+                    res.push(val);
+                }
+            }
+        }
+        return res;
+    };
+}
+
+// Polyfill для Array.prototype.forEach
+if (!Array.prototype.forEach) {
+    Array.prototype.forEach = function(callback, thisArg) {
+        if (this === null || this === undefined) {
+            throw new TypeError('Array.prototype.forEach called on null or undefined');
+        }
+        var O = Object(this);
+        var len = O.length >>> 0;
+        if (typeof callback !== "function") {
+            throw new TypeError(callback + " is not a function");
+        }
+        var T = thisArg || undefined;
+        for (var i = 0; i < len; i++) {
+            if (i in O) {
+                callback.call(T, O[i], i, O);
+            }
+        }
+    };
+}
+
+// Polyfill для Array.prototype.indexOf
+if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function(searchElement, fromIndex) {
+        if (this === null) {
+            throw new TypeError('"this" is null or not defined');
+        }
+        var O = Object(this);
+        var len = O.length >>> 0;
+        if (len === 0) {
+            return -1;
+        }
+        var n = +fromIndex || 0;
+        if (Math.abs(n) === Infinity) {
+            n = 0;
+        }
+        if (n >= len) {
+            return -1;
+        }
+        var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+        while (k < len) {
+            if (k in O && O[k] === searchElement) {
+                return k;
+            }
+            k++;
+        }
+        return -1;
+    };
+}
+
 var incrementValues = {};
 var localIndex = 0;
 
@@ -2309,26 +2405,56 @@ function buildUI(thisObj) {
 		}
 	}
 
-	function filterLayerType(layerType, filter) {
+	function filterLayerType(layerType, filterSpec) {
 		if (!layerType) return "";
-		var filterLower = filter.toLowerCase().trim();
-		var parts = layerType.split(",").map(function(item) {
-			return item.toLowerCase().trim();
-		});
-		for (var i = 0; i < parts.length; i++) {
-			if (parts[i] === filterLower) {
-				return filter.charAt(0).toUpperCase() + filter.slice(1);
+		var separator = ", ";
+		var filtersPart = filterSpec;
+		var matchSep = filterSpec.match(/^(.*?)\[(.*)\]$/);
+		if (matchSep) {
+			filtersPart = matchSep[1].replace(/\s+$/, "");
+			separator = matchSep[2];
+		}
+		var tokensTemp = filtersPart.split(",");
+		var filterTokens = [];
+		for (var i = 0; i < tokensTemp.length; i++) {
+			var token = tokensTemp[i].replace(/^\s+|\s+$/g, "").toLowerCase();
+			if (token !== "") {
+				filterTokens.push(token);
 			}
 		}
-		if (filterLower === "shape") {
-			var shapeKeywords = ["rectangle", "ellipse", "polystar", "shape"];
-			for (var i = 0; i < parts.length; i++) {
-				if (shapeKeywords.indexOf(parts[i]) !== -1) {
-					return "Shape";
+		
+		var items;
+		if (layerType.indexOf(",") !== -1) {
+			var itemsTemp = layerType.split(",");
+			items = [];
+			for (var i = 0; i < itemsTemp.length; i++) {
+				items.push(itemsTemp[i].replace(/^\s+|\s+$/g, ""));
+			}
+		} else {
+			items = [layerType.replace(/^\s+|\s+$/g, "")];
+		}
+		
+		var matchedItems = [];
+		for (var i = 0; i < items.length; i++) {
+			var itemLower = items[i].toLowerCase();
+			for (var j = 0; j < filterTokens.length; j++) {
+				if (itemLower === filterTokens[j]) {
+					var exists = false;
+					for (var k = 0; k < matchedItems.length; k++) {
+						if (matchedItems[k] === items[i]) {
+							exists = true;
+							break;
+						}
+					}
+					if (!exists) {
+						matchedItems.push(items[i]);
+					}
+					break;
 				}
 			}
 		}
-		return "";
+		
+		return matchedItems.join(separator);
 	}	
 
 	function getIndexInSelection(layer) {
