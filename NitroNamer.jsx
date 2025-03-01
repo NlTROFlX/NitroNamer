@@ -1887,14 +1887,19 @@ function buildUI(thisObj) {
 	}
 
 	function getWidth(layer, settings) {
-		if (layer.nullLayer || layer.adjustmentLayer) {
-			return settings && settings.W ? (settings.W.active ? settings.W.customValue : settings.W.defaultValue) : "NoWidth"
+		var layerType = getLayerType(layer);
+		if (layerType === "Null" || layerType === "Camera" || layerType === "Light" || layerType === "Audio") {
+			return settings && settings.W ? (settings.W.active ? settings.W.customValue : settings.W.defaultValue) : "NoWidth";
 		}
 		if (layer.source && layer.source.width) {
-			return layer.source.width.toString()
+			return layer.source.width;
 		}
-		return settings && settings.W ? (settings.W.active ? settings.W.customValue : settings.W.defaultValue) : "NoWidth"
-	}
+		if (typeof layer.sourceRectAtTime === "function") {
+			var rect = layer.sourceRectAtTime(layer.inPoint, false);
+			return rect.width;
+		}
+		return settings && settings.W ? (settings.W.active ? settings.W.customValue : settings.W.defaultValue) : "NoWidth";
+	}	
 
 	function getHeight(layer, settings) {
 		if (layer.nullLayer || layer.adjustmentLayer) {
@@ -2534,11 +2539,19 @@ function buildUI(thisObj) {
 		var result = template;
 		var nthEffectRegex = /e(\d+)/g;
 		var nthMaskRegex = /m(\d+)/g;
-		var regex = new RegExp(["\\[([^\\[\\]]+)\\]", "T\\(([^()]+)\\)", "it", "Df", "Ec\\(([^()\\[\\]]+?)\\)", "Ec", "E\\(\\[([^\\[\\]]+)\\]\\)", "E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "E", "An\\(\\[([^\\[\\]]+)\\]\\)", "An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "An", "Lexp\\(\\[([^\\[\\]]+)\\]\\)", "Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lexp", "D\\(([^()\\[\\]]+)\\)", "D", "Fext\\(([^()\\[\\]]+)\\)", "Fext", "Ip", "Op", "Tm", "Ar\\(([^()\\[\\]]+)\\)", "Ar", "Pn", "Lpos", "Lsc", "Lrot", "Lops", "Lpnt\\(([^()\\[\\]]+)\\)", "Lpnt", "Cd\\(([^()\\[\\]]+)\\)", "Cd", "Lmc\\(\\[([^\\[\\]]+)\\]\\)", "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmc", "Lmn\\(\\[([^\\[\\]]+)\\]\\)", "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmn", "Chld\\(\\[([^\\[\\]]+)\\]\\)", "Chld\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Chld", "I\\(([^()\\[\\]]+)\\)", "I", "attr", "prop", "e(\\d+)", "m(\\d+)", "[A-Z]", "i", "S", "W", "H", "@cycle\\(\\s*(\\d+)\\s*,\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)", "cycle", "@replace\\(\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)"].join("|"), "g");
+		var regex = new RegExp(["\\[([^\\[\\]]+)\\]", "T\\(([^()]+)\\)", "it", "Df", "Ec\\(([^()\\[\\]]+?)\\)", "Ec", "E\\(\\[([^\\[\\]]+)\\]\\)", "E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "E", "An\\(\\[([^\\[\\]]+)\\]\\)", "An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "An", "Lexp\\(\\[([^\\[\\]]+)\\]\\)", "Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lexp", "D\\(([^()\\[\\]]+)\\)", "D", "Fext\\(([^()\\[\\]]+)\\)", "Fext", "Ip", "Op", "Tm", "Ar\\(([^()\\[\\]]+)\\)", "Ar", "Pn", "Lpos", "Lsc", "Lrot", "Lops", "Lpnt\\(([^()\\[\\]]+)\\)", "Lpnt", "Cd\\(([^()\\[\\]]+)\\)", "Cd", "Lmc\\(\\[([^\\[\\]]+)\\]\\)", "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmc", "Lmn\\(\\[([^\\[\\]]+)\\]\\)", "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmn", "Chld\\(\\[([^\\[\\]]+)\\]\\)", "Chld\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Chld", "I\\(([^()\\[\\]]+)\\)", "I", "attr", "prop", "e(\\d+)", "m(\\d+)", "W\\(([1-9])\\)", "W", "[A-Z]", "i", "S", "H", "@cycle\\(\\s*(\\d+)\\s*,\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)", "cycle", "@replace\\(\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)"].join("|"), "g");
 		var usedVariables = {};
 		var currentLocalIndex = localIndex;
 		result = result.replace(regex, function (match, group, tFilter, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, chldSeparatorOnly, chldN, chldSeparator, customI, nthEffectIndex, nthMaskIndex, cycleCount, cycleA, cycleB, replaceFindStr, replaceWithStr) {
 			var value;
+			if (/^W\(([1-9])\)$/.test(match)) {
+				var decimals = parseInt(match.match(/^W\(([1-9])\)$/)[1], 10);
+				if (typeof variables.W === "number") {
+					return variables.W.toFixed(decimals);
+				} else {
+					return variables.W;
+				}
+			}
 			if (anSeparatorOnly !== undefined) {
 				anSeparatorOnly = anSeparatorOnly.replace(/attr/g, variables.attr)
 			}
@@ -2825,8 +2838,12 @@ function buildUI(thisObj) {
 				value = variables.i
 			} else if (match === 'S') {
 				value = variables.S
-			} else if (match === 'W') {
-				value = variables.W
+			} if (match === "W") {
+				if (typeof variables.W === "number") {
+					return Math.round(variables.W).toString();
+				} else {
+					return variables.W;
+				}
 			} else if (match === 'H') {
 				value = variables.H
 			} else {
