@@ -2550,9 +2550,16 @@ function buildUI(thisObj) {
 		result = result.replace(regex, function (match, group, tFilter, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, chldSeparatorOnly, chldN, chldSeparator, customI, nthEffectIndex, nthMaskIndex, cycleCount, cycleA, cycleB, replaceFindStr, replaceWithStr) {
 			var value;
 			if (/^W\(([1-9])\)$/.test(match)) {
-				var decimals = parseInt(match.match(/^W\(([1-9])\)$/)[1], 10);
+				var decimalsW = parseInt(match.match(/^W\(([1-9])\)$/)[1], 10);
 				if (typeof variables.W === "number") {
-					return variables.W.toFixed(decimals);
+					return variables.W.toFixed(decimalsW);
+				} else {
+					return variables.W;
+				}
+			}
+			if (match === "W") {
+				if (typeof variables.W === "number") {
+					return Math.round(variables.W).toString();
 				} else {
 					return variables.W;
 				}
@@ -2561,6 +2568,13 @@ function buildUI(thisObj) {
 				var decimalsH = parseInt(match.match(/^H\(([1-9])\)$/)[1], 10);
 				if (typeof variables.H === "number") {
 					return variables.H.toFixed(decimalsH);
+				} else {
+					return variables.H;
+				}
+			}
+			if (match === "H") {
+				if (typeof variables.H === "number") {
+					return Math.round(variables.H).toString();
 				} else {
 					return variables.H;
 				}
@@ -2851,18 +2865,6 @@ function buildUI(thisObj) {
 				value = variables.i
 			} else if (match === 'S') {
 				value = variables.S
-			} if (match === "W") {
-				if (typeof variables.W === "number") {
-					return Math.round(variables.W).toString();
-				} else {
-					return variables.W;
-				}
-			} if (match === "H") {
-				if (typeof variables.H === "number") {
-					return Math.round(variables.H).toString();
-				} else {
-					return variables.H;
-				}
 			} else {
 				value = ''
 			}
