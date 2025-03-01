@@ -2102,14 +2102,24 @@ function buildUI(thisObj) {
 	function getFileExtension(layer, settings, customExtension) {
 		if (layer.source && layer.source.file && layer.source.file.name) {
 			var fileName = layer.source.file.name;
-			var extension = fileName.split('.').pop();
+			var ext = fileName.split('.').pop().toLowerCase();
 			if (customExtension) {
-				return extension.toLowerCase() === customExtension.toLowerCase() ? customExtension : (settings && settings.Fext ? (settings.Fext.active ? settings.Fext.customValue : settings.Fext.defaultValue) : "NoExtension")
+				var allowed = customExtension.split(',').map(function(item) {
+					return item.replace(/[\[\]\*]/g, "").trim().toLowerCase();
+				}).filter(function(item) { return item !== ""; });
+				if (customExtension.indexOf('*') !== -1) {
+					return ext;
+				}
+				if (allowed.indexOf(ext) !== -1) {
+					return ext;
+				} else {
+					return (settings && settings.Fext ? (settings.Fext.active ? settings.Fext.customValue : settings.Fext.defaultValue) : "NoExtension");
+				}
 			}
-			return extension
+			return ext;
 		}
-		return settings && settings.Fext ? (settings.Fext.active ? settings.Fext.customValue : settings.Fext.defaultValue) : "NoExtension"
-	}
+		return (settings && settings.Fext ? (settings.Fext.active ? settings.Fext.customValue : settings.Fext.defaultValue) : "NoExtension");
+	}	
 
 	function getLayerOpacity(layer) {
 		if (layer instanceof AVLayer && layer.hasAudio && !layer.hasVideo) {

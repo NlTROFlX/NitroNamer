@@ -43,7 +43,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "O | T.i = E = Ip = Cd = Pn = C",
+        "template": "Fext(exr, png, ai, psd)",
         "briefly": false,
         "brieflyType": 3,
         "modeIndex": 4,
