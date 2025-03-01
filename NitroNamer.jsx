@@ -2749,7 +2749,7 @@ function buildUI(thisObj) {
 					}
 				}
 			} else if (match === "Chld") {
-				value = getChildLayerNames(layer, null, null); // Все дочерние с дефолтным разделителем
+				value = getChildLayerNames(layer, null, null);
 			} else if (customI !== undefined) {
 				var uniqueKey = "I(" + customI + ")";
 				var parts = customI.split(",");
@@ -2887,16 +2887,12 @@ function buildUI(thisObj) {
 				localIndex = 1;
 				for (var idx = 0; idx < orderedLayers.length; idx++) {
 					var currentLayer = orderedLayers[idx];
-					// Получаем тип слоя (для предпросмотра будет кастомное значение)
 					var layerType = getLayerType(currentLayer);
 					var typeIndex = getTypeIndexInComp(currentLayer);
 					var totalTypeLayers = typeTotals[layerType] || 1;
 					var it = reverseOrder ? (totalTypeLayers - typeIndex + 1) : typeIndex;
 
 					if ((!currentLayer.shy || showShyLocked) && !currentLayer.locked && (allLayers || currentLayer.selected)) {
-						// Для переименования важно использовать applyKey, которое берётся из карты.
-						// Если слой является ShapeLayer, то даже если getLayerType возвращает, например, "Rectangle",
-						// применяем applyKey = "shapeLayer" чтобы переименование выполнялось.
 						if (currentLayer instanceof ShapeLayer) {
 							var applyKey = "shapeLayer";
 						} else {
@@ -2919,7 +2915,7 @@ function buildUI(thisObj) {
 						var propNameCombined = propNames.length > 0 ? propNames.join(", ") : "Property not selected";
 						var templateData = {
 							totalLayers: totalLayersInComp,
-							T: layerType,  // В предпросмотре T будет содержать кастомное значение (например, "Rectangle, Ellipse" и т.п.)
+							T: layerType,
 							i: currentLayer.index,
 							I: localIndex,
 							it: it,
