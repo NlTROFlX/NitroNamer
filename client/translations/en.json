@@ -102,8 +102,7 @@
     "leftBlock_spoilerOperators_2": "@cycle - loop operator",
     "leftBlock_spoilerOperators_3": "@replace - replace operator",
     "leftBlock_spoilerOther_1": "Other",
-    "leftBlock_spoilerOther_3": "[1] Lpnt - Parent layer name.",
-    "leftBlock_spoilerOther_4": "[2] Fext - Extension type.",
+    "leftBlock_spoilerOther_2": "[2] Fext - Extension type.",
 
     "cVarPage_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Pre-comp</span><br>",
     "cVarPage_2": "The variable <span class=\"variable-text-block-span-1\">C</span> is the name of the current composition in which the layer being processed is located.",
@@ -269,5 +268,9 @@
     "replaceOperatorSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">2</span><br>Compatibility with variables: <span class=\"variable-text-block-span-1\">Yes</span><br>Number of required parameters: <span class=\"variable-text-block-span-1\">3</span><br>Returned data type: <span class=\"variable-text-block-span-1\">String</span>",
     "replaceOperatorSection_2": "The replacement operator <span class=\"variable-text-block-span-1\">@replace</span> — <span class=\"variable-text-block-span-1\">@replace('A', 'B')</span> replaces the value <span class=\"variable-text-block-span-1\">A</span> with <span class=\"variable-text-block-span-1\">B</span>. In the values <span class=\"variable-text-block-span-1\">A</span> and <span class=\"variable-text-block-span-1\">B</span>, variables or any other syntax are not supported—only plain text.",
     "replaceOperatorSection_3": "• The character case in the conditional value <span class=\"variable-text-block-span-1\">A</span> and <span class=\"variable-text-block-span-1\">B</span> is taken into account. For example, if you specify the value <span class=\"variable-text-block-span-1\">Shape</span> in <span class=\"variable-text-block-span-1\">A</span>, but the layers contain a different name, such as <span class=\"variable-text-block-span-1\">SHAPE</span>, <span class=\"variable-text-block-span-1\">shape</span>, or <span class=\"variable-text-block-span-1\">shAPE</span>, the replacement will not be performed.",
-    "operatorReplace_videoExample_1": " | Demonstration of the @replace"
+    "operatorReplace_videoExample_1": " | Demonstration of the @replace",
+
+    "fextVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">2</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">Yes</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Source in the project</span><br>",
+    "fextVarSection_2": "The variable <span class=\"variable-text-block-span-1\">Fext</span> returns the extension name for materials of various types: video, images, audio, <span class=\"variable-text-block-span-1\">Photoshop file</span>, <span class=\"variable-text-block-span-1\">AI file</span>, and similar ones—in general, everything that is not created directly in Adobe After Effects. There is a filtering mode <span class=\"variable-text-block-span-1\">Fext(extensionName)</span>, where <span class=\"variable-text-block-span-1\">extensionName</span> can be any file extension. Enumeration can be used, for example: <span class=\"variable-text-block-span-1\">Fext(ai, psd, png)</span>. If a layer has no extension, the value from the settings is returned for it.",
+    "varmFext_videoExample_1": " | Demonstration of the Fext"
 }

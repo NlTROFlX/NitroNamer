@@ -103,8 +103,7 @@
     "leftBlock_spoilerOperators_2": "@cycle - оператор цикла",
     "leftBlock_spoilerOperators_3": "@replace - оператор замены",
     "leftBlock_spoilerOther_1": "Другие",
-    "leftBlock_spoilerOther_3": "[1] Lpnt - Имя родительского слоя.",
-    "leftBlock_spoilerOther_4": "[2] Fext - Тип расширения.",
+    "leftBlock_spoilerOther_2": "[2] Fext - Тип расширения.",
 
     "cVarPage_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Строка</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Прекомпозиция</span><br>",
     "cVarPage_2": "<span class=\"variable-text-block-span-1\">C</span> - это имя текущей композиции, в которой находится обрабатываемый слой.",
@@ -271,5 +270,9 @@
     "replaceOperatorSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Совместимость с переменными: <span class=\"variable-text-block-span-1\">Нет</span><br>Количество обязательных параметров: <span class=\"variable-text-block-span-1\">2</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Строка</span>",
     "replaceOperatorSection_2": "Оператор замены <span class=\"variable-text-block-span-1\">@replace</span> — <span class=\"variable-text-block-span-1\">@replace('A', 'B')</span> заменяет значение <span class=\"variable-text-block-span-1\">A</span> на <span class=\"variable-text-block-span-1\">B</span>. В значение <span class=\"variable-text-block-span-1\">A</span> и <span class=\"variable-text-block-span-1\">B</span> не поддерживаются переменные или какой-либо другой синтаксис, только обычный текст.",
     "replaceOperatorSection_3": "• Регистр символов в условном значении <span class=\"variable-text-block-span-1\">A</span> и <span class=\"variable-text-block-span-1\">B</span> учитывается. Например, если в части <span class=\"variable-text-block-span-1\">A</span> вы укажете значение <span class=\"variable-text-block-span-1\">Shape</span>, а в слоях содержится отличное от него имя, например, <span class=\"variable-text-block-span-1\">SHAPE</span>, <span class=\"variable-text-block-span-1\">shape</span>, <span class=\"variable-text-block-span-1\">shAPE</span>, то замена произведена не будет.",
-    "operatorReplace_videoExample_1": " | Демонстрация работы @replace"
+    "operatorReplace_videoExample_1": " | Демонстрация работы @replace",
+
+    "fextVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">2</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Да</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Строка</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Источник в проекте</span><br>",
+    "fextVarSection_2": "Переменная <span class=\"variable-text-block-span-1\">Fext</span> возвращает имя расширения для материалов различных типов: видео, изображения, аудио, <span class=\"variable-text-block-span-1\">Photoshop file</span>, <span class=\"variable-text-block-span-1\">AI file</span> и тому подобные, в общем, всё, что не создано непосредственно в самом Adobe After Effects. Есть режим фильтрации <span class=\"variable-text-block-span-1\">Fext(extensionName)</span>, где <span class=\"variable-text-block-span-1\">extensionName</span> может быть любым расширением файла. Можно использовать перечисление, например: <span class=\"variable-text-block-span-1\">Fext(ai, psd, png)</span>. Если у слоя нет расширения, то для него возвращается значение из настроек.",
+    "varmFext_videoExample_1": " | Демонстрация работы Fext"
 }
