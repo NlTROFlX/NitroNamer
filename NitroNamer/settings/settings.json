@@ -43,7 +43,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "T(ellipse, shape)",
+        "template": "O | T.i = E = Ip = Cd = Pn = C",
         "briefly": false,
         "brieflyType": 3,
         "modeIndex": 4,

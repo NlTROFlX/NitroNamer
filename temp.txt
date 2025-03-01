@@ -1,1 +1,1 @@
-• The countdown of the loop executions goes from top to bottom. <br><br>• If you need to return plain text, you can use square brackets, just like in the regular syntax, to prevent characters from being recognized as variables, for example, <span class=\"variable-text-block-span-1\">@cycle(2, '[First]', '[Second]')</span>. <br><br>
+The variable <span class=\"variable-text-block-span-1\">O</span> returns the current layer name that it had before the rename button was pressed.

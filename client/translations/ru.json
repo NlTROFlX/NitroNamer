@@ -77,6 +77,7 @@
     "leftBlock_spoilerIndexesAndIndetifiers_4": "[4] it - Порядковый номер среди слоёв одного типа.",
     "leftBlock_spoilerIndexesAndIndetifiers_5": "[5] Lpnt(i) - Индекс от родительского слоя.",
     "leftBlock_spoilerLayerProperties_1": "Свойства слоя",
+    "leftBlock_spoilerLayerProperties_17": "[1] O - Текущее имя слоя.",
     "leftBlock_spoilerLayerProperties_2": "[1] T - Тип слоя.",
     "leftBlock_spoilerLayerProperties_3": "[1] S - Имя исходного.",
     "leftBlock_spoilerLayerProperties_4": "[1] W - Ширина в пикселях.",
@@ -102,7 +103,6 @@
     "leftBlock_spoilerOperators_2": "@cycle - оператор цикла",
     "leftBlock_spoilerOperators_3": "@replace - оператор замены",
     "leftBlock_spoilerOther_1": "Другие",
-    "leftBlock_spoilerOther_2": "[1] O - Имя текущего слоя.",
     "leftBlock_spoilerOther_3": "[1] Lpnt - Имя родительского слоя.",
     "leftBlock_spoilerOther_4": "[2] Fext - Тип расширения.",
 
@@ -169,6 +169,10 @@
     "itTypeVarSection_2": "Переменная <span class=\"variable-text-block-span-1\">it</span> возвращает индекс слоя среди слоёв того же типа.",
     "itTypeVarSection_3": "• Учитываются все слои, находящиеся в текущей композиции.",
     "varitType_videoExample_1": " | Демонстрация работы it",
+
+    "oVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Строка</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Слой</span><br>",
+    "oVarSection_2": "Переменная <span class=\"variable-text-block-span-1\">O</span> возвращает текущее имя слоя, которое у него было до нажатия на кнопку переименования.",
+    "varO_videoExample_1": " | Демонстрация работы O",
 
     "tVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">2</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Нет</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Да</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Строка</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Слой</span><br>",
     "tVarSection_2": "Переменная <span class=\"variable-text-block-span-1\">T</span> — возвращает тип слоя. Для слоев типа <span class=\"variable-text-block-span-1\">Shape</span> возвращается коллекция имен, которая содержится в группе <span class=\"variable-text-block-span-1\">Contents</span>. Можно задать режим фильтрации: в этом режиме имена возвращаются только для тех слоев, чей тип совпадает с заданным. Значения, которые можно использовать в качестве фильтрации: <span class=\"variable-text-block-span-1\">shape</span>, <span class=\"variable-text-block-span-1\">text</span>, <span class=\"variable-text-block-span-1\">pre-comp</span>, <span class=\"variable-text-block-span-1\">null</span>, <span class=\"variable-text-block-span-1\">adjustment</span>, <span class=\"variable-text-block-span-1\">footage</span>, <span class=\"variable-text-block-span-1\">solid</span>, <span class=\"variable-text-block-span-1\">light</span>, <span class=\"variable-text-block-span-1\">camera</span>, <span class=\"variable-text-block-span-1\">audio</span>. Для слоев типа <span class=\"variable-text-block-span-1\">Shape</span> есть дополнительные значения фильтрации: <span class=\"variable-text-block-span-1\">Rectangle</span>, <span class=\"variable-text-block-span-1\">Polystar</span>, <span class=\"variable-text-block-span-1\">Ellipse</span>, <span class=\"variable-text-block-span-1\">Shape</span>, <span class=\"variable-text-block-span-1\">CustomName</span>, где <span class=\"variable-text-block-span-1\">CustomName</span> — это пользовательское имя группы. Можно использовать перечисление в режиме фильтрации, к примеру: <span class=\"variable-text-block-span-1\">T(solid, shape)</span>. В таком случае имена изменятся только у тех слоев, которые подходят под значения фильтрации, остальные останутся без изменений.",
