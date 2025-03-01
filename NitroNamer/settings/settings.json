@@ -43,7 +43,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "W(1)",
+        "template": "W(1) | H(1)",
         "briefly": false,
         "brieflyType": 3,
         "modeIndex": 4,
