@@ -1,6 +1,5 @@
 #include "json2.js";
 
-// Polyfill для Array.prototype.map
 if (!Array.prototype.map) {
     Array.prototype.map = function(callback, thisArg) {
         if (this === null || this === undefined) {
@@ -22,7 +21,6 @@ if (!Array.prototype.map) {
     };
 }
 
-// Polyfill для Array.prototype.filter
 if (!Array.prototype.filter) {
     Array.prototype.filter = function(callback, thisArg) {
         if (this === null || this === undefined) {
@@ -47,7 +45,6 @@ if (!Array.prototype.filter) {
     };
 }
 
-// Polyfill для Array.prototype.forEach
 if (!Array.prototype.forEach) {
     Array.prototype.forEach = function(callback, thisArg) {
         if (this === null || this === undefined) {
@@ -67,7 +64,6 @@ if (!Array.prototype.forEach) {
     };
 }
 
-// Polyfill для Array.prototype.indexOf
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function(searchElement, fromIndex) {
         if (this === null) {
