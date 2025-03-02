@@ -560,12 +560,12 @@ function buildUI(thisObj) {
 	btnRename.addEventListener("mouseout", function () {
 		updateRenameButtonIcon()
 	});
-	btnVariables.addEventListener("click", function () {
-		var scriptFilePath = File(scriptFolderPath + "/NitroNamer/scripts/NNLayerInfo.jsx");
-		if (scriptFilePath.exists) {
-			$.evalFile(scriptFilePath)
+	btnVariables.addEventListener("click", function() {
+		var commandID = app.findMenuCommandId("NitroNamer Library");
+		if (commandID !== 0) {
+			app.executeCommand(commandID);
 		} else {
-			alert("Script file not found: " + scriptFilePath.fsName, scriptMessageHead_1)
+			alert("Extension panel not found.", scriptMessageHead_1);
 		}
 	});
 	btnCopy.addEventListener("click", function () {
@@ -943,37 +943,45 @@ function buildUI(thisObj) {
 	}
 
 	function checkNitroNamerLibraryFolder() {
+
 		var baseExtensionsPath;
 		if ($.os.toLowerCase().indexOf("mac") !== -1) {
-			baseExtensionsPath = "~/Library/Application Support/Adobe/CEP/extensions"
+			baseExtensionsPath = "/Library/Application Support/Adobe/CEP/extensions";
 		} else {
-			baseExtensionsPath = $.getenv("APPDATA") + "/Adobe/CEP/extensions"
+			baseExtensionsPath = "C:\\Program Files (x86)\\Common Files\\Adobe\\CEP\\extensions";
 		}
+
 		var nnExtFolder = new Folder(baseExtensionsPath + "/nitronamer.library.ui");
 		if (nnExtFolder.exists) {
+
 			var nnClientSettingsFolder = new Folder(nnExtFolder.fsName + "/client/settings");
 			if (!nnClientSettingsFolder.exists) {
-				nnClientSettingsFolder.create()
+				nnClientSettingsFolder.create();
 			}
+
 			var nnSettingsFile = new File(nnClientSettingsFolder.fsName + "/settings.json");
 			var nnSettingsData = {};
+
 			if (nnSettingsFile.exists) {
 				nnSettingsFile.open("r");
 				try {
-					nnSettingsData = JSON.parse(nnSettingsFile.read())
+					nnSettingsData = JSON.parse(nnSettingsFile.read());
 				} catch (e) {
-					nnSettingsData = {}
+					nnSettingsData = {}; // Если JSON некорректен, начинаем с пустого объекта
 				}
-				nnSettingsFile.close()
+				nnSettingsFile.close();
 			}
+
 			var scriptFile = new File($.fileName);
 			nnSettingsData.nnAeScriptUIPanelsPath = scriptFile.fsName;
+
 			nnSettingsFile.open("w");
 			nnSettingsFile.write(JSON.stringify(nnSettingsData, null, 4));
 			nnSettingsFile.close();
-			$.writeln("Папка nitronamer.library.ui обнаружена. Путь к NitroNamer.jsx записан в client/settings/settings.json")
+			
+			$.writeln("Папка nitronamer.library.ui обнаружена. Путь к NitroNamer.jsx записан в client/settings/settings.json");
 		} else {
-			$.writeln("Папка nitronamer.library.ui НЕ найдена по пути: " + nnExtFolder.fsName)
+			$.writeln("Папка nitronamer.library.ui НЕ найдена по пути: " + nnExtFolder.fsName);
 		}
 	}
 
@@ -1481,7 +1489,6 @@ function buildUI(thisObj) {
 			txtSelectedLayersCount.text = "0";
 		}
 	}
-
 
 	function updatePreview() {
 		var settings = loadSettings();
