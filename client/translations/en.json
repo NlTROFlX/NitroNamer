@@ -60,8 +60,9 @@
     "leftBlock_spoilerComposition_2": "[1] C - Current composition name.",
     "leftBlock_spoilerComposition_3": "[1] Pn - Current project name.",
     "leftBlock_spoilerComposition_4": "[1] F - Frame rate.",
-    "leftBlock_spoilerComposition_5": "[1] R - Resolution of the layer.",
+    "leftBlock_spoilerComposition_5": "[1] R - Resolution.",
     "leftBlock_spoilerComposition_6": "[1] Ar - Aspect ratio.",
+    "leftBlock_spoilerComposition_7": "[2] Np - List of nested compositions.",
     "leftBlock_spoilerTimeAndDuration_1": "Time",
     "leftBlock_spoilerTimeAndDuration_2": "[1] Ip - Entry point of the layer.",
     "leftBlock_spoilerTimeAndDuration_3": "[1] Op - Exit point of the layer.",
@@ -107,6 +108,10 @@
     "cVarPage_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Pre-comp</span><br>",
     "cVarPage_2": "The variable <span class=\"variable-text-block-span-1\">C</span> is the name of the current composition in which the layer being processed is located.",
     "varC_videoExample_1": " | Demonstration of the C",
+
+    "npVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">2</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">Yes</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">Yes</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number, String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Pre-comp</span><br>",
+    "npVarSection_2": "The variable <span class=\"variable-text-block-span-1\">Np</span> returns a list of precompositions that are inside the precomposition layer. There is a custom separator mode <span class=\"variable-text-block-span-1\">Np([Sep])</span>, where <span class=\"variable-text-block-span-1\">Sep</span> can be any entered value.",
+    "varNp_videoExample_1": " | Demonstration of the Np",
 
     "pnVarPage_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">No</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Current project</span><br>",
     "pnVarPage_2": "The variable <span class=\"variable-text-block-span-1\">Pn</span> provides the name of the current project in Adobe After Effects without the file extension.",

@@ -67,14 +67,16 @@
                 <div class="spoiler-content">
                     <p onclick="selectSubItem(this);showContent('content-1')"
                         data-i18n="leftBlock_spoilerComposition_2">[1] C - Current composition name.</p>
+                    <p onclick="selectSubItem(this);showContent('content-39')"
+                        data-i18n="leftBlock_spoilerComposition_7">[2] Np - List of nested compositions.</p>
                     <p onclick="selectSubItem(this);showContent('content-2')"
                         data-i18n="leftBlock_spoilerComposition_3">[1] Pn - Current project name.</p>
                     <p onclick="selectSubItem(this);showContent('content-3')"
                         data-i18n="leftBlock_spoilerComposition_4">[1] F - Frame rate.</p>
                     <p onclick="selectSubItem(this);showContent('content-4')"
-                        data-i18n="leftBlock_spoilerComposition_5">[1] R - Resolution of the layer.</p>
+                        data-i18n="leftBlock_spoilerComposition_5">[2] R - Resolution of the layer.</p>
                     <p onclick="selectSubItem(this);showContent('content-5')"
-                        data-i18n="leftBlock_spoilerComposition_6">[1] Ar - Aspect ratio.</p>
+                        data-i18n="leftBlock_spoilerComposition_6">[2] Ar - Aspect ratio.</p>
                 </div>
             </div>
             <!-- Time and duration -->
@@ -234,8 +236,8 @@
                     <div class="spoiler-title" data-i18n="leftBlock_spoilerOther_1">Other</div>
                 </div>
                 <div class="spoiler-content">
-                    <p onclick="selectSubItem(this);showContent('content-38')"
-                        data-i18n="leftBlock_spoilerOther_4">[2] Fext - Extension.</p>
+                    <p onclick="selectSubItem(this);showContent('content-38')" data-i18n="leftBlock_spoilerOther_4">[2]
+                        Fext - Extension.</p>
                 </div>
             </div>
         </div>
@@ -457,10 +459,81 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">FirstSequence</span>_renderDate_20.01.2025
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- var Np -->
+                <div class="content-section" id="content-39">
+                    <div class="variable-name-block" data-value="Np"> <span
+                            class="variable-text-block-span-1">Np&nbsp;</span> -
+                        variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
+                    <div class="variable-text-block" data-i18n="npVarSection_1">Number of available modes: <span
+                            class="variable-text-block-span-1">-</span>
+                        <br>Customizing the return value: <span class="variable-text-block-span-1">-</span>
+                        <br>Customizing the separator: <span class="variable-text-block-span-1">-</span>
+                        <br>Returned data type: <span class="variable-text-block-span-1">-</span>
+                        <br>Source of data: <span class="variable-text-block-span-1">-</span>
+                        <br>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_2">Description:</div>
+                    <div class="variable-text-block" data-i18n="npVarSection_2">-</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_3">Features:</div>
+                    <div class="variable-text-block" data-i18n="globalVarRightBlock_3_1">-</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_4">Video examples with results:
+                    </div>
+                    <div class="videoblock" id="video1">
+                        <div class="video-container" id="videoContainer">
+                            <video id="video" width="100%" height="100%" src="media/video/var_examples/var_c.webm"
+                                type="video/webm"></video>
+                            <img src="icons/play.svg" id="playIcon" class="control-icon" alt="Play">
+                            <img src="icons/pause.svg" id="pauseIcon" class="control-icon" alt="Pause">
+                            <div class="video-overlay"></div>
+                        </div>
+                        <div class="video-info" id="videoInfo">
+                            <p id="currentTime">00:00:00</p>
+                            <p id="titleVideo" data-i18n="varNp_videoExample_1">| Demonstration of the Np variable</p>
+                            <img src="icons/scale-up.svg" class="scale-up-icon" alt="Scale Up">
+                        </div>
+                        <div id="progressBarContainer">
+                            <div id="progressBarBackground">
+                                <div id="progressBarFill"></div>
+                                <div id="seekKnob"></div>
+                                <div id="timeTooltip">00:00:00</div>
+                                <div id="hoverCircle"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_5">Text examples with results:
+                    </div>
+                    <div class="variable-example-block" data-value="Np"> <span
+                            class="variable-text-block-span-0">MODE 1:</span>&nbsp;<span
+                            class="variable-text-block-span-2">Np</span><span><span
+                            class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel Precomp"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-precomp.svg"  />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                <span class="variable-text-block-span-2">Precomp.1, Precomp.2</span>
+                            </div>
+                        </div>
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg"  />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                <span class="variable-text-block-span-2">NoNestedPrecomps</span>
                             </div>
                         </div>
                     </div>
@@ -519,7 +592,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Layer_from_<span class="variable-text-block-span-2">myProject</span>
@@ -581,7 +654,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape" id=""></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape_frameRate:<span class="variable-text-block-span-2">NoFrameRate</span>
@@ -590,7 +663,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel FootageVideo"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-video-file.svg" alt="Download" />
+                                <img src="icons/layer-video-file.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Footage_frameRate:<span class="variable-text-block-span-2">30.00</span>
@@ -599,7 +672,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel FootageImage"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-image-file.svg" alt="Download" />
+                                <img src="icons/layer-image-file.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Footage_frameRate:<span class="variable-text-block-span-2">NoFrameRate</span>
@@ -608,7 +681,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Precomp"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-precomp.svg" alt="Download" />
+                                <img src="icons/layer-precomp.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Footage_frameRate:<span class="variable-text-block-span-2">60</span>
@@ -670,7 +743,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape |<span class="variable-text-block-span-2">520*340</span>.NoExtension
@@ -679,7 +752,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel FootageVideo"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-video-file.svg" alt="Download" />
+                                <img src="icons/layer-video-file.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Footage |<span class="variable-text-block-span-2">1920*1080</span>.mp4
@@ -688,7 +761,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel FootageImage"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-image-file.svg" alt="Download" />
+                                <img src="icons/layer-image-file.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Footage |<span class="variable-text-block-span-2">512*512</span>.png
@@ -697,7 +770,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Precomp"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-precomp.svg" alt="Download" />
+                                <img src="icons/layer-precomp.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Pre-comp |<span class="variable-text-block-span-2">256*1080</span>.NoExtension
@@ -705,14 +778,15 @@
                         </div>
                     </div>
                     <div class="variable-example-block" data-value="R(1)(Fext)"> <span
-                        class="variable-text-block-span-0">MODE 2:&nbsp;<span class="variable-text-block-span-2">R(1)</span>(Fext)</span><span class="copied-text"
-                        data-i18n="textbox-copied">- Copied</span>
+                            class="variable-text-block-span-0">MODE 2:&nbsp;<span
+                                class="variable-text-block-span-2">R(1)</span>(Fext)</span><span class="copied-text"
+                            data-i18n="textbox-copied">- Copied</span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">520.5*340.5</span>(NoExtension)
@@ -721,7 +795,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel FootageVideo"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-video-file.svg" alt="Download" />
+                                <img src="icons/layer-video-file.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">1920.0*1080.0</span>(mp4)
@@ -730,7 +804,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel FootageImage"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-image-file.svg" alt="Download" />
+                                <img src="icons/layer-image-file.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">512.7*512.7</span>(png)
@@ -739,7 +813,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Precomp"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-precomp.svg" alt="Download" />
+                                <img src="icons/layer-precomp.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">256.0*1080.0</span>(NoExtension)
@@ -801,7 +875,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape" id=""></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape.<span class="variable-text-block-span-2">NoAscpectRation</span> | NoResolution
@@ -810,7 +884,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel FootageVideo"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-video-file.svg" alt="Download" />
+                                <img src="icons/layer-video-file.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Footage.<span class="variable-text-block-span-2">16:9</span> | 1920*1080
@@ -819,7 +893,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel FootageImage"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-image-file.svg" alt="Download" />
+                                <img src="icons/layer-image-file.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Footage.<span class="variable-text-block-span-2">1:1</span> | 512*512
@@ -828,7 +902,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Precomp"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-precomp.svg" alt="Download" />
+                                <img src="icons/layer-precomp.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Pre-comp.<span class="variable-text-block-span-2">32:135</span> | 256*1080
@@ -892,7 +966,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 FrameDuration:250 - In:<span class="variable-text-block-span-2">1.25</span>
@@ -901,7 +975,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Precomp"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-precomp.svg" alt="Download" />
+                                <img src="icons/layer-precomp.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 FrameDuration:650 - In:<span class="variable-text-block-span-2">2.05</span>
@@ -963,7 +1037,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 FrameDuration:300 - Out:<span class="variable-text-block-span-2">0.5</span>
@@ -972,7 +1046,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Precomp"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-precomp.svg" alt="Download" />
+                                <img src="icons/layer-precomp.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 FrameDuration:100 - Out:<span class="variable-text-block-span-2">0.39</span>
@@ -1034,7 +1108,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Total layer duration: <span class="variable-text-block-span-2">00:02:15</span>
@@ -1051,7 +1125,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 (MINUTES:SECONDS) - <span class="variable-text-block-span-2">02</span>_<span
@@ -1114,7 +1188,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 frameDuration:<span class="variable-text-block-span-2">40</span>
@@ -1176,7 +1250,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Full current date:<span class="variable-text-block-span-2">21.25.2024</span>
@@ -1193,7 +1267,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 (MONTH:YEAR) - <span class="variable-text-block-span-2">25</span>/<span
@@ -1258,7 +1332,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 All layer effects:&nbsp;<span class="variable-text-block-span-2">levels, glow,
@@ -1275,7 +1349,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 With custom divider - <span class="variable-text-block-span-2">levels ** glow **
@@ -1292,7 +1366,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 names+separator - <span class="variable-text-block-span-2">levels ** echo</span>
@@ -1308,7 +1382,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Auxiliary variable - <span class="variable-text-block-span-2">glow # echo</span>
@@ -1370,7 +1444,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 All layer effects:&nbsp;<span class="variable-text-block-span-2">levels, glow,
@@ -1387,7 +1461,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Counter filter - <span class="variable-text-block-span-2">2</span>
@@ -1452,7 +1526,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape-layerIndex:&nbsp;<span class="variable-text-block-span-2">1</span>
@@ -1461,7 +1535,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape-layerIndex:&nbsp;<span class="variable-text-block-span-2">2</span>
@@ -1470,7 +1544,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Precomp"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-precomp.svg" alt="Download" />
+                                <img src="icons/layer-precomp.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Procomp-layerIndex:&nbsp;<span class="variable-text-block-span-2">3</span>
@@ -1536,7 +1610,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape-localLayerIndex:&nbsp;<span class="variable-text-block-span-2">1 | 3 | 10 |
@@ -1546,7 +1620,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape-localLayerIndex:&nbsp;<span class="variable-text-block-span-2">2 | 2 | 11 |
@@ -1556,7 +1630,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape-localLayerIndex:&nbsp;<span class="variable-text-block-span-2">3 | 1 | 12 |
@@ -1622,7 +1696,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape[<span class="variable-text-block-span-2">1</span>]
@@ -1631,7 +1705,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape[<span class="variable-text-block-span-2">2</span>]
@@ -1640,7 +1714,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Precomp"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-precomp.svg" alt="Download" />
+                                <img src="icons/layer-precomp.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Precomp[<span class="variable-text-block-span-2">1</span>]
@@ -1649,7 +1723,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Precomp"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-precomp.svg" alt="Download" />
+                                <img src="icons/layer-precomp.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Precomp[<span class="variable-text-block-span-2">2</span>]
@@ -1658,7 +1732,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Precomp"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-precomp.svg" alt="Download" />
+                                <img src="icons/layer-precomp.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Precomp[<span class="variable-text-block-span-2">3</span>]
@@ -1723,7 +1797,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 beforeRename:&nbsp;<span class="variable-text-block-span-2">myLastName</span>&nbsp; |
@@ -1733,7 +1807,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 beforeRename:&nbsp;<span class="variable-text-block-span-2">myLastName</span>&nbsp; |
@@ -1796,7 +1870,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">Shape</span>.1
@@ -1805,7 +1879,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Text"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-text.svg" alt="Download" />
+                                <img src="icons/layer-text.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">Text</span>.2
@@ -1814,7 +1888,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Null"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-null.svg" alt="Download" />
+                                <img src="icons/layer-null.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">Null</span>.3
@@ -1823,7 +1897,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Adjustment"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-solid-adjustment.svg" alt="Download" />
+                                <img src="icons/layer-solid-adjustment.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">Adjustment</span>.4
@@ -1832,7 +1906,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel FootageImage"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-image-file.svg" alt="Download" />
+                                <img src="icons/layer-image-file.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">Footage</span>.5
@@ -1841,7 +1915,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Solid"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-solid-adjustment.svg" alt="Download" />
+                                <img src="icons/layer-solid-adjustment.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">Solid</span>.6
@@ -1850,7 +1924,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Precomp"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-precomp.svg" alt="Download" />
+                                <img src="icons/layer-precomp.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">Pre-comp</span>.7
@@ -1859,7 +1933,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Camera"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-camera.svg" alt="Download" />
+                                <img src="icons/layer-camera.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">Camera</span>.8
@@ -1868,7 +1942,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Light"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-light.svg" alt="Download" />
+                                <img src="icons/layer-light.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">Light</span>.9
@@ -1877,7 +1951,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Audio"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-audio.svg" alt="Download" />
+                                <img src="icons/layer-audio.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">Audio</span>.10
@@ -1939,7 +2013,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Precomp"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-precomp.svg" alt="Download" />
+                                <img src="icons/layer-precomp.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 original name in project:<span
@@ -2002,7 +2076,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Precomp"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-precomp.svg" alt="Download" />
+                                <img src="icons/layer-precomp.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 layerWidth:<span class="variable-text-block-span-2">1920</span>
@@ -2011,7 +2085,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Solid"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-solid-adjustment.svg" alt="Download" />
+                                <img src="icons/layer-solid-adjustment.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 layerWidth:<span class="variable-text-block-span-2">250</span>
@@ -2020,7 +2094,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel FootageVideo"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-video-file.svg" alt="Download" />
+                                <img src="icons/layer-video-file.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 layerWidth:<span class="variable-text-block-span-2">1920</span>
@@ -2082,7 +2156,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Precomp"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-precomp.svg" alt="Download" />
+                                <img src="icons/layer-precomp.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 layerHeight:<span class="variable-text-block-span-2">1080</span>
@@ -2091,7 +2165,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Solid"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-solid-adjustment.svg" alt="Download" />
+                                <img src="icons/layer-solid-adjustment.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 layerHeight:<span class="variable-text-block-span-2">500</span>
@@ -2100,7 +2174,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel FootageVideo"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-video-file.svg" alt="Download" />
+                                <img src="icons/layer-video-file.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 layerHeight:<span class="variable-text-block-span-2">1080</span>
@@ -2164,7 +2238,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Layer.1
@@ -2173,7 +2247,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape.2 |<span class="variable-text-block-span-2"> Layer.1</span>
@@ -2182,7 +2256,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape.3 |<span class="variable-text-block-span-2"> Layer.1</span>
@@ -2199,7 +2273,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Layer.1
@@ -2208,7 +2282,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 (Subsidiary for Layer.1) Shape.1 |<span class="variable-text-block-span-2">
@@ -2218,7 +2292,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 (Subsidiary for Shape.1) Shape.2 |<span class="variable-text-block-span-2">
@@ -2236,7 +2310,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Layer.1
@@ -2245,7 +2319,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 (Subsidiary for Layer.1) Shape.1 |<span class="variable-text-block-span-2"> 1</span>
@@ -2254,7 +2328,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 (Subsidiary for Layer.1) Shape.2 |<span class="variable-text-block-span-2"> 2</span>
@@ -2317,7 +2391,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Main: <span class="variable-text-block-span-2"> Shape.1,</span> <span
@@ -2327,7 +2401,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape.1
@@ -2336,7 +2410,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape.2
@@ -2353,7 +2427,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Main: <span class="variable-text-block-span-2"> Shape.2</span>
@@ -2362,7 +2436,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape.1
@@ -2371,7 +2445,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape.2
@@ -2388,7 +2462,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Main: <span class="variable-text-block-span-2"> Shape.1 ~~</span> <span
@@ -2398,7 +2472,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape.1
@@ -2407,7 +2481,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape.2
@@ -2471,7 +2545,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2"> 520.2, 965.0</span>
@@ -2480,7 +2554,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2"> 1000.5, 197.4, 469.0</span>
@@ -2489,7 +2563,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2"> 960.0, 580.0</span>
@@ -2552,7 +2626,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">100, 100</span>
@@ -2561,7 +2635,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">50, 100, 100</span>
@@ -2570,7 +2644,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">25, 70</span>
@@ -2634,7 +2708,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">90</span>
@@ -2643,7 +2717,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">50, 100, 100</span>
@@ -2652,7 +2726,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">0</span>
@@ -2716,7 +2790,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">100</span>
@@ -2779,7 +2853,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape.1 |<span class="variable-text-block-span-2"> TM:Source</span>
@@ -2790,7 +2864,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape.2 |<span class="variable-text-block-span-2"> TM:Alpha</span>
@@ -2801,7 +2875,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape.3 |<span class="variable-text-block-span-2"> TM:Luma</span>
@@ -2864,7 +2938,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape.1 |<span class="variable-text-block-span-2"> position, scale, opacity</span>
@@ -2873,7 +2947,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape.2 |<span class="variable-text-block-span-2"> scale, opacity</span>
@@ -2882,7 +2956,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape.3 |<span class="variable-text-block-span-2"> opacity</span>
@@ -2899,7 +2973,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">position && scale && opacity</span>
@@ -2963,7 +3037,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape.1 |<span class="variable-text-block-span-2"> position, scale, opacity</span>
@@ -2972,7 +3046,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape.2 |<span class="variable-text-block-span-2"> scale, opacity</span>
@@ -2981,7 +3055,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Shape.3 |<span class="variable-text-block-span-2"> opacity</span>
@@ -2998,7 +3072,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel Shape"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">position && scale && opacity</span>
@@ -3062,7 +3136,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 All layer effects:&nbsp;<span class="variable-text-block-span-2">mask 1, mask 2, mask
@@ -3079,7 +3153,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 With custom divider - <span class="variable-text-block-span-2">mask 1 ** mask 2 ** mask
@@ -3096,7 +3170,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 names+vars+sep: <span class="variable-text-block-span-2">mask 2 / mask 3</span>
@@ -3160,7 +3234,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Number of masks:&nbsp;<span class="variable-text-block-span-2">3</span>
@@ -3176,7 +3250,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Number of masks: <span class="variable-text-block-span-2">3</span>
@@ -3242,7 +3316,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Selected layer properties:&nbsp;<span class="variable-text-block-span-2">position,
@@ -3259,7 +3333,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 As an auxiliary: <span class="variable-text-block-span-2">position, scale,
@@ -3324,7 +3398,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Selected layer properties:&nbsp;<span
@@ -3341,7 +3415,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 As an auxiliary: <span class="variable-text-block-span-2">Deep Glow 2</span>
@@ -3408,7 +3482,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Layer effects:&nbsp;<span class="variable-text-block-span-2">Deep Glow 2, Levels,
@@ -3425,7 +3499,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 As an auxiliary: <span class="variable-text-block-span-2">Deep Glow 2 / Warp</span>
@@ -3488,7 +3562,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 Layer masks:&nbsp;<span class="variable-text-block-span-2">mask 1, mask 2, mask 3</span>
@@ -3504,7 +3578,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 As an auxiliary: <span class="variable-text-block-span-2">mask 1 / mask 3</span>
@@ -3567,7 +3641,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">A.1</span>
@@ -3576,7 +3650,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">A.2</span>
@@ -3585,7 +3659,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">B.3</span>
@@ -3594,7 +3668,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">B.4</span>
@@ -3655,7 +3729,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 <span class="variable-text-block-span-2">emptyLayer</span>
@@ -3664,7 +3738,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 SHAPE
@@ -3673,7 +3747,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 shape
@@ -3738,7 +3812,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 fileExtension:&nbsp;<span class="variable-text-block-span-2">psd</span>.1
@@ -3747,7 +3821,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 fileExtension:&nbsp;<span class="variable-text-block-span-2">ai</span>.2
@@ -3756,7 +3830,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 fileExtension:&nbsp;<span class="variable-text-block-span-2">mp3</span>.4
@@ -3765,7 +3839,7 @@
                         <div class="aeUiElementsLayerBlock">
                             <div class="aeUiElementsLayerLabel"></div>
                             <div class="aeUiElementsLayerShapeIcon">
-                                <img src="icons/layer-star.svg" alt="Download" />
+                                <img src="icons/layer-star.svg"  />
                             </div>
                             <div class="aeUiElementsLayerName">
                                 fileExtension:&nbsp;<span class="variable-text-block-span-2">mp4</span>.5
@@ -3779,24 +3853,24 @@
                 <span class="license-by">LICENSE BY</span>&nbsp;
                 <span class="license-nitrofix">NITROFIX</span>
                 <div class="icon-wrapper clickable-icon" data-url="https://boosty.to/nitrofix">
-                  <img class="default-icon" src="icons/icon_boosty.svg" alt="Boosty">
-                  <img class="hover-icon" src="icons/icon_browser.svg" alt="Browser Icon">
+                    <img class="default-icon" src="icons/icon_boosty.svg" alt="Boosty">
+                    <img class="hover-icon" src="icons/icon_browser.svg" alt="Browser Icon">
                 </div>
                 <div class="icon-wrapper clickable-icon" data-url="https://www.patreon.com/c/NITROFIX">
-                  <img class="default-icon" src="icons/icon_patreon.svg" alt="Patreon">
-                  <img class="hover-icon" src="icons/icon_browser.svg" alt="Browser Icon">
+                    <img class="default-icon" src="icons/icon_patreon.svg" alt="Patreon">
+                    <img class="hover-icon" src="icons/icon_browser.svg" alt="Browser Icon">
                 </div>
                 <div class="icon-wrapper clickable-icon" data-url="https://github.com/NlTROFlX/NitroNamer">
-                  <img class="default-icon" src="icons/icon_github.svg" alt="GitHub">
-                  <img class="hover-icon" src="icons/icon_browser.svg" alt="Browser Icon">
+                    <img class="default-icon" src="icons/icon_github.svg" alt="GitHub">
+                    <img class="hover-icon" src="icons/icon_browser.svg" alt="Browser Icon">
                 </div>
                 <div class="icon-wrapper clickable-icon" data-url="https://www.reddit.com/r/DoubleDTeam/">
-                  <img class="default-icon" src="icons/icon_reddit.svg" alt="Reddit">
-                  <img class="hover-icon" src="icons/icon_browser.svg" alt="Browser Icon">
+                    <img class="default-icon" src="icons/icon_reddit.svg" alt="Reddit">
+                    <img class="hover-icon" src="icons/icon_browser.svg" alt="Browser Icon">
                 </div>
                 <div class="icon-wrapper clickable-icon" data-url="https://t.me/FixYourVFX">
-                  <img class="default-icon" src="icons/icon_telegram.svg" alt="Telegram">
-                  <img class="hover-icon" src="icons/icon_browser.svg" alt="Browser Icon">
+                    <img class="default-icon" src="icons/icon_telegram.svg" alt="Telegram">
+                    <img class="hover-icon" src="icons/icon_browser.svg" alt="Browser Icon">
                 </div>
             </div>
         </div>
