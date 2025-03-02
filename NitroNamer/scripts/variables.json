@@ -1,4 +1,9 @@
 {
+    "Np": {
+        "defaultValue": "NoNestedPrecomps",
+        "customValue": "Custom{Np}",
+        "active": true
+    },
     "An": {
         "defaultValue": "NoAnimations",
         "customValue": "Custom{An}",
@@ -30,7 +35,7 @@
         "active": false
     },
     "Fext": {
-        "defaultValue": "",
+        "defaultValue": "NoExtension",
         "customValue": "Custom{Fext}",
         "active": false
     },

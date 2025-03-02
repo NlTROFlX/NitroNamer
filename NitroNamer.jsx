@@ -1005,6 +1005,11 @@ function buildUI(thisObj) {
 		var variablesFile = new File(scriptFolderPath + "/variables.json");
 		if (!variablesFile.exists) {
 			var initialData = {
+				"Np": {
+					"defaultValue": "NoNestedPrecomps",
+					"customValue": "Custom{Np}",
+					"active": !1
+				},
 				"An": {
 					"defaultValue": "NoAnimations",
 					"customValue": "Custom{An}",
@@ -1618,7 +1623,8 @@ function buildUI(thisObj) {
 			"Lmc": getMaskCount(layer, settings),
 			"Lmn": getMaskNames(layer, settings),
 			"attr": getSelectedPropertyName(),
-			"prop": getSelectedPropertyGroupNamesForLayer(layer, getSelectedPropertyPaths()).length > 0 ? getSelectedPropertyGroupNamesForLayer(layer, getSelectedPropertyPaths()).join(", ") : "Property not selected"
+			"prop": getSelectedPropertyGroupNamesForLayer(layer, getSelectedPropertyPaths()).length > 0 ? getSelectedPropertyGroupNamesForLayer(layer, getSelectedPropertyPaths()).join(", ") : "Property not selected",
+			"Np": getNestedPrecompNames(layer, settings)
 		};
 		if (briefly && !isNaN(parseFloat(variables.F))) {
 			variables.F = parseFloat(variables.F).toFixed(2)
@@ -2550,11 +2556,32 @@ function buildUI(thisObj) {
 		}
 	}
 
+	function getNestedPrecompNames(layer, settings, customSeparator) {
+		if (layer.source && (layer.source instanceof CompItem)) {
+			var nestedNames = [];
+			var precomp = layer.source;
+			for (var i = 1; i <= precomp.numLayers; i++) {
+				var nestedLayer = precomp.layer(i);
+				if (nestedLayer instanceof AVLayer && nestedLayer.source instanceof CompItem) {
+					nestedNames.push(nestedLayer.name);
+				}
+			}
+			if (nestedNames.length > 0) {
+				var sep = customSeparator || ", ";
+				return nestedNames.join(sep);
+			}
+		}
+		if (settings && settings.Np) {
+			return settings.Np.active ? settings.Np.customValue : settings.Np.defaultValue;
+		}
+		return "NoNestedPrecomps";
+	}
+
 	function replaceVariables(template, variables, originalName, layer, settings, isPreview) {
 		var result = template;
 		var nthEffectRegex = /e(\d+)/g;
 		var nthMaskRegex = /m(\d+)/g;
-		var regex = new RegExp(["\\[([^\\[\\]]+)\\]", "T\\(([^()]+)\\)", "it", "Df", "Ec\\(([^()\\[\\]]+?)\\)", "Ec", "E\\(\\[([^\\[\\]]+)\\]\\)", "E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "E", "An\\(\\[([^\\[\\]]+)\\]\\)", "An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "An", "Lexp\\(\\[([^\\[\\]]+)\\]\\)", "Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lexp", "D\\(([^()\\[\\]]+)\\)", "D", "Fext\\(([^()\\[\\]]+)\\)", "Fext", "Ip", "Op", "Tm", "Ar\\(([^()\\[\\]]+)\\)", "Ar", "Pn", "Lpos", "Lsc", "Lrot", "Lops", "Lpnt\\(([^()\\[\\]]+)\\)", "Lpnt", "Cd\\(([^()\\[\\]]+)\\)", "Cd", "Lmc\\(\\[([^\\[\\]]+)\\]\\)", "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmc", "Lmn\\(\\[([^\\[\\]]+)\\]\\)", "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmn", "Chld\\(\\[([^\\[\\]]+)\\]\\)", "Chld\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Chld", "I\\(([^()\\[\\]]+)\\)", "I", "attr", "prop", "e(\\d+)", "m(\\d+)", "W\\(([1-9])\\)", "W", "H\\(([1-9])\\)", "H", "R\\(([1-9])\\)", "R", "[A-Z]", "i", "S", "@cycle\\(\\s*(\\d+)\\s*,\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)", "cycle", "@replace\\(\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)"].join("|"), "g");
+		var regex = new RegExp(["\\[([^\\[\\]]+)\\]", "T\\(([^()]+)\\)", "it", "Df", "Ec\\(([^()\\[\\]]+?)\\)", "Ec", "E\\(\\[([^\\[\\]]+)\\]\\)", "E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "E", "An\\(\\[([^\\[\\]]+)\\]\\)", "An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "An", "Lexp\\(\\[([^\\[\\]]+)\\]\\)", "Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lexp", "D\\(([^()\\[\\]]+)\\)", "D", "Fext\\(([^()\\[\\]]+)\\)", "Fext", "Ip", "Op", "Tm", "Ar\\(([^()\\[\\]]+)\\)", "Ar", "Pn", "Lpos", "Lsc", "Lrot", "Lops", "Lpnt\\(([^()\\[\\]]+)\\)", "Lpnt", "Cd\\(([^()\\[\\]]+)\\)", "Cd", "Lmc\\(\\[([^\\[\\]]+)\\]\\)", "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmc", "Lmn\\(\\[([^\\[\\]]+)\\]\\)", "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmn", "Np\\(\\[([^\\[\\]]+)\\]\\)", "Np\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Np", "Chld\\(\\[([^\\[\\]]+)\\]\\)", "Chld\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Chld", "I\\(([^()\\[\\]]+)\\)", "I", "attr", "prop", "e(\\d+)", "m(\\d+)", "W\\(([1-9])\\)", "W", "H\\(([1-9])\\)", "H", "R\\(([1-9])\\)", "R", "[A-Z]", "i", "S", "@cycle\\(\\s*(\\d+)\\s*,\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)", "cycle", "@replace\\(\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)"].join("|"), "g");
 		var usedVariables = {};
 		var currentLocalIndex = localIndex;
 		result = result.replace(regex, function (match, group, tFilter, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, chldSeparatorOnly, chldN, chldSeparator, customI, nthEffectIndex, nthMaskIndex, cycleCount, cycleA, cycleB, replaceFindStr, replaceWithStr) {
@@ -2769,6 +2796,15 @@ function buildUI(thisObj) {
 				} else {
 					value = variables.Lpnt
 				}
+			} else if(match === "Np") {
+				value = getNestedPrecompNames(layer, settings);
+			} else if(match.indexOf("Np(") === 0) {
+				var customSep = "";
+				var m = match.match(/Np\(\[([^\[\]]+)\]\)/);
+				if (m && m[1]) {
+					customSep = m[1];
+				}
+				value = getNestedPrecompNames(layer, settings, customSep);
 			} else if (match === 'Lpnt') {
 				value = variables.Lpnt
 			} else if (dateFormat !== undefined) {

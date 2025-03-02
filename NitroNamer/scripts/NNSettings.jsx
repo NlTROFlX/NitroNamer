@@ -1,4 +1,5 @@
 var initialData = {
+    "Np": { "defaultValue": "NoNestedPrecomps", "customValue": "Custom{Np}", "active": false },
     "An": { "defaultValue": "NoAnimations", "customValue": "Custom{An}", "active": false },
     "Ar": { "defaultValue": "NoAspectRatio", "customValue": "Custom{Ar}", "active": false },
     "E": { "defaultValue": "No effects", "customValue": "Custom{E}", "active": false },
@@ -73,7 +74,7 @@ function buildNewUI(thisObj) {
     }
 
     
-    var variableNames = ["An", "Ar", "E", "F", "R", "H", "W", "Lexp", "Fext", "Lmc", "Lmn",  "Tm"];
+    var variableNames = ["Np", "An", "Ar", "E", "F", "R", "H", "W", "Lexp", "Fext", "Lmc", "Lmn", "Tm"];
     var ddVariableNames = grpDropdownAndInput.add("dropdownlist", undefined, variableNames);
     ddVariableNames.selection = 0; 
 
