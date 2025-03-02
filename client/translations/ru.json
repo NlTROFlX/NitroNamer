@@ -118,7 +118,7 @@
     "varF_videoExample_1": " | Демонстрация работы F",
 
     "rVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Да</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Строка</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Футаж, Прекомпозиция</span><br>",
-    "rVarSection_2": "<span class=\"variable-text-block-span-1\">R</span> — возвращает строку вида «ширина*высота» исходного футажа или прекомпозиции.",
+    "rVarSection_2": "Переменная <span class=\"variable-text-block-span-1\">R</span> возвращает ширину и высоту источника слоя в пикселях в форме <span class=\"variable-text-block-span-1\">x*y</span>. Есть режим округления после точки — <span class=\"variable-text-block-span-1\">R(N)</span>, где <span class=\"variable-text-block-span-1\">N</span> — это число возвращаемых знаков после точки. Принимает значения от 1 до 9.",
     "varR_videoExample_1": " | Демонстрация работы R",
 
     "arVarSection_1": "Количество доступных режимов: <span class=\"variable-text-block-span-1\">1</span><br>Кастомизация возвращаемого значения: <span class=\"variable-text-block-span-1\">Да</span><br>Кастомизация разделителя: <span class=\"variable-text-block-span-1\">Нет</span><br>Тип возвращаемых данных: <span class=\"variable-text-block-span-1\">Строка</span><br>Источник данных: <span class=\"variable-text-block-span-1\">Источник в проекте</span><br>",

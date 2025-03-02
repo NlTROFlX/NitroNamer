@@ -117,7 +117,7 @@
     "varF_videoExample_1": " | Demonstration of the F",
     
     "rVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">Yes</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number, String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Footage, Pre-comp</span><br>",
-    "rVarSection_2": "<span class=\"variable-text-block-span-1\">R</span> returns a string of the form \"width*height\" of the source footage or precomposition.",
+    "rVarSection_2": "The variable <span class=\"variable-text-block-span-1\">R</span> returns the width and height of the layer source in pixels in the format <span class=\"variable-text-block-span-1\">x*y</span>. There is a rounding mode after the decimal point — <span class=\"variable-text-block-span-1\">R(N)</span>, where <span class=\"variable-text-block-span-1\">N</span> is the number of decimal places returned. It takes values from 1 to 9.",
     "varR_videoExample_1": " | Demonstration of the R",
 
     "arVarSection_1": "Number of available modes: <span class=\"variable-text-block-span-1\">1</span><br>Customizing the return value: <span class=\"variable-text-block-span-1\">Yes</span><br>Customizing the separator: <span class=\"variable-text-block-span-1\">No</span><br>Returned data type: <span class=\"variable-text-block-span-1\">Number, String</span><br>Source of data: <span class=\"variable-text-block-span-1\">Project source</span><br>",
