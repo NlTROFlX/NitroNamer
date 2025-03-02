@@ -1843,14 +1843,24 @@ function buildUI(thisObj) {
 	}
 
 	function getResolution(layer, settings) {
-		if (layer.nullLayer || layer.adjustmentLayer) {
-			return settings && settings.R ? (settings.R.active ? settings.R.customValue : settings.R.defaultValue) : "NoResolution"
+		var layerType = getLayerType(layer);
+		if (layerType === "Null" || layerType === "Camera" || layerType === "Light" || layerType === "Audio") {
+			return settings && settings.R ? (settings.R.active ? settings.R.customValue : settings.R.defaultValue) : "NoResolution";
 		}
+		var width = null, height = null;
 		if (layer.source && layer.source.width && layer.source.height) {
-			return layer.source.width + "*" + layer.source.height
+			width = layer.source.width;
+			height = layer.source.height;
+		} else if (typeof layer.sourceRectAtTime === "function") {
+			var rect = layer.sourceRectAtTime(layer.inPoint, false);
+			width = rect.width;
+			height = rect.height;
 		}
-		return settings && settings.R ? (settings.R.active ? settings.R.customValue : settings.R.defaultValue) : "NoResolution"
-	}
+		if (width !== null && height !== null) {
+			return width + "*" + height;
+		}
+		return settings && settings.R ? (settings.R.active ? settings.R.customValue : settings.R.defaultValue) : "NoResolution";
+	}	
 
 	function getDuration(layer) {
 		var duration;
@@ -2544,7 +2554,7 @@ function buildUI(thisObj) {
 		var result = template;
 		var nthEffectRegex = /e(\d+)/g;
 		var nthMaskRegex = /m(\d+)/g;
-		var regex = new RegExp(["\\[([^\\[\\]]+)\\]", "T\\(([^()]+)\\)", "it", "Df", "Ec\\(([^()\\[\\]]+?)\\)", "Ec", "E\\(\\[([^\\[\\]]+)\\]\\)", "E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "E", "An\\(\\[([^\\[\\]]+)\\]\\)", "An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "An", "Lexp\\(\\[([^\\[\\]]+)\\]\\)", "Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lexp", "D\\(([^()\\[\\]]+)\\)", "D", "Fext\\(([^()\\[\\]]+)\\)", "Fext", "Ip", "Op", "Tm", "Ar\\(([^()\\[\\]]+)\\)", "Ar", "Pn", "Lpos", "Lsc", "Lrot", "Lops", "Lpnt\\(([^()\\[\\]]+)\\)", "Lpnt", "Cd\\(([^()\\[\\]]+)\\)", "Cd", "Lmc\\(\\[([^\\[\\]]+)\\]\\)", "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmc", "Lmn\\(\\[([^\\[\\]]+)\\]\\)", "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmn", "Chld\\(\\[([^\\[\\]]+)\\]\\)", "Chld\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Chld", "I\\(([^()\\[\\]]+)\\)", "I", "attr", "prop", "e(\\d+)", "m(\\d+)", "W\\(([1-9])\\)", "W", "H\\(([1-9])\\)", "H", "[A-Z]", "i", "S", "@cycle\\(\\s*(\\d+)\\s*,\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)", "cycle", "@replace\\(\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)"].join("|"), "g");
+		var regex = new RegExp(["\\[([^\\[\\]]+)\\]", "T\\(([^()]+)\\)", "it", "Df", "Ec\\(([^()\\[\\]]+?)\\)", "Ec", "E\\(\\[([^\\[\\]]+)\\]\\)", "E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "E", "An\\(\\[([^\\[\\]]+)\\]\\)", "An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "An", "Lexp\\(\\[([^\\[\\]]+)\\]\\)", "Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lexp", "D\\(([^()\\[\\]]+)\\)", "D", "Fext\\(([^()\\[\\]]+)\\)", "Fext", "Ip", "Op", "Tm", "Ar\\(([^()\\[\\]]+)\\)", "Ar", "Pn", "Lpos", "Lsc", "Lrot", "Lops", "Lpnt\\(([^()\\[\\]]+)\\)", "Lpnt", "Cd\\(([^()\\[\\]]+)\\)", "Cd", "Lmc\\(\\[([^\\[\\]]+)\\]\\)", "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmc", "Lmn\\(\\[([^\\[\\]]+)\\]\\)", "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmn", "Chld\\(\\[([^\\[\\]]+)\\]\\)", "Chld\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Chld", "I\\(([^()\\[\\]]+)\\)", "I", "attr", "prop", "e(\\d+)", "m(\\d+)", "W\\(([1-9])\\)", "W", "H\\(([1-9])\\)", "H", "R\\(([1-9])\\)", "R", "[A-Z]", "i", "S", "@cycle\\(\\s*(\\d+)\\s*,\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)", "cycle", "@replace\\(\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)"].join("|"), "g");
 		var usedVariables = {};
 		var currentLocalIndex = localIndex;
 		result = result.replace(regex, function (match, group, tFilter, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, chldSeparatorOnly, chldN, chldSeparator, customI, nthEffectIndex, nthMaskIndex, cycleCount, cycleA, cycleB, replaceFindStr, replaceWithStr) {
@@ -2577,6 +2587,25 @@ function buildUI(thisObj) {
 					return Math.round(variables.H).toString();
 				} else {
 					return variables.H;
+				}
+			}
+			if (/^R\(([1-9])\)$/.test(match)) {
+				var decimalsR = parseInt(match.match(/^R\(([1-9])\)$/)[1], 10);
+				var wVal = getWidth(layer, settings);
+				var hVal = getHeight(layer, settings);
+				if (typeof wVal === "number" && typeof hVal === "number") {
+					return wVal.toFixed(decimalsR) + "*" + hVal.toFixed(decimalsR);
+				} else {
+					return wVal + "*" + hVal;
+				}
+			}
+			if (match === "R") {
+				var wVal = getWidth(layer, settings);
+				var hVal = getHeight(layer, settings);
+				if (typeof wVal === "number" && typeof hVal === "number") {
+					return Math.round(wVal).toString() + "*" + Math.round(hVal).toString();
+				} else {
+					return wVal + "*" + hVal;
 				}
 			}
 			if (anSeparatorOnly !== undefined) {

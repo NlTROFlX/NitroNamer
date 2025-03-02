@@ -43,7 +43,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "attr, prop",
+        "template": "R(1) | T",
         "briefly": false,
         "brieflyType": 3,
         "modeIndex": 4,
