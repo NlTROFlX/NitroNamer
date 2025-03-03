@@ -540,22 +540,27 @@ function buildUI(thisObj) {
 	addHoverEffect(btnVariables, scriptFolderPath + "/NitroNamer/img/variablesIcon");
 	addHoverEffect(btnReset, scriptFolderPath + "/NitroNamer/img/resetIcon");
 	addHoverEffect(btnSettings, scriptFolderPath + "/NitroNamer/img/settings");
-	btnRename.addEventListener("mouseover", function () {
+	btnRename.addEventListener("mouseover", function(){
+		if(!compHasLayers()){
+			btnRename.image = File(scriptFolderPath + "/NitroNamer/img/warningHover.png");
+			btnRename.imageSize = [24,24];
+			return;
+		}
 		checkAndUpdateSettings();
 		updatePreview();
 		updateLayerCounts();
 		var isCtrlPressed = ScriptUI.environment.keyboardState.ctrlKey;
 		var isShiftPressed = ScriptUI.environment.keyboardState.shiftKey;
-		if (trim(txtTemplate.text) === "") {
-			btnRename.image = warningIconHover
-		} else if (isCtrlPressed) {
-			btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHoverAfter.png")
-		} else if (isShiftPressed) {
-			btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHoverBefore.png")
+		if(trim(txtTemplate.text) === ""){
+			btnRename.image = warningIconHover;
+		} else if(isCtrlPressed){
+			btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHoverAfter.png");
+		} else if(isShiftPressed){
+			btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHoverBefore.png");
 		} else {
-			btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHover.png")
+			btnRename.image = File(scriptFolderPath + "/NitroNamer/img/renameIconHover.png");
 		}
-		btnRename.imageSize = [24, 24]
+		btnRename.imageSize = [24,24];
 	});
 	btnRename.addEventListener("mouseout", function () {
 		updateRenameButtonIcon()
@@ -622,6 +627,17 @@ function buildUI(thisObj) {
 		btnFavorites.isMouseOver = !1;
 		updateFavoritesButtonIcon()
 	});
+
+	function compHasLayers(){
+		var proj = app.project;
+		if(proj){
+			var comp = (app.activeViewer && app.activeViewer.type === ViewerType.COMPOSITION) ? app.activeViewer.comp : proj.activeItem;
+			if(comp && comp instanceof CompItem && comp.numLayers > 0){
+				return true;
+			}
+		}
+		return false;
+	}
 
 	function updateFavoritesButtonIcon() {
 		var iconPath = scriptFolderPath + "/NitroNamer/img/";
@@ -3263,6 +3279,11 @@ function buildUI(thisObj) {
 			settingsData.needGlobalUiReload = false;
 			var settingsFilePath = new File($.fileName).path + "/NitroNamer/settings/settings.json";
 			writeJSONFile(settingsFilePath, settingsData);
+
+			if(!compHasLayers()){
+				btnRename.image = File(scriptFolderPath + "/NitroNamer/img/warning.png");
+				btnRename.imageSize = [24,24];
+			}
 
 			applySettings(settingsData);
 			updatePresetsDropdown(settingsData);
