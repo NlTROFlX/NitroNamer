@@ -68,7 +68,7 @@
     "leftBlock_spoilerTimeAndDuration_3": "[1] Op - Exit point of the layer.",
     "leftBlock_spoilerTimeAndDuration_4": "[4] D - Duration of the layer.",
     "leftBlock_spoilerTimeAndDuration_5": "[1] Df - Time duration of the layer.",
-    "leftBlock_spoilerTimeAndDuration_6": "[1] D - Duration in frames.",
+    "leftBlock_spoilerTimeAndDuration_6": "[1] Cd - Current date.",
     "leftBlock_spoilerEffects_1": "Effects",
     "leftBlock_spoilerEffects_2": "[4] E - Names of the effects.",
     "leftBlock_spoilerEffects_3": "[1] Ec - Number of effects per layer.",
