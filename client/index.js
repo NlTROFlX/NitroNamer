@@ -289,16 +289,34 @@ function checkExportRequirements() {
     });
 }
 
-function updateActiveIndicator(e) {
-    var t = document.getElementById("active-indicator"),
-        n = document.getElementById("indicator-line"),
-        o = e.querySelector(".spoiler-title-container"),
-        a = e.querySelectorAll(".spoiler-content p");
-    if (o) {
-        var l = e.offsetTop + o.offsetTop + o.offsetHeight / 2 - t.offsetHeight / 2,
-            c = t.getBoundingClientRect().left - t.parentElement.getBoundingClientRect().left;
-        t.style.top = l + "px", n.style.height = l + "px", n.style.left = c + t.offsetWidth / 2 + "px", t.textContent = a.length
-    }
+function updateActiveIndicator(element, isSearchInput = !1) {
+	var t = document.getElementById("active-indicator"),
+		n = document.getElementById("indicator-line");
+	if (!t || !n) {
+		console.error("Не удалось найти active-indicator или indicator-line.");
+		return
+	}
+	var l, c;
+	if (isSearchInput) {
+		var rect = element.getBoundingClientRect(),
+			parentRect = element.parentElement.getBoundingClientRect();
+		l = rect.top - parentRect.top + (rect.height / 2) - (t.offsetHeight / 2);
+		c = t.getBoundingClientRect().left - t.parentElement.getBoundingClientRect().left;
+		t.innerHTML = '<img src="icons/icon-search.svg" alt="Search" style="width: 12px; height: 12px;">'
+	} else {
+		var o = element.querySelector(".spoiler-title-container"),
+			a = element.querySelectorAll(".spoiler-content p");
+		if (o) {
+			l = element.offsetTop + o.offsetTop + o.offsetHeight / 2 - t.offsetHeight / 2;
+			c = t.getBoundingClientRect().left - t.parentElement.getBoundingClientRect().left;
+			t.textContent = a.length
+		} else {
+			return
+		}
+	}
+	t.style.top = l + "px";
+	n.style.height = l + "px";
+	n.style.left = c + t.offsetWidth / 2 + "px"
 }
 
 function initializeLanguageSelector() {
@@ -411,11 +429,6 @@ function openLinkInBrowser(url) {
     const csInterface = new CSInterface();
     csInterface.openURLInDefaultBrowser(url);
 }
-
-document.addEventListener("DOMContentLoaded", function() {
-    initializeLicenseClickHandlers();
-});
-
 
 function processTranslation(message) {
 
@@ -646,6 +659,61 @@ function resetExportCheckboxes() {
     updateExportButtonState();
 }
 
+function initializeSpoilerSearch() {
+	const searchInput = document.querySelector('.spoiler-search');
+	if (!searchInput) {
+		console.error("Поле ввода с классом 'spoiler-search' не найдено.");
+		return
+	}
+	searchInput.addEventListener('input', function() {
+		const searchTerm = this.value.toLowerCase();
+		const spoilers = document.querySelectorAll('.spoiler');
+		spoilers.forEach(spoiler => {
+			const content = spoiler.querySelector('.spoiler-content');
+			if (content) {
+				const paragraphs = content.querySelectorAll('p');
+				let hasMatch = !1;
+				paragraphs.forEach(p => {
+					const text = p.textContent.toLowerCase();
+					if (text.includes(searchTerm)) {
+						hasMatch = !0
+					}
+				});
+				spoiler.style.display = hasMatch || searchTerm === '' ? 'block' : 'none'
+			}
+		})
+	})
+}
+
+function initializeSearchBehavior() {
+	const searchInput = document.querySelector('.spoiler-search');
+	const activeIndicator = document.getElementById('active-indicator');
+	if (!searchInput || !activeIndicator) {
+		console.error("Не удалось найти поле ввода или active-indicator.");
+		return
+	}
+	const originalContent = activeIndicator.innerHTML;
+
+	function alignIndicator() {
+		const searchRect = searchInput.getBoundingClientRect();
+		const parentRect = searchInput.parentElement.getBoundingClientRect();
+		const top = searchRect.top - parentRect.top + (searchRect.height / 2) - (activeIndicator.offsetHeight / 2);
+		activeIndicator.style.top = `${top}px`
+	}
+	searchInput.addEventListener('focus', function() {
+		alignIndicator();
+		activeIndicator.innerHTML = '<img src="icons/icon-search.svg" alt="Search" style="width: 12px; height: 12px;">'
+	});
+	searchInput.addEventListener('input', function() {
+		const icon = activeIndicator.querySelector('img');
+		if (icon) {
+			icon.style.filter = this.value ? 'invert(48%) sepia(82%) saturate(2053%) hue-rotate(177deg) brightness(95%) contrast(102%)' : 'none'
+		}
+	});
+	searchInput.addEventListener('blur', function() {
+		activeIndicator.innerHTML = originalContent
+	})
+}
 
 document.querySelector(".export-button").addEventListener("mouseenter", function () {
     checkExportRequirements();
@@ -704,6 +772,33 @@ document.addEventListener("mousemove", (function (e) {
     initializeExportIconClickHandler();
     initializeImportIconClickHandler();
     initializeImportButtonHandler();
+    initializeLicenseClickHandlers();
+    initializeSpoilerSearch();
+    initializeSearchBehavior();
+
+    const searchInput = document.querySelector('.spoiler-search');
+    const activeIndicator = document.getElementById('active-indicator');
+    const indicatorLine = document.getElementById('indicator-line');
+
+    if (searchInput) {
+        searchInput.addEventListener('focus', function() {
+            updateActiveIndicator(this, true); // Передаем поле ввода и флаг isSearchInput
+            activeIndicator.style.opacity = "1";
+            indicatorLine.style.opacity = "1";
+        });
+
+        searchInput.addEventListener('blur', function() {
+            activeIndicator.style.opacity = "0";
+            indicatorLine.style.opacity = "0";
+        });
+    }
+
+    // Существующие обработчики для спойлеров
+    document.querySelectorAll(".spoiler").forEach(function(spoiler) {
+        spoiler.addEventListener("click", function() {
+            toggleSpoiler(this);
+        });
+    });
 
     loadDefaultTranslations();
     loadSettings();
