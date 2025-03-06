@@ -481,7 +481,7 @@ body, html {
   transition: color 124ms;
 }
 .spoiler.active .spoiler-content p.selected {
-  color: #b9b9b9;
+  color: #b9b9b9!important                                                                                                                            ;
 }
 .spoiler.active .spoiler-content p:hover {
   color: #e7e7e7;

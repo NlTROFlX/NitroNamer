@@ -666,23 +666,26 @@ function initializeSpoilerSearch() {
 		return
 	}
 	searchInput.addEventListener('input', function() {
-		const searchTerm = this.value.toLowerCase();
-		const spoilers = document.querySelectorAll('.spoiler');
-		spoilers.forEach(spoiler => {
-			const content = spoiler.querySelector('.spoiler-content');
-			if (content) {
-				const paragraphs = content.querySelectorAll('p');
-				let hasMatch = !1;
-				paragraphs.forEach(p => {
-					const text = p.textContent.toLowerCase();
-					if (text.includes(searchTerm)) {
-						hasMatch = !0
-					}
-				});
-				spoiler.style.display = hasMatch || searchTerm === '' ? 'block' : 'none'
-			}
-		})
-	})
+        const searchTerm = this.value.toLowerCase();
+        const spoilers = document.querySelectorAll('.spoiler');
+        spoilers.forEach(spoiler => {
+            const content = spoiler.querySelector('.spoiler-content');
+            if (content) {
+                const paragraphs = content.querySelectorAll('p');
+                let hasMatch = false;
+                paragraphs.forEach(p => {
+                    const text = p.textContent.toLowerCase();
+                    if (text.includes(searchTerm) && searchTerm !== '') {
+                        p.style.color = '#2d8ceb'; // Устанавливаем цвет для совпадений
+                        hasMatch = true;
+                    } else {
+                        p.style.color = ''; // Сбрасываем цвет, если совпадений нет
+                    }
+                });
+                spoiler.style.display = hasMatch || searchTerm === '' ? 'block' : 'none';
+            }
+        });
+    });
 }
 
 function initializeSearchBehavior() {
@@ -713,6 +716,13 @@ function initializeSearchBehavior() {
 	searchInput.addEventListener('blur', function() {
 		activeIndicator.innerHTML = originalContent
 	})
+}
+
+function resetSpoilers() {
+    document.querySelectorAll(".spoiler").forEach(function(spoiler) {
+        spoiler.classList.remove("active");
+        spoiler.classList.add("inactive");
+    });
 }
 
 document.querySelector(".export-button").addEventListener("mouseenter", function () {
@@ -766,7 +776,7 @@ document.addEventListener("mousemove", (function (e) {
         let t = currentHoveredElement.getAttribute("data-value");
         t && (copyToClipboard(t), e.preventDefault())
     }
-})), document.addEventListener("DOMContentLoaded", function () {
+})), document.addEventListener("DOMContentLoaded", function() {
     initializeLanguageSelector();
     initializeIconClickHandlers();
     initializeExportIconClickHandler();
@@ -782,18 +792,17 @@ document.addEventListener("mousemove", (function (e) {
 
     if (searchInput) {
         searchInput.addEventListener('focus', function() {
-            updateActiveIndicator(this, true); // Передаем поле ввода и флаг isSearchInput
+            resetSpoilers();
+            updateActiveIndicator(this, true);
             activeIndicator.style.opacity = "1";
             indicatorLine.style.opacity = "1";
         });
-
         searchInput.addEventListener('blur', function() {
             activeIndicator.style.opacity = "0";
             indicatorLine.style.opacity = "0";
         });
     }
 
-    // Существующие обработчики для спойлеров
     document.querySelectorAll(".spoiler").forEach(function(spoiler) {
         spoiler.addEventListener("click", function() {
             toggleSpoiler(this);
