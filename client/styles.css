@@ -985,3 +985,21 @@ body, html {
 .custom-checkbox.disabled-checkbox:hover .checkbox-text {
   color: #8a8a8a !important;
 }
+
+.spoiler-search {
+  width: 234px;
+  height: 33px;
+  font-family: "Fira Sans", sans-serif;
+  font-size: 14px;
+  color: #8a8a8a;
+  background-color: #2a2a2a;
+  border: none;
+  border-bottom: 1px solid #313131;
+  padding: 0 8px;
+  box-sizing: border-box;
+}
+
+.spoiler-search:focus {
+  outline: none;
+  box-shadow: none;
+}
