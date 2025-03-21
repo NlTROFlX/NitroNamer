@@ -584,7 +584,7 @@ function buildUI(thisObj) {
 				layer = comp.layer(1)
 			}
 			if (layer) {
-				txtTemplate.text = "(" + layer.name + ")";
+				txtTemplate.text = "[" + layer.name + "]";
 				updatePreview();
 				updateLayerCounts();
 				resetRenameButtonIcon();
