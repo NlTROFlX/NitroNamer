@@ -7,7 +7,7 @@
                 "btnSave": "Saves the value from the name template input field to the presets.\nShift + Click - Updates the values of the selected preset",
                 "btnCircleMinus": "Delete the currently selected template in the preset list.",
                 "btnMinimize": "Switching UI operating modes.",
-                "btnRename": "Click - Apply template.\nShift + Click - Add template value to the beginning of layer name.\nCtrl + Click - Add value to the end of layer name.\nAlt+Click - Invert all variables mode \"I\"",
+                "btnRename": "Click – apply the template.\nShift + Click – add the template value to the beginning of the layer name.\nCtrl + Click – add the value to the end of the layer name.\n",
                 "btnVariables": "Open the variable values panel for the layer.",
                 "btnHelp": "Open the library of all variables and their modes.",
                 "btnReset": "Reset all values.\n(Does not delete presets and variable settings)",
