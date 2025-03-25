@@ -2005,22 +2005,35 @@ function buildUI(thisObj) {
 	}
 
 	function getAspectRatio(layer, settings, inPixels) {
-		if (layer.nullLayer || layer.adjustmentLayer) {
-			return settings && settings.Ar ? (settings.Ar.active ? settings.Ar.customValue : settings.Ar.defaultValue) : "NoAspectRatio"
+
+		var fallback = settings && settings.Ar ? (settings.Ar.active ? settings.Ar.customValue : settings.Ar.defaultValue) : "NoAspectRatio";
+	
+		var layerType = getLayerType(layer);
+		if (layerType === "Camera" || layerType === "Light" || layerType === "Audio" ||
+			layerType === "Null" || layerType === "Adjustment") {
+			return fallback;
 		}
-		if (layer.source && layer.source.width && layer.source.height) {
-			var width = layer.source.width;
-			var height = layer.source.height;
-			if (inPixels) {
-				return width + "px:" + height + "px"
-			}
-			var gcd = function (a, b) {
-				return b == 0 ? a : gcd(b, a % b)
-			};
-			var divisor = gcd(width, height);
-			return (width / divisor) + ":" + (height / divisor)
+	
+		var widthVal = getWidth(layer, settings);
+		var heightVal = getHeight(layer, settings);
+	
+		var width = parseFloat(widthVal);
+		var height = parseFloat(heightVal);
+	
+		if (isNaN(width) || isNaN(height) || width <= 0 || height <= 0) {
+			return fallback;
 		}
-		return settings && settings.Ar ? (settings.Ar.active ? settings.Ar.customValue : settings.Ar.defaultValue) : "NoAspectRatio"
+	
+		if (inPixels) {
+			return width + "px:" + height + "px";
+		}
+	
+		var gcd = function(a, b) {
+			return b === 0 ? a : gcd(b, a % b);
+		};
+	
+		var divisor = gcd(width, height);
+		return (width / divisor) + ":" + (height / divisor);
 	}
 
 	function getEffectsCount(layer, settings, effectsFilter) {
@@ -3292,7 +3305,6 @@ function buildUI(thisObj) {
 			}
 		}
 	}
-
 
 	win.addEventListener("mouseover", function () {
 		var settingsData = loadSettings();
