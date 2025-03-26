@@ -5,7 +5,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "Ar(px)",
+        "template": "T | Ar",
         "briefly": false,
         "brieflyType": 0,
         "modeIndex": 4,
