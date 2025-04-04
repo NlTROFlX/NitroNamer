@@ -2,7 +2,7 @@
     "Np": {
         "defaultValue": "NoNestedPrecomps",
         "customValue": "Custom{Np}",
-        "active": true
+        "active": false
     },
     "An": {
         "defaultValue": "NoAnimations",
@@ -52,6 +52,11 @@
     "R": {
         "defaultValue": "NoResolution",
         "customValue": "Custom{R}",
+        "active": false
+    },
+    "Txt": {
+        "defaultValue": "NoText",
+        "customValue": "Custom{Txt}",
         "active": false
     },
     "Tm": {

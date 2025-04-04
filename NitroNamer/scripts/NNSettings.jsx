@@ -10,6 +10,7 @@ var initialData = {
     "Lmc": { "defaultValue": "NoMasks", "customValue": "Custom{Lmc}", "active": false },
     "Lmn": { "defaultValue": "NoMaskNames", "customValue": "Custom{Lmn}", "active": false },
     "R": { "defaultValue": "NoResolution", "customValue": "Custom{R}", "active": false },
+    "Txt": { "defaultValue": "NoText", "customValue": "Custom{Txt}", "active": false },
     "Tm": { "defaultValue": "NoTrackMate", "customValue": "Custom{Tm}", "active": false },
     "W": { "defaultValue": "NoWidth", "customValue": "Custom{W}", "active": false }
 };
@@ -74,7 +75,7 @@ function buildNewUI(thisObj) {
     }
 
     
-    var variableNames = ["Np", "An", "Ar", "E", "F", "R", "H", "W", "Lexp", "Fext", "Lmc", "Lmn", "Tm"];
+    var variableNames = ["Np", "An", "Ar", "E", "F", "R", "Txt", "H", "W", "Lexp", "Fext", "Lmc", "Lmn", "Tm"];
     var ddVariableNames = grpDropdownAndInput.add("dropdownlist", undefined, variableNames);
     ddVariableNames.selection = 0; 
 
