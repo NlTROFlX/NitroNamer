@@ -151,35 +151,34 @@ function selectSubItem(e) {
     })), e.classList.add("selected")
 }
 
-function showContent(contentId) {
-    const defaultMessage = document.getElementById("default-message");
-    if (defaultMessage) {
-        defaultMessage.style.display = "none";
-    }
-
-    if (currentContentSection) {
-        const previousSection = document.getElementById(currentContentSection);
-        if (previousSection) {
-            const videos = previousSection.getElementsByTagName("video");
-            for (let i = 0; i < videos.length; i++) {
-                videos[i].pause();
-            }
-        }
-    }
-
-    document.querySelectorAll("#content-sections .content-section").forEach(section => {
-        section.style.display = "none";
-    });
-
-    const newSection = document.getElementById(contentId);
-    if (newSection) {
-        newSection.style.display = "block";
-        currentContentSection = contentId;
-
-        if (contentId === "content-export") {
-            checkExportRequirements();
-        }
-    }
+function showContent(contentIdentifier) {
+	const defaultMessage = document.getElementById("default-message");
+	if (defaultMessage) {
+		defaultMessage.style.display = "none"
+	}
+	if (currentContentSection) {
+		const previousSection = document.getElementById(currentContentSection) || document.querySelector(`[data-source="${currentContentSection}"]`);
+		if (previousSection) {
+			const videos = previousSection.getElementsByTagName("video");
+			for (let i = 0; i < videos.length; i++) {
+				videos[i].pause()
+			}
+		}
+	}
+	document.querySelectorAll("#content-sections .content-section").forEach(section => {
+		section.style.display = "none"
+	});
+	let newSection = document.getElementById(contentIdentifier);
+	if (!newSection) {
+		newSection = document.querySelector(`#content-sections .content-section[data-source="${contentIdentifier}"]`)
+	}
+	if (newSection) {
+		newSection.style.display = "block";
+		currentContentSection = newSection.id ? newSection.id : newSection.getAttribute("data-source");
+		if (contentIdentifier === "content-export") {
+			checkExportRequirements()
+		}
+	}
 }
 
 function updateExportButtonState() {
