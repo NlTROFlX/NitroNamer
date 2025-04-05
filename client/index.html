@@ -56,26 +56,28 @@
     <div class="split-container">
         <!-- Левая колонка со спойлерами -->
         <div class="left">
-            <input type="text" class="spoiler-search" placeholder="Start typing here to search...">
+            <input type="text" class="spoiler-search" data-i18n="leftBlock_searchSpoilerInput"
+                placeholder="Start typing here to search...">
             <!-- Source-->
             <div class="spoiler active" onclick="toggleSpoiler(this)">
                 <div class="spoiler-title-container">
                     <div class="spoiler-icon-container">
                         <img src="icons/icon-folder-structure.svg" class="spoiler-icon" alt="Icon 1">
                     </div>
-                    <div class="spoiler-title" data-i18n="leftBlock_spoilerComposition_1">Soruce</div>
+                    <div class="spoiler-title" data-i18n="leftBlock_spoilerSoruce_1">Soruce</div>
                 </div>
                 <div class="spoiler-content">
                     <p data-source="F" onclick="selectSubItem(this);showContent('F')"
-                        data-i18n="leftBlock_spoilerComposition_4">[1] F - Frame rate.</p>
-                    <p data-source="Fext" onclick="selectSubItem(this);showContent('Fext')" data-i18n="leftBlock_spoilerOther_4">[2]
+                        data-i18n="leftBlock_spoilerSoruce_2">[1] F - Frame rate.</p>
+                    <p data-source="Fext" onclick="selectSubItem(this);showContent('Fext')"
+                        data-i18n="leftBlock_spoilerOther_3">[2]
                         Fext - Extension.</p>
                     <p data-source="Np" onclick="selectSubItem(this);showContent('Np')"
-                        data-i18n="leftBlock_spoilerComposition_7">[2] Np - List of nested compositions.</p>
+                        data-i18n="leftBlock_spoilerSoruce_4">[2] Np - List of nested compositions.</p>
                 </div>
             </div>
             <!-- Composition information -->
-            <div class="spoiler active" onclick="toggleSpoiler(this)">
+            <div class="spoiler inactive" onclick="toggleSpoiler(this)">
                 <div class="spoiler-title-container">
                     <div class="spoiler-icon-container">
                         <img src="icons/icon-panoram.svg" class="spoiler-icon" alt="Icon 1">
@@ -119,10 +121,12 @@
                     <div class="spoiler-title" data-i18n="leftBlock_spoilerEffects_1">Effects</div>
                 </div>
                 <div class="spoiler-content">
-                    <p data-source="E" onclick="selectSubItem(this);showContent('E')" data-i18n="leftBlock_spoilerEffects_2">
+                    <p data-source="E" onclick="selectSubItem(this);showContent('E')"
+                        data-i18n="leftBlock_spoilerEffects_2">
                         [3]
                         E - Names of the effects.</p>
-                    <p data-source="Ec" onclick="selectSubItem(this);showContent('Ec')" data-i18n="leftBlock_spoilerEffects_3">
+                    <p data-source="Ec" onclick="selectSubItem(this);showContent('Ec')"
+                        data-i18n="leftBlock_spoilerEffects_3">
                         [1]
                         Ec - Number of effects per layer.</p>
                 </div>
@@ -133,13 +137,13 @@
                     <div class="spoiler-icon-container">
                         <img src="icons/icon-circle-half.svg" class="spoiler-icon" alt="Icon 3">
                     </div>
-                    <div class="spoiler-title" data-i18n="leftBlock_spoilerEffects_1">Masks</div>
+                    <div class="spoiler-title" data-i18n="leftBlock_spoilerMasks_1">Masks</div>
                 </div>
                 <div class="spoiler-content">
-                    <p data-source="Lmn" data-source="Lmn" onclick="selectSubItem(this);showContent('Lmn')"
-                        data-i18n="leftBlock_spoilerLayerProperties_13">[4] Lmn - List of layer masks.</p>
+                    <p data-source="Lmn" onclick="selectSubItem(this);showContent('Lmn')"
+                        data-i18n="leftBlock_spoilerMasks_2">[4] Lmn - List of layer masks.</p>
                     <p data-source="Lmc" onclick="selectSubItem(this);showContent('Lmc')"
-                        data-i18n="leftBlock_spoilerLayerProperties_14">[4] Lmс - Number of layer masks.</p>
+                        data-i18n="leftBlock_spoilerMasks_3">[4] Lmс - Number of layer masks.</p>
                 </div>
             </div>
             <!-- Indexes and indetifiers -->
@@ -167,20 +171,20 @@
                     <div class="spoiler-icon-container">
                         <img src="icons/icon-size.svg" class="spoiler-icon" alt="Icon 6">
                     </div>
-                    <div class="spoiler-title" data-i18n="leftBlock_spoilerLayerProperties_1">Size</div>
+                    <div class="spoiler-title" data-i18n="leftBlock_spoilerSize_1">Size</div>
                 </div>
                 <div class="spoiler-content">
                     <p data-source="R" onclick="selectSubItem(this);showContent('R')"
-                        data-i18n="leftBlock_spoilerComposition_5">[2] R -
+                        data-i18n="leftBlock_spoilerSize_2">[2] R -
                         Resolution of the layer.</p>
                     <p data-source="Ar" onclick="selectSubItem(this);showContent('Ar')"
-                        data-i18n="leftBlock_spoilerComposition_6">[2] Ar -
+                        data-i18n="leftBlock_spoilerSize_3">[2] Ar -
                         Aspect ratio.</p>
                     <p data-source="W" onclick="selectSubItem(this);showContent('W')"
-                        data-i18n="leftBlock_spoilerLayerProperties_4">[1] W
+                        data-i18n="leftBlock_spoilerSize_4">[1] W
                         - Width of the layer in pixels.</p>
                     <p data-source="H" onclick="selectSubItem(this);showContent('H')"
-                        data-i18n="leftBlock_spoilerLayerProperties_5">[1] H
+                        data-i18n="leftBlock_spoilerSize_5">[1] H
                         - Height of the layer in pixels.</p>
                 </div>
             </div>
@@ -210,6 +214,8 @@
                     <p data-source="Lexp" onclick="selectSubItem(this);showContent('Lexp')"
                         data-i18n="leftBlock_spoilerLayerProperties_12">[4] Lexp - Layer properties with expressions.
                     </p>
+                    <p data-source="Txt" onclick="selectSubItem(this);showContent('Txt')"
+                        data-i18n="leftBlock_spoilerLayerProperties_18">[1] Txt - text.</p>
                 </div>
             </div>
             <!-- Transform -->
@@ -218,17 +224,17 @@
                     <div class="spoiler-icon-container">
                         <img src="icons/icon-arrow-side.svg" class="spoiler-icon" alt="Icon 6">
                     </div>
-                    <div class="spoiler-title" data-i18n="leftBlock_spoilerLayerProperties_1">Transform</div>
+                    <div class="spoiler-title" data-i18n="leftBlock_spoilerTransform_1">Transform</div>
                 </div>
                 <div class="spoiler-content">
                     <p data-source="Lpos" onclick="selectSubItem(this);showContent('Lpos')"
-                        data-i18n="leftBlock_spoilerLayerProperties_6">[1] Lpos - Position of the layer.</p>
+                        data-i18n="leftBlock_spoilerTransform_2">[1] Lpos - Position of the layer.</p>
                     <p data-source="Lsc" onclick="selectSubItem(this);showContent('Lsc')"
-                        data-i18n="leftBlock_spoilerLayerProperties_7">[1] Lsc - Scale of the layer.</p>
+                        data-i18n="leftBlock_spoilerTransform_3">[1] Lsc - Scale of the layer.</p>
                     <p data-source="Lrot" onclick="selectSubItem(this);showContent('Lrot')"
-                        data-i18n="leftBlock_spoilerLayerProperties_8">[1] Lrot - Rotate the layer.</p>
+                        data-i18n="leftBlock_spoilerTransform_4">[1] Lrot - Rotate the layer.</p>
                     <p data-source="Lops" onclick="selectSubItem(this);showContent('Lops')"
-                        data-i18n="leftBlock_spoilerLayerProperties_9">[1] Lops - Opacity of the layer.</p>
+                        data-i18n="leftBlock_spoilerTransform_5">[1] Lops - Opacity of the layer.</p>
                 </div>
             </div>
             <!-- Special -->
@@ -240,9 +246,11 @@
                     <div class="spoiler-title" data-i18n="leftBlock_spoilerSpecial_1">Special</div>
                 </div>
                 <div class="spoiler-content">
-                    <p data-source="attr" onclick="selectSubItem(this);showContent('attr')" data-i18n="leftBlock_spoilerSpecial_2">
+                    <p data-source="attr" onclick="selectSubItem(this);showContent('attr')"
+                        data-i18n="leftBlock_spoilerSpecial_2">
                         [2] attr - selected attributes</p>
-                    <p data-source="prop" onclick="selectSubItem(this);showContent('prop')" data-i18n="leftBlock_spoilerSpecial_3">
+                    <p data-source="prop" onclick="selectSubItem(this);showContent('prop')"
+                        data-i18n="leftBlock_spoilerSpecial_3">
                         [1] prop - selected properties</p>
                 </div>
             </div>
@@ -272,22 +280,12 @@
                     <div class="spoiler-title" data-i18n="leftBlock_spoilerOperators_1">Operators</div>
                 </div>
                 <div class="spoiler-content">
-                    <p data-source="@cycle" onclick="selectSubItem(this);showContent('@cycle')" data-i18n="leftBlock_spoilerOperators_2">
+                    <p data-source="@cycle" onclick="selectSubItem(this);showContent('@cycle')"
+                        data-i18n="leftBlock_spoilerOperators_2">
                         [2] @cycle</p>
-                    <p data-source="@replace" onclick="selectSubItem(this);showContent('@replace')" data-i18n="leftBlock_spoilerOperators_3">
+                    <p data-source="@replace" onclick="selectSubItem(this);showContent('@replace')"
+                        data-i18n="leftBlock_spoilerOperators_3">
                         [2] @replace</p>
-                </div>
-            </div>
-            <!-- Other -->
-            <div class="spoiler inactive" onclick="toggleSpoiler(this)">
-                <div class="spoiler-title-container">
-                    <div class="spoiler-icon-container">
-                        <img src="icons/icon-dots.svg" class="spoiler-icon" alt="Icon 7">
-                    </div>
-                    <div class="spoiler-title" data-i18n="leftBlock_spoilerOther_1">Other</div>
-                </div>
-                <div class="spoiler-content">
-
                 </div>
             </div>
         </div>
@@ -564,7 +562,7 @@
                     </div>
                     <div class="variable-example-block" data-value="Np"> <span class="variable-text-block-span-0">MODE
                             1:</span>&nbsp;<span class="variable-text-block-span-2">Np</span><span><span
-                                class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                                class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -635,7 +633,7 @@
                     <div class="variable-example-block" data-value="(Layer_from_)Pn"> <span
                             class="variable-text-block-span-0">MODE 1: [Layer_from_]<span
                                 class="variable-text-block-span-2">Pn</span> <span class="copied-text"
-                                data-i18n="textbox-copied">- Copied</span>
+                                data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -697,7 +695,7 @@
                     <div class="variable-example-block" data-value="T_[frameRate]:F"> <span
                             class="variable-text-block-span-0">MODE 1: T_[frameRate]:<span
                                 class="variable-text-block-span-2">F</span><span class="copied-text"
-                                data-i18n="textbox-copied">- Copied</span>
+                                data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -1892,7 +1890,7 @@
                     <div class="variable-example-block" data-value="T.i">
                         <span class="variable-text-block-span-0">MODE 1:&nbsp;<span
                                 class="variable-text-block-span-2">T</span>.i
-                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -2035,7 +2033,7 @@
                     <div class="variable-example-block" data-value="(original name in project):S">
                         <span class="variable-text-block-span-0">MODE 1:&nbsp;(original name in project:)<span
                                 class="variable-text-block-span-2">S</span>
-                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -2098,7 +2096,7 @@
                     <div class="variable-example-block" data-value="(layerWidth):W">
                         <span class="variable-text-block-span-0">MODE 1:&nbsp;(layerWidth):<span
                                 class="variable-text-block-span-2">W</span>
-                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -2178,7 +2176,7 @@
                     <div class="variable-example-block" data-value="(layerHeight):H">
                         <span class="variable-text-block-span-0">MODE 1:&nbsp;(layerHeight):<span
                                 class="variable-text-block-span-2">H</span>
-                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -2260,7 +2258,7 @@
                     <div class="variable-example-block" data-value="O | Lpnt">
                         <span class="variable-text-block-span-0">MODE 1:&nbsp;O |&nbsp;<span
                                 class="variable-text-block-span-2">Lpnt</span>
-                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -2295,7 +2293,7 @@
                     <div class="variable-example-block" data-value="O | Lpnt(1)">
                         <span class="variable-text-block-span-0">MODE 2:&nbsp;O |&nbsp;<span
                                 class="variable-text-block-span-2">Lpnt(1)</span>
-                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -2332,7 +2330,7 @@
                     <div class="variable-example-block" data-value="O | Lpnt(i)">
                         <span class="variable-text-block-span-0">MODE 3:&nbsp;O |&nbsp;<span
                                 class="variable-text-block-span-2">Lpnt(i)</span>
-                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -2413,7 +2411,7 @@
                     <div class="variable-example-block" data-value="[Main:] Chld">
                         <span class="variable-text-block-span-0">MODE 1:&nbsp;<span
                                 class="variable-text-block-span-2">Chld</span>
-                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -2449,7 +2447,7 @@
                     <div class="variable-example-block" data-value="[Main:] Chld(2)">
                         <span class="variable-text-block-span-0">MODE 2:&nbsp;<span
                                 class="variable-text-block-span-2">Chld(2)</span>
-                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -2484,7 +2482,7 @@
                     <div class="variable-example-block" data-value="[Main:] Chld(1, 2 [ ~~ ])">
                         <span class="variable-text-block-span-0">MODE 3:&nbsp;<span
                                 class="variable-text-block-span-2">Chld(1, 2 [ ~~ ])</span>
-                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -2567,7 +2565,7 @@
                     <div class="variable-example-block" data-value="Lpos">
                         <span class="variable-text-block-span-0">MODE 1:&nbsp;<span
                                 class="variable-text-block-span-2">Lpos</span>
-                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -2648,7 +2646,7 @@
                     <div class="variable-example-block" data-value="Lsc">
                         <span class="variable-text-block-span-0">MODE 1:&nbsp;<span
                                 class="variable-text-block-span-2">Lsc</span>
-                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -2730,7 +2728,7 @@
                     <div class="variable-example-block" data-value="Lrot">
                         <span class="variable-text-block-span-0">MODE 1:&nbsp;<span
                                 class="variable-text-block-span-2">Lrot</span>
-                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -2812,7 +2810,7 @@
                     <div class="variable-example-block" data-value="Lops">
                         <span class="variable-text-block-span-0">MODE 1:&nbsp;<span
                                 class="variable-text-block-span-2">Lops</span>
-                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -2875,7 +2873,7 @@
                     <div class="variable-example-block" data-value="O | Tm">
                         <span class="variable-text-block-span-0">MODE 1:&nbsp;O |<span
                                 class="variable-text-block-span-2"> Lops</span>
-                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -2960,7 +2958,7 @@
                     <div class="variable-example-block" data-value="T.i | An">
                         <span class="variable-text-block-span-0">MODE 1:&nbsp;T.i |<span
                                 class="variable-text-block-span-2"> An</span>
-                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -2995,7 +2993,7 @@
                     <div class="variable-example-block" data-value="An(attr, [ && ])">
                         <span class="variable-text-block-span-0">MODE 3:&nbsp;<span
                                 class="variable-text-block-span-2">An(attr, [ && ])</span>
-                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -3059,7 +3057,7 @@
                     <div class="variable-example-block" data-value="T.i | Lexp">
                         <span class="variable-text-block-span-0">MODE 1:&nbsp;T.i |<span
                                 class="variable-text-block-span-2"> Lexp</span>
-                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -3094,7 +3092,7 @@
                     <div class="variable-example-block" data-value="Lexp(attr, [ && ])">
                         <span class="variable-text-block-span-0">MODE 3:&nbsp;<span
                                 class="variable-text-block-span-2">Lexp(attr, [ && ])</span>
-                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                            <span class="copied-text" data-i18n="textbox-copied">- Copied</span></span>
                     </div>
                     <div class="variable-example-block-result">
                         <div class="aeUiElementsLayerBlock">
@@ -3238,6 +3236,86 @@
                         <div class="video-info" id="videoInfo">
                             <p id="currentTime">00:00:00</p>
                             <p id="titleVideo" data-i18n="varLmc_videoExample_1">| Demonstration of the Lmc variable
+                            </p>
+                            <img src="icons/scale-up.svg" class="scale-up-icon" alt="Scale Up">
+                        </div>
+                        <div id="progressBarContainer">
+                            <div id="progressBarBackground">
+                                <div id="progressBarFill"></div>
+                                <div id="seekKnob"></div>
+                                <div id="timeTooltip">00:00:00</div>
+                                <div id="hoverCircle"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_5">Text examples with results:
+                    </div>
+                    <!-- Lmn: MODE 1 -->
+                    <div class="variable-example-block" data-value="[Number of masks]: Lmc">
+                        <span class="variable-text-block-span-0">MODE 1:&nbsp;</span>[Number of masks]:&nbsp;<span
+                            class="variable-text-block-span-2">Lmc</span>
+                        <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                Number of masks:&nbsp;<span class="variable-text-block-span-2">3</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="variable-example-block" data-value="[Number of masks]: Lmс(prop, m2, mask3)">
+                        <span class="variable-text-block-span-0">MODE 3:&nbsp;</span>[Number of masks]:&nbsp;<span
+                            class="variable-text-block-span-2">Lmс(prop, m2, mask 3)</span>
+                        <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-example-block-result">
+                        <div class="aeUiElementsLayerBlock">
+                            <div class="aeUiElementsLayerLabel"></div>
+                            <div class="aeUiElementsLayerShapeIcon">
+                                <img src="icons/layer-star.svg" />
+                            </div>
+                            <div class="aeUiElementsLayerName">
+                                Number of masks: <span class="variable-text-block-span-2">3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- var Txt -->
+                <div class="content-section" data-source="Txt">
+                    <div class="variable-name-block" data-value="Txt"> <span
+                            class="variable-text-block-span-1">Txt&nbsp;</span> -
+                        variable <span class="copied-text" data-i18n="textbox-copied">- Copied</span>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_1">Specifications:</div>
+                    <div class="variable-text-block" data-i18n="txtVarSection_1">Number of available modes: <span
+                            class="variable-text-block-span-1">-</span>
+                        <br>Customizing the return value: <span class="variable-text-block-span-1">-</span>
+                        <br>Customizing the separator: <span class="variable-text-block-span-1">-</span>
+                        <br>Returned data type: <span class="variable-text-block-span-1">-</span>
+                        <br>Source of data: <span class="variable-text-block-span-1">-</span>
+                        <br>
+                    </div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_2">Description:</div>
+                    <div class="variable-text-block" data-i18n="txtVarSection_2">-</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_3">Features:</div>
+                    <div class="variable-text-block" data-i18n="txtVarSection_3">-</div>
+                    <div class="variable-header-block" data-i18n="globalVarRightBlock_4">Video examples with results:
+                    </div>
+                    <div class="videoblock" id="video1">
+                        <div class="video-container" id="videoContainer">
+                            <video id="video" width="100%" height="100%" src="media/video/var_examples/var_c.webm"
+                                type="video/webm"></video>
+                            <img src="icons/play.svg" id="playIcon" class="control-icon" alt="Play">
+                            <img src="icons/pause.svg" id="pauseIcon" class="control-icon" alt="Pause">
+                            <div class="video-overlay"></div>
+                        </div>
+                        <div class="video-info" id="videoInfo">
+                            <p id="currentTime">00:00:00</p>
+                            <p id="titleVideo" data-i18n="varTxt_videoExample_1">| Demonstration of the Txt variable
                             </p>
                             <img src="icons/scale-up.svg" class="scale-up-icon" alt="Scale Up">
                         </div>
@@ -3816,7 +3894,7 @@
                         </div>
                         <div class="video-info" id="videoInfo">
                             <p id="currentTime">00:00:00</p>
-                            <p id="titleVideo" data-i18n="varmFext_videoExample_1">-</p>
+                            <p id="titleVideo" data-i18n="varFext_videoExample_1">-</p>
                             <img src="icons/scale-up.svg" class="scale-up-icon" alt="Scale Up">
                         </div>
                         <div id="progressBarContainer">
@@ -3892,7 +3970,7 @@
                     <img class="default-icon" src="icons/icon_github.svg" alt="GitHub">
                     <img class="hover-icon" src="icons/icon_browser.svg" alt="Browser Icon">
                 </div>
-                <div class="icon-wrapper clickable-icon" data-url="https://www.reddit.com/r/DoubleDTeam/">
+                <div class="icon-wrapper clickable-icon" data-url="https://www.reddit.com/user/nitrofix/">
                     <img class="default-icon" src="icons/icon_reddit.svg" alt="Reddit">
                     <img class="hover-icon" src="icons/icon_browser.svg" alt="Browser Icon">
                 </div>
@@ -3902,10 +3980,13 @@
                 </div>
             </div>
         </div>
-        <div id="active-indicator" class="active-indicator"></div>
-        <script src="CSInterface.js"></script>
-        <script src="index.js"></script>
-        <script src="js/videoBlock.js"></script>
+    </div>
+
+    <div id="active-indicator" class="active-indicator"></div>
+
+    <script src="CSInterface.js"></script>
+    <script src="index.js"></script>
+    <script src="js/videoBlock.js"></script>
 </body>
 
 </html>
