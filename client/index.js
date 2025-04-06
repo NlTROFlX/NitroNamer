@@ -305,7 +305,6 @@ function updateActiveIndicator(element, isSearchInput = false) {
     }
     var leftBlock = document.querySelector(".left");
     var top, left, lineHeight;
-
     if (isSearchInput) {
         var rect = element.getBoundingClientRect();
         var parentRect = element.parentElement.getBoundingClientRect();
@@ -321,7 +320,6 @@ function updateActiveIndicator(element, isSearchInput = false) {
             top = offsetTop - leftBlock.scrollTop;
             left = indicator.getBoundingClientRect().left - indicator.parentElement.getBoundingClientRect().left;
             indicator.textContent = subItems.length;
-
             if (top > 0 && top < leftBlock.clientHeight) {
                 lineHeight = top;
             } else {
@@ -331,12 +329,21 @@ function updateActiveIndicator(element, isSearchInput = false) {
             return;
         }
     }
-
     top = top - 3;
     indicatorLine.style.height = Math.max(0, lineHeight) + "px";
     indicatorLine.style.left = left + indicator.offsetWidth / 2 + "px";
     top = top + 40;
     indicator.style.top = top + "px";
+
+    var leftTop = leftBlock.getBoundingClientRect().top;
+    var leftBottom = leftTop + leftBlock.clientHeight;
+    var indicatorTop = parseFloat(indicator.style.top);
+    var indicatorHeight = indicator.offsetHeight;
+    if (indicatorTop + indicatorHeight > leftTop && indicatorTop < leftBottom) {
+        indicator.style.opacity = "1"; // Показать индикатор
+    } else {
+        indicator.style.opacity = "0"; // Скрыть индикатор
+    }
 }
 
 function initializeLanguageSelector() {
@@ -831,11 +838,16 @@ document.addEventListener("mousemove", (function (e) {
 
     var leftBlock = document.querySelector(".left");
     leftBlock.addEventListener("scroll", function() {
-        var activeSpoiler = document.querySelector(".spoiler.active");
-        if (activeSpoiler) {
-            updateActiveIndicator(activeSpoiler);
+        if (searchInput === document.activeElement) {
+            updateActiveIndicator(searchInput, true); // Обновить для поискового поля
         } else {
-            document.getElementById("indicator-line").style.height = "0px";
+            var activeSpoiler = document.querySelector(".spoiler.active");
+            if (activeSpoiler) {
+                updateActiveIndicator(activeSpoiler); // Обновить для спойлера
+            } else {
+                document.getElementById("indicator-line").style.height = "0px";
+                document.getElementById("active-indicator").style.opacity = "0"; // Скрыть, если ничего не активно
+            }
         }
     });
 
