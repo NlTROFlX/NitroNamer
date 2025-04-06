@@ -240,12 +240,12 @@ body, html {
 .left {
   border-right: 1px solid #313131;
 }
-.left::-webkit-scrollbar {
-  width: 0;
+.left {
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
-.left::-webkit-scrollbar-track {
+.left::-webkit-scrollbar {
   display: none;
-  opacity: 0;
 }
 .left::-webkit-scrollbar-thumb {
   display: none;
