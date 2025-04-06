@@ -56,7 +56,7 @@
     "homePage_listChangeLog_12": "- Переменные <span class=\"variable-text-block-span-1\">E</span>, <span class=\"variable-text-block-span-1\">An</span>, <span class=\"variable-text-block-span-1\">Lexp</span> с режимом работы фильтрации по заданному эффекту/свойству, теперь корректно обрабатывает ситуации когда в композиции есть слои с этим эффектом/свойством или их отсутствием (смотри раздел изменения, первый пункт)",
     "homePage_listChangeLog_13": "- Теперь переменные <span class=\"variable-text-block-span-1\">Lmn</span>, <span class=\"variable-text-block-span-1\">Lmc</span> корректно распознают имена масок и режимы работы их работы (смотри раздел изменения, третий пункт)",
 
-    "leftBlock_searchSpoilerInput": "Начните вводить текст здесь для поиска...",
+    "leftBlock_searchSpoilerInput": "Поиск переменных",
     "leftBlock_spoilerSoruce_1": "Исходный объект",
     "leftBlock_spoilerSoruce_2": "[1] F - Кадровая частота.",
     "leftBlock_spoilerSoruce_3": "[2] Fext - Тип расширения.",

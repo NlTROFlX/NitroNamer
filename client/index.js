@@ -15,12 +15,17 @@ function loadTranslations(e) {
 }
 
 function applyTranslations() {
-    document.querySelectorAll("[data-i18n]").forEach((function (e) {
-        var t = e.getAttribute("data-i18n"),
-            n = translations[t];
-        n || (n = defaultTranslations[t] || e.textContent), e.innerHTML = n
-    }))
+    document.querySelectorAll("[data-i18n]").forEach(function(elem) {
+        var key = elem.getAttribute("data-i18n");
+        var translated = translations[key] || defaultTranslations[key] || elem.textContent;
+        if (elem.tagName.toLowerCase() === "input" && elem.hasAttribute("placeholder")) {
+            elem.setAttribute("placeholder", translated);
+        } else {
+            elem.innerHTML = translated;
+        }
+    });
 }
+
 defaultTranslations = {};
 
 function loadDefaultTranslations(e) {
