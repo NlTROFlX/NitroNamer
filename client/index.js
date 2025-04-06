@@ -288,34 +288,55 @@ function checkExportRequirements() {
     });
 }
 
-function updateActiveIndicator(element, isSearchInput = !1) {
-	var t = document.getElementById("active-indicator"),
-		n = document.getElementById("indicator-line");
-	if (!t || !n) {
-		console.error("Не удалось найти active-indicator или indicator-line.");
-		return
-	}
-	var l, c;
-	if (isSearchInput) {
-		var rect = element.getBoundingClientRect(),
-			parentRect = element.parentElement.getBoundingClientRect();
-		l = rect.top - parentRect.top + (rect.height / 2) - (t.offsetHeight / 2);
-		c = t.getBoundingClientRect().left - t.parentElement.getBoundingClientRect().left;
-		t.innerHTML = '<img src="icons/icon-search.svg" alt="Search" style="width: 12px; height: 12px;">'
-	} else {
-		var o = element.querySelector(".spoiler-title-container"),
-			a = element.querySelectorAll(".spoiler-content p");
-		if (o) {
-			l = element.offsetTop + o.offsetTop + o.offsetHeight / 2 - t.offsetHeight / 2;
-			c = t.getBoundingClientRect().left - t.parentElement.getBoundingClientRect().left;
-			t.textContent = a.length
-		} else {
-			return
-		}
-	}
-	t.style.top = l + "px";
-	n.style.height = l + "px";
-	n.style.left = c + t.offsetWidth / 2 + "px"
+function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}
+
+function updateActiveIndicator(element, isSearchInput = false) {
+    var indicator = document.getElementById("active-indicator");
+    var indicatorLine = document.getElementById("indicator-line");
+    if (!indicator || !indicatorLine) {
+        console.error("Не удалось найти active-indicator или indicator-line.");
+        return;
+    }
+    var leftBlock = document.querySelector(".left");
+    var top, left, lineHeight;
+
+    if (isSearchInput) {
+        var rect = element.getBoundingClientRect();
+        var parentRect = element.parentElement.getBoundingClientRect();
+        top = rect.top - parentRect.top + (rect.height / 2) - (indicator.offsetHeight / 2);
+        left = indicator.getBoundingClientRect().left - indicator.parentElement.getBoundingClientRect().left;
+        indicator.innerHTML = '<img src="icons/icon-search.svg" alt="Search" style="width: 12px; height: 12px;">';
+        lineHeight = top;
+    } else {
+        var titleContainer = element.querySelector(".spoiler-title-container");
+        var subItems = element.querySelectorAll(".spoiler-content p");
+        if (titleContainer) {
+            var offsetTop = element.offsetTop + titleContainer.offsetTop + titleContainer.offsetHeight / 2 - indicator.offsetHeight / 2;
+            top = offsetTop - leftBlock.scrollTop;
+            left = indicator.getBoundingClientRect().left - indicator.parentElement.getBoundingClientRect().left;
+            indicator.textContent = subItems.length;
+
+            if (top > 0 && top < leftBlock.clientHeight) {
+                lineHeight = top;
+            } else {
+                lineHeight = 0;
+            }
+        } else {
+            return;
+        }
+    }
+
+    top = top - 3;
+    indicatorLine.style.height = Math.max(0, lineHeight) + "px";
+    indicatorLine.style.left = left + indicator.offsetWidth / 2 + "px";
+    top = top + 40;
+    indicator.style.top = top + "px";
 }
 
 function initializeLanguageSelector() {
@@ -806,6 +827,16 @@ document.addEventListener("mousemove", (function (e) {
         spoiler.addEventListener("click", function() {
             toggleSpoiler(this);
         });
+    });
+
+    var leftBlock = document.querySelector(".left");
+    leftBlock.addEventListener("scroll", function() {
+        var activeSpoiler = document.querySelector(".spoiler.active");
+        if (activeSpoiler) {
+            updateActiveIndicator(activeSpoiler);
+        } else {
+            document.getElementById("indicator-line").style.height = "0px";
+        }
     });
 
     loadDefaultTranslations();
