@@ -2657,11 +2657,24 @@ function buildUI(thisObj) {
 		var result = template;
 		var nthEffectRegex = /e(\d+)/g;
 		var nthMaskRegex = /m(\d+)/g;
-		var regex = new RegExp(["\\[([^\\[\\]]+)\\]", "T\\(([^()]+)\\)", "it", "Df", "Ec\\(([^()\\[\\]]+?)\\)", "Ec", "E\\(\\[([^\\[\\]]+)\\]\\)", "E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "E", "An\\(\\[([^\\[\\]]+)\\]\\)", "An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "An", "Lexp\\(\\[([^\\[\\]]+)\\]\\)", "Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lexp", "D\\(([^()\\[\\]]+)\\)", "D", "Fext\\(([^()\\[\\]]+)\\)", "Fext", "Ip", "Op", "Tm", "Ar\\(([^()\\[\\]]+)\\)", "Ar", "Pn", "Lpos", "Lsc", "Lrot", "Lops", "Lpnt\\(([^()\\[\\]]+)\\)", "Lpnt", "Cd\\(([^()\\[\\]]+)\\)", "Cd", "Lmc\\(\\[([^\\[\\]]+)\\]\\)", "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmc", "Lmn\\(\\[([^\\[\\]]+)\\]\\)", "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmn", "Np\\(\\[([^\\[\\]]+)\\]\\)", "Np\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Np", "Chld\\(\\[([^\\[\\]]+)\\]\\)", "Chld\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Chld", "I\\(([^()\\[\\]]+)\\)", "I", "attr", "prop", "e(\\d+)", "m(\\d+)", "W\\(([1-9])\\)", "W", "H\\(([1-9])\\)", "H", "R\\(([1-9])\\)", "R", "Txt", "[A-Z]", "i", "S", "@cycle\\(\\s*(\\d+)\\s*,\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)", "cycle", "@replace\\(\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)"].join("|"), "g");
+		var regex = new RegExp(["\\[([^\\[\\]]+)\\]", "T\\(([^()]+)\\)", "it", "Df", "Ec\\(([^()\\[\\]]+?)\\)", "Ec", "E\\(\\[([^\\[\\]]+)\\]\\)", "E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "E", "An\\(\\[([^\\[\\]]+)\\]\\)", "An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "An", "Lexp\\(\\[([^\\[\\]]+)\\]\\)", "Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lexp", "D\\(([^()\\[\\]]+)\\)", "D", "Fext\\(([^()\\[\\]]+)\\)", "Fext", "Ip", "Op", "Tm", "Ar\\(([^()\\[\\]]+)\\)", "Ar", "Pn", "Lpos", "Lsc", "Lrot", "Lops", "Lpnt\\(([^()\\[\\]]+)\\)", "Lpnt", "Cd\\(([^()\\[\\]]+)\\)", "Cd", "Lmc\\(\\[([^\\[\\]]+)\\]\\)", "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmc", "Lmn\\(\\[([^\\[\\]]+)\\]\\)", "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmn", "Np\\(\\[([^\\[\\]]+)\\]\\)", "Np\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Np", "Chld\\(\\[([^\\[\\]]+)\\]\\)", "Chld\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Chld", "I(?:\\(([^()\\[\\]]+(?:\\s*,\\s*r)?)\\))?", "attr", "prop", "e(\\d+)", "m(\\d+)", "W\\(([1-9])\\)", "W", "H\\(([1-9])\\)", "H", "R\\(([1-9])\\)", "R", "Txt", "[A-Z]", "i", "S", "@cycle\\(\\s*(\\d+)\\s*,\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)", "cycle", "@replace\\(\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)"].join("|"), "g");
 		var usedVariables = {};
 		var currentLocalIndex = localIndex;
-		result = result.replace(regex, function (match, group, tFilter, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, chldSeparatorOnly, chldN, chldSeparator, customI, nthEffectIndex, nthMaskIndex, cycleCount, cycleA, cycleB, replaceFindStr, replaceWithStr) {
+		result = result.replace(regex, function (match, group, tFilter, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, chldSeparatorOnly, chldN, chldSeparator, customI, nthEffectIndex, nthMaskIndex, cycleCount, cycleA, cycleB, replaceFindStr, replaceWithStr) {			
+			var args = Array.prototype.slice.call(arguments);
+
+			var customI;
+			for (var idx = 1; idx < args.length; idx++){
+				var candidate = args[idx];
+				if (typeof candidate === "string" && candidate.match(/^\d+(?:\s*,\s*r)?$/)) {
+					customI = candidate;
+					$.writeln("DEBUG: Найден потенциальный customI на позиции " + idx + ": " + customI);
+					break;
+				}
+			}
+
 			var value;
+
 			if (/^W\(([1-9])\)$/.test(match)) {
 				var decimalsW = parseInt(match.match(/^W\(([1-9])\)$/)[1], 10);
 				if (typeof variables.W === "number") {
@@ -2932,27 +2945,33 @@ function buildUI(thisObj) {
 			} else if (match === "Chld") {
 				value = getChildLayerNames(layer, null, null);
 			} else if (customI !== undefined) {
+				if (typeof customI !== "string") {
+					customI = customI.toString();
+				}
 				var uniqueKey = "I(" + customI + ")";
 				var parts = customI.split(",");
 				var offset = 0;
-				var isReverse = !1;
+				var isReverse = false;
 				for (var p = 0; p < parts.length; p++) {
 					var segment = parts[p].trim();
 					if (segment === "r") {
-						isReverse = !0
+						isReverse = true;
 					} else {
 						var parsedInt = parseInt(segment, 10);
 						if (!isNaN(parsedInt)) {
-							offset = parsedInt
+							offset = parsedInt;
 						}
 					}
 				}
+				
 				if (usedVariables.hasOwnProperty(uniqueKey)) {
-					return usedVariables[uniqueKey]
+					return usedVariables[uniqueKey];
 				}
+				
 				var currentI = variables.i;
 				var totalLayers = variables.totalLayers || 1;
 				var isSelectedMode = (typeof rdoOnlySelected !== "undefined") && rdoOnlySelected.value;
+				
 				var value;
 				if (isReverse) {
 					if (offset !== 0) {
@@ -2960,34 +2979,34 @@ function buildUI(thisObj) {
 							var selIndex = getIndexInSelection(layer);
 							var selCount = layer.containingComp.selectedLayers.length;
 							var step = (selCount - selIndex);
-							value = offset - step
+							value = offset - step;
 						} else {
 							var stepGlobal = (totalLayers - currentI);
-							value = offset - stepGlobal
+							value = offset - stepGlobal;
 						}
 					} else {
 						if (isSelectedMode) {
 							var selIndexZero = getIndexInSelection(layer);
 							var selCountZero = layer.containingComp.selectedLayers.length;
 							var stepZero = (selCountZero - selIndexZero);
-							value = 1 + (stepZero * 0)
+							value = 1 + (stepZero * 0);
 						} else {
-							value = (totalLayers - currentI + 1)
+							value = (totalLayers - currentI + 1);
 						}
 					}
 				} else {
 					if (!isPreview) {
 						if (!incrementValues[uniqueKey]) {
-							incrementValues[uniqueKey] = offset || 1
+							incrementValues[uniqueKey] = offset || 1;
 						}
-						value = incrementValues[uniqueKey]++
+						value = incrementValues[uniqueKey]++;
 					} else {
 						var previewIndex = getPreviewLocalIndex(layer);
-						value = (offset || 1) + (previewIndex - 1)
+						value = (offset || 1) + (previewIndex - 1);
 					}
 				}
 				usedVariables[uniqueKey] = value;
-				return value
+				return value;
 			} else if (match === 'I') {
 				value = currentLocalIndex
 			} else if(match === 'Txt'){
