@@ -5,12 +5,12 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "Txt",
+        "template": "I(10)",
         "briefly": false,
         "brieflyType": 0,
         "modeIndex": 4,
         "modeActive": false,
-        "selectedPresetTemplate": "[TAn] | T_S:W | [EEc @cycle(a, b, '1', '2')]"
+        "selectedPresetTemplate": ""
     },
     "nameApply": {
         "shapeLayer": true,

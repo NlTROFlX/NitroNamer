@@ -1562,11 +1562,11 @@ function buildUI(thisObj) {
 				}
 			} else {
 				if (!isCompact) {
-					txtOriginal.text = "No composition selected (or empty).";
-					txtRenamed.text = "No composition selected (or empty)."
+					txtOriginal.text = "Timeline is not selected or is empty.";
+					txtRenamed.text = "Timeline is not selected or is empty."
 				}
 				if (txtRenamed) {
-					txtRenamed.text = "No composition selected (or empty)."
+					txtRenamed.text = "Timeline is not selected or is empty."
 				}
 			}
 		} else {
@@ -2668,7 +2668,6 @@ function buildUI(thisObj) {
 				var candidate = args[idx];
 				if (typeof candidate === "string" && candidate.match(/^\d+(?:\s*,\s*r)?$/)) {
 					customI = candidate;
-					$.writeln("DEBUG: Найден потенциальный customI на позиции " + idx + ": " + customI);
 					break;
 				}
 			}
@@ -3188,10 +3187,10 @@ function buildUI(thisObj) {
 				}
 				app.endUndoGroup();
 			} else {
-				alert("В активной композиции нет слоёв.", scriptMessageHead_1);
+				alert("Timeline is not selected or is empty.", scriptMessageHead_1);
 			}
 		} else {
-			alert("В активной композиции нет слоёв.", scriptMessageHead_1);
+			alert("Timeline is not selected or is empty.", scriptMessageHead_1);
 		}
 	}
 
