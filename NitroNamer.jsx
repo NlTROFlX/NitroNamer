@@ -2773,18 +2773,12 @@ function buildUI(thisObj) {
 				value = getMaskCount(layer, settings, lmcFilters, lmcSeparator);
 			}
 			if (lmnFilters !== undefined) {
-				lmnFilters = lmnFilters.replace(/m(\d+)/g, function (fullMatch, number) {
+				lmnFilters = lmnFilters.replace(/m(\d+)/g, function(fullMatch, number) {
 					var maskNumber = parseInt(number, 10);
 					return getNthMaskName(layer, maskNumber, settings);
 				});
 				lmnFilters = lmnFilters.replace(/prop/g, variables.prop);
 				value = getMaskNames(layer, settings, lmnFilters, lmnSeparator);
-			}
-			if (lmnSeparatorOnly !== undefined) {
-				lmnSeparatorOnly = lmnSeparatorOnly.replace(nthMaskRegex, function (fullMatch, number) {
-					var maskNumber = parseInt(number, 10);
-					return getNthMaskName(layer, maskNumber, settings)
-				})
 			}
 			if (lmcSeparatorOnly !== undefined) {
 				lmcSeparatorOnly = lmcSeparatorOnly.replace(nthMaskRegex, function (fullMatch, number) {
@@ -2899,18 +2893,18 @@ function buildUI(thisObj) {
 				value = getCurrentDate(dateFormat)
 			} else if (match === 'Cd') {
 				value = getCurrentDate()
-			} else if (lmcSeparatorOnly !== undefined) {
-				value = getMaskCount(layer, settings, lmcSeparatorOnly, null)
+			} if (lmcSeparatorOnly !== undefined) {
+				value = getMaskCount(layer, settings, lmcSeparatorOnly, null);
 			} else if (lmcFilters !== undefined) {
-				value = getMaskCount(layer, settings, lmcFilters, lmcSeparator)
+				value = getMaskCount(layer, settings, lmcFilters, lmcSeparator);
 			} else if (match === 'Lmc') {
-				value = getMaskCount(layer, settings)
+				value = getMaskCount(layer, settings);
 			} else if (lmnSeparatorOnly !== undefined) {
-				value = getMaskNames(layer, settings, lmnSeparatorOnly, null)
+				value = getMaskNames(layer, settings, null, lmnSeparatorOnly);
 			} else if (lmnFilters !== undefined) {
-				value = getMaskNames(layer, settings, lmnFilters, lmnSeparator)
+				value = getMaskNames(layer, settings, lmnFilters, lmnSeparator);
 			} else if (match === 'Lmn') {
-				value = getMaskNames(layer, settings)
+				value = getMaskNames(layer, settings);
 			} else if (chldSeparatorOnly !== undefined) {
 				value = getChildLayerNames(layer, null, chldSeparatorOnly);
 			} else if (chldN !== undefined) {
