@@ -1621,6 +1621,7 @@ function buildUI(thisObj) {
 		var variables = {
 			"T": getLayerType(layer),
 			"i": layer.index,
+			"it": getTypeIndexInComp(layer),
 			"totalLayers": comp ? comp.numLayers : 1,
 			"O": layer.name,
 			"E": getEffectNames(layer, settings),
@@ -1655,6 +1656,7 @@ function buildUI(thisObj) {
 			"prop": getSelectedPropertyGroupNamesForLayer(layer, getSelectedPropertyPaths()).length > 0 ? getSelectedPropertyGroupNamesForLayer(layer, getSelectedPropertyPaths()).join(", ") : "Property not selected",
 			"Np": getNestedPrecompNames(layer, settings)
 		};
+
 		if (briefly && !isNaN(parseFloat(variables.F))) {
 			variables.F = parseFloat(variables.F).toFixed(2)
 		}
@@ -2806,12 +2808,8 @@ function buildUI(thisObj) {
 			}
 			if (group !== undefined) {
 				return group
-			} else if (match === 'it') {
-				if (variables.hasOwnProperty('it')) {
-					value = variables.it
-				} else {
-					value = getTypeIndexInComp(layer)
-				}
+			} else if (match === "it") {
+				return (variables.hasOwnProperty("it") && variables.it !== "") ? variables.it : getTypeIndexInComp(layer);
 			} else if (tFilter !== undefined) {
 				var layerType = variables.T;
 				value = filterLayerType(layerType, tFilter);
