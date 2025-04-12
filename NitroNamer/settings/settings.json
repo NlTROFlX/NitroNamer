@@ -1,16 +1,24 @@
 {
     "userPresets": {
-        
+        "preset_1": {
+            "allLayers": true,
+            "template": "I | I(r) | I(1,r) | I(10) | I(10, r)",
+            "briefly": false,
+            "brieflyType": 0,
+            "creationDate": 1744483742296,
+            "usageFrequency": 2,
+            "favoritesTemplate": false
+        }
     },
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "T.it",
+        "template": "I | I(r) | I(1,r) | I(10) | I(10, r)",
         "briefly": false,
         "brieflyType": 0,
         "modeIndex": 4,
         "modeActive": false,
-        "selectedPresetTemplate": ""
+        "selectedPresetTemplate": "I | I(r) | I(1,r) | I(10) | I(10, r)"
     },
     "nameApply": {
         "shapeLayer": true,

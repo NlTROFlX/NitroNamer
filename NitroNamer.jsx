@@ -2659,16 +2659,80 @@ function buildUI(thisObj) {
 		var result = template;
 		var nthEffectRegex = /e(\d+)/g;
 		var nthMaskRegex = /m(\d+)/g;
-		var regex = new RegExp(["\\[([^\\[\\]]+)\\]", "T\\(([^()]+)\\)", "it", "Df", "Ec\\(([^()\\[\\]]+?)\\)", "Ec", "E\\(\\[([^\\[\\]]+)\\]\\)", "E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "E", "An\\(\\[([^\\[\\]]+)\\]\\)", "An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "An", "Lexp\\(\\[([^\\[\\]]+)\\]\\)", "Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lexp", "D\\(([^()\\[\\]]+)\\)", "D", "Fext\\(([^()\\[\\]]+)\\)", "Fext", "Ip", "Op", "Tm", "Ar\\(([^()\\[\\]]+)\\)", "Ar", "Pn", "Lpos", "Lsc", "Lrot", "Lops", "Lpnt\\(([^()\\[\\]]+)\\)", "Lpnt", "Cd\\(([^()\\[\\]]+)\\)", "Cd", "Lmc\\(\\[([^\\[\\]]+)\\]\\)", "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmc", "Lmn\\(\\[([^\\[\\]]+)\\]\\)", "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmn", "Np\\(\\[([^\\[\\]]+)\\]\\)", "Np\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Np", "Chld\\(\\[([^\\[\\]]+)\\]\\)", "Chld\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Chld", "I(?:\\(([^()\\[\\]]+(?:\\s*,\\s*r)?)\\))?", "attr", "prop", "e(\\d+)", "m(\\d+)", "W\\(([1-9])\\)", "W", "H\\(([1-9])\\)", "H", "R\\(([1-9])\\)", "R", "Txt", "[A-Z]", "i", "S", "@cycle\\(\\s*(\\d+)\\s*,\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)", "cycle", "@replace\\(\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)"].join("|"), "g");
+		var regex = new RegExp([
+			"\\[([^\\[\\]]+)\\]",
+			"T\\(([^()]+)\\)",
+			"it",
+			"Df",
+			"Ec\\(([^()\\[\\]]+?)\\)",
+			"Ec",
+			"E\\(\\[([^\\[\\]]+)\\]\\)",
+			"E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+			"E",
+			"An\\(\\[([^\\[\\]]+)\\]\\)",
+			"An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+			"An",
+			"Lexp\\(\\[([^\\[\\]]+)\\]\\)",
+			"Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+			"Lexp",
+			"D\\(([^()\\[\\]]+)\\)",
+			"D",
+			"Fext\\(([^()\\[\\]]+)\\)",
+			"Fext",
+			"Ip",
+			"Op",
+			"Tm",
+			"Ar\\(([^()\\[\\]]+)\\)",
+			"Ar",
+			"Pn",
+			"Lpos",
+			"Lsc",
+			"Lrot",
+			"Lops",
+			"Lpnt\\(([^()\\[\\]]+)\\)",
+			"Lpnt",
+			"Cd\\(([^()\\[\\]]+)\\)",
+			"Cd",
+			"Lmc\\(\\[([^\\[\\]]+)\\]\\)",
+			"Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+			"Lmc",
+			"Lmn\\(\\[([^\\[\\]]+)\\]\\)",
+			"Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+			"Lmn",
+			"Np\\(\\[([^\\[\\]]+)\\]\\)",
+			"Np\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+			"Np",
+			"Chld\\(\\[([^\\[\\]]+)\\]\\)",
+			"Chld\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+			"Chld",
+			"I\\(([^()\\[\\]]+(?:\\s*,\\s*r)?)\\)|I",  // <-- заменили эту строку
+			"attr",
+			"prop",
+			"e(\\d+)",
+			"m(\\d+)",
+			"W\\(([1-9])\\)",
+			"W",
+			"H\\(([1-9])\\)",
+			"H",
+			"R\\(([1-9])\\)",
+			"R",
+			"Txt",
+			"[A-Z]",
+			"i",
+			"S",
+			"@cycle\\(\\s*(\\d+)\\s*,\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)",
+			"cycle",
+			"@replace\\(\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)"
+		].join("|"), "g");		
 		var usedVariables = {};
 		var currentLocalIndex = localIndex;
 		result = result.replace(regex, function (match, group, tFilter, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, chldSeparatorOnly, chldN, chldSeparator, customI, nthEffectIndex, nthMaskIndex, cycleCount, cycleA, cycleB, replaceFindStr, replaceWithStr) {			
 			var args = Array.prototype.slice.call(arguments);
 
 			var customI;
-			for (var idx = 1; idx < args.length; idx++){
+			for (var idx = 1; idx < args.length; idx++) {
 				var candidate = args[idx];
-				if (typeof candidate === "string" && candidate.match(/^\d+(?:\s*,\s*r)?$/)) {
+				if (typeof candidate === "string" && candidate.match(/^(?:r|\d+(?:\s*,\s*r)?)$/)) {
 					customI = candidate;
 					break;
 				}
