@@ -1902,23 +1902,23 @@ function buildUI(thisObj) {
 
 	function getResolution(layer, settings) {
 		var layerType = getLayerType(layer);
+	
 		if (layerType === "Null" || layerType === "Camera" || layerType === "Light" || layerType === "Audio") {
 			return settings && settings.R ? (settings.R.active ? settings.R.customValue : settings.R.defaultValue) : "NoResolution";
 		}
-		var width = null, height = null;
-		if (layer.source && layer.source.width && layer.source.height) {
-			width = layer.source.width;
-			height = layer.source.height;
-		} else if (typeof layer.sourceRectAtTime === "function") {
-			var rect = layer.sourceRectAtTime(layer.inPoint, false);
-			width = rect.width;
-			height = rect.height;
+	
+		var wVal = getWidth(layer, settings);
+		var hVal = getHeight(layer, settings);
+	
+		var numW = parseFloat(wVal);
+		var numH = parseFloat(hVal);
+	
+		if (!isNaN(numW) && !isNaN(numH) && numW > 0 && numH > 0) {
+			return Math.round(numW).toString() + "*" + Math.round(numH).toString();
 		}
-		if (width !== null && height !== null) {
-			return width + "*" + height;
-		}
+	
 		return settings && settings.R ? (settings.R.active ? settings.R.customValue : settings.R.defaultValue) : "NoResolution";
-	}	
+	}
 
 	function getDuration(layer) {
 		var duration;
@@ -2780,15 +2780,9 @@ function buildUI(thisObj) {
 					return wVal + "*" + hVal;
 				}
 			}
-			if (match === "R") {
-				var wVal = getWidth(layer, settings);
-				var hVal = getHeight(layer, settings);
-				if (typeof wVal === "number" && typeof hVal === "number") {
-					return Math.round(wVal).toString() + "*" + Math.round(hVal).toString();
-				} else {
-					return wVal + "*" + hVal;
-				}
-			}		
+			if(match === "R"){
+				return getResolution(layer, settings);
+			}
 			if (anSeparatorOnly !== undefined) {
 				anSeparatorOnly = anSeparatorOnly.replace(/attr/g, variables.attr)
 			}

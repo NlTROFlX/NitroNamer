@@ -6,14 +6,14 @@
             "briefly": false,
             "brieflyType": 0,
             "creationDate": 1744483742296,
-            "usageFrequency": 2,
+            "usageFrequency": 3,
             "favoritesTemplate": false
         }
     },
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "I | I(r) | I(1,r) | I(10) | I(10, r)",
+        "template": "R(3) | R",
         "briefly": false,
         "brieflyType": 0,
         "modeIndex": 4,

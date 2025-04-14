@@ -52,7 +52,7 @@
     "R": {
         "defaultValue": "NoResolution",
         "customValue": "Custom{R}",
-        "active": false
+        "active": true
     },
     "Txt": {
         "defaultValue": "NoText",
