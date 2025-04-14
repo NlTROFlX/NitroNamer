@@ -2770,16 +2770,16 @@ function buildUI(thisObj) {
 					return variables.H;
 				}
 			}
-			if (/^R\(([1-9])\)$/.test(match)) {
+			if(/^R\(([1-9])\)$/.test(match)){
 				var decimalsR = parseInt(match.match(/^R\(([1-9])\)$/)[1], 10);
 				var wVal = getWidth(layer, settings);
 				var hVal = getHeight(layer, settings);
 				if (typeof wVal === "number" && typeof hVal === "number") {
 					return wVal.toFixed(decimalsR) + "*" + hVal.toFixed(decimalsR);
 				} else {
-					return wVal + "*" + hVal;
+					return getResolution(layer, settings);
 				}
-			}
+			}			
 			if(match === "R"){
 				return getResolution(layer, settings);
 			}
