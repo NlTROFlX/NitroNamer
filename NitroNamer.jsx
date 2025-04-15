@@ -1005,6 +1005,11 @@ function buildUI(thisObj) {
 		var variablesFile = new File(scriptFolderPath + "/variables.json");
 		if (!variablesFile.exists) {
 			var initialData = {
+				"Txt": {
+					"defaultValue": "NoText",
+					"customValue": "Custom{Txt}",
+					"active": !1
+				},
 				"An": {
 					"defaultValue": "NoAnimations",
 					"customValue": "Custom{An}",
@@ -1586,6 +1591,7 @@ function buildUI(thisObj) {
 			}
 		}
 		var variables = {
+			"Txt": getTextContent(layer, settings),
 			"T": getLayerType(layer),
 			"i": layer.index,
 			"totalLayers": comp ? comp.numLayers : 1,
@@ -2660,6 +2666,7 @@ function buildUI(thisObj) {
 			"R\\(([1-9])\\)",
 			"Np\\(\\[([^\\[\\]]+?)\\]\\)",
     		"Np",
+			"Txt",
 			"[A-Z]",
 			"i",
 			"S",
@@ -2795,6 +2802,8 @@ function buildUI(thisObj) {
 			}
 			if (group !== undefined) {
 				return group
+			} else if(match === 'Txt'){
+				value = getTextContent(layer, settings);
 			} else if (match.indexOf("Np([") === 0) {
 				var customSep = match.slice(4, -2);
 				value = getNestedPrecompNames(layer, settings, customSep);
@@ -3221,7 +3230,20 @@ function buildUI(thisObj) {
 			return settings.Np.active ? settings.Np.customValue : settings.Np.defaultValue;
 		}
 		return "NoPreComps";
-	}	
+	}
+
+	function getTextContent(layer, settings) {
+		if (layer.property("Source Text")) {
+			var textProp = layer.property("Source Text");
+			if (typeof textProp.value === "object" && textProp.value.hasOwnProperty("text")) {
+				return textProp.value.text;
+			} else {
+				return textProp.value;
+			}
+		} else {
+			return (settings && settings.Txt) ? (settings.Txt.active ? settings.Txt.customValue : settings.Txt.defaultValue) : "NoText";
+		}
+	}
 	
 	checkAndCreateSettingsFile();
 	checkAndCreateVariablesFile();
