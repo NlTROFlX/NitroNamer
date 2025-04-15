@@ -1887,23 +1887,46 @@ function buildUI(thisObj) {
 	}
 
 	function getWidth(layer, settings) {
-		if (layer.nullLayer || layer.adjustmentLayer) {
-			return settings && settings.W ? (settings.W.active ? settings.W.customValue : settings.W.defaultValue) : "NoWidth"
+		if (layer.nullLayer) {
+			return settings && settings.W ? (settings.W.active ? settings.W.customValue : settings.W.defaultValue) : "NoWidth";
+		}
+		if (layer.adjustmentLayer) {
+			var comp = layer.containingComp;
+			if (comp) {
+				return comp.width;
+			} else {
+				return settings && settings.W ? (settings.W.active ? settings.W.customValue : settings.W.defaultValue) : "NoWidth";
+			}
+		}
+		if (layer instanceof TextLayer || layer instanceof ShapeLayer) {
+			try {
+				var rect = layer.sourceRectAtTime(layer.inPoint, false);
+				return rect.width;
+			} catch (e) {
+			}
 		}
 		if (layer.source && layer.source.width) {
-			return layer.source.width.toString()
+			return layer.source.width;
 		}
-		return settings && settings.W ? (settings.W.active ? settings.W.customValue : settings.W.defaultValue) : "NoWidth"
-	}
+		return settings && settings.W ? (settings.W.active ? settings.W.customValue : settings.W.defaultValue) : "NoWidth";
+	}	
 
 	function getHeight(layer, settings) {
-		if (layer.nullLayer || layer.adjustmentLayer) {
-			return settings && settings.H ? (settings.H.active ? settings.H.customValue : settings.H.defaultValue) : "NoHeight"
+		if (layer.nullLayer) {
+			return settings && settings.H ? (settings.H.active ? settings.H.customValue : settings.H.defaultValue) : "NoHeight";
+		}
+		if (layer instanceof TextLayer || layer instanceof ShapeLayer || layer.adjustmentLayer) {
+			try {
+				var rect = layer.sourceRectAtTime(layer.inPoint, false);
+				return rect.height;
+			} catch (e) {
+
+			}
 		}
 		if (layer.source && layer.source.height) {
-			return layer.source.height.toString()
+			return layer.source.height;
 		}
-		return settings && settings.H ? (settings.H.active ? settings.H.customValue : settings.H.defaultValue) : "NoHeight"
+		return settings && settings.H ? (settings.H.active ? settings.H.customValue : settings.H.defaultValue) : "NoHeight";
 	}
 
 	function getLayerPosition(layer) {
@@ -2534,11 +2557,110 @@ function buildUI(thisObj) {
 		var result = template;
 		var nthEffectRegex = /e(\d+)/g;
 		var nthMaskRegex = /m(\d+)/g;
-		var regex = new RegExp(["\\[([^\\[\\]]+)\\]", "T\\(([^()]+)\\)", "it", "Df", "Ec\\(([^()\\[\\]]+?)\\)", "Ec", "E\\(\\[([^\\[\\]]+)\\]\\)", "E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "E", "An\\(\\[([^\\[\\]]+)\\]\\)", "An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "An", "Lexp\\(\\[([^\\[\\]]+)\\]\\)", "Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lexp", "D\\(([^()\\[\\]]+)\\)", "D", "Fext\\(([^()\\[\\]]+)\\)", "Fext", "Ip", "Op", "Tm", "Ar\\(([^()\\[\\]]+)\\)", "Ar", "Pn", "Lpos", "Lsc", "Lrot", "Lops", "Lpnt\\(([^()\\[\\]]+)\\)", "Lpnt", "Cd\\(([^()\\[\\]]+)\\)", "Cd", "Lmc\\(\\[([^\\[\\]]+)\\]\\)", "Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmc", "Lmn\\(\\[([^\\[\\]]+)\\]\\)", "Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Lmn", "Chld\\(\\[([^\\[\\]]+)\\]\\)", "Chld\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)", "Chld", "I\\(([^()\\[\\]]+)\\)", "I", "attr", "prop", "e(\\d+)", "m(\\d+)", "[A-Z]", "i", "S", "W", "H", "@cycle\\(\\s*(\\d+)\\s*,\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)", "cycle", "@replace\\(\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)"].join("|"), "g");
+		var regex = new RegExp([
+			"\\[([^\\[\\]]+)\\]",
+			"T\\(([^()]+)\\)",
+			"it",
+			"Df",
+			"Ec\\(([^()\\[\\]]+?)\\)",
+			"Ec",
+			"E\\(\\[([^\\[\\]]+)\\]\\)",
+			"E\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+			"E",
+			"An\\(\\[([^\\[\\]]+)\\]\\)",
+			"An\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+			"An",
+			"Lexp\\(\\[([^\\[\\]]+)\\]\\)",
+			"Lexp\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+			"Lexp",
+			"D\\(([^()\\[\\]]+)\\)",
+			"D",
+			"Fext\\(([^()\\[\\]]+)",
+			"Fext",
+			"Ip",
+			"Op",
+			"Tm",
+			"Ar\\(([^()\\[\\]]+)",
+			"Ar",
+			"Pn",
+			"Lpos",
+			"Lsc",
+			"Lrot",
+			"Lops",
+			"Lpnt\\(([^()\\[\\]]+)",
+			"Lpnt",
+			"Cd\\(([^()\\[\\]]+)",
+			"Cd",
+			"Lmc\\(\\[([^\\[\\]]+)\\]\\)",
+			"Lmc\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+			"Lmc",
+			"Lmn\\(\\[([^\\[\\]]+)\\]\\)",
+			"Lmn\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+			"Lmn",
+			"Chld\\(\\[([^\\[\\]]+)\\]\\)",
+			"Chld\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
+			"Chld",
+			"I\\(([^()\\[\\]]+)",
+			"I",
+			"attr",
+			"prop",
+			"e(\\d+)",
+			"m(\\d+)",
+			"H\\(([1-9])\\)",
+			"H",
+			"W\\(([1-9])\\)",
+        	"W",
+			"[A-Z]",
+			"i",
+			"S",
+			"@cycle\\(\\s*(\\d+)\\s*,\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)",
+			"cycle",
+			"@replace\\(\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)"
+		].join("|"), "g");		
 		var usedVariables = {};
 		var currentLocalIndex = localIndex;
 		result = result.replace(regex, function (match, group, tFilter, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, chldSeparatorOnly, chldN, chldSeparator, customI, nthEffectIndex, nthMaskIndex, cycleCount, cycleA, cycleB, replaceFindStr, replaceWithStr) {
 			var value;
+			if (match.indexOf("H(") === 0) {
+				var m = match.match(/^H\(([1-9])\)$/);
+				if (m) {
+					var decimalDigits = parseInt(m[1], 10);
+					var hValue = getHeight(layer, settings);
+					if (!isNaN(parseFloat(hValue))) {
+						return parseFloat(hValue).toFixed(decimalDigits);
+					} else {
+						return hValue;
+					}
+				}
+			}
+			if (match === "H") {
+				var hValue = getHeight(layer, settings);
+				if (!isNaN(parseFloat(hValue))) {
+					return String(Math.round(parseFloat(hValue)));
+				} else {
+					return hValue;
+				}
+			}
+			if (match.indexOf("W(") === 0) {
+				var m = match.match(/^W\(([1-9])\)$/);
+				if (m) {
+					var decimalDigits = parseInt(m[1], 10);
+					var wValue = getWidth(layer, settings);
+					if (!isNaN(parseFloat(wValue))) {
+						return parseFloat(wValue).toFixed(decimalDigits);
+					} else {
+						return wValue;
+					}
+				}
+			}
+			if (match === "W") {
+				var wValue = getWidth(layer, settings);
+				if (!isNaN(parseFloat(wValue))) {
+					return String(Math.round(parseFloat(wValue)));
+				} else {
+					return wValue;
+				}
+			}
 			if (anSeparatorOnly !== undefined) {
 				anSeparatorOnly = anSeparatorOnly.replace(/attr/g, variables.attr)
 			}
@@ -2827,8 +2949,6 @@ function buildUI(thisObj) {
 				value = variables.S
 			} else if (match === 'W') {
 				value = variables.W
-			} else if (match === 'H') {
-				value = variables.H
 			} else {
 				value = ''
 			}

@@ -6,7 +6,7 @@
             "briefly": false,
             "brieflyType": 3,
             "creationDate": 1740663938499,
-            "usageFrequency": 2,
+            "usageFrequency": 5,
             "favoritesTemplate": false
         },
         "preset_4": {
@@ -30,7 +30,7 @@
             "template": "T.I | I(r) | I(10) | I(10,r)",
             "briefly": false,
             "brieflyType": 3,
-            "usageFrequency": 5
+            "usageFrequency": 6
         },
         "preset_1": {
             "allLayers": true,
@@ -43,7 +43,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "Fext(exr, png, ai, psd)",
+        "template": "T \\\\\\ H(1) | W(1) \\\\\\",
         "briefly": false,
         "brieflyType": 3,
         "modeIndex": 4,
