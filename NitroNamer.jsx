@@ -560,12 +560,12 @@ function buildUI(thisObj) {
 	btnRename.addEventListener("mouseout", function () {
 		updateRenameButtonIcon()
 	});
-	btnVariables.addEventListener("click", function () {
-		var scriptFilePath = File(scriptFolderPath + "/NitroNamer/scripts/NNLayerInfo.jsx");
-		if (scriptFilePath.exists) {
-			$.evalFile(scriptFilePath)
+	btnVariables.addEventListener("click", function() {
+		var commandID = app.findMenuCommandId("NitroNamer Library");
+		if (commandID !== 0) {
+			app.executeCommand(commandID);
 		} else {
-			alert("Script file not found: " + scriptFilePath.fsName, scriptMessageHead_1)
+			alert("Timeline panel not found or out of focus", scriptMessageHead_1);
 		}
 	});
 	btnCopy.addEventListener("click", function () {
@@ -579,7 +579,7 @@ function buildUI(thisObj) {
 				layer = comp.layer(1)
 			}
 			if (layer) {
-				txtTemplate.text = "(" + layer.name + ")";
+				txtTemplate.text = "[" + layer.name + "]";
 				updatePreview();
 				updateLayerCounts();
 				resetRenameButtonIcon();
@@ -2612,7 +2612,7 @@ function buildUI(thisObj) {
 			"Chld\\(\\[([^\\[\\]]+)\\]\\)",
 			"Chld\\(([^()\\[\\]]+?)(?:\\[(.*?)\\])?\\)",
 			"Chld",
-			"I\\(([^()\\[\\]]+)",
+			"I\\(([^()\\[\\]]+)\\)",
 			"I",
 			"attr",
 			"prop",
