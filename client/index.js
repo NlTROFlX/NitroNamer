@@ -15,12 +15,17 @@ function loadTranslations(e) {
 }
 
 function applyTranslations() {
-    document.querySelectorAll("[data-i18n]").forEach((function (e) {
-        var t = e.getAttribute("data-i18n"),
-            n = translations[t];
-        n || (n = defaultTranslations[t] || e.textContent), e.innerHTML = n
-    }))
+    document.querySelectorAll("[data-i18n]").forEach(function(elem) {
+        var key = elem.getAttribute("data-i18n");
+        var translated = translations[key] || defaultTranslations[key] || elem.textContent;
+        if (elem.tagName.toLowerCase() === "input" && elem.hasAttribute("placeholder")) {
+            elem.setAttribute("placeholder", translated);
+        } else {
+            elem.innerHTML = translated;
+        }
+    });
 }
+
 defaultTranslations = {};
 
 function loadDefaultTranslations(e) {
@@ -151,35 +156,34 @@ function selectSubItem(e) {
     })), e.classList.add("selected")
 }
 
-function showContent(contentId) {
-    const defaultMessage = document.getElementById("default-message");
-    if (defaultMessage) {
-        defaultMessage.style.display = "none";
-    }
-
-    if (currentContentSection) {
-        const previousSection = document.getElementById(currentContentSection);
-        if (previousSection) {
-            const videos = previousSection.getElementsByTagName("video");
-            for (let i = 0; i < videos.length; i++) {
-                videos[i].pause();
-            }
-        }
-    }
-
-    document.querySelectorAll("#content-sections .content-section").forEach(section => {
-        section.style.display = "none";
-    });
-
-    const newSection = document.getElementById(contentId);
-    if (newSection) {
-        newSection.style.display = "block";
-        currentContentSection = contentId;
-
-        if (contentId === "content-export") {
-            checkExportRequirements();
-        }
-    }
+function showContent(contentIdentifier) {
+	const defaultMessage = document.getElementById("default-message");
+	if (defaultMessage) {
+		defaultMessage.style.display = "none"
+	}
+	if (currentContentSection) {
+		const previousSection = document.getElementById(currentContentSection) || document.querySelector(`[data-source="${currentContentSection}"]`);
+		if (previousSection) {
+			const videos = previousSection.getElementsByTagName("video");
+			for (let i = 0; i < videos.length; i++) {
+				videos[i].pause()
+			}
+		}
+	}
+	document.querySelectorAll("#content-sections .content-section").forEach(section => {
+		section.style.display = "none"
+	});
+	let newSection = document.getElementById(contentIdentifier);
+	if (!newSection) {
+		newSection = document.querySelector(`#content-sections .content-section[data-source="${contentIdentifier}"]`)
+	}
+	if (newSection) {
+		newSection.style.display = "block";
+		currentContentSection = newSection.id ? newSection.id : newSection.getAttribute("data-source");
+		if (contentIdentifier === "content-export") {
+			checkExportRequirements()
+		}
+	}
 }
 
 function updateExportButtonState() {
@@ -289,15 +293,61 @@ function checkExportRequirements() {
     });
 }
 
-function updateActiveIndicator(e) {
-    var t = document.getElementById("active-indicator"),
-        n = document.getElementById("indicator-line"),
-        o = e.querySelector(".spoiler-title-container"),
-        a = e.querySelectorAll(".spoiler-content p");
-    if (o) {
-        var l = e.offsetTop + o.offsetTop + o.offsetHeight / 2 - t.offsetHeight / 2,
-            c = t.getBoundingClientRect().left - t.parentElement.getBoundingClientRect().left;
-        t.style.top = l + "px", n.style.height = l + "px", n.style.left = c + t.offsetWidth / 2 + "px", t.textContent = a.length
+function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}
+
+function updateActiveIndicator(element, isSearchInput = false) {
+    var indicator = document.getElementById("active-indicator");
+    var indicatorLine = document.getElementById("indicator-line");
+    if (!indicator || !indicatorLine) {
+        console.error("Не удалось найти active-indicator или indicator-line.");
+        return;
+    }
+    var leftBlock = document.querySelector(".left");
+    var top, left, lineHeight;
+    if (isSearchInput) {
+        var rect = element.getBoundingClientRect();
+        var parentRect = element.parentElement.getBoundingClientRect();
+        top = rect.top - parentRect.top + (rect.height / 2) - (indicator.offsetHeight / 2);
+        left = indicator.getBoundingClientRect().left - indicator.parentElement.getBoundingClientRect().left;
+        indicator.innerHTML = '<img src="icons/icon-search.svg" alt="Search" style="width: 12px; height: 12px;">';
+        lineHeight = top;
+    } else {
+        var titleContainer = element.querySelector(".spoiler-title-container");
+        var subItems = element.querySelectorAll(".spoiler-content p");
+        if (titleContainer) {
+            var offsetTop = element.offsetTop + titleContainer.offsetTop + titleContainer.offsetHeight / 2 - indicator.offsetHeight / 2;
+            top = offsetTop - leftBlock.scrollTop;
+            left = indicator.getBoundingClientRect().left - indicator.parentElement.getBoundingClientRect().left;
+            indicator.textContent = subItems.length;
+            if (top > 0 && top < leftBlock.clientHeight) {
+                lineHeight = top;
+            } else {
+                lineHeight = 0;
+            }
+        } else {
+            return;
+        }
+    }
+    top = top - 3;
+    indicatorLine.style.height = Math.max(0, lineHeight) + "px";
+    indicatorLine.style.left = left + indicator.offsetWidth / 2 + "px";
+    top = top + 40;
+    indicator.style.top = top + "px";
+
+    var leftTop = leftBlock.getBoundingClientRect().top;
+    var leftBottom = leftTop + leftBlock.clientHeight;
+    var indicatorTop = parseFloat(indicator.style.top);
+    var indicatorHeight = indicator.offsetHeight;
+    if (indicatorTop + indicatorHeight > leftTop && indicatorTop < leftBottom) {
+        indicator.style.opacity = "1"; // Показать индикатор
+    } else {
+        indicator.style.opacity = "0"; // Скрыть индикатор
     }
 }
 
@@ -411,11 +461,6 @@ function openLinkInBrowser(url) {
     const csInterface = new CSInterface();
     csInterface.openURLInDefaultBrowser(url);
 }
-
-document.addEventListener("DOMContentLoaded", function() {
-    initializeLicenseClickHandlers();
-});
-
 
 function processTranslation(message) {
 
@@ -646,6 +691,71 @@ function resetExportCheckboxes() {
     updateExportButtonState();
 }
 
+function initializeSpoilerSearch() {
+	const searchInput = document.querySelector('.spoiler-search');
+	if (!searchInput) {
+		console.error("Поле ввода с классом 'spoiler-search' не найдено.");
+		return
+	}
+	searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const spoilers = document.querySelectorAll('.spoiler');
+        spoilers.forEach(spoiler => {
+            const content = spoiler.querySelector('.spoiler-content');
+            if (content) {
+                const paragraphs = content.querySelectorAll('p');
+                let hasMatch = false;
+                paragraphs.forEach(p => {
+                    const text = p.textContent.toLowerCase();
+                    if (text.includes(searchTerm) && searchTerm !== '') {
+                        p.style.color = '#2d8ceb'; // Устанавливаем цвет для совпадений
+                        hasMatch = true;
+                    } else {
+                        p.style.color = ''; // Сбрасываем цвет, если совпадений нет
+                    }
+                });
+                spoiler.style.display = hasMatch || searchTerm === '' ? 'block' : 'none';
+            }
+        });
+    });
+}
+
+function initializeSearchBehavior() {
+	const searchInput = document.querySelector('.spoiler-search');
+	const activeIndicator = document.getElementById('active-indicator');
+	if (!searchInput || !activeIndicator) {
+		console.error("Не удалось найти поле ввода или active-indicator.");
+		return
+	}
+	const originalContent = activeIndicator.innerHTML;
+
+	function alignIndicator() {
+		const searchRect = searchInput.getBoundingClientRect();
+		const parentRect = searchInput.parentElement.getBoundingClientRect();
+		const top = searchRect.top - parentRect.top + (searchRect.height / 2) - (activeIndicator.offsetHeight / 2);
+		activeIndicator.style.top = `${top}px`
+	}
+	searchInput.addEventListener('focus', function() {
+		alignIndicator();
+		activeIndicator.innerHTML = '<img src="icons/icon-search.svg" alt="Search" style="width: 12px; height: 12px;">'
+	});
+	searchInput.addEventListener('input', function() {
+		const icon = activeIndicator.querySelector('img');
+		if (icon) {
+			icon.style.filter = this.value ? 'invert(48%) sepia(82%) saturate(2053%) hue-rotate(177deg) brightness(95%) contrast(102%)' : 'none'
+		}
+	});
+	searchInput.addEventListener('blur', function() {
+		activeIndicator.innerHTML = originalContent
+	})
+}
+
+function resetSpoilers() {
+    document.querySelectorAll(".spoiler").forEach(function(spoiler) {
+        spoiler.classList.remove("active");
+        spoiler.classList.add("inactive");
+    });
+}
 
 document.querySelector(".export-button").addEventListener("mouseenter", function () {
     checkExportRequirements();
@@ -698,12 +808,53 @@ document.addEventListener("mousemove", (function (e) {
         let t = currentHoveredElement.getAttribute("data-value");
         t && (copyToClipboard(t), e.preventDefault())
     }
-})), document.addEventListener("DOMContentLoaded", function () {
+})), document.addEventListener("DOMContentLoaded", function() {
     initializeLanguageSelector();
     initializeIconClickHandlers();
     initializeExportIconClickHandler();
     initializeImportIconClickHandler();
     initializeImportButtonHandler();
+    initializeLicenseClickHandlers();
+    initializeSpoilerSearch();
+    initializeSearchBehavior();
+
+    const searchInput = document.querySelector('.spoiler-search');
+    const activeIndicator = document.getElementById('active-indicator');
+    const indicatorLine = document.getElementById('indicator-line');
+
+    if (searchInput) {
+        searchInput.addEventListener('focus', function() {
+            resetSpoilers();
+            updateActiveIndicator(this, true);
+            activeIndicator.style.opacity = "1";
+            indicatorLine.style.opacity = "1";
+        });
+        searchInput.addEventListener('blur', function() {
+            activeIndicator.style.opacity = "0";
+            indicatorLine.style.opacity = "0";
+        });
+    }
+
+    document.querySelectorAll(".spoiler").forEach(function(spoiler) {
+        spoiler.addEventListener("click", function() {
+            toggleSpoiler(this);
+        });
+    });
+
+    var leftBlock = document.querySelector(".left");
+    leftBlock.addEventListener("scroll", function() {
+        if (searchInput === document.activeElement) {
+            updateActiveIndicator(searchInput, true); // Обновить для поискового поля
+        } else {
+            var activeSpoiler = document.querySelector(".spoiler.active");
+            if (activeSpoiler) {
+                updateActiveIndicator(activeSpoiler); // Обновить для спойлера
+            } else {
+                document.getElementById("indicator-line").style.height = "0px";
+                document.getElementById("active-indicator").style.opacity = "0"; // Скрыть, если ничего не активно
+            }
+        }
+    });
 
     loadDefaultTranslations();
     loadSettings();
