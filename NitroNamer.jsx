@@ -2626,13 +2626,10 @@ function buildUI(thisObj) {
 			"[A-Z]",
 			"i",
 			"S",
-			"@cycle\\(\\s*(\\d+)\\s*,\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)",
-			"cycle",
-			"@replace\\(\\s*'([^']+)'\\s*,\\s*'([^']+)'\\s*\\)"
 		].join("|"), "g");		
 		var usedVariables = {};
 		var currentLocalIndex = localIndex;
-		result = result.replace(regex, function (match, group, tFilter, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, chldSeparatorOnly, chldN, chldSeparator, customI, nthEffectIndex, nthMaskIndex, cycleCount, cycleA, cycleB, replaceFindStr, replaceWithStr) {
+		result = result.replace(regex, function (match, group, tFilter, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, chldSeparatorOnly, chldN, chldSeparator, customI, nthEffectIndex, nthMaskIndex) {
 			var value;
 			if (anSeparatorOnly !== undefined) {
 				anSeparatorOnly = anSeparatorOnly.replace(/attr/g, variables.attr)
@@ -2711,15 +2708,6 @@ function buildUI(thisObj) {
 					var maskNumber = parseInt(number, 10);
 					return getNthMaskName(layer, maskNumber, settings)
 				})
-			}
-			if (cycleCount !== undefined && cycleA !== undefined && cycleB !== undefined) {
-				var iValue = parseInt(variables.i, 10);
-				if (isNaN(iValue) || iValue < 1) iValue = 1;
-				var cycleBlock = 2 * cycleCount;
-				var indexInBlock = (iValue - 1) % cycleBlock;
-				var cycleValue = (indexInBlock < cycleCount) ? cycleA : cycleB;
-				var processedCycleValue = replaceVariables(cycleValue, variables, originalName, layer, settings, isPreview);
-				return processedCycleValue
 			}
 			if (match.indexOf("R(") === 0) {
 				var m = match.match(/^R\(([1-9])\)$/);
@@ -2967,18 +2955,8 @@ function buildUI(thisObj) {
 				value = variables.i
 			} else if (match === 'S') {
 				value = variables.S
-			} else if (match === 'W') {
-				value = variables.W
 			} else {
 				value = ''
-			}
-			if (replaceFindStr !== undefined && replaceWithStr !== undefined) {
-				function escapeRegExp(str) {
-					return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-				}
-				var safeFindStr = escapeRegExp(replaceFindStr);
-				var replacedName = originalName.replace(new RegExp(safeFindStr, 'g'), replaceWithStr);
-				return replacedName
 			}
 			return (value !== undefined && value !== "") ? value : ""
 		});
