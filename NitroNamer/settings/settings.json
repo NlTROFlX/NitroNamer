@@ -6,7 +6,7 @@
             "briefly": false,
             "brieflyType": 3,
             "creationDate": 1740663938499,
-            "usageFrequency": 5,
+            "usageFrequency": 6,
             "favoritesTemplate": false
         },
         "preset_4": {
@@ -22,7 +22,7 @@
             "briefly": false,
             "brieflyType": 3,
             "creationDate": 1740501421743,
-            "usageFrequency": 1,
+            "usageFrequency": 2,
             "favoritesTemplate": false
         },
         "preset_2": {
@@ -34,21 +34,21 @@
         },
         "preset_1": {
             "allLayers": true,
-            "template": "@cycle(2, '(A) T.i | I(10)', '(B) T.i | I(100)')",
+            "template": "@cycle(2, '[A] T.i | I(10)', '[B] T.i | I(100)')",
             "briefly": false,
             "brieflyType": 3,
-            "usageFrequency": 7
+            "usageFrequency": 2
         }
     },
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "T \\\\\\ H(1) | W(1) \\\\\\",
+        "template": "R \\ W*H",
         "briefly": false,
         "brieflyType": 3,
         "modeIndex": 4,
         "modeActive": false,
-        "selectedPresetTemplate": "Chld(1, 2, 3 [ # ]) | Chld([ $ ])"
+        "selectedPresetTemplate": "@cycle(2, '[A] T.i | I(10)', '[B] T.i | I(100)')"
     },
     "nameApply": {
         "shapeLayer": true,

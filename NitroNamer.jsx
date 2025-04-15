@@ -1842,15 +1842,27 @@ function buildUI(thisObj) {
 		return settings && settings.F ? (settings.F.active ? settings.F.customValue : settings.F.defaultValue) : "NoFrameRate"
 	}
 
-	function getResolution(layer, settings) {
-		if (layer.nullLayer || layer.adjustmentLayer) {
-			return settings && settings.R ? (settings.R.active ? settings.R.customValue : settings.R.defaultValue) : "NoResolution"
+	function getResolution(layer, settings, precision) {
+		if (layer.nullLayer || layer.adjustmentLayer || (layer instanceof ShapeLayer) || (layer instanceof TextLayer)) {
+			var width = getWidth(layer, settings);
+			var height = getHeight(layer, settings);
+			if (typeof width !== "number" || typeof height !== "number") {
+				return settings && settings.R ? (settings.R.active ? settings.R.customValue : settings.R.defaultValue) : "NoResolution";
+			}
+			if (typeof precision === 'number') {
+				width = parseFloat(width).toFixed(precision);
+				height = parseFloat(height).toFixed(precision);
+			} else {
+				width = Math.round(width).toString();
+				height = Math.round(height).toString();
+			}
+			return width + "*" + height;
 		}
 		if (layer.source && layer.source.width && layer.source.height) {
-			return layer.source.width + "*" + layer.source.height
+			return layer.source.width + "*" + layer.source.height;
 		}
-		return settings && settings.R ? (settings.R.active ? settings.R.customValue : settings.R.defaultValue) : "NoResolution"
-	}
+		return settings && settings.R ? (settings.R.active ? settings.R.customValue : settings.R.defaultValue) : "NoResolution";
+	}	
 
 	function getDuration(layer) {
 		var duration;
@@ -2610,6 +2622,7 @@ function buildUI(thisObj) {
 			"H",
 			"W\\(([1-9])\\)",
         	"W",
+			"R\\(([1-9])\\)",
 			"[A-Z]",
 			"i",
 			"S",
@@ -2621,46 +2634,6 @@ function buildUI(thisObj) {
 		var currentLocalIndex = localIndex;
 		result = result.replace(regex, function (match, group, tFilter, ecFilters, eSeparatorOnly, eEffects, eSeparator, anSeparatorOnly, anProps, anSeparator, lexpSeparatorOnly, lexpProps, lexpSeparator, durationFormat, customFext, customAr, parentIndex, dateFormat, lmcSeparatorOnly, lmcFilters, lmcSeparator, lmnSeparatorOnly, lmnFilters, lmnSeparator, chldSeparatorOnly, chldN, chldSeparator, customI, nthEffectIndex, nthMaskIndex, cycleCount, cycleA, cycleB, replaceFindStr, replaceWithStr) {
 			var value;
-			if (match.indexOf("H(") === 0) {
-				var m = match.match(/^H\(([1-9])\)$/);
-				if (m) {
-					var decimalDigits = parseInt(m[1], 10);
-					var hValue = getHeight(layer, settings);
-					if (!isNaN(parseFloat(hValue))) {
-						return parseFloat(hValue).toFixed(decimalDigits);
-					} else {
-						return hValue;
-					}
-				}
-			}
-			if (match === "H") {
-				var hValue = getHeight(layer, settings);
-				if (!isNaN(parseFloat(hValue))) {
-					return String(Math.round(parseFloat(hValue)));
-				} else {
-					return hValue;
-				}
-			}
-			if (match.indexOf("W(") === 0) {
-				var m = match.match(/^W\(([1-9])\)$/);
-				if (m) {
-					var decimalDigits = parseInt(m[1], 10);
-					var wValue = getWidth(layer, settings);
-					if (!isNaN(parseFloat(wValue))) {
-						return parseFloat(wValue).toFixed(decimalDigits);
-					} else {
-						return wValue;
-					}
-				}
-			}
-			if (match === "W") {
-				var wValue = getWidth(layer, settings);
-				if (!isNaN(parseFloat(wValue))) {
-					return String(Math.round(parseFloat(wValue)));
-				} else {
-					return wValue;
-				}
-			}
 			if (anSeparatorOnly !== undefined) {
 				anSeparatorOnly = anSeparatorOnly.replace(/attr/g, variables.attr)
 			}
@@ -2747,6 +2720,53 @@ function buildUI(thisObj) {
 				var cycleValue = (indexInBlock < cycleCount) ? cycleA : cycleB;
 				var processedCycleValue = replaceVariables(cycleValue, variables, originalName, layer, settings, isPreview);
 				return processedCycleValue
+			}
+			if (match.indexOf("R(") === 0) {
+				var m = match.match(/^R\(([1-9])\)$/);
+				if (m) {
+					var precision = parseInt(m[1], 10);
+					return getResolution(layer, settings, precision);
+				}
+			}
+			if (match.indexOf("H(") === 0) {
+				var m = match.match(/^H\(([1-9])\)$/);
+				if (m) {
+					var decimalDigits = parseInt(m[1], 10);
+					var hValue = getHeight(layer, settings);
+					if (!isNaN(parseFloat(hValue))) {
+						return parseFloat(hValue).toFixed(decimalDigits);
+					} else {
+						return hValue;
+					}
+				}
+			}
+			if (match === "H") {
+				var hValue = getHeight(layer, settings);
+				if (!isNaN(parseFloat(hValue))) {
+					return String(Math.round(parseFloat(hValue)));
+				} else {
+					return hValue;
+				}
+			}
+			if (match.indexOf("W(") === 0) {
+				var m = match.match(/^W\(([1-9])\)$/);
+				if (m) {
+					var decimalDigits = parseInt(m[1], 10);
+					var wValue = getWidth(layer, settings);
+					if (!isNaN(parseFloat(wValue))) {
+						return parseFloat(wValue).toFixed(decimalDigits);
+					} else {
+						return wValue;
+					}
+				}
+			}
+			if (match === "W") {
+				var wValue = getWidth(layer, settings);
+				if (!isNaN(parseFloat(wValue))) {
+					return String(Math.round(parseFloat(wValue)));
+				} else {
+					return wValue;
+				}
 			}
 			if (group !== undefined) {
 				return group
