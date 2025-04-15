@@ -1482,7 +1482,6 @@ function buildUI(thisObj) {
 		}
 	}
 
-
 	function updatePreview() {
 		var settings = loadSettings();
 		var isCompact = settings.currentSettings && settings.currentSettings.UICompact;
@@ -1534,11 +1533,11 @@ function buildUI(thisObj) {
 				}
 			} else {
 				if (!isCompact) {
-					txtOriginal.text = "No composition selected (or empty).";
-					txtRenamed.text = "No composition selected (or empty)."
+					txtOriginal.text = "Timeline is not selected or is empty.";
+					txtRenamed.text = "Timeline is not selected or is empty."
 				}
 				if (txtRenamed) {
-					txtRenamed.text = "No composition selected (or empty)."
+					txtRenamed.text = "Timeline is not selected or is empty."
 				}
 			}
 		} else {
@@ -1833,7 +1832,6 @@ function buildUI(thisObj) {
 		}
 		return results.join(", ")
 	}
-
 
 	function getFrameRate(layer, settings) {
 
@@ -2223,19 +2221,6 @@ function buildUI(thisObj) {
 			currentLayer = currentLayer.parent
 		}
 		return currentLayer.name
-	}
-
-	function isParentLayer(layer) {
-		if (!layer || !layer.containingComp) {
-			return !1
-		}
-		var comp = layer.containingComp;
-		for (var i = 1; i <= comp.numLayers; i++) {
-			if (comp.layer(i).parent === layer) {
-				return !0
-			}
-		}
-		return !1
 	}
 
 	function arrayIndexOf(arr, item) {
@@ -3056,16 +3041,12 @@ function buildUI(thisObj) {
 				localIndex = 1;
 				for (var idx = 0; idx < orderedLayers.length; idx++) {
 					var currentLayer = orderedLayers[idx];
-					// Получаем тип слоя (для предпросмотра будет кастомное значение)
 					var layerType = getLayerType(currentLayer);
 					var typeIndex = getTypeIndexInComp(currentLayer);
 					var totalTypeLayers = typeTotals[layerType] || 1;
 					var it = reverseOrder ? (totalTypeLayers - typeIndex + 1) : typeIndex;
 
 					if ((!currentLayer.shy || showShyLocked) && !currentLayer.locked && (allLayers || currentLayer.selected)) {
-						// Для переименования важно использовать applyKey, которое берётся из карты.
-						// Если слой является ShapeLayer, то даже если getLayerType возвращает, например, "Rectangle",
-						// применяем applyKey = "shapeLayer" чтобы переименование выполнялось.
 						if (currentLayer instanceof ShapeLayer) {
 							var applyKey = "shapeLayer";
 						} else {
@@ -3088,7 +3069,7 @@ function buildUI(thisObj) {
 						var propNameCombined = propNames.length > 0 ? propNames.join(", ") : "Property not selected";
 						var templateData = {
 							totalLayers: totalLayersInComp,
-							T: layerType,  // В предпросмотре T будет содержать кастомное значение (например, "Rectangle, Ellipse" и т.п.)
+							T: layerType,
 							i: currentLayer.index,
 							I: localIndex,
 							it: it,
@@ -3163,10 +3144,10 @@ function buildUI(thisObj) {
 				}
 				app.endUndoGroup();
 			} else {
-				alert("В активной композиции нет слоёв.", scriptMessageHead_1);
+				alert("Timeline is not selected or is empty.", scriptMessageHead_1);
 			}
 		} else {
-			alert("В активной композиции нет слоёв.", scriptMessageHead_1);
+			alert("Timeline is not selected or is empty.", scriptMessageHead_1);
 		}
 	}
 
