@@ -32,7 +32,7 @@
     "Fext": {
         "defaultValue": "",
         "customValue": "Custom{Fext}",
-        "active": false
+        "active": true
     },
     "Lmc": {
         "defaultValue": "NoMasks",
