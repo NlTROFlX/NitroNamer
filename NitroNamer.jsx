@@ -1830,16 +1830,38 @@ function buildUI(thisObj) {
 
 
 	function getFrameRate(layer, settings) {
-		if (layer.nullLayer || layer.adjustmentLayer || layer instanceof LightLayer || layer instanceof CameraLayer || layer instanceof TextLayer || layer instanceof ShapeLayer || layer.hasAudio) {
-			return settings && settings.F ? (settings.F.active ? settings.F.customValue : settings.F.defaultValue) : "NoFrameRate"
+
+		if (!(layer instanceof AVLayer && layer.hasVideo)) {
+			return settings && settings.F ? (settings.F.active ? settings.F.customValue : settings.F.defaultValue) : "NoFrameRate";
 		}
-		if (layer.source && layer.source.mainSource instanceof SolidSource) {
-			return settings && settings.F ? (settings.F.active ? settings.F.customValue : settings.F.defaultValue) : "NoFrameRate"
+	
+		if (layer.source) {
+			var ext = "";
+			if (layer.source.file && layer.source.file.name) {
+				ext = layer.source.file.name.split('.').pop().toLowerCase();
+			}
+	
+			var allowedExtensions = ["mov", "mp4", "avi", "mxf", "mpeg", "mpg", "m2v", "m2t", "mts", "m2ts", "flv", "f4v", "wmv", "prores", "dnxhd", "dnxhr", "r3d", "arriraw", "cinemadng", "dpx", "exr", "tiff", "xavc", "xavc-s", "avc-intra", "hevc", "gif"];
+	
+			if (layer.source.mainSource instanceof SolidSource) {
+				return settings && settings.F ? (settings.F.active ? settings.F.customValue : settings.F.defaultValue) : "NoFrameRate";
+			}
+	
+			var frameRate = NaN;
+			if (!isNaN(layer.source.frameRate) && layer.source.frameRate > 0) {
+				frameRate = layer.source.frameRate;
+			} else if (layer.source.mainSource && !isNaN(layer.source.mainSource.frameRate) && layer.source.mainSource.frameRate > 0) {
+				frameRate = layer.source.mainSource.frameRate;
+			}
+	
+			if (allowedExtensions.indexOf(ext) !== -1 || (!isNaN(frameRate) && frameRate > 0)) {
+				if (!isNaN(frameRate) && frameRate > 0) {
+					return frameRate.toFixed(2);
+				}
+			}
 		}
-		if (layer.source && !isNaN(layer.source.frameRate)) {
-			return layer.source.frameRate.toFixed(2)
-		}
-		return settings && settings.F ? (settings.F.active ? settings.F.customValue : settings.F.defaultValue) : "NoFrameRate"
+	
+		return settings && settings.F ? (settings.F.active ? settings.F.customValue : settings.F.defaultValue) : "NoFrameRate";
 	}
 
 	function getResolution(layer, settings, precision) {

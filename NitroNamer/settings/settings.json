@@ -52,7 +52,7 @@
     "currentSettings": {
         "UICompact": false,
         "allLayers": true,
-        "template": "I(10), I(20)",
+        "template": "F",
         "briefly": false,
         "brieflyType": 3,
         "modeIndex": 4,
