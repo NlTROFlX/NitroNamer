@@ -2623,6 +2623,8 @@ function buildUI(thisObj) {
 			"W\\(([1-9])\\)",
         	"W",
 			"R\\(([1-9])\\)",
+			"Np\\(\\[([^\\[\\]]+?)\\]\\)",
+    		"Np",
 			"[A-Z]",
 			"i",
 			"S",
@@ -2758,6 +2760,11 @@ function buildUI(thisObj) {
 			}
 			if (group !== undefined) {
 				return group
+			} else if (match.indexOf("Np([") === 0) {
+				var customSep = match.slice(4, -2);
+				value = getNestedPrecompNames(layer, settings, customSep);
+			} else if (match === "Np") {
+				value = getNestedPrecompNames(layer, settings, null);
 			} else if (match === 'it') {
 				if (variables.hasOwnProperty('it')) {
 					value = variables.it
@@ -3159,6 +3166,28 @@ function buildUI(thisObj) {
 			}
 		}
 	}
+
+	function getNestedPrecompNames(layer, settings, customSeparator) {
+		if (layer.source && (layer.source instanceof CompItem)) {
+			var nestedNames = [];
+			var precomp = layer.source;
+			for (var i = 1; i <= precomp.numLayers; i++) {
+				var nestedLayer = precomp.layer(i);
+				if (nestedLayer instanceof AVLayer && nestedLayer.source instanceof CompItem) {
+					nestedNames.push(nestedLayer.name);
+				}
+			}
+			if (nestedNames.length > 0) {
+				var sep = customSeparator || ", ";
+				return nestedNames.join(sep);
+			}
+		}
+		if (settings && settings.Np) {
+			return settings.Np.active ? settings.Np.customValue : settings.Np.defaultValue;
+		}
+		return "NoPreComps";
+	}	
+	
 	checkAndCreateSettingsFile();
 	checkAndCreateVariablesFile();
 	checkNitroNamerLibraryFolder();
