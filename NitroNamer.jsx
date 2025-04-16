@@ -1061,7 +1061,7 @@ function buildUI(thisObj) {
 					"active": !1
 				},
 				"Tm": {
-					"defaultValue": "NoTrackMate",
+					"defaultValue": "NoTrackMatte",
 					"customValue": "Custom{Tm}",
 					"active": !1
 				},
@@ -1694,30 +1694,30 @@ function buildUI(thisObj) {
 
 	function getTrackMatteType(layer, settings) {
 		if (layer instanceof CameraLayer || layer instanceof LightLayer) {
-			return settings && settings.Tm ? (settings.Tm.active ? settings.Tm.customValue : settings.Tm.defaultValue) : "NoTrackMate"
+			return settings && settings.Tm ? (settings.Tm.active ? settings.Tm.customValue : settings.Tm.defaultValue) : "NoTrackMatte"
 		} else if (layer.isTrackMatte) {
-			return "TM:Source"
+			return "TrackMatte [Source]"
 		} else if (layer.trackMatteType !== undefined && layer.trackMatteType !== TrackMatteType.NO_TRACK_MATTE) {
 			var matteType;
 			switch (layer.trackMatteType) {
 				case TrackMatteType.ALPHA:
-					matteType = "Alpha";
+					matteType = "[Alpha]";
 					break;
 				case TrackMatteType.ALPHA_INVERTED:
-					matteType = "Alpha Inverted";
+					matteType = "[Alpha Inverted]";
 					break;
 				case TrackMatteType.LUMA:
-					matteType = "Luma";
+					matteType = "[Luma]";
 					break;
 				case TrackMatteType.LUMA_INVERTED:
-					matteType = "Luma Inverted";
+					matteType = "[Luma Inverted]";
 					break;
 				default:
-					matteType = "Unknown Track Matte"
+					matteType = "[Unknown Track Matte]"
 			}
-			return "TM:" + matteType
+			return "TrackMatte " + matteType
 		} else {
-			return settings && settings.Tm ? (settings.Tm.active ? settings.Tm.customValue : settings.Tm.defaultValue) : "NoTrackMate"
+			return settings && settings.Tm ? (settings.Tm.active ? settings.Tm.customValue : settings.Tm.defaultValue) : "NoTrackMatte"
 		}
 	}
 
