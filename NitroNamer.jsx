@@ -2591,19 +2591,71 @@ function buildUI(thisObj) {
 		}
 	}
 
+	function nnEscRegExp(str){
+		return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+	}
+
+	function nnApplyReplaceOperators(nameStr, originalName){
+		var work = nameStr;
+		var opRE = /@replace\(\s*([^)]*?)\s*\)/i;
+
+		while (true){
+			var m = opRE.exec(work);
+			if (!m) break;
+	
+			var fullOp  = m[0];
+			var inside  = m[1];
+
+			var tokRE   = /(!?)\s*'([^']*)'\s*(?:,|$)/g;
+			var tokens  = [];
+			var t;
+			while ( (t = tokRE.exec(inside)) !== null){
+				tokens.push({ icase: (t[1]==="!"), txt: t[2] });
+			}
+
+			if (tokens.length < 2){
+
+				work = work.replace(fullOp, "");
+				continue;
+			}
+			var invalid = false;
+			for (var k=0;k<tokens.length;k++){
+				if (tokens[k].txt === ""){
+					invalid = true; break;
+				}
+			}
+			if (invalid){
+				work = work.replace(fullOp, "");
+				continue;
+			}
+	
+			var B       = tokens.pop().txt;
+			var As      = tokens;
+
+			var leftPart  = work.substring(0, m.index);
+			var targetStr = (leftPart.trim().length ? leftPart : originalName);
+
+			for (var i=0;i<As.length;i++){
+				var flags = "g" + (As[i].icase ? "i" : "");
+				var find  = new RegExp(nnEscRegExp(As[i].txt), flags);
+				targetStr = targetStr.replace(find, B);
+			}
+
+			var rightPart = work.substring(m.index + fullOp.length);
+			work = targetStr + rightPart;
+		}
+	
+		return work.trim();
+	}
+
 	function replaceVariables(template, variables, originalName, layer, settings, isPreview) {
 		var result = template;
-	
-		// --- NEW: поддержка оператора @cycle(N, 'A', 'B') ---
-		// Синтаксис: @cycle(<кол-во повторений>, '<шаблонA>', '<шаблонB>')
-		// Пример: @cycle(2, '[cycle A] | An', '[cycle B] E')
+
 		result = result.replace(
 			/@cycle\(\s*(\d+)\s*,\s*['"]([^'"]*)['"]\s*,\s*['"]([^'"]*)['"]\s*\)/g,
 			function(match, countStr, templateA, templateB) {
 				var count = parseInt(countStr, 10);
-				// используем текущий localIndex (начинается с 1 для первого слоя)
 				var idx = localIndex;
-				// вычисляем, попадаем ли мы в первую (0) или вторую (1) половину цикла
 				var pickA = (Math.floor((idx - 1) / count) % 2) === 0;
 				return pickA ? templateA : templateB;
 			}
@@ -3013,6 +3065,9 @@ function buildUI(thisObj) {
 			return (value !== undefined && value !== "") ? value : ""
 		});
 		localIndex++;
+
+		result = nnApplyReplaceOperators(result, originalName);
+
 		if (result === originalName || result === "") {
 			return originalName
 		}
