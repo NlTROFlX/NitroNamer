@@ -1,5 +1,7 @@
 ![NitroNamer 2024 3](https://github.com/user-attachments/assets/8c5ae374-a823-48fb-a5cd-b1eed9317284)
 
+### **NitroNamer** is a compact ScriptUI panel for Adobe After Effects that automates layer naming through a powerful system of “smart variables”, dynamic context-sensitive parameters: indexing, effects, animations, sizes, transformations and more.
+
 > **If you notice any other (flaw/problem) in your opinion, then write to me in [telegram private messages](https://t.me/Nitrofix) 💬 or email [forward.ultimate@gmail.com](mailto:forward.ultimate@gmail.com) 📫, or specify the problem in the repository for this project on [GitHub](https://github.com/NlTROFlX/NitroNamer) 🧑‍💻**
 > 
 
